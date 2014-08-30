@@ -17,7 +17,9 @@ public class Dynamiz {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Hello");
+		TaskItem item = new TaskItem("Sample task");
+		item.setEndDate(6, 9, 2014);
+		System.out.println(item.getEndDate());
 	}
 
 }

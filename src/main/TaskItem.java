@@ -1,8 +1,10 @@
 package main;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Defines each task item in the To-Do list.
@@ -13,13 +15,13 @@ public class TaskItem {
     enum STATUS_TYPE {PENDING, COMPLETED};
     
     private String description;
-    private Calendar startDate = null;
-    private Calendar endDate = null;
+    private Date startDate = null;
+    private Date endDate = null;
     private String category = "---";
     private PRIORITY_TYPE priority = PRIORITY_TYPE.NORMAL;
     private STATUS_TYPE status = STATUS_TYPE.PENDING;
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
-    
+    private DateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
+    private DateFormat dateFormatter2 = new SimpleDateFormat("dd/MMM/yyyy");
     /**
      * Creates a new TaskItem with the given description.
      */
@@ -39,7 +41,11 @@ public class TaskItem {
 	if(startDate==null){
 	    return "--/--/----";
 	}
-	return dateFormatter.format(startDate);
+	try{
+	    return dateFormatter.format(startDate);
+	}catch(Exception e){
+	    return dateFormatter2.format(startDate)+",--:--";
+	}
     }
     
     /**
@@ -50,7 +56,11 @@ public class TaskItem {
 	if(endDate==null){
 	    return "--/--/----";
 	}
-	return dateFormatter.format(endDate);
+	try{
+	    return dateFormatter.format(endDate);
+	}catch(Exception e){
+	    return dateFormatter2.format(endDate)+",--:--";
+	}
     }
     
     public String getCategory(){
@@ -92,21 +102,41 @@ public class TaskItem {
     }
     
     public void setStartDate(int date, int month, int year){
-	startDate.set(year, month, date);
+	if(startDate==null){
+	    startDate = new GregorianCalendar(year, month, date);
+	}else{
+	    startDate.set(year, month, date);
+	}
     }
     
     public void setStartDate(int date, int month, int year,
 	    		     int hour, int minute){
-	startDate.set(year, month, date, hour, minute);
+	if(startDate==null){
+	    startDate = new GregorianCalendar(year, month,
+		    			    date, hour,
+		    			    minute);
+	}else{
+	    startDate.set(year, month, date, hour, minute);
+	}
     }
     
     public void setEndDate(int date, int month, int year){
-	endDate.set(year, month, date);
+	if(endDate==null){
+	    endDate = new GregorianCalendar(year, month, date);
+	}else{
+	    endDate.set(year, month, date);
+	}
     }
     
     public void setEndDate(int date, int month, int year,
 	    		     int hour, int minute){
-	endDate.set(year, month, date, hour, minute);
+	if(endDate==null){
+	    endDate = new GregorianCalendar(year, month,
+		    			    date, hour,
+		    			    minute);
+	}else{
+	    endDate.set(year, month, date, hour, minute);
+	}
     }
 
     public void setCategory(String category){
