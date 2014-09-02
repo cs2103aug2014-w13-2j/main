@@ -70,6 +70,15 @@ public class TaskItem {
 	    default: return "";
 	}
     }
+    
+    public String toString(){
+	String output = getPriority()+"\t";
+	output+=getDescription()+"\t";
+	output+=getStartDate()+"\t";
+	output+=getEndDate()+"\t";
+	output+=getCategory()+"\t";
+	return output;
+    }
 
     /**
      * Sets the description for this to the new
