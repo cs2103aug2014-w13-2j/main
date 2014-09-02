@@ -2,7 +2,13 @@ package main;
 
 /**
  * Defines each task item in the To-Do list.
+ * This class does not implement Comparable interface.
+ * To sort by any of the member attributes, please
+ * use a Comparator class that operates on this class
+ * instead.
  * @author zixian
+ * Note: Please update author list if you have
+ * made any changes here.
  */
 public class TaskItem {
     enum PRIORITY_TYPE {VERY_URGENT, URGENT, NORMAL};
@@ -71,6 +77,11 @@ public class TaskItem {
 	}
     }
     
+    /**
+     * Represents this task item in the format
+     * priority'\t'description'\t'start_date'\t'end_date'\t'category.
+     */
+    //To be updated/modified for listing purposes.
     public String toString(){
 	String output = getPriority()+"\t";
 	output+=getDescription()+"\t";
