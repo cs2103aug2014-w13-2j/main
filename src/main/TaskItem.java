@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 /**
  * Defines each task item in the To-Do list.
  * This class does not implement Comparable interface.
@@ -17,7 +19,7 @@ public class TaskItem {
     private String description;
     private Date startDate = new Date();
     private Date endDate = new Date();
-    private String category = "---";
+    private ArrayList<String> category = new ArrayList<String>();
     private PRIORITY_TYPE priority = PRIORITY_TYPE.NORMAL;
     private STATUS_TYPE status = STATUS_TYPE.PENDING;
     
@@ -49,7 +51,7 @@ public class TaskItem {
     }
     
     public String getCategory(){
-	return category;
+	return "";
     }
     
     /**
@@ -118,8 +120,8 @@ public class TaskItem {
 	endDate.setDate(date, month, year, hour, minute);
     }
 
-    public void setCategory(String category){
-	   this.category = category;
+    public void addCategory(String category){
+	   
     }
     
     /**
