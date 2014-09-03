@@ -3,6 +3,8 @@
  */
 package main;
 
+import java.util.ArrayList;
+
 /**
  * @author zixian
  *
@@ -17,9 +19,11 @@ public class Dynamiz {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		TaskItem item = new TaskItem("Sample task");
+		/*TaskItem item = new TaskItem("Sample task");
 		item.setEndDate(6, 9, 2014);
-		System.out.println(item);
+		System.out.println(item);*/
+	    	FileHandler fileHandler = new FileHandler();
+	    	ArrayList<TaskItem> list = fileHandler.getListFromFile();
 	}
 
 }

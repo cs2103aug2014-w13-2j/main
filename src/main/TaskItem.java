@@ -50,6 +50,11 @@ public class TaskItem {
 	return endDate.toString();
     }
     
+    /**
+     * Returns a comma-separated list of categories this
+     * item falls in.
+     * Eg. "cs2103,project,code"
+     */
     public String getCategory(){
 	return "";
     }
