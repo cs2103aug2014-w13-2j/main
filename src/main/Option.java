@@ -18,6 +18,10 @@ import java.util.List;
  */
 
 public class Option {
+	/*=========================================================================
+	 * Constants
+	 * ========================================================================
+	 */
 	/** constant that specifies if the number of required arguments has not been specified */
 	private static final int ARGS_UNINITIALISED = -99;
 	
@@ -36,6 +40,10 @@ public class Option {
 	/** constant that specifies if the number of arguments is none or many */
 	public static final int ARGS_OPTIONAL = -1;
 	
+	/*=========================================================================
+	 * Class attributes
+	 * ========================================================================
+	 */
 	/** option short name */
 	private String optName;
 	
@@ -60,6 +68,13 @@ public class Option {
 	/** option self-documenting string description */
 	private String description;
 
+	/** delimiter character for multiple argument values */
+	private char delimiter;
+	
+	/*=========================================================================
+	 * Getter & Setter Methods
+	 * ========================================================================
+	 */
 	/**
 	 * Retrieve the short name of this option
 	 * 
@@ -210,6 +225,24 @@ public class Option {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Retrieve the delimiter character
+	 * 
+	 * @return delimiter character. Null if there is none
+	 */
+	public char getDelimiter() {
+		return delimiter;
+	}
+
+	/**
+	 * Set the delimiter character for multiple argument values
+	 * 
+	 * @param delimiter the delimiter character
+	 */
+	public void setDelimiter(char delimiter) {
+		this.delimiter = delimiter;
 	}
 	
 	
