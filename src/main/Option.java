@@ -15,6 +15,7 @@ import java.util.List;
  * 
  * @author nhan
  *
+ * Modelled after CLI library
  */
 
 public class Option {
@@ -40,6 +41,9 @@ public class Option {
 	/** constant that specifies if the number of arguments is none or many */
 	public static final int ARGS_OPTIONAL = -1;
 	
+	/** constant that specifies the default character for delimiter of argument values */
+	public static final char DEFAULT_DELIMITER = ',';
+	
 	/*=========================================================================
 	 * Class attributes
 	 * ========================================================================
@@ -57,7 +61,7 @@ public class Option {
 	private String argName;
 	
 	/** option boolean if this option is required in the command */
-	private boolean isRequired;
+	private boolean isRequired = false;
 	
 	/** option boolean if this option has a fixed number of argument */
 	private boolean hasFixedArgNo;
@@ -70,6 +74,64 @@ public class Option {
 
 	/** delimiter character for multiple argument values */
 	private char delimiter;
+	
+	/*=========================================================================
+	 * Constructors
+	 * ======================================================================== 
+	 */
+	/**
+	 * Create an Option object with the specified parameters
+	 * 
+	 * @param optName short name of the option
+	 * @param description description string of the option
+	 */
+	public Option(String optName, String description) {
+		this(optName, null, ARGS_UNINITIALISED, description, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Create an Option object with the specified parameters
+	 * 
+	 * @param optName short name of the option
+	 * @param longOptName long name of the option
+	 * @param description description string of the option
+	 */
+	public Option(String optName, String longOptName, String description) {
+		this(optName, longOptName, ARGS_UNINITIALISED, description, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Create an Option object with the specified parameters
+	 * 
+	 * @param optName short name of the option
+	 * @param longOptName long name of the option
+	 * @param numOfArgs number of required arguments
+	 * @param description description string of the option
+	 */
+	public Option(String optName, String longOptName, int numOfArgs, String description) {
+		this(optName, longOptName, numOfArgs, description, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Create an Option object with the specified parameters
+	 * 
+	 * @param optName short name of the option
+	 * @param longOptName long name of the option
+	 * @param numOfArgs number of required arguments
+	 * @param description description string of the option
+	 * @param delimiter a specified delimiter character between argument values
+	 */
+	public Option(String optName, String longOptName, int numOfArgs, String description, char delimiter) {
+		isValidOption(optName);
+		this.optName = optName;
+		this.longOptName = longOptName;
+		
+		this.numOfArgs = numOfArgs;
+		setHasFixedArgNo();
+		
+		this.description = description;
+		this.delimiter = delimiter;
+	}
 	
 	/*=========================================================================
 	 * Getter & Setter Methods
@@ -187,7 +249,7 @@ public class Option {
 	 * Set the boolean flag hasFixedArgNo by checking if the number
 	 * of required argument is nonnegative.
 	 */
-	public void setFixedArgNo() {
+	public void setHasFixedArgNo() {
 		this.hasFixedArgNo = this.numOfArgs >= 0;
 	}
 	/**
@@ -244,6 +306,31 @@ public class Option {
 	public void setDelimiter(char delimiter) {
 		this.delimiter = delimiter;
 	}
-	
-	
+
+	/**
+	 * Validate if the short name of this option observe the validation rule
+	 * 
+	 * The short option name is only valid when it is an single alphabet.
+	 * 
+	 * @param optName short name of this option to validate
+	 * 
+	 * @throws IllegalArgumentException if the short name does not follow the
+	 * validation rule
+	 */
+	public static void isValidOption(String optName) throws IllegalArgumentException {
+		if (optName == null) {
+			// No further check
+			return;
+		}
+		
+		if (optName.length() == 1) {
+			char startChar = optName.charAt(0);
+			if (!Character.isAlphabetic(startChar)) {
+				throw new IllegalArgumentException("Illegal option name '" + optName + "'");
+			}
+		} else {
+			throw new IllegalArgumentException("Invalid option name '" + optName + "'" + 
+										"Short option name must have only 1 alphabet");
+		}
+	}
 }
