@@ -169,6 +169,13 @@ public class Option {
 	}
 
 	/**
+	 * Set the boolean flag hasFixedArgNo by checking if the number
+	 * of required argument is nonnegative.
+	 */
+	public void setFixedArgNo() {
+		this.hasFixedArgNo = this.numOfArgs >= 0;
+	}
+	/**
 	 * Retrieve an array list of argument values
 	 * 
 	 * @return an array list of argument values. Null if there is none
