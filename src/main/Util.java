@@ -1,9 +1,16 @@
 package main;
 
+/**
+ * Util class to store some utilities function in String manipulation
+ * 
+ * @author nhan
+ * 
+ *	Modelled after org.apache.commons.cli
+ */
 public final class Util {
 	
 	/**
-	 * Remove the hyphens (single or double) from the given str and
+	 * Remove the hyphens (single or double) from the given string and
 	 * return a new String
 	 * 
 	 * @param str The string from which the hyphens should be removed.
