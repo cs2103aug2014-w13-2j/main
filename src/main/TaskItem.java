@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Note: Please update author list if you have
  * made any changes here.
  */
+//To-Do: Modify Date-related methods after modifying Date class.
 public class TaskItem {
     private static final String EMPTY_CATEGORY = "---";
     
@@ -24,7 +25,7 @@ public class TaskItem {
     private String description;
     private Date startDate = new Date();
     private Date endDate = new Date();
-    private ArrayList<String> category = new ArrayList<String>();
+    private ArrayList<String> categoryList = new ArrayList<String>();
     private PRIORITY_TYPE priority = PRIORITY_TYPE.NORMAL;
     private STATUS_TYPE status = STATUS_TYPE.PENDING;
     
@@ -61,7 +62,15 @@ public class TaskItem {
      * Eg. "cs2103,project,code"
      */
     public String getCategory(){
-	return "";
+	String output = "";
+	int numCategories = categoryList.size();
+	for(int i=0; i<numCategories; i++){
+	    output+=categoryList.get(i);
+	    if(i!=numCategories-1){
+		output+=",";
+	    }
+	}
+	return output;
     }
     
     /**
@@ -95,11 +104,12 @@ public class TaskItem {
      */
     //To be updated/modified for listing purposes.
     public String toString(){
-	String output = getPriority()+"\t";
-	output+=getDescription()+"\t";
+	String output = getDescription()+"\t";
 	output+=getStartDate()+"\t";
 	output+=getEndDate()+"\t";
+	output+=getPriority()+"\t";
 	output+=getCategory()+"\t";
+	output+=getStatus()+"\t";
 	return output;
     }
 
@@ -134,7 +144,7 @@ public class TaskItem {
      * Adds the specified category to this task.
      */
     public void addCategory(String category){
-	   this.category.add(category);
+	   categoryList.add(category);
     }
     
     /**
