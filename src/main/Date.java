@@ -10,6 +10,7 @@ public class Date {
 		DECEMBER, INVALID};
     private int year = 0, date = 0, hour = -1, minute = -1;
     private MONTH month = MONTH.INVALID;
+    private String dayOfWeek;
     
     public Date(){}
     

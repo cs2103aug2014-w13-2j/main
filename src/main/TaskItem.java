@@ -13,6 +13,11 @@ import java.util.ArrayList;
  * made any changes here.
  */
 public class TaskItem {
+    private static final String EMPTY_CATEGORY = "---";
+    
+    private static final String STATUS_COMPLETED = "completed";
+    private static final String STATUS_PENDING = "pending";
+    
     enum PRIORITY_TYPE {VERY_URGENT, URGENT, NORMAL};
     enum STATUS_TYPE {PENDING, COMPLETED};
     
@@ -125,8 +130,11 @@ public class TaskItem {
 	endDate.setDate(date, month, year, hour, minute);
     }
 
+    /**
+     * Adds the specified category to this task.
+     */
     public void addCategory(String category){
-	   
+	   this.category.add(category);
     }
     
     /**
@@ -145,9 +153,37 @@ public class TaskItem {
     }
     
     /**
+     * Sets the status of this task. If the specified status is invalid,
+     * this task's status is set to the default status.
+     * Acceptable status values: "pending", "completed"
+     */
+    //To-Do: Update this method asfter adding in more status types.
+    public void setStatus(String status){
+	if(status.equals(STATUS_COMPLETED)){
+	    this.status = STATUS_TYPE.COMPLETED;
+	} else{
+	    this.status = STATUS_TYPE.PENDING;
+	}
+    }
+    
+    /**
      * Marks this task as completed.
      */
     public void completeTask(){
 	status = STATUS_TYPE.COMPLETED;
+    }
+    
+    /**
+     * Splits comma-separated categoryString into an array of categories.
+     * Pre-condition: categoryString is in the form "x,y,etc", which is ensured
+     * 			by file parsing in FileHandler.
+     * @returns A String array of categories.
+     */
+    //Consider the case of "CS2103T,"
+    public static String[] splitCategories(String categoryString){
+	if(categoryString.equals(TaskItem.EMPTY_CATEGORY)){
+	    return new String[0];
+	}
+	return categoryString.split(",");
     }
 }
