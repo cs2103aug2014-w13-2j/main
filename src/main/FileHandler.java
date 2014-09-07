@@ -2,13 +2,17 @@ package main;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
 
+/**
+ * Defines each FileHandler that reads/writes task list to/from the
+ * specified file or "todo.txt".
+ * @author Qua Zi Xian
+ */
 public class FileHandler {
     private static final String FILENAME_DEFAULT="todo.txt";
     
@@ -21,12 +25,15 @@ public class FileHandler {
      * Defines regular expression format for each TaskItem object
      * represented on each line.
      */
-    private static final String INPUTFORMAT="[a-zA-Z0-9\\s]+\\t"+
-	    		"(([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})||(--/--/----)) "+
-	    		"(([0-9]{1,2}:[0-9]{1,2})||(--:--))\\t"+
-	    		"(([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})||(--/--/----)) "+
-	    		"(([0-9]{1,2}:[0-9]{1,2})||(--:--))\\t[a-z]+\\t"+
-	    		"(([a-zA-Z0-9,]+)||(---))\\t[a-z]+";
+    private static final String FORMAT_DESCRIPTION = "[a-zA-Z0-9\\s]+";
+    private static final String FORMAT_DATE = "(([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})||(--/--/----)) " +
+	    					"(([0-9]{1,2}:[0-9]{1,2})||(--:--))";
+    private static final String FORMAT_PRIORITY = "[a-z]+";
+    private static final String FORMAT_CATEGORY = "(([a-zA-Z0-9,]+)||(---))";
+    private static final String FORMAT_STATUS = "[a-z]+";
+    private static final String FORMAT_TASKITEM = FORMAT_DESCRIPTION+"\\t" +
+	    		FORMAT_DATE + "\\t" + FORMAT_DATE + "\\t" + FORMAT_PRIORITY
+	    		+ "\\t" + FORMAT_CATEGORY + "\\t" + FORMAT_STATUS;
 
     
     
@@ -48,7 +55,7 @@ public class FileHandler {
     
     public FileHandler(String fileName){
 	this.fileName = fileName;
-	file = new File(fileName);
+	file = new File(this.fileName);
     }
     
     /**
@@ -57,65 +64,55 @@ public class FileHandler {
      * @return An ArrayList of TaskItem objects, each TaskItem object represents
      * 		a task in the file being read from.
      */
-    public ArrayList<TaskItem> getListFromFile(){
+    public ArrayList<TaskItem> getListFromFile() throws IOException {
 	ArrayList<TaskItem> tempList = new ArrayList<TaskItem>();
 	String[] params, categoryList;
 	String lineInput;
 	TaskItem temp;
 	
-	try{
-	    reader = new BufferedReader(new FileReader(file));
+	reader = new BufferedReader(new FileReader(file));
+	lineInput = reader.readLine();
+	while(lineInput!=null){
+	    if(lineInput.matches(FORMAT_TASKITEM)){
+		params = lineInput.split("\\t");
+		temp = new TaskItem(params[0]);
+		/*if(Date.isValidDate(params[1])){
+		    //set start date
+		}
+		if(Date.isValidDate(params[2])){
+		    //set end date
+		}
+		temp.setPriorityType(params[3]);
+		categoryList = TaskItem.splitCategories(params[4]);
+		for(int i=0; i<categoryList.length; i++){
+		    temp.addCategory(categoryList[i]);
+		}
+		temp.setStatus(params[5]);*/
+		tempList.add(temp);
+	    } else{
+		throw new IOException();
+	    }    
 	    lineInput = reader.readLine();
-	    while(lineInput!=null){
-		if(lineInput.matches(INPUTFORMAT)){
-		    params = lineInput.split("\\t");
-		    temp = new TaskItem(params[0]);
-		    if(Date.isValidDate(params[1])){
-			//set start date
-		    }
-		    if(Date.isValidDate(params[2])){
-			//set end date
-		    }
-		    temp.setPriorityType(params[3]);
-		    categoryList = TaskItem.splitCategories(params[4]);
-		    for(int i=0; i<categoryList.length; i++){
-			temp.addCategory(categoryList[i]);
-		    }
-		    temp.setStatus(params[5]);
-		    tempList.add(temp);
-		} else{
-		    throw new IOException();
-		}    
-		lineInput = reader.readLine();
-	    }
+   
 	}
-	catch(IOException ioe){
-	    printErrorMessage(MESSAGE_FILE_ERROR);
-	    System.exit(1);
-	}
-	finally{
-	    reader.close();
-	}
+	reader.close();
 	return tempList;
     }
     
     /**
      * Writes the tasks in list to the file specified in the constructor of
      * "to-do.txt".
+     * @throws IOException if error occurs while creating output file if
+     * 		if does not exists.
      */
-    public void writeToFile(ArrayList<TaskItem> list){
-	try{
-	    file.createNewFile();
-	    writer = new PrintWriter(file);
-	    while(!list.isEmpty()){
-		writer.println(list.remove(0));
-	    }
-	    printMessage(MESSAGE_SAVE_SUCCESS);
-	} catch(IOException ioe){
-	    printErrorMessage(MESSAGE_FILE_WRITE_ERROR);
-	} finally{
-	    writer.close();
+    public void writeToFile(ArrayList<TaskItem> list) throws IOException {
+	file.createNewFile();
+	writer = new PrintWriter(file);
+	int numItems = list.size();
+	for(int i=0; i<numItems; i++){
+	    writer.println(list.get(i));
 	}
+	writer.close();
     }
     
     private void printMessage(String message){

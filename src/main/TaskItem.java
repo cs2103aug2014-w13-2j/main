@@ -9,12 +9,14 @@ import java.util.ArrayList;
  * use a Comparator class that operates on this class
  * instead.
  * @author zixian
- * Note: Please update author list if you have
- * made any changes here.
  */
 //To-Do: Modify Date-related methods after modifying Date class.
 public class TaskItem {
     private static final String EMPTY_CATEGORY = "---";
+    
+    private static final String PRIORITY_HIGH = "high";
+    private static final String PRIORITY_MID = "mid";
+    private static final String PRIORITY_LOW = "low";
     
     private static final String STATUS_COMPLETED = "completed";
     private static final String STATUS_PENDING = "pending";
@@ -22,6 +24,7 @@ public class TaskItem {
     enum PRIORITY_TYPE {VERY_URGENT, URGENT, NORMAL};
     enum STATUS_TYPE {PENDING, COMPLETED};
     
+    //Data attributes
     private String description;
     private Date startDate = new Date();
     private Date endDate = new Date();
@@ -36,22 +39,27 @@ public class TaskItem {
 	this.description = description;
     }
     
+    /**
+     * Returns the description for this task item.
+     */
     public String getDescription(){
 	return description;
     }
     
     /**
-     * Returns the start date in the format used in
-     * the text file.
+     * Returns the start date.
+     * @return The String representation of the start date in the format ""
      */
+    //To-Do: Update @return with finalised Date.toString() format.
     public String getStartDate(){
 	return startDate.toString();
     }
     
     /**
-     * Returns the end date in the format used in
-     * the text file.
+     * Returns the end date.
+     * @return The String representation of the end date in the format ""
      */
+    //To-Do: Update @return with finalised Date.toString() format.
     public String getEndDate(){
 	return endDate.toString();
     }
@@ -79,10 +87,10 @@ public class TaskItem {
      */
     public String getPriority(){
 	switch(priority){
-	    case VERY_URGENT: return "high";
-	    case URGENT: return "mid";
-	    case NORMAL: return "low";
-	    default: return "";
+	    case VERY_URGENT: return TaskItem.PRIORITY_HIGH;
+	    case URGENT: return TaskItem.PRIORITY_MID;
+	    case NORMAL: return TaskItem.PRIORITY_LOW;
+	    default: return "";	//This line will never be executed.
 	}
     }
     
@@ -92,8 +100,8 @@ public class TaskItem {
      */
     public String getStatus(){
 	switch(status){
-	    case PENDING: return "pending";
-	    case COMPLETED: return "completed";  
+	    case PENDING: return TaskItem.STATUS_PENDING;
+	    case COMPLETED: return TaskItem.STATUS_COMPLETED;  
 	    default: return "";
 	}
     }
