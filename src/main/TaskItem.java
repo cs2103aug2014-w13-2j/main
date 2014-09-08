@@ -50,9 +50,13 @@ public class TaskItem {
 	return endDate.toString();
     }
     
-    public String getCategory(){
-	return "";
+    /**@author 
+     * @return ArrayList<String>
+     */
+    public ArrayList<String> getCategory(){ 	
+	return this.category;
     }
+    
     
     /**
      * Returns the priority value in the form that is
