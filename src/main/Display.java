@@ -22,11 +22,11 @@ public class Display {
 		}
 	}
 	public static String taskListTitle(){
-		String s=String.format("%20s%20s%20s%20s%20s%20s", "Description","Status","Priority","Start Time","End Time","Categories");
+		String s=String.format("%-20s%15s   %12s  %8s  %8s  %20s  ", "Description","Status","Priority","Start Time","End Time","Categories");
 		return s;
 	}
 	public static String dividingLine(){
-		return "---------------------------------------------------------";
+		return "--------------------------------------------------------------------------------------------------------";
 	}
 	public static void taskDisplay(TaskItem thisTask){	
 		
@@ -42,19 +42,19 @@ public class Display {
 		String status=thisTask.getStatus();
 		ArrayList<String> categories=thisTask.getCategory();
 		
-		String s=String.format("%-20s%20s%10s%15s%15s%30s", description,status,priority,startTime,endTime,categories.toString());
+		String s=String.format("%-20s%20s%10s%10s%10s%30s", description,status,priority,startTime,endTime,categories.toString());
 		return s;
 	}
-	private String dateFormatter(Calendar c){
+	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
-	private String dateFormatter(Date d){
+	public String dateFormatter(Date d){
 		
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
-	private String timeFormatter(Date d){
+	public String timeFormatter(Date d){
 		String s = String.format("%tH:%tM", d);
 		return s;
 	}
