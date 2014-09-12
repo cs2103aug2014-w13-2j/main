@@ -22,9 +22,19 @@ public class FileHandlerTest {
 	}
     }
     
-    @Ignore
+    @Test
     public void testWriteToFile() {
-	fail("Not yet implemented");
+	FileHandler testReadWrite = new FileHandler();
+	try{
+	    ArrayList<TaskItem> list = testReadWrite.getListFromFile();
+	    list.get(0).setEndDate(30, 9, 2014);
+	    testReadWrite.writeToFile(list);
+	    list = testReadWrite.getListFromFile();
+	    assertEquals("list has 1 item", 1, list.size());
+	    assertEquals("item's endDate is 30/9/2014 --:--", "30/9/2014 --:--", list.get(0).getEndDate());
+	} catch(IOException ioe){
+	    System.out.println("Error");
+	}
     }
     
 }

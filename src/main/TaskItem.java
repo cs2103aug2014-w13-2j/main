@@ -153,7 +153,11 @@ public class TaskItem {
      * Adds the specified category to this task.
      */
     public void addCategory(String category){
-	   categoryList.add(category);
+	categoryList.add(category);
+    }
+    
+    public void removeCategory(String category){
+	categoryList.remove(category);
     }
     
     /**
