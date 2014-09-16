@@ -6,11 +6,11 @@ package main;
  */
 public class Date implements Comparable<Date>{
     //Default, invalid date values.
-    public static final int DEFAULT_DAY = 0;
-    public static final int DEFAULT_MONTH = 0;
-    public static final int DEFAULT_YEAR = 0;
-    public static final int DEFAULT_HOUR = -1;
-    public static final int DEFAULT_MINUTE = -1;
+    private static final int DEFAULT_DAY = 0;
+    private static final int DEFAULT_MONTH = 0;
+    private static final int DEFAULT_YEAR = 0;
+    private static final int DEFAULT_HOUR = -1;
+    private static final int DEFAULT_MINUTE = -1;
     
     //String format for unset date and time
     private static final String FORMAT_DEFAULT_DATE = "--/--/----";
@@ -30,11 +30,11 @@ public class Date implements Comparable<Date>{
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
-    public Date(int date, int month, int year){
+    public Date(int date, int month, int year) /*throws IllegalArgumentException*/{
 	setDate(date, month, year);
     }
 
-    public Date(int date, int month, int year, int hour, int minute){
+    public Date(int date, int month, int year, int hour, int minute) /*throws IllegalArgumentException*/{
 	setDate(date, month, year, hour, minute);
     }
     
