@@ -27,7 +27,11 @@ public class Date implements Comparable<Date>{
     private MONTH month = MONTH.INVALID;
     
     public Date(){
+	//try
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
+	//} ctach(IllegalArgumentException e){
+	
+    	//}
     }
     
     public Date(int date, int month, int year) /*throws IllegalArgumentException*/{
@@ -106,7 +110,7 @@ public class Date implements Comparable<Date>{
     /**
      * Sets this to the given date without a specified time.
      */
-    public void setDate(int date, int month, int year){
+    public void setDate(int date, int month, int year) /*throws IllegalArgumentException*/{
 	setDate(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
@@ -114,7 +118,7 @@ public class Date implements Comparable<Date>{
      * Sets this to the given date and time.
      */
     public void setDate(int date, int month, int year,
-	    		int hour, int minute){
+	    		int hour, int minute) /*throws IllegalArgumentException*/{
 	setDate(date);
 	setMonth(month);
 	setYear(year);
