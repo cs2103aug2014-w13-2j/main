@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A single command-line option. It keeps information of an option
@@ -73,7 +74,7 @@ public class Option {
 	private String description;
 
 	/** delimiter character for multiple argument values */
-	private char delimiter;
+	private char delimiter = ',';
 	
 	/*=========================================================================
 	 * Constructors
