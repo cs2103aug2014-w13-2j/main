@@ -15,5 +15,7 @@ package main;
  *
  */
 public class CommandLine {
-
+	private String commandType;
+	private Options options;
+	
 }
