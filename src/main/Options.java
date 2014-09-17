@@ -84,6 +84,16 @@ public class Options implements Iterable<Option> {
 	public Collection<Option> getOptions(String optName) {
 		OptionType optType = OptionType.fromString(optName);
 		
+		return getOptions(optType);
+	}
+	
+	/**
+	 * Retrieve the collection of Option that is of the given type
+	 * 
+	 * @param optType OptionType to retrieve
+	 * @return a collection of all the options of that OptionType
+	 */
+	public Collection<Option> getOptions(OptionType optType) {
 		return optionTable.get(optType);
 	}
 	
@@ -99,7 +109,7 @@ public class Options implements Iterable<Option> {
 	public Collection<OptionType> getAmbiguousOptionTypes() {
 		Collection<OptionType> list = new ArrayList<OptionType>();
 		for (Entry<OptionType, Collection<Option>> e: optionTable.entrySet()) {
-			if (e.getValue().size() > 1) {
+			if (e.getValue().size() > 1) { // if there are 2 more options for 1 type
 				list.add(e.getKey());
 			}
 		}
