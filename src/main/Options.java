@@ -1,12 +1,10 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Collection of Options
@@ -90,8 +88,23 @@ public class Options implements Iterable<Option> {
 	}
 	
 	public boolean hasAmbiguity() {
-		
+		for (Collection<Option> c: optionTable.values()) {
+			if (c.size() > 1) {
+				return true;
+			}
+		}
 		return false;
+	}
+	
+	public Collection<OptionType> getAmbiguousOptionTypes() {
+		Collection<OptionType> list = new ArrayList<OptionType>();
+		for (Entry<OptionType, Collection<Option>> e: optionTable.entrySet()) {
+			if (e.getValue().size() > 1) {
+				list.add(e.getKey());
+			}
+		}
+		
+		return list;
 	}
 	
 	@Override
