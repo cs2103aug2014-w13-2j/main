@@ -36,6 +36,15 @@ public enum OptionType {
 		
 		return opt;
 	}
+	
+	static public OptionType fromOption(Option opt) {
+		if (opt == null) {
+			throw new NullPointerException("Null option");
+		}
+		
+		return fromString(opt.getOptName());
+	}
+	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
 		this.aliases = Arrays.asList(aliases);
