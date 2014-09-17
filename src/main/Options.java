@@ -33,6 +33,33 @@ public class Options implements Iterable<Option> {
 		return true;
 	}
 
+	/**
+	 * Query if this collection contains a particular option
+	 * 
+	 * @param opt the Option to query
+	 * @return boolean flag if the matching option exists in the collection
+	 */
+	public boolean hasOption(Option opt) {
+		OptionType optType = OptionType.fromOption(opt);
+		
+		if (optionTable.containsKey(OptionType.fromOption(opt))) {
+			Collection<Option> options = optionTable.get(optType);
+			return options.contains(opt);
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Query if this collection contains an option name
+	 * 
+	 * @param optName String name for the option
+	 * @return boolean flag if a certain option type exists.
+	 */
+	public boolean hasOption(String optName) {
+		return optionTable.containsKey(OptionType.fromString(optName));
+	}
+	
 	
 	@Override
 	public Iterator<Option> iterator() {
