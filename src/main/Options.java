@@ -42,7 +42,7 @@ public class Options implements Iterable<Option> {
 	public boolean hasOption(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
 		
-		if (optionTable.containsKey(OptionType.fromOption(opt))) {
+		if (optionTable.containsKey(optType)) {
 			Collection<Option> options = optionTable.get(optType);
 			return options.contains(opt);
 		} else {
@@ -60,6 +60,39 @@ public class Options implements Iterable<Option> {
 		return optionTable.containsKey(OptionType.fromString(optName));
 	}
 	
+	/**
+	 * Retrieve a passed Option if it exists in this collection
+	 * 
+	 * @param opt an Option to search for in the collection
+	 * @return an Option object that exists in the collection
+	 */
+	public Option getOption(Option opt) {
+		OptionType optType = OptionType.fromOption(opt);
+		
+		for (Option o: optionTable.get(optType)) {
+			if (opt.equals(o)) {
+				return o;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieve the collection of Option that has the same type
+	 * 
+	 * @param optName an alias of the option to specify OptionType
+	 * @return a collection of all the options of that OptionType
+	 */
+	public Collection<Option> getOptions(String optName) {
+		OptionType optType = OptionType.fromString(optName);
+		
+		return optionTable.get(optType);
+	}
+	
+	public boolean hasAmbiguity() {
+		
+		return false;
+	}
 	
 	@Override
 	public Iterator<Option> iterator() {
