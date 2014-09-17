@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OptionType to help with aliases for Option
+ * 
+ * @author nhan
+ *
+ */
 public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
 	}, START_TIME("-s", "--starttime", "from") {
