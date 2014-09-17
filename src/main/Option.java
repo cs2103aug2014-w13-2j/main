@@ -73,7 +73,7 @@ public class Option {
 	private String description;
 
 	/** delimiter character for multiple argument values */
-	private char delimiter;
+	private char delimiter = ',';
 	
 	/*=========================================================================
 	 * Constructors
