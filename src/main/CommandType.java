@@ -58,15 +58,7 @@ public enum CommandType {
 		
 		return cmd;
 	}
-	
-	static public CommandType fromOption(Option cmd) {
-		if (cmd == null) {
-			throw new NullPointerException("Null command");
-		}
-		
-		return fromString(cmd.getOptName());
-	}
-	
+
 	private List<String> aliases;
 	private CommandType(String... aliases) {
 		this.aliases = Arrays.asList(aliases);
