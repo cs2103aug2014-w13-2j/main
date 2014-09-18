@@ -9,6 +9,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 
+ * CommandType includes the types for each command keyword.
+ * 
+ * There are currently 4 command types, i.e.
+ * 	- Add: Adding an item to the storage
+ *  - Delete: Delete an item in the storage
+ *  - Display: Display the items in the storage
+ *  - Search: Query for item/items matching certain filters.
+ *  
+ * This CommandType enum class is able to recognise aliases.
+ * The current aliases for the CommandType now are:
+ *  - Add: put,
+ *  - Delete: del,
+ *  - Display: disp, show,
+ *  - Search: find, query,
  * @author nhan
  *
  */
@@ -16,7 +31,7 @@ public enum CommandType {
 	ADD("put") {
 	}, DELETE("del") {
 	}, DISPLAY("disp", "show") {
-	}, SEARCH("find");
+	}, SEARCH("find", "query");
 	
 	static private final Map<String, CommandType> ALIAS_TABLE = new HashMap<String, CommandType>();
 	static {
