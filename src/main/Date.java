@@ -1,51 +1,55 @@
 package main;
 
 /**
- * Defines the date.
+ * Defines the date in the format DD/MM/YYYY.
  * @author zixian
  */
 public class Date implements Comparable<Date>{
-    //Default, invalid date values.
-    private static final int DEFAULT_DAY = 0;
-    private static final int DEFAULT_MONTH = 0;
-    private static final int DEFAULT_YEAR = 0;
-    private static final int DEFAULT_HOUR = -1;
-    private static final int DEFAULT_MINUTE = -1;
-    
-    //String format for unset date and time
-    private static final String FORMAT_DEFAULT_DATE = "--/--/----";
-    private static final String FORMAT_DEFAULT_TIME = "--:--";
+    //Default date values.
+    protected static final int DEFAULT_DAY = 1;
+    protected static final int DEFAULT_MONTH = 1;
+    protected static final int DEFAULT_YEAR = 1970;
     
     //String format for set date and time
-    private static final String FORMAT_DATE = "%1$d/%2$d/%3$d";
-    private static final String FORMAT_TIME = "%1$d:%2$d";
+    protected static final String FORMAT_DATE = "%1$d/%2$d/%3$d";
     
     enum MONTH {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE,
 		JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER,
 		DECEMBER, INVALID};
-    private int year, date, hour, minute;
+    private int year, date;
     private MONTH month = MONTH.INVALID;
     
+    /**
+     * Creates and initialises this Date object to 1 January 1970.
+     */
     public Date(){
-	//try
-	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
-	//} ctach(IllegalArgumentException e){
-	
-    	//}
+	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
     }
     
-    public Date(int date, int month, int year) /*throws IllegalArgumentException*/{
+    /**
+     * Creates a Date object with the specified date, month and year.
+     * @throws IllegalArgumentException if any of the values cause the date to be incorrect
+     * 		on the actual calendar.
+     */
+    public Date(int date, int month, int year) throws IllegalArgumentException{
+	if(!isValidDate(date, month, year)){
+	    throw new IllegalArgumentException();
+	}
 	setDate(date, month, year);
     }
 
-    public Date(int date, int month, int year, int hour, int minute) /*throws IllegalArgumentException*/{
-	setDate(date, month, year, hour, minute);
-    }
-    
+    /**
+     * Gets the day of the month of this date object.
+     * @returns The day in the month of this Date object.
+     */
     public int getDate(){
 	return date;
     }
     
+    /**
+     * Gets the month of this date object.
+     * @return The month of this Date object.
+     */
     public int getMonth(){
 	switch(month){
 	    case JANUARY: return 1;
@@ -64,36 +68,46 @@ public class Date implements Comparable<Date>{
 	}
     }
     
+    /**
+     * Gets the year of this date object.
+     * @return The year of this Date object.
+     */
     public int getYear(){
 	return year;
     }
     
-    public int getHour(){
-	return hour;
-    }
-    
-    public int getMinute(){
-	return minute;
+    /**
+     * Checks if the given date is valid.
+     * @return True if the date is valid in the calendar and false otherwise.
+     */
+    public static boolean isValidDate(int date, int month, int year){
+	boolean isValidYear = year>=0;
+	boolean isValidMonth = (month>0 && month<13);
+	boolean isValidDate = date>0;
+	if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12){
+	    isValidDate&=(date<32);
+	} else if(month==4 || month==6 || month==9 || month==11){
+	    isValidDate&=(date<31);
+	} else if(month==2){
+	    boolean isLeapYear = (year%400==0 || (year%4==0 && year%100!=0));
+	    if(isLeapYear){
+		isValidDate&=(date<30);
+	    } else{
+		isValidDate&=(date<29);
+	    }
+	} else{
+	    isValidDate = false;
+	}
+	return isValidYear && isValidMonth && isValidDate;
     }
     
     /**
      * Returns the String representation of this Date object for printing purpose.
-     * Format is: DD/MM/YYYY hh:mm.
-     * Invalid date is --/--/---- while invalid time is --:--
+     * Format is: DD/MM/YYYY.
      * @return String representation of this Date object.
      */
     public String toString(){
-	String output = "";
-	if(date<=0 || month==MONTH.INVALID || year<=0){
-	    output+=FORMAT_DEFAULT_DATE+" ";
-	}else{
-	    output+=(String.format(FORMAT_DATE, getDate(), getMonth(), getYear())+" ");
-	}
-	if(hour==-1 || minute==-1){
-	    output+=FORMAT_DEFAULT_TIME;
-	}else{
-	    output+=String.format(FORMAT_TIME, getHour(), getMinute());
-	}
+	String output = String.format(FORMAT_DATE, getDate(), getMonth(), getYear());
 	return output;
     }
     
@@ -109,28 +123,23 @@ public class Date implements Comparable<Date>{
     
     /**
      * Sets this to the given date without a specified time.
+     * @throws IllegalArgumentException if any of the parameters cause the new date value to be incorrect
+     * 		in the actual calendar.
      */
-    public void setDate(int date, int month, int year) /*throws IllegalArgumentException*/{
-	setDate(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
-    }
-    
-    /**
-     * Sets this to the given date and time.
-     */
-    public void setDate(int date, int month, int year,
-	    		int hour, int minute) /*throws IllegalArgumentException*/{
+    public void setDate(int date, int month, int year) throws IllegalArgumentException{
+	if(!isValidDate(date, month, year)){
+	    throw new IllegalArgumentException();
+	}
 	setDate(date);
 	setMonth(month);
 	setYear(year);
-	setHour(hour);
-	setMinute(minute);
     }
-    
-    private void setDate(int date) {
+
+    protected void setDate(int date) {
 	this.date = date;
     }
     
-    private void setMonth(int month){
+    protected void setMonth(int month){
 	switch(month){
 	    case 1: this.month = MONTH.JANUARY;
 	    		break;
@@ -160,18 +169,10 @@ public class Date implements Comparable<Date>{
 	}
     }
     
-    private void setYear(int year){
+    protected void setYear(int year){
 	this.year = year;
     }
-    
-    private void setHour(int hour){
-	this.hour = hour;
-    }
-    
-    private void setMinute(int minute){
-	this.minute = minute;
-    }
-    
+
     @Override
     /**
      * Compares which of the 2 Date objects comes later.
@@ -195,18 +196,8 @@ public class Date implements Comparable<Date>{
 	    return year-date2.getYear();
 	} else if(getMonth()!=date2.getMonth()){
 	    return getMonth()-date2.getMonth();
-	} else if(date!=date2.getDate()){
-	    return date-date2.getDate();
-	} else if(hour==DEFAULT_HOUR && date2.getHour()==DEFAULT_HOUR){
-	    return 0;
-	} else if(date2.getHour()==DEFAULT_HOUR){
-	    return -1;
-	} else if(hour==DEFAULT_HOUR){
-	    return 1;
-	} else if(hour!=date2.getHour()){
-	    return hour-date2.getHour();
 	} else{
-	    return minute-date2.getMinute();
+	    return date-date2.getDate();
 	}
     }
 }
