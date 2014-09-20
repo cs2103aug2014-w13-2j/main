@@ -15,7 +15,7 @@ public class DateTest {
     @Test
     public void testDateIntIntInt() {
 	Date date = new Date(2, 3, 1992);
-	assertEquals("Day is 2", 2, date.getDate());
+	assertEquals("Day is 2", 2, date.getDayOfMonth());
 	assertEquals("Month is 3", 3, date.getMonth());
 	assertEquals("Year is 1992", 1992, date.getYear());
     }
@@ -23,7 +23,7 @@ public class DateTest {
     @Test
     public void testDateIntIntIntIntInt() {
 	Date date = new Date(2, 3, 1992);
-	assertEquals("Day is 2", 2, date.getDate());
+	assertEquals("Day is 2", 2, date.getDayOfMonth());
 	assertEquals("Month is 3", 3, date.getMonth());
 	assertEquals("Year is 1992", 1992, date.getYear());
     }
@@ -43,12 +43,15 @@ public class DateTest {
     
     @Test
     public void testSetDateIntIntInt() {
-	fail("Not yet implemented");
-    }
-    
-    @Test
-    public void testSetDateIntIntIntIntInt() {
-	fail("Not yet implemented");
+	try{
+	    Date date = new Date();
+	    date.setDate(27, 9, 2014);
+	    assertEquals("Day of month is 27", 27, date.getDayOfMonth());
+	    assertEquals("Month is 9", 9, date.getMonth());
+	    assertEquals("Year is 2014", 2014, date.getYear());
+	} catch(IllegalArgumentException e){
+	    System.out.println("error");
+	}
     }
     
     @Test
@@ -66,13 +69,23 @@ public class DateTest {
 	date = new Date(29, 2, 2013);
 	date = new Date(32, 12, 1996);
 	date = new Date(29, 2, 2100);
+	date.setDate(29, 2, 2100);
+	date.setDate(-1, -1, -1);
+	date.setDate(2, 13, 1992);
+	date.setDate(3, 0, 1);
+	date.setDate(30, 2, 1995);
+	date.setDate(29, 2, 2013);
+	date.setDate(32, 12, 1996);
     }
     
     @Test
     public void testIsValidDate(){
+	assertTrue("29/2/2012 is valid date", Date.isValidDate(29, 2, 2012));
+	assertTrue("31/10/2014 is valid date", Date.isValidDate(31, 10, 2014));
 	assertTrue("2/3/1992 is valid date", Date.isValidDate(2, 3, 1992));
 	assertFalse("0/0/0 is invalid date", Date.isValidDate(0, 0, 0));
 	assertFalse("32/2/-1 is invalid date", Date.isValidDate(32, 2, -1));
+	assertFalse("29/2/2100 is invalid date", Date.isValidDate(29, 2, 2100));
     }
     
     

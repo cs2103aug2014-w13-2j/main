@@ -1,13 +1,18 @@
 package main;
 
+/**
+ * Defines an object containing both date and time. Time is defined using 24-hour clock.
+ * @author zixian
+ */
 public class DateTime extends Date {
+    //The default time values
     private static final int DEFAULT_HOUR = 0;
     private static final int DEFAULT_MINUTE = 0;
     
+    //The string format for time.
     private static final String FORMAT_TIME = "%1$d:%2$d";
     
-    private static final String FORMAT_DEFAULT_TIME = "--:--";
-    
+    //The main additional data members
     private int hour, minute;
     
     public DateTime(){
@@ -15,7 +20,7 @@ public class DateTime extends Date {
     }
     
     public DateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
-	setDate(date, month, year, hour, minute);
+	setDateTime(date, month, year, hour, minute);
     }
     
     public int getHour(){
@@ -39,8 +44,7 @@ public class DateTime extends Date {
     /**
      * Sets this to the given date and time.
      */
-    public void setDate(int date, int month, int year,
-	    		int hour, int minute) throws IllegalArgumentException{
+    public void setDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	if(!isValidDate(date, month, year) || !isValidTime(hour, minute)){
 	    throw new IllegalArgumentException();
 	}
@@ -56,11 +60,27 @@ public class DateTime extends Date {
 	this.minute = minute;
     }
     
+    /**
+     * Sets the time of this DateTime object.
+     * @throws IllegalArgumentException if the parameters result in an invalid time.
+     */
     public void setTime(int hour, int minute) throws IllegalArgumentException{
 	if(!isValidTime(hour, minute)){
 	    throw new IllegalArgumentException();
 	}
 	setHour(hour);
 	setMinute(minute);
+    }
+    
+    @Override
+    /**
+     * Returns the string representation of this DateTime object in the format DD/MM/YYYY HH:MM.
+     * @return The String representation of this DateTime object.
+     */
+    public String toString(){
+	StringBuilder output = new StringBuilder(super.toString());
+	output.append(' ');
+	output.append(String.format(FORMAT_TIME, hour, minute));
+	return output.toString();
     }
 }
