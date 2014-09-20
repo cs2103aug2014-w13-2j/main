@@ -100,8 +100,7 @@ public class Date implements Comparable<Date>{
      * @return String representation of this Date object for file IO.
      */
     public String toFileString(){
-	
-	return "";
+	return toString();
     }
     
     /**
@@ -132,12 +131,18 @@ public class Date implements Comparable<Date>{
 
     @Override
     /**
-     * Compares which of the 2 Date objects comes later.
-     * @return 0 if the 2 dates have same date and time, positive
+     * Compares which of the 2 Date objects comes later. If date2 is a subclass of Date,
+     * date2's compareTo method will be used instead but the outcome is not reversed.
+     * @return 0 if the 2 dates have same date, positive
      * 		integer if this come later than date2, negative integer
      * 		if this comes earlier than date2.
      */
     public int compareTo(Date date2){
+	Class<?> thisClass = this.getClass();
+	Class<?> date2Class = date2.getClass();
+	if(!thisClass.equals(date2Class)){
+	    return -date2.compareTo(this);
+	}
 	if(year!=date2.getYear()){
 	    return year-date2.getYear();
 	} else if(month!=date2.getMonth()){

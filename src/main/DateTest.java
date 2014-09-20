@@ -56,7 +56,12 @@ public class DateTest {
     
     @Test
     public void testCompareTo() {
-	fail("Not yet implemented");
+	Date date1 = new Date(2, 3, 1992);
+	Date date2 = new Date(9, 8, 1965);
+	assertTrue("date2<date1", date2.compareTo(date1)<0);
+	assertTrue("date1>date2", date1.compareTo(date2)>0);
+	date2.setDate(2, 3, 1992);
+	assertTrue("date1==date2", date1.compareTo(date2)==0);
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -87,6 +92,5 @@ public class DateTest {
 	assertFalse("32/2/-1 is invalid date", Date.isValidDate(32, 2, -1));
 	assertFalse("29/2/2100 is invalid date", Date.isValidDate(29, 2, 2100));
     }
-    
     
 }

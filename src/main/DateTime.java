@@ -15,18 +15,40 @@ public class DateTime extends Date {
     //The main additional data members
     private int hour, minute;
     
+    /**
+     * Creates a new DateTime object with the default date and time.
+     */
     public DateTime(){
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
+    /**
+     * Downcast the given Date object into DateTime object by assigning default time value.
+     */
+    public DateTime(Date date){
+	this(date.getDayOfMonth(), date.getMonth(), date.getYear(), DEFAULT_HOUR, DEFAULT_MINUTE);
+    }
+    
+    /**
+     * Creates a new DateTime object with the specified date and time details.
+     * @throws IllegalArgumentException if the date and time is invalid on the calendar of 24-hour clock.
+     */
     public DateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	setDateTime(date, month, year, hour, minute);
     }
     
+    /**
+     * Gets the hour of this datetime object in 24-hour clock.
+     * @return The hour of this DateTime object.
+     */
     public int getHour(){
 	return hour;
     }
     
+    /**
+     * Gets the minute of this datetime object.
+     * @return The minute of this DateTime object.
+     */
     public int getMinute(){
 	return minute;
     }
@@ -82,5 +104,29 @@ public class DateTime extends Date {
 	output.append(' ');
 	output.append(String.format(FORMAT_TIME, hour, minute));
 	return output.toString();
+    }
+
+    @Override
+    public int compareTo(Date date2){
+	if(!(date2 instanceof DateTime)){
+	    return compareTo(new DateTime(date2));
+	} else{
+	    return compareTo((DateTime)date2);
+	}
+    }
+    
+    /**
+     * Performs the same compareTo method between 2 DateTime objects.
+     */
+    private int compareTo(DateTime date2){
+	int result = super.compareTo(date2);
+	if(result==0){
+	    if(hour!=date2.getHour()){
+		return hour-date2.getHour();
+	    } else{
+		return minute-date2.getMinute();
+	    }
+	}
+	return result;
     }
 }
