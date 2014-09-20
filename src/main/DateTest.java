@@ -37,11 +37,6 @@ public class DateTest {
     }
     
     @Test
-    public void testToFileString() {
-	fail("Not yet implemented");
-    }
-    
-    @Test
     public void testSetDateIntIntInt() {
 	try{
 	    Date date = new Date();
