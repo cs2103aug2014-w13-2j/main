@@ -8,7 +8,11 @@ public class TaskItemTest {
     
     @Test
     public void testToFileString() {
-	fail("Not yet implemented");
+	TaskItem task = new TaskItem("Return book", new Date(1, 10, 2014));
+	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 --:--", task.toFileString());
+	
+	task.setDeadlineTime(10, 40);
+	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 10:40", task.toFileString());
     }
     
     @Test
@@ -19,12 +23,20 @@ public class TaskItemTest {
     
     @Test
     public void testSetDeadline() {
-	fail("Not yet implemented");
+	TaskItem task = new TaskItem("CS2106 homework", new Date(24, 9, 2014));
+	assertEquals("24/9/2014", task.getDeadline().toString());
+	
+	task.setDeadline(new DateTime(26, 9, 2014, 23, 59));
+	assertEquals("26/9/2014 23:59", task.getDeadline().toString());
     }
     
     @Test
     public void testSetDeadlineDate() {
-	fail("Not yet implemented");
+	TaskItem task = new TaskItem("CS2106 homework", new Date(27, 9, 2014));
+	assertEquals("27/9/2014", task.getDeadline().toString());
+	
+	task.setDeadlineDate(new Date(26, 9, 2014));
+	assertEquals("26/9/2014", task.getDeadline().toString());
     }
     
     @Test
@@ -39,7 +51,7 @@ public class TaskItemTest {
 	assertTrue("deadline is DateTime type", task.getDeadline() instanceof DateTime);
 	
 	task.setDeadlineTime(22, 60);
-	assertEquals("A2 CS2106 homework 0 pending --/--/---- --:-- 26/9/2014 23:59", task.toString());
+	assertEquals("A3 CS2106 homework 0 pending --/--/---- --:-- 26/9/2014 23:59", task.toString());
     }
     
     @Test
