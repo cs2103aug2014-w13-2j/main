@@ -16,7 +16,7 @@ package main;
  */
 public class EventItem extends ToDoItem {
     private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; %4$s; %5$s";
-    private static final String FORMAT_PRINTSTRING = "%1$s %2$d %3$s %4$s %5$s";
+    private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s %5$s %6$s";
     private static final String FORMAT_EMPTYTIME = " --:--";
     
     //Main data members
@@ -145,10 +145,8 @@ public class EventItem extends ToDoItem {
     
     @Override
     public String toString(){
-	StringBuilder output = new StringBuilder(id).append(' ');
-	output = output.append(String.format(FORMAT_PRINTSTRING, description, priority, status,
-		     		getDateString(startDate), getDateString(endDate)));
-	return output.toString();
+	return String.format(FORMAT_PRINTSTRING, id, description, priority, status,
+		     		getDateString(startDate), getDateString(endDate));
     }
     
     @Override

@@ -18,7 +18,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     
     //Print formats
     private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; --/--/---- --:--";
-    private static final String FORMAT_PRINTSTRING = " %1$s %2$d %3$s --/--/---- --:-- --/--/---- --:--";
+    private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- --/--/---- --:--";
     
     //ID is of the form idLetter followed by idNUm.
     //Highest idNum possible is 99, after which idLetter will advance to the next alphabet.
@@ -110,8 +110,6 @@ public class ToDoItem implements Comparable<ToDoItem>{
     
     @Override
     public String toString(){
-	StringBuilder output = new StringBuilder(getId());
-	output = output.append(String.format(FORMAT_PRINTSTRING, description, priority, status));
-	return output.toString();
+	return String.format(FORMAT_PRINTSTRING, id, description, priority, status);
     }
 }
