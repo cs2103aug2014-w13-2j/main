@@ -94,34 +94,36 @@ public class EventItem extends ToDoItem {
     
     /**
      * Updates the start time for this event.
-     * @throws IllegalArgumentException if the specified time is invalid on 24-hour clock.
+     * Does nothing if the specified time is invalid on 24-hour clock.
      */
-    public void setStartTime(int hour, int minute) throws IllegalArgumentException{
-	if(!DateTime.isValidTime(hour, minute)){
-	    throw new IllegalArgumentException();
-	}
+    public void setStartTime(int hour, int minute){
 	DateTime temp;
 	if(!(startDate instanceof DateTime)){
 	    startDate = new DateTime(startDate);
 	} 
 	temp = (DateTime)startDate;
-	temp.setTime(hour, minute);
+	try{
+	    temp.setTime(hour, minute);
+	} catch(IllegalArgumentException e){
+	    
+	}
     }
     
     /**
      * Updates the end time for this event.
-     * @throws IllegalArgumentException if the specified time is invalid on 24-hour clock.
+     * Does nothing if the specified time is invalid on 24-hour clock.
      */
-    public void setEndTime(int hour, int minute) throws IllegalArgumentException{
-	if(!DateTime.isValidTime(hour, minute)){
-	    throw new IllegalArgumentException();
-	}
+    public void setEndTime(int hour, int minute){
 	DateTime temp;
 	if(!(endDate instanceof DateTime)){
 	    endDate = new DateTime(endDate);
 	} 
 	temp = (DateTime)endDate;
-	temp.setTime(hour, minute);
+	try{
+	    temp.setTime(hour, minute);
+	} catch(IllegalArgumentException e){
+	    
+	}
     }
     
     /**

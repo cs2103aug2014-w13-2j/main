@@ -37,5 +37,8 @@ public class EventItemTest {
 	
 	item.setStartDate(new Date(24, 9, 2014));
 	assertEquals("A4 CS2010R lesson 0 pending 24/9/2014 18:30 23/9/2014 18:30", item.toString());
+	
+	item.setStartTime(24, 0);
+	assertEquals("A4 CS2010R lesson 0 pending 24/9/2014 18:30 23/9/2014 18:30", item.toString());
     }
 }
