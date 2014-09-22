@@ -9,6 +9,8 @@ package main;
  * 		   new EventItem(description, Date start, DateTime end)	//end has specified time while start does not.
  * 		   new EventItem(description, DateTime start, Date end)	//start has specified time while end does not.
  * 		   new EventItem(description, DateTime start, DateTime end)	//both start and end have specified times and can be different.
+ * 		   new EventItem(description, priority, date) or
+ * 		   new EventItem(description, priority, start, end)	//to initialise priority.
  * 		   set start/end dates with setStartDate()/setEndDate() respectively.
  * 		   set start/end times with setStartTime()/setEndTime() respectively.
  * 		   set date and time by using the above 2 uses together.
@@ -71,11 +73,27 @@ public class EventItem extends ToDoItem {
     }
     
     /**
+     * Returns the string representation of the start date and/or time in this class.
+     * @return A String representation of the start date and/or time used in this class.
+     */
+    public String getStartDateString(){
+	return getDateString(startDate);
+    }
+    
+    /**
      * Returns the end date of this event.
      * @return A Date object of the end date or null if the end date is not set.
      */
     public Date getEndDate(){
 	return endDate;
+    }
+    
+    /**
+     * Returns the string representation of the end date and/or time in this class.
+     * @return A String representation of the end date and/or time used in this class.
+     */
+    public String getEndDateString(){
+	return getDateString(endDate);
     }
 
     /**

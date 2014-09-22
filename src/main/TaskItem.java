@@ -3,6 +3,11 @@ package main;
 /**
  * Defines a task.
  * A task is an item in the To-Do List with specified deadline.
+ * Usage: new TaskItem(description, Date deadline) //deadline without specific time.
+ * 	  new TaskItem(description, DateTime deadline)	//deadline with specific time.
+ * 	  new TaskItem(description, priority, deadline)	//to initialise priority.
+ * 	  setStatus(status)	//to set task status.
+ * 	  setPriority(priority)	//to set priority.
  * @author zixian
  */
 public class TaskItem extends ToDoItem {
@@ -48,10 +53,18 @@ public class TaskItem extends ToDoItem {
     
     /**
      * Gets the deadline for this task.
-     * @return A reference to the deadline for this task.
+     * @return A Date reference to the deadline for this task.
      */
     public Date getDeadline(){
 	return deadline;
+    }
+    
+    /**
+     * Returns the string representation of this task's deadline.
+     * @return A String representation of the deadline in this class.
+     */
+    public String getDeadlineString(){
+	return getDateString(deadline);
     }
     
     /**
