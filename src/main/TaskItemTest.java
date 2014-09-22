@@ -10,9 +10,11 @@ public class TaskItemTest {
     public void testToFileString() {
 	TaskItem task = new TaskItem("Return book", new Date(1, 10, 2014));
 	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 --:--", task.toFileString());
+	System.out.println(task.getFeedbackString());
 	
 	task.setDeadlineTime(10, 40);
 	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 10:40", task.toFileString());
+	System.out.println(task.getFeedbackString());
     }
     
     @Test
@@ -61,5 +63,6 @@ public class TaskItemTest {
 	
 	task.setStatus(TaskItem.STATUS_INPROGRESS);
 	assertEquals("new status is 'in progress'", TaskItem.STATUS_INPROGRESS, task.getStatus());
+	System.out.println(task.getFeedbackString());
     }
 }

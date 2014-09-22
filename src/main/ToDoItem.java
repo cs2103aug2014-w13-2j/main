@@ -17,6 +17,8 @@ public class ToDoItem implements Comparable<ToDoItem>{
     private static final int MAX_IDNUM = 99;
     
     //Print formats
+    private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+	    						"Status: %4$s";
     private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; --/--/---- --:--";
     private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- --/--/---- --:--";
     
@@ -104,6 +106,14 @@ public class ToDoItem implements Comparable<ToDoItem>{
 	this.status = status;
     }
     
+    public String getFeedbackString(){
+	return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, status);
+    }
+    
+    /**
+     * Returns a string representation of this item to be displayed for feedback and confirmation.
+     * @return A formatted String representing this item.
+     */
     public String toFileString(){
 	return String.format(FORMAT_FILESTRING, description, priority, status);
     }

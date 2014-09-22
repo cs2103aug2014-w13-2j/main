@@ -15,6 +15,7 @@ public class ToDoItemTest {
 	assertEquals("A2", item.getId());
 	assertEquals("pending", item.getStatus());
 	assertEquals("Priority is 0", 0, item.getPriority());
+	System.out.println(item.getFeedbackString());
     }
     
     @Test

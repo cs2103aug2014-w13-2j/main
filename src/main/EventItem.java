@@ -15,9 +15,12 @@ package main;
  * @author zixian
  */
 public class EventItem extends ToDoItem {
+    private static final String FORMAT_EMPTYTIME = " --:--";
+    private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+	    						"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
     private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; %4$s; %5$s";
     private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s %5$s %6$s";
-    private static final String FORMAT_EMPTYTIME = " --:--";
+    
     
     //Main data members
     private Date startDate, endDate;
@@ -139,6 +142,12 @@ public class EventItem extends ToDoItem {
     public String toString(){
 	return String.format(FORMAT_PRINTSTRING, id, description, priority, status,
 		     		getDateString(startDate), getDateString(endDate));
+    }
+    
+    @Override
+    public String getFeedbackString(){
+	return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, getDateString(startDate),
+				getDateString(endDate), status);
     }
     
     @Override

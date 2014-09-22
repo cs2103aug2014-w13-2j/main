@@ -18,6 +18,7 @@ public class EventItemTest {
 	assertEquals("A2 CS2105 midterms 0 pending 4/10/2014 17:00 4/10/2014 17:00", item.toString());
 	item.setEndTime(18, 0);
 	assertEquals("A2 CS2105 midterms 0 pending 4/10/2014 17:00 4/10/2014 18:00", item.toString());
+	System.out.println(item.getFeedbackString());
     }
     
     @Test
@@ -41,4 +42,14 @@ public class EventItemTest {
 	item.setStartTime(24, 0);
 	assertEquals("A4 CS2010R lesson 0 pending 24/9/2014 18:30 23/9/2014 18:30", item.toString());
     }
+    
+    //@Test Test shows the pool of ID strings is shared.
+    /*public void testIdPool(){
+	ToDoItem item1 = new ToDoItem("Task 1");
+	EventItem item2 = new EventItem("Event 1", new Date(30, 9, 2014));
+	TaskItem item3 = new TaskItem("Task 2", new Date(30, 9, 2014));
+	System.out.println(item1.getId());
+	System.out.println(item2.getId());
+	System.out.println(item3.getId());
+    }*/
 }

@@ -6,8 +6,10 @@ package main;
  * @author zixian
  */
 public class TaskItem extends ToDoItem {
-    private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; %4$s";
     private static final String FORMAT_EMPTYTIME = " --:--";
+    private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+	    						"Deadline: %4$s\n"+"Status: %5$s";
+    private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; %4$s";
     private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- %5$s";
     
     //Main data member
@@ -96,6 +98,11 @@ public class TaskItem extends ToDoItem {
     @Override
     public String toString(){
 	return String.format(FORMAT_PRINTSTRING, id, description, priority, status, getDateString(deadline));
+    }
+    
+    @Override
+    public String getFeedbackString(){
+	return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, getDateString(deadline), status);
     }
     
     @Override
