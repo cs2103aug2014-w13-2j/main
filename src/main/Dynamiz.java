@@ -3,9 +3,13 @@
  */
 package main;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 
 /**
+ * The main program.
  * @author zixian
  *
  */
@@ -14,16 +18,38 @@ import java.util.ArrayList;
  * Defines the object class of the main program.
  */
 public class Dynamiz {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		/*TaskItem item = new TaskItem("Sample task");
-		item.setEndDate(6, 9, 2014);
-		System.out.println(item);*/
-	    	FileHandler fileHandler = new FileHandler();
-	    	ArrayList<TaskItem> list = fileHandler.getListFromFile();
+    private static Controller controller = new Controller();
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    
+    public static void main(String[] args) {
+	//Load to-do list from file.
+	//controller.setup();
+	
+	//Display welcome message, with some tips to help users get started.
+	//Display.printWelcomeMessage();
+	System.out.println("Welcome to Dynamiz. Enter \"add [new task]\", replacing \"[new task]\" with" +
+			"your desired task description, to begin.");
+	System.out.print("Command: ");
+	String input = getInput();
+	
+	//Stub. To be refactored.
+	while(!input.equals("exit")){
+		controller.executeCommand(input);
+		System.out.print("Command: ");
+		input = getInput();
+    	}
+	try{
+	    reader.close();
+	} catch(IOException ioe){
+	    
 	}
+    }
 
+    private static String getInput(){
+	try{
+	    return reader.readLine();
+	} catch(IOException ioe){
+	    return "exit";
+	}
+    }
 }
