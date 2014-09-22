@@ -8,7 +8,7 @@ package main;
 public class ToDoItem implements Comparable<ToDoItem>{
 
     private static final int DEFAULT_PRIORITY = 0;
-    private static final String DEFAULT_STATUS = "pending";
+    protected static final String DEFAULT_STATUS = "pending";
     
     public static final String STATUS_INPROGRESS = "in progress";
     public static final String STATUS_COMPLETED = "completed";

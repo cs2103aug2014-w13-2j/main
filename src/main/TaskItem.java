@@ -85,13 +85,11 @@ public class TaskItem extends ToDoItem {
      * Does nothing if the specified time is invalid on the 24-hour clock.
      */
     public void setDeadlineTime(int hour, int minute){
-	if(!(this.deadline instanceof DateTime)){
-	    this.deadline = new DateTime(this.deadline);
-	}
-	try{
+	if(DateTime.isValidTime(hour, minute)){
+	    if(!(this.deadline instanceof DateTime)){
+		this.deadline = new DateTime(this.deadline);
+	    }
 	    ((DateTime)deadline).setTime(hour, minute);
-	} catch(IllegalArgumentException e){
-	    
 	}
     }
     

@@ -113,13 +113,12 @@ public class Date implements Comparable<Date>{
      * @throws IllegalArgumentException if any of the parameters cause the new date value to be incorrect
      * 		in the actual calendar.
      */
-    public void setDate(int date, int month, int year) throws IllegalArgumentException{
-	if(!isValidDate(date, month, year)){
-	    throw new IllegalArgumentException();
+    public void setDate(int date, int month, int year){
+	if(isValidDate(date, month, year)){
+	    setDayOfMonth(date);
+		setMonth(month);
+		setYear(year);
 	}
-	setDayOfMonth(date);
-	setMonth(month);
-	setYear(year);
     }
 
     protected void setDayOfMonth(int date) {

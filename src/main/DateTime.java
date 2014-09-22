@@ -36,7 +36,7 @@ public class DateTime extends Date {
     /**
      * Creates a new DateTime object with the specified date, using the default time.
      */
-    public DateTime(int date, int month, int year){
+    public DateTime(int date, int month, int year) throws IllegalArgumentException{
 	this(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     

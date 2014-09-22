@@ -97,15 +97,11 @@ public class EventItem extends ToDoItem {
      * Does nothing if the specified time is invalid on 24-hour clock.
      */
     public void setStartTime(int hour, int minute){
-	DateTime temp;
-	if(!(startDate instanceof DateTime)){
-	    startDate = new DateTime(startDate);
-	} 
-	temp = (DateTime)startDate;
-	try{
-	    temp.setTime(hour, minute);
-	} catch(IllegalArgumentException e){
-	    
+	if(DateTime.isValidTime(hour, minute)){
+	    if(!(startDate instanceof DateTime)){
+		startDate = new DateTime(startDate);
+	    } 
+	    ((DateTime)startDate).setTime(hour, minute);
 	}
     }
     
@@ -114,15 +110,11 @@ public class EventItem extends ToDoItem {
      * Does nothing if the specified time is invalid on 24-hour clock.
      */
     public void setEndTime(int hour, int minute){
-	DateTime temp;
-	if(!(endDate instanceof DateTime)){
-	    endDate = new DateTime(endDate);
-	} 
-	temp = (DateTime)endDate;
-	try{
-	    temp.setTime(hour, minute);
-	} catch(IllegalArgumentException e){
-	    
+	if(DateTime.isValidTime(hour, minute)){
+	    if(!(endDate instanceof DateTime)){
+		endDate = new DateTime(endDate);
+	    } 
+	    ((DateTime)endDate).setTime(hour, minute); 
 	}
     }
     
