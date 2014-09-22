@@ -6,15 +6,17 @@ package main;
  * @author zixian
  */
 public class ToDoItem implements Comparable<ToDoItem>{
-   
+
     private static final int DEFAULT_PRIORITY = 0;
     private static final String DEFAULT_STATUS = "pending";
     
     public static final String STATUS_INPROGRESS = "in progress";
     public static final String STATUS_COMPLETED = "completed";
     
+    //Number of ToDoItems with the same alphabetical prefix
     private static final int MAX_IDNUM = 99;
     
+    //Print formats
     private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; --/--/---- --:--";
     private static final String FORMAT_PRINTSTRING = " %1$s %2$d %3$s --/--/---- --:-- --/--/---- --:--";
     
@@ -27,6 +29,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     protected String id, description, status;
     protected int priority;
     
+    //Constructors
     public ToDoItem(String description){
 	this(description, DEFAULT_PRIORITY);
     }

@@ -13,6 +13,14 @@ public class DateTest {
     }
     
     @Test
+    public void testCopy(){
+	Date date1 = new Date();
+	Date date2 = new Date(date1);
+	assertFalse("the 2 dates are different objects", date1==date2);
+	assertTrue(date1.equals(date2));
+    }
+    
+    @Test
     public void testDateIntIntInt() {
 	Date date = new Date(2, 3, 1992);
 	assertEquals("Day is 2", 2, date.getDayOfMonth());

@@ -15,6 +15,14 @@ public class DateTimeTest {
     }
     
     @Test
+    public void testCopy(){
+	DateTime dt1 = new DateTime();
+	DateTime dt2 = new DateTime(dt1);
+	assertFalse("the 2 objects are not the same", dt1==dt2);
+	assertTrue("the 2 objects represent the same date and time", dt1.equals(dt2));
+    }
+    
+    @Test
     public void testDateTimeIntIntIntIntInt() {
 	try{
 	    DateTime dt = new DateTime(2, 3, 1992, 9, 0);
@@ -31,7 +39,9 @@ public class DateTimeTest {
     @Test
     public void testToString(){
 	DateTime dt = new DateTime();
-	assertEquals("1/1/1970 0:0", dt.toString());
+	assertEquals("1/1/1970 0:00", dt.toString());
+	dt = new DateTime(2, 3, 1992, 3, 10);
+	assertEquals("2/3/1992 3:10", dt.toString());
     }
     
     @Test

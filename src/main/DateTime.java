@@ -10,7 +10,7 @@ public class DateTime extends Date {
     private static final int DEFAULT_MINUTE = 0;
     
     //The string format for time.
-    private static final String FORMAT_TIME = "%1$d:%2$d";
+    private static final String FORMAT_TIME = "%1$d:%2$02d";
     
     //The main additional data members
     private int hour, minute;
@@ -23,10 +23,21 @@ public class DateTime extends Date {
     }
     
     /**
-     * Downcast the given Date object into DateTime object by assigning default time value.
+     * Downcast constructor for Date object and copy constructor for DateTime object.
      */
     public DateTime(Date date){
-	this(date.getDayOfMonth(), date.getMonth(), date.getYear(), DEFAULT_HOUR, DEFAULT_MINUTE);
+	this(date.getDayOfMonth(), date.getMonth(), date.getYear());
+	if(date instanceof DateTime){
+	    DateTime temp = (DateTime)date;
+	    setTime(temp.getHour(), temp.getMinute());
+	}
+    }
+    
+    /**
+     * Creates a new DateTime object with the specified date, using the default time.
+     */
+    public DateTime(int date, int month, int year){
+	this(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
     /**
@@ -52,7 +63,7 @@ public class DateTime extends Date {
     public int getMinute(){
 	return minute;
     }
-    
+
     /**
      * Checks if the given time is valid.
      * @return True if the given time is in the range [00:00, 23:59] and false otherwise.

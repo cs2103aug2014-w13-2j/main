@@ -23,6 +23,11 @@ public class Date implements Comparable<Date>{
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
     }
     
+    //Copy constructor
+    public Date(Date date){
+	this(date.getDayOfMonth(), date.getMonth(), date.getYear());
+    }
+    
     /**
      * Creates a Date object with the specified date, month and year.
      * @throws IllegalArgumentException if any of the values cause the date to be incorrect
@@ -150,5 +155,14 @@ public class Date implements Comparable<Date>{
 	} else{
 	    return date-date2.getDayOfMonth();
 	}
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+	if(obj instanceof Date){
+	    Date temp = (Date)obj;
+	    return compareTo(temp)==0;
+	}
+	return false;
     }
 }
