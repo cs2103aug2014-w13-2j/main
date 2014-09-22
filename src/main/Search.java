@@ -1,5 +1,6 @@
 package main;
 
-public class Search {
+public enum Search {
 
+	
 }
