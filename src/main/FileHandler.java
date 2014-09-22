@@ -16,6 +16,13 @@ import java.util.ArrayList;
 public class FileHandler {
     private static final String FILENAME_DEFAULT="todo.txt";
     
+    private static final String DATE_DELIM = "/";
+    private static final String DATETIME_DELIM = " ";
+    private static final String FILESTRING_DELIM = "; ";
+    private static final String TIME_DELIM = ":";
+    
+    private static final String NULLTIME = "--:--";
+    
     private static final String MESSAGE_FILE_ERROR = "File does not exist or is corrupted. Exiting.";
     private static final String MESSAGE_FILE_WRITE_ERROR = "Error creating file/writing to file." +
     		"Some/All of the contents may not be saved.";
@@ -25,15 +32,11 @@ public class FileHandler {
      * Defines regular expression format for each TaskItem object
      * represented on each line.
      */
-    private static final String FORMAT_DESCRIPTION = "[a-zA-Z0-9\\s]+";
-    private static final String FORMAT_DATE = "(([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})||(--/--/----)) " +
-	    					"(([0-9]{1,2}:[0-9]{1,2})||(--:--))";
-    private static final String FORMAT_PRIORITY = "[a-z]+";
-    private static final String FORMAT_CATEGORY = "(([a-zA-Z0-9,]+)||(---))";
-    private static final String FORMAT_STATUS = "[a-z]+";
-    private static final String FORMAT_TASKITEM = FORMAT_DESCRIPTION+"\\t" +
-	    		FORMAT_DATE + "\\t" + FORMAT_DATE + "\\t" + FORMAT_PRIORITY
-	    		+ "\\t" + FORMAT_CATEGORY + "\\t" + FORMAT_STATUS;
+    private static final String FORMAT_DATE = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4} " +
+	    					"(([0-9]{1,2}:[0-9]{2})||(--:--))";
+    private static final String FORMAT_EVENTITEM = ".+; [0-9]+; .+; "+FORMAT_DATE+"; "+FORMAT_DATE;
+    private static final String FORMAT_TASKITEM = ".+; [0-9]+; .+; --/--/---- --:--; "+FORMAT_DATE;
+    private static final String FORMAT_TODOITEM = ".+; [0-9]+; .+; --/--/---- --:--; --/--/---- --:--";
 
     
     
@@ -60,42 +63,50 @@ public class FileHandler {
     
     /**
      * Reads the task list from the file specified in the constructor or
-     * todo.txt.
-     * @return An ArrayList of TaskItem objects, each TaskItem object represents
-     * 		a task in the file being read from.
+     * todo.txt. Stops reading on encountering IOException
+     * @return An ArrayList of ToDoItem objects, each ToDoItem object represents
+     * 		an item in the file being read from.
      */
-    public ArrayList<TaskItem> getListFromFile() throws IOException {
-	ArrayList<TaskItem> tempList = new ArrayList<TaskItem>();
-	String[] params, categoryList;
-	String lineInput;
+    public ArrayList<ToDoItem> getListFromFile(){
+	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
+	String[] params;
 	TaskItem temp;
 	
-	reader = new BufferedReader(new FileReader(file));
-	lineInput = reader.readLine();
-	while(lineInput!=null){
-	    if(lineInput.matches(FORMAT_TASKITEM)){
-		params = lineInput.split("\\t");
-		temp = new TaskItem(params[0]);
-		/*if(Date.isValidDate(params[1])){
-		    //set start date
-		}
-		if(Date.isValidDate(params[2])){
-		    //set end date
-		}
-		temp.setPriorityType(params[3]);
-		categoryList = TaskItem.splitCategories(params[4]);
-		for(int i=0; i<categoryList.length; i++){
-		    temp.addCategory(categoryList[i]);
-		}
-		temp.setStatus(params[5]);*/
-		tempList.add(temp);
-	    } else{
-		throw new IOException();
-	    }    
-	    lineInput = reader.readLine();
-   
+	try{
+	    reader = new BufferedReader(new FileReader(file));
+	    String lineInput = reader.readLine();
+	    while(lineInput!=null){
+		if(lineInput.matches(FORMAT_TASKITEM)){
+		    params = lineInput.split(FILESTRING_DELIM);
+		    String[] dateTime = params[4].split(DATETIME_DELIM);
+		    String[] date = dateTime[0].split(DATE_DELIM);
+		    int day = Integer.parseInt(date[0]);
+		    int month = Integer.parseInt(date[1]);
+		    int year = Integer.parseInt(date[2]);
+		    if(dateTime[1].equals(NULLTIME)){
+			Date deadline = new Date(day, month, year);
+			temp = new TaskItem(params[0], deadline);
+		    } else{
+			String[] time = dateTime[1].split(TIME_DELIM);
+			int hour = Integer.parseInt(time[0]);
+			int minute = Integer.parseInt(time[1]);
+			DateTime deadline = new DateTime(day, month, year, hour, minute);
+			temp = new TaskItem(params[0], deadline);
+		    }
+		    tempList.add(temp);
+		} else if(lineInput.matches(FORMAT_EVENTITEM)){
+		    //Add EventItem to tempList
+		} else if(lineInput.matches(FORMAT_TODOITEM)){
+		    //Add ToDoItem to tempList
+		} else{
+		    throw new IOException();
+		}    
+		lineInput = reader.readLine();
+	    }
+	    reader.close();
+	} catch(IOException ioe){
+	    
 	}
-	reader.close();
 	return tempList;
     }
     

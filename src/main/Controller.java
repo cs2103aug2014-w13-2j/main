@@ -1,7 +1,7 @@
 package main;
 
 public class Controller {
-    //private Storage = new Storage();
+    //private Storage storage = new Storage();
     
     public void executeCommand(String input){
 	System.out.println("Executing "+input);
@@ -9,5 +9,6 @@ public class Controller {
     
     public void setup(){
 	//initialise storage
+	//storage.initialise();
     }
 }
