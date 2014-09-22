@@ -3,6 +3,15 @@ package main;
 /**
  * Defines each event in the To-Do list.
  * Each event is defined as having start and/or end date(s).
+ * Possible usage: new EventItem(description, Date eventDate)	//start and end dates are the same with no specified time.
+ * 		   new EventItem(description, DateTime eventDateTime)	//both start and end times will be the same.
+ * 		   new EventItem(description, Date start, Date end)	//start and end dates can be different with no specified time.
+ * 		   new EventItem(description, Date start, DateTime end)	//end has specified time while start does not.
+ * 		   new EventItem(description, DateTime start, Date end)	//start has specified time while end does not.
+ * 		   new EventItem(description, DateTime start, DateTime end)	//both start and end have specified times and can be different.
+ * 		   set start/end dates with setStartDate()/setEndDate() respectively.
+ * 		   set start/end times with setStartTime()/setEndTime() respectively.
+ * 		   set date and time by using the above 2 uses together.
  * @author zixian
  */
 public class EventItem extends ToDoItem {
