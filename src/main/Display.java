@@ -18,33 +18,19 @@ public class Display {
 	public static void taskDisplay(ArrayList<TaskItem> taskList){
 		if(taskList==null) return;
 		for(int i=0;i<taskList.size();i++){
-			taskDisplay(taskList.get(i));
+			TaskItem thisTask= taskList.get(i);
+			System.out.println(thisTask.toString());
 		}
 	}
 	public static String taskListTitle(){
-		String s=String.format("%-20s%15s   %12s  %8s  %8s  %20s  ", "Description","Status","Priority","Start Time","End Time","Categories");
+		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Description","Status","Priority","Start Time","End Time");
 		return s;
 	}
 	public static String dividingLine(){
 		return "--------------------------------------------------------------------------------------------------------";
 	}
-	public static void taskDisplay(TaskItem thisTask){	
-		
-		String taskString=getTaskString(thisTask);
-		System.out.println(taskString);
-		
-	}
-	private static String getTaskString(TaskItem thisTask){
-		String description=thisTask.getDescription();
-		String startTime=thisTask.getStartDate();
-		String endTime=thisTask.getEndDate();
-		String priority=thisTask.getPriority();
-		String status=thisTask.getStatus();
-		ArrayList<String> categories=thisTask.getCategory();
-		
-		String s=String.format("%-20s%20s%10s%10s%10s%30s", description,status,priority,startTime,endTime,categories.toString());
-		return s;
-	}
+	
+
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
