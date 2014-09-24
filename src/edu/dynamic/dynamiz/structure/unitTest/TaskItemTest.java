@@ -1,5 +1,8 @@
 package edu.dynamic.dynamiz.structure.unitTest;
-
+import edu.dynamic.dynamiz.displayer.*;
+import edu.dynamic.dynamiz.logic.*;
+import edu.dynamic.dynamiz.parser.*;
+import edu.dynamic.dynamiz.storage.*;
 import edu.dynamic.dynamiz.structure.*;
 import static org.junit.Assert.*;
 
