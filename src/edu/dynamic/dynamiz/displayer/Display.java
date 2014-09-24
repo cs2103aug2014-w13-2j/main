@@ -12,24 +12,24 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * @author Hu Wenyan
  *
  */
-public class Display {
+public class Display implements DisplayerInterface {
 	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 
-	public static void printWelcomeMessage(){
+	public void printWelcomeMessage(){
 		System.out.println(WELCOME_MESSAGE);
 	}
-	public static void taskDisplay(ArrayList<TaskItem> taskList){
+	public void taskDisplay(ArrayList<TaskItem> taskList){
 		if(taskList==null) return;
 		for(int i=0;i<taskList.size();i++){
 			TaskItem thisTask= taskList.get(i);
 			System.out.println(thisTask.toString());
 		}
 	}
-	public static String taskListTitle(){
+	private static String taskListTitle(){
 		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Description","Status","Priority","Start Time","End Time");
 		return s;
 	}
-	public static String dividingLine(){
+	private static String dividingLine(){
 		return "--------------------------------------------------------------------------------------------------------";
 	}
 	
