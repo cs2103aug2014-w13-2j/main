@@ -19,6 +19,8 @@ import edu.dynamic.dynamiz.structure.TaskItem;
 public class FileHandlerTest {
     
     @Test
+    
+    
     public void testGetListFromFile() {
 	ArrayList<ToDoItem> list = FileHandler.getListFromFile();
 	assertEquals("list has 3 items", 3, list.size());

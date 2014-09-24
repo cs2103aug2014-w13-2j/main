@@ -25,7 +25,7 @@ import java.util.Set;
  * Modelled after CLI library
  */
 
-public class Option {
+public class Option implements  OptionInterface{
 	/*=========================================================================
 	 * Constants
 	 * ========================================================================
@@ -324,7 +324,7 @@ public class Option {
 	 * @throws IllegalArgumentException if the short name does not follow the
 	 * validation rule
 	 */
-	public static void isValidOption(String optName) throws IllegalArgumentException {
+	public void isValidOption(String optName) throws IllegalArgumentException {
 		if (optName == null) {
 			// No further check
 			return;

@@ -57,6 +57,16 @@ public class Display implements DisplayerInterface {
 	public static void stringDisplay(String thisString){
 		System.out.println(thisString);
 	}
+	@Override
+	public void stringPrint(String str) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void stringPrint(ArrayList<String> arr) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

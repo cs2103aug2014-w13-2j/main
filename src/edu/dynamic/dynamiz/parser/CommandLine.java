@@ -1,5 +1,11 @@
 package edu.dynamic.dynamiz.parser;
 
+import edu.dynamic.dynamiz.displayer.*;
+import edu.dynamic.dynamiz.logic.*;
+import edu.dynamic.dynamiz.parser.*;
+import edu.dynamic.dynamiz.storage.*;
+import edu.dynamic.dynamiz.structure.*;
+
 
 /**
  * This is a class Object which stores the information of the parsed 
@@ -15,7 +21,7 @@ package edu.dynamic.dynamiz.parser;
  * @author nhan
  *
  */
-public class CommandLine {
+public class CommandLine implements CommandLineInterface{
 	private String commandType;
 	private Options options;
 	

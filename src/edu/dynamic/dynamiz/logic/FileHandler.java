@@ -21,7 +21,7 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * specified file or "todo.txt".
  * @author zixian
  */
-public class FileHandler {
+public class FileHandler implements FileHandlerInterface{
     //Name of the default file to read from/write to.
     private static final String FILENAME_DEFAULT = "todo.txt";
     
@@ -78,7 +78,7 @@ public class FileHandler {
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @return An ArrayList of ToDoItem objects.
      */
-    public static ArrayList<ToDoItem> getListFromFile(){
+    public ArrayList<ToDoItem> getListFromFile(){
 	return getListFromFile(FILENAME_DEFAULT);
     }
     
@@ -87,7 +87,7 @@ public class FileHandler {
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @return An ArrayList of ToDoItem objects.
      */
-    public static ArrayList<ToDoItem> getListFromFile(String filename){
+    public  ArrayList<ToDoItem> getListFromFile(String filename){
 	File file = new File(filename);
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	
@@ -122,7 +122,7 @@ public class FileHandler {
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
-    public static void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
+    public void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
 	writeListToFile(list, FILENAME_DEFAULT);
     }
     
@@ -131,7 +131,7 @@ public class FileHandler {
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
-    public static void writeListToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
+    public void writeListToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
 	File file = new File(filename);
 	if(!file.exists()){
 	    file.createNewFile();
