@@ -1,11 +1,6 @@
 package edu.dynamic.dynamiz.logic;
 
-import edu.dynamic.dynamiz.displayer.*;
-import edu.dynamic.dynamiz.logic.*;
-import edu.dynamic.dynamiz.parser.*;
-import edu.dynamic.dynamiz.storage.*;
 import edu.dynamic.dynamiz.structure.*;
-
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,11 +12,12 @@ import java.util.ArrayList;
 import edu.dynamic.dynamiz.structure.TaskItem;
 
 /**
- * Defines each FileHandler that reads/writes task list to/from the
+ * FileHandler is a class that reads/writes task list to/from the
  * specified file or "todo.txt".
+ * This class is meant to be used in the same way as Java Math class: no object instance is required.
  * @author zixian
  */
-public class FileHandler implements FileHandlerInterface{
+public class FileHandler {
     //Name of the default file to read from/write to.
     private static final String FILENAME_DEFAULT = "todo.txt";
     
@@ -78,7 +74,7 @@ public class FileHandler implements FileHandlerInterface{
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @return An ArrayList of ToDoItem objects.
      */
-    public ArrayList<ToDoItem> getListFromFile(){
+    public static ArrayList<ToDoItem> getListFromFile(){
 	return getListFromFile(FILENAME_DEFAULT);
     }
     
@@ -87,7 +83,7 @@ public class FileHandler implements FileHandlerInterface{
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @return An ArrayList of ToDoItem objects.
      */
-    public  ArrayList<ToDoItem> getListFromFile(String filename){
+    public static ArrayList<ToDoItem> getListFromFile(String filename){
 	File file = new File(filename);
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	
@@ -122,7 +118,7 @@ public class FileHandler implements FileHandlerInterface{
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
-    public void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
+    public static void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
 	writeListToFile(list, FILENAME_DEFAULT);
     }
     
@@ -131,7 +127,7 @@ public class FileHandler implements FileHandlerInterface{
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
-    public void writeListToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
+    public static void writeListToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
 	File file = new File(filename);
 	if(!file.exists()){
 	    file.createNewFile();

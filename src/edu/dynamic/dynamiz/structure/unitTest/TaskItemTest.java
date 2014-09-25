@@ -67,7 +67,7 @@ public class TaskItemTest {
     @Test
     public void testSetStatus(){
 	TaskItem task = new TaskItem("CS2106 homework", new Date(26, 9, 2014));
-	assertEquals("initial status is 'pending'", TaskItem.DEFAULT_STATUS, task.getStatus());
+	assertEquals("initial status is 'pending'", TaskItem.STATUS_PENDING, task.getStatus());
 	
 	task.setStatus(TaskItem.STATUS_INPROGRESS);
 	assertEquals("new status is 'in progress'", TaskItem.STATUS_INPROGRESS, task.getStatus());
