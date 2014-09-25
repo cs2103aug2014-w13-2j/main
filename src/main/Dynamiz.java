@@ -3,18 +3,14 @@
  */
 package main;
 
-import edu.dynamic.dynamiz.displayer.*;
-import edu.dynamic.dynamiz.logic.*;
-import edu.dynamic.dynamiz.parser.*;
-import edu.dynamic.dynamiz.storage.*;
-import edu.dynamic.dynamiz.structure.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import edu.dynamic.dynamiz.storage.Controller;
-
+import edu.dynamic.dynamiz.displayer.Display;
+import edu.dynamic.dynamiz.displayer.DisplayStub;
 
 /**
  * The main program.
@@ -26,24 +22,26 @@ import edu.dynamic.dynamiz.storage.Controller;
  * Defines the object class of the main program.
  */
 public class Dynamiz {
+    private static final String COMMAND_EXIT = "exit";
+    
     private static Controller controller = new Controller();
+    private static Display displayer = new DisplayStub();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
     public static void main(String[] args) {
-	//Load to-do list from file.
-	//controller.setup();
+
+	controller.setup();
 	
-	//Display welcome message, with some tips to help users get started.
-	//Display.printWelcomeMessage();
-	System.out.println("Welcome to Dynamiz. Enter \"add [new task]\", replacing \"[new task]\" with" +
-			"your desired task description, to begin.");
-	System.out.print("Command: ");
+	displayer.printWelcomeMessage();
+	((DisplayStub)displayer).printCommandPrompt();
+	
 	String input = getInput();
+	String result;
 	
-	//Stub. To be refactored.
-	while(!input.equals("exit")){
-		controller.executeCommand(input);
-		System.out.print("Command: ");
+	while(!input.equals(COMMAND_EXIT)){
+		result = controller.executeCommand(input);
+		((DisplayStub)displayer).printFeedbackMessage(result);
+		((DisplayStub)displayer).printCommandPrompt();
 		input = getInput();
     	}
 	try{
@@ -57,7 +55,7 @@ public class Dynamiz {
 	try{
 	    return reader.readLine();
 	} catch(IOException ioe){
-	    return "exit";
+	    return COMMAND_EXIT;
 	}
     }
 }
