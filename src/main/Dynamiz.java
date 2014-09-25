@@ -1,8 +1,4 @@
-/**
- * 
- */
 package main;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,11 +32,9 @@ public class Dynamiz {
 	((DisplayStub)displayer).printCommandPrompt();
 	
 	String input = getInput();
-	String result;
 	
 	while(!input.equals(COMMAND_EXIT)){
-		result = controller.executeCommand(input);
-		((DisplayStub)displayer).printFeedbackMessage(result);
+		controller.executeCommand(input);
 		((DisplayStub)displayer).printCommandPrompt();
 		input = getInput();
     	}
