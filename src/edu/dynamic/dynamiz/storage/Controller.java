@@ -27,6 +27,10 @@ public class Controller {
 	//((StorageStub)storage).addItem(...);
     }
     
+    private void delete(String id){
+	//((StorageStub)storage).removeItem(id);
+    }
+    
     private void display(){
 	DisplayStub.displayTask(((StorageStub)storage).getList());
     }
