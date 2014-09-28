@@ -18,10 +18,10 @@ public enum OptionType {
 	}, UNKNOWN;
 	
 	static private final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
+	
 	static {
 		for (OptionType opt: OptionType.values()) {
 			// Normalising by lowercase all
-			ALIAS_TABLE.put(opt.toString().toLowerCase(), opt);
 			for (String alias: opt.aliases) {
 				ALIAS_TABLE.put(alias.toLowerCase(), opt);
 			}
@@ -51,8 +51,13 @@ public enum OptionType {
 		return fromString(opt.getOptName());
 	}
 	
+	static public List<String> getAliases(OptionType opt) {
+		return opt.aliases;
+	}
+	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
 		this.aliases = Arrays.asList(aliases);
+		this.aliases.add(this.toString());
 	}
 }
