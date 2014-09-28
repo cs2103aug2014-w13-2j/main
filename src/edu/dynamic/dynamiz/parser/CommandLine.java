@@ -2,15 +2,6 @@ package edu.dynamic.dynamiz.parser;
 
 import java.util.List;
 
-import main.CommandType;
-import main.Options;
-import edu.dynamic.dynamiz.displayer.*;
-import edu.dynamic.dynamiz.logic.*;
-import edu.dynamic.dynamiz.parser.*;
-import edu.dynamic.dynamiz.storage.*;
-import edu.dynamic.dynamiz.structure.*;
-
-
 /**
  * This is a class Object which stores the information of the parsed 
  * command line given by the user.
@@ -26,33 +17,5 @@ import edu.dynamic.dynamiz.structure.*;
  *
  */
 public class CommandLine {
-	private CommandType commandType;
-	private Options options;
-	private List<String> parameteres;
-	
-	
-	
-	public CommandType getCommandType() {
-		return commandType;
-	}
-	
-	public void setCommandType(CommandType commandType) {
-		this.commandType = commandType;
-	}
-	
-	public Options getOptions() {
-		return options;
-	}
-	
-	public void setOptions(Options options) {
-		this.options = options;
-	}
-	
-	public List<String> getParameteres() {
-		return parameteres;
-	}
-	
-	public void setParameteres(List<String> parameteres) {
-		this.parameteres = parameteres;
-	}
+
 }
