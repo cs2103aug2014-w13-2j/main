@@ -96,6 +96,10 @@ public class Options implements Iterable<Option> {
 	public Collection<Option> getOptions(OptionType optType) {
 		return optionTable.get(optType);
 	}
+
+	public int getNumOfOptions() {
+		return optionTable.size();
+	}
 	
 	public boolean hasAmbiguity() {
 		for (Collection<Option> c: optionTable.values()) {
