@@ -8,6 +8,66 @@ package edu.dynamic.dynamiz.parser;
  *	Modelled after org.apache.commons.cli
  */
 public final class Util {
+	/** This is the default delimiter to split the string, i.e. Whitespace*/
+	private static final String DEFAULT_DELIMITER = "\\s+";
+	
+	/**
+	 * Retrieve the string with its first word stripped off. 
+	 * Default delimiter is applied here.
+	 * 
+	 * @param str the string to strip the first word off
+	 * @return the stripped string
+	 */
+	public static String stripFirstWord(String str) {
+		return stripFirstWord(str, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Retrieve the string with its first word stripped off.
+	 * regEx specifies the delimiter for the string
+	 * 
+	 * @param str the string to strip the first word off
+	 * @param regEx the regular expression string to split the string
+	 * @return the stripped string
+	 */
+	public static String stripFirstWord(String str, String regEx) {
+		if (str == null) {
+			return null;
+		}
+		
+		String firstWord = getFirstWord(str, regEx);
+		
+		return str.replaceFirst(firstWord, "");
+	}
+	
+	/**
+	 * Retrieve the first word of the string. 
+	 * Default delimiter is applied when splitting the string
+	 * 
+	 * @param str the string to get the first word from
+	 * @return the first word of the string
+	 */
+	public static String getFirstWord(String str) {
+		return getFirstWord(str, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Retrieve the first word of the string
+	 * regEx specifies the delimiter for the string
+	 * 
+	 * @param str the string to get the first word from
+	 * @param regEx the regular expression string to split the string
+	 * @return the first word of the string
+	 */
+	public static String getFirstWord(String str, String regEx) {
+		if (str == null) {
+			return null;
+		}
+		
+		String[] words = str.split(regEx);
+		return words[0];
+	}
+	
 	
 	/**
 	 * Remove the hyphens (single or double) from the given string and
