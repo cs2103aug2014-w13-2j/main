@@ -48,12 +48,10 @@ public class Display implements DisplayerInterface {
 		return "--------------------------------------------------------------------------------------------------------";
 	}
 	
-	@Override
 	public void printString(String string) {
 		System.out.println(string);
 		
 	}
-	@Override
 	public void printStringList(ArrayList<String> arr) {
 		for(int i=0;i<arr.size();i++)
 			printString(arr.get(i));
@@ -85,14 +83,12 @@ public class Display implements DisplayerInterface {
 		}
 		
 	}
-	@Override
 	public void displayTaskItem(TaskItem task) {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	
-	@Override
 	public void displayEventList(ArrayList<EventItem> eventList) {
 		// TODO Auto-generated method stub
 		
