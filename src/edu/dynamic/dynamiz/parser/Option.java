@@ -139,7 +139,11 @@ public class Option implements OptionInterface{
 		this.description = description;
 		this.delimiter = delimiter;
 	}
-	
+
+	public Option(String optName, List<String> values) {
+		this.optName = optName;
+		this.values = values;
+	}
 	/*=========================================================================
 	 * Getter & Setter Methods
 	 * ========================================================================
@@ -339,5 +343,13 @@ public class Option implements OptionInterface{
 			throw new IllegalArgumentException("Invalid option name '" + optName + "'" + 
 										"Short option name must have only 1 alphabet");
 		}
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<" + this.optName + ", " + this.values + ">");
+		
+		return sb.toString();
 	}
 }
