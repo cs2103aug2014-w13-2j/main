@@ -6,7 +6,9 @@ import java.util.Formatter;
 import java.awt.color.*;
 
 import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * @author Hu Wenyan
@@ -18,22 +20,9 @@ public class Display implements DisplayerInterface {
 	public void printWelcomeMessage(){
 		System.out.println(WELCOME_MESSAGE);
 	}
-	public void taskDisplay(ArrayList<TaskItem> taskList){
-		if(taskList==null) return;
-		for(int i=0;i<taskList.size();i++){
-			TaskItem thisTask= taskList.get(i);
-			System.out.println(thisTask.toString());
-		}
-	}
-	private static String taskListTitle(){
-		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Description","Status","Priority","Start Time","End Time");
-		return s;
-	}
-	private static String dividingLine(){
-		return "--------------------------------------------------------------------------------------------------------";
-	}
 	
-
+	
+	
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
@@ -48,25 +37,103 @@ public class Display implements DisplayerInterface {
 		return s;
 	}
 	
+
+	private static String taskListTitle(){
+		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Task","Status","Priority","Start Time","End Time");
+		
+		return s;
+	}
 	
-	public static void stringDisplay(ArrayList<String> strings){
-		for(int i=0;i<strings.size();i++){
-			stringDisplay(strings.get(i));
+	private static String dividingLine(){
+		return "--------------------------------------------------------------------------------------------------------";
+	}
+	
+	@Override
+	public void printString(String string) {
+		System.out.println(string);
+		
+	}
+	@Override
+	public void printStringList(ArrayList<String> arr) {
+		for(int i=0;i<arr.size();i++)
+			printString(arr.get(i));
+		
+	}
+	
+	public void displayTaskList(ArrayList<TaskItem> taskList){
+		if(taskList==null) return;
+		else{
+			System.out.println(taskListTitle());
+			System.out.println(dividingLine());
+		for(int i=0;i<taskList.size();i++){
+			TaskItem thisTask= taskList.get(i);
+			System.out.println(thisTask.toString());
+		}
 		}
 	}
-	public static void stringDisplay(String thisString){
-		System.out.println(thisString);
+	
+	@Override
+	public void displayTaskList(TaskItem[] taskList) {
+		if(taskList==null) return;
+		else{
+			System.out.println(taskListTitle());
+			System.out.println(dividingLine());
+		for(int i=0;i<taskList.length;i++){
+			TaskItem thisTask= taskList[i];
+			System.out.println(thisTask.toString());
+		}
+		}
+		
 	}
 	@Override
-	public void stringPrint(String str) {
+	public void displayTaskItem(TaskItem task) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	@Override
+	public void displayEventList(ArrayList<EventItem> eventList) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void stringPrint(ArrayList<String> arr) {
+	public void displayEventList(EventItem[] eventList) {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void displayEventItem(EventItem event) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayToDoList(ArrayList<ToDoItem> todoList) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayToDoList(ToDoItem[] todoList) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayToDoItem(ToDoItem todoItem) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void printPrompt(String promtMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayHelpPage() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 	
 }
