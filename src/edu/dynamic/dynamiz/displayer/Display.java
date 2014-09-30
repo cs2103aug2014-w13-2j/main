@@ -21,8 +21,6 @@ public class Display implements DisplayerInterface {
 		System.out.println(WELCOME_MESSAGE);
 	}
 	
-	
-	
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
@@ -135,7 +133,7 @@ public class Display implements DisplayerInterface {
 	public void displayToDoList(ToDoItem[] todoList) {
 		if(todoList==null) return;
 		else{
-			System.out.println(taskListTitle());
+			//System.out.println(taskListTitle());
 			System.out.println(dividingLine());
 		for(int i=0;i<todoList.length;i++){
 			ToDoItem thisTodo= todoList[i];
@@ -150,31 +148,22 @@ public class Display implements DisplayerInterface {
 		
 	}
 
-
-
 	@Override
 	public void displayEventFeedBack(EventItem event) {
 		System.out.println(event.toFileString());
 		
 	}
 
-
-
 	@Override
 	public void displayEventFile(EventItem event) {
-		System.out.println(event.toString());
-		
+		System.out.println(event.toString());	
 	}
-
-
 
 	@Override
 	public void displayTaskFeedBack(TaskItem task) {
 		
 		System.out.println(task.getFeedbackString());	
 	}
-
-
 
 	@Override
 	public void displayTaskFile(TaskItem taskItem) {
@@ -198,14 +187,12 @@ public class Display implements DisplayerInterface {
 	
 	@Override
 	public void printPrompt(String promtMessage) {
-		// TODO Auto-generated method stub
-		
+		System.out.print(promtMessage);	
 	}
 	
 	@Override
 	public void displayHelpPage() {
-		System.out.println("Help Page");
-		
+		System.out.println("Help Page");	
 	}
 	
 	

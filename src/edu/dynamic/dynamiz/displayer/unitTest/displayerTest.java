@@ -8,7 +8,7 @@ import org.junit.Test;
 public class displayerTest {
 
 	@Test
-	public void test() {
+	public void testDisplayer() {
 		fail("Not yet implemented");
 	}
 
