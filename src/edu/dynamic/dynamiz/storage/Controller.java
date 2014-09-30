@@ -6,7 +6,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class Controller {
     private DisplayStub displayer = new DisplayStub();
-    private Storage storage = new StorageStub();
+    private Storage storage = new Storage();
     
     public void executeCommand(String input){
 	//Get list of command parameters from parser
@@ -17,9 +17,7 @@ public class Controller {
 	}
     }
     
-    public void setup(){
-	((StorageStub)storage).initialise();
-    }
+
     
     //params is {description, priority, start, end/deadline}
     private void add(){
