@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.parser;
 import java.util.List;
 
 import edu.dynamic.dynamiz.logic.Command;
+import edu.dynamic.dynamiz.logic.CommandType;
 
 /**
  * This is a class which stores the information of the parsed 
@@ -19,7 +20,7 @@ import edu.dynamic.dynamiz.logic.Command;
  *
  */
 public class CommandLine {
-	private Command command;
+	private CommandType command;
 	private Options options;
 	private String param;
 	
@@ -29,8 +30,8 @@ public class CommandLine {
 		this.param = null;
 	}
 	
-	public CommandLine(Command command, Options options, String param) {
-		this.command = command;
+	public CommandLine(CommandType cmdType, Options options, String param) {
+		this.command = cmdType;
 		this.options = options;
 		this.param = param;
 	}
@@ -40,11 +41,11 @@ public class CommandLine {
 	 * Getters & Setters
 	 * ========================================================================
 	 */
-	public Command getCommand() {
+	public CommandType getCommand() {
 		return command;
 	}
 
-	public void setCommand(Command command) {
+	public void setCommand(CommandType command) {
 		this.command = command;
 	}
 
@@ -70,13 +71,17 @@ public class CommandLine {
 	 * 
 	 */
 	
-	public String getCommandType() {
-		return command.getType();
-	}
-	
 	public int getNumberOfOptions() {
 		return options.getNumOfOptions();
 	}
 	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Command Type: " + command.toString() + "\n");
+		sb.append("Options: \n" + options.toString());
+		
+		return sb.toString();
+	}
 	
 }
