@@ -1,25 +1,31 @@
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Collection of Options
+ * List of Options
  * 
  * @author nhan
  *
  */
 public class Options implements Iterable<Option> {
 
-	private Map<OptionType, Collection<Option>> optionTable;
+	private Map<OptionType, List<Option>> optionTable;
 
+	public Options() {
+		optionTable = new HashMap<OptionType, List<Option>>();
+	}
+	
 	public boolean add(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
 		
-		Collection<Option> options = null;
+		List<Option> options = null;
 		if (optionTable.containsKey(optType)) {
 			options = optionTable.get(optType);
 		} else {
@@ -32,16 +38,16 @@ public class Options implements Iterable<Option> {
 	}
 
 	/**
-	 * Query if this collection contains a particular option
+	 * Query if this List contains a particular option
 	 * 
 	 * @param opt the Option to query
-	 * @return boolean flag if the matching option exists in the collection
+	 * @return boolean flag if the matching option exists in the List
 	 */
 	public boolean hasOption(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
 		
 		if (optionTable.containsKey(optType)) {
-			Collection<Option> options = optionTable.get(optType);
+			List<Option> options = optionTable.get(optType);
 			return options.contains(opt);
 		} else {
 			return false;
@@ -49,7 +55,7 @@ public class Options implements Iterable<Option> {
 	}
 	
 	/**
-	 * Query if this collection contains an option name
+	 * Query if this List contains an option name
 	 * 
 	 * @param optName String name for the option
 	 * @return boolean flag if a certain option type exists.
@@ -59,10 +65,10 @@ public class Options implements Iterable<Option> {
 	}
 	
 	/**
-	 * Retrieve a passed Option if it exists in this collection
+	 * Retrieve a passed Option if it exists in this List
 	 * 
-	 * @param opt an Option to search for in the collection
-	 * @return an Option object that exists in the collection
+	 * @param opt an Option to search for in the List
+	 * @return an Option object that exists in the List
 	 */
 	public Option getOption(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
@@ -76,24 +82,24 @@ public class Options implements Iterable<Option> {
 	}
 	
 	/**
-	 * Retrieve the collection of Option that has the same type
+	 * Retrieve the List of Option that has the same type
 	 * 
 	 * @param optName an alias of the option to specify OptionType
-	 * @return a collection of all the options of that OptionType
+	 * @return a List of all the options of that OptionType
 	 */
-	public Collection<Option> getOptions(String optName) {
+	public List<Option> getOptions(String optName) {
 		OptionType optType = OptionType.fromString(optName);
 		
 		return getOptions(optType);
 	}
 	
 	/**
-	 * Retrieve the collection of Option that is of the given type
+	 * Retrieve the List of Option that is of the given type
 	 * 
 	 * @param optType OptionType to retrieve
-	 * @return a collection of all the options of that OptionType
+	 * @return a List of all the options of that OptionType
 	 */
-	public Collection<Option> getOptions(OptionType optType) {
+	public List<Option> getOptions(OptionType optType) {
 		return optionTable.get(optType);
 	}
 
@@ -102,7 +108,7 @@ public class Options implements Iterable<Option> {
 	}
 	
 	public boolean hasAmbiguity() {
-		for (Collection<Option> c: optionTable.values()) {
+		for (List<Option> c: optionTable.values()) {
 			if (c.size() > 1) {
 				return true;
 			}
@@ -110,9 +116,9 @@ public class Options implements Iterable<Option> {
 		return false;
 	}
 	
-	public Collection<OptionType> getAmbiguousOptionTypes() {
-		Collection<OptionType> list = new ArrayList<OptionType>();
-		for (Entry<OptionType, Collection<Option>> e: optionTable.entrySet()) {
+	public List<OptionType> getAmbiguousOptionTypes() {
+		List<OptionType> list = new ArrayList<OptionType>();
+		for (Entry<OptionType, List<Option>> e: optionTable.entrySet()) {
 			if (e.getValue().size() > 1) { // if there are 2 more options for 1 type
 				list.add(e.getKey());
 			}
@@ -125,5 +131,23 @@ public class Options implements Iterable<Option> {
 	public Iterator<Option> iterator() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (Entry<OptionType, List<Option>> e: optionTable.entrySet()) {
+			OptionType type = e.getKey();
+			List<Option> opts = e.getValue();
+			sb.append(type + ": ");
+			
+			for (Option opt: opts) {
+				sb.append(opt.toString() + " ");
+			}
+			
+			sb.append("\n");
+		}
+		
+		return sb.toString();
 	}
 }
