@@ -25,8 +25,6 @@ public class Dynamiz {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
     public static void main(String[] args) {
-
-	controller.setup();
 	
 	displayer.printWelcomeMessage();
 	((DisplayStub)displayer).printCommandPrompt();
@@ -34,7 +32,12 @@ public class Dynamiz {
 	String input = getInput();
 	
 	while(!input.equals(COMMAND_EXIT)){
-		controller.executeCommand(input);
+		try {
+		    controller.executeCommand(input);
+		} catch (Exception e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 		((DisplayStub)displayer).printCommandPrompt();
 		input = getInput();
     	}

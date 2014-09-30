@@ -7,9 +7,8 @@ import org.junit.Test;
 public class ControllerTest {
     
     @Test
-    public void testExecuteCommand() {
+    public void testExecuteCommand() throws Exception{
 	Controller controller = new Controller();
-	controller.setup();
 	controller.executeCommand("list");
     }
     
