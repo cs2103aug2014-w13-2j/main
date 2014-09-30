@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
 	}, START_TIME("-s", "--starttime", "from") {
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
-	}, UNKNOWN;
+	};
 	
 	static private final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
@@ -51,13 +52,22 @@ public enum OptionType {
 		return fromString(opt.getOptName());
 	}
 	
-	static public List<String> getAliases(OptionType opt) {
-		return opt.aliases;
+	public List<String> getAliases() {
+		return this.aliases;
+	}
+	
+	static public List<String> getAllAliases() {
+		List<String> allAliases = new ArrayList<String>();
+		for (OptionType opts: OptionType.values()) {
+			allAliases.addAll(opts.aliases);
+		}
+		
+		return allAliases;
 	}
 	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
-		this.aliases = Arrays.asList(aliases);
-		this.aliases.add(this.toString());
+		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
+		this.aliases.add(this.toString().toLowerCase());
 	}
 }
