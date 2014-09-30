@@ -12,6 +12,7 @@ public class DisplayStub extends Display {
     
     public void printFeedbackMessage(String message){
 	System.out.println(message);
+	System.out.println();
     }
     
     public void printCommandPrompt(){
