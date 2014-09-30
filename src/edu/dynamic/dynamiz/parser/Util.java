@@ -1,5 +1,9 @@
 package edu.dynamic.dynamiz.parser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Util class to store some utilities function in String manipulation
  * 
@@ -11,6 +15,21 @@ public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
 	
+	public static List<String> removeEmptyStringsInList(List<String> list) {
+		List<String> newList = new ArrayList<String>();
+		for (String s: list) {
+			if (!s.isEmpty()) {
+				newList.add(s);
+			}
+		}
+		
+		return newList;
+	}
+	
+	public static List<String> removeEmptyStringsInArray(String[] array) {
+		List<String> list = Arrays.asList(array);
+		return removeEmptyStringsInList(list);
+	}
 	/**
 	 * Retrieve the string with its first word stripped off. 
 	 * Default delimiter is applied here.
