@@ -109,8 +109,8 @@ public class Display implements DisplayerInterface {
 		
 	}
 	@Override
-	public void displayEventList(EventItem[] eventList) {
-		if(eventList==null) return;
+	public String displayEventList(EventItem[] eventList) {
+		if(eventList==null) return "";
 		else{
 			System.out.println(taskListTitle());
 			System.out.println(dividingLine());
@@ -119,16 +119,17 @@ public class Display implements DisplayerInterface {
 			System.out.println(thisEvent.toString());
 		}
 		}
+		return "";
 		
 	}
 	@Override
-	public void displayEventItem(EventItem event) {
-		System.out.println(event.toString());
+	public String displayEventItem(EventItem event) {
+		return event.toString();
 		
 	}
 	@Override
-	public void displayToDoList(ArrayList<ToDoItem> todoList) {
-		if(todoList==null) return;
+	public String displayToDoList(ArrayList<ToDoItem> todoList) {
+		if(todoList==null) return "";
 		else{
 			
 		for(int i=0;i<todoList.size();i++){
