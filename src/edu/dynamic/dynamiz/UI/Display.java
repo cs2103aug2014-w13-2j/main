@@ -141,6 +141,7 @@ public class Display implements DisplayerInterface {
 		}
 		}
 		
+		
 	}
 	@Override
 	public void displayToDoItem(ToDoItem todoItem) {
