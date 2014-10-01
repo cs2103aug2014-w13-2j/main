@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import edu.dynamic.dynamiz.storage.Controller;
+import edu.dynamic.dynamiz.logic.Controller;
 import edu.dynamic.dynamiz.UI.Display;
 import edu.dynamic.dynamiz.UI.DisplayStub;
 

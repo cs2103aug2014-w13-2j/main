@@ -1,7 +1,8 @@
-package edu.dynamic.dynamiz.storage;
+package edu.dynamic.dynamiz.logic;
 
 import edu.dynamic.dynamiz.UI.Display;
 import edu.dynamic.dynamiz.UI.DisplayStub;
+import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class Controller {

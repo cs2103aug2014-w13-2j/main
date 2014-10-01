@@ -1,4 +1,4 @@
-package edu.dynamic.dynamiz.storage;
+package edu.dynamic.dynamiz.logic;
 
 import static org.junit.Assert.*;
 
