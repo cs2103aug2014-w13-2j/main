@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import edu.dynamic.dynamiz.logic.Controller;
+import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.UI.Display;
 import edu.dynamic.dynamiz.UI.DisplayStub;
 
@@ -22,25 +23,31 @@ public class Dynamiz {
     
     private static Controller controller = new Controller();
     private static Display displayer = new DisplayStub();
+    
+    //Delete when integrating GUI component
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
     public static void main(String[] args) {
 	
+	//Displays welcome message and command prompt.
+	//Modify as required.
 	displayer.printWelcomeMessage();
 	((DisplayStub)displayer).printCommandPrompt();
 	
+	//Get input from GUI. Please modify as required.
 	String input = getInput();
 	
 	while(!input.equals(COMMAND_EXIT)){
-		try {
-		    controller.executeCommand(input);
-		} catch (Exception e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-		((DisplayStub)displayer).printCommandPrompt();
-		input = getInput();
+	    Feedback feedback = controller.executeCommand(input);
+	    //Display feedback message
+	    //Display command prompt. Modify as required.
+	    ((DisplayStub)displayer).printCommandPrompt();
+	    
+	    //Get input from GUI.
+	    input = getInput();
     	}
+	
+	//Delete when integrating GUI component
 	try{
 	    reader.close();
 	} catch(IOException ioe){
@@ -48,6 +55,7 @@ public class Dynamiz {
 	}
     }
 
+  //Delete when integrating GUI component
     private static String getInput(){
 	try{
 	    return reader.readLine();

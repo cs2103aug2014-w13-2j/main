@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.logic;
 import edu.dynamic.dynamiz.UI.Display;
 import edu.dynamic.dynamiz.UI.DisplayStub;
 import edu.dynamic.dynamiz.storage.Storage;
+import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class Controller {
@@ -15,18 +16,8 @@ public class Controller {
      * ToDo: Decide on the exception to be thrown on failure.
      * Notes: This is just a stub implementation. To be updated.
      */
-    public void executeCommand(String input) throws Exception {
-	if(input.equals("add")){
-	    add(new ToDoItem("New Task"));
-	} else if(input.equals("delete")){
-	    delete("A1");
-	} else if(input.equals("list")){
-	    display();
-	} else if(input.equals("update")){
-	    update("A1");
-	} else{
-	    throw new Exception();
-	}
+    public Feedback executeCommand(String input){
+	return null;
     }
     
 
