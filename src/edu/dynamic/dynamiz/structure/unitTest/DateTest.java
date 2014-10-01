@@ -90,4 +90,14 @@ public class DateTest {
 	assertFalse("29/2/2100 is invalid date", Date.isValidDate(29, 2, 2100));
     }
     
+    @Test
+    public void testCopyConstructor(){
+	Date date = new Date(2, 3, 1992);
+	Date date2 = new Date(date);
+	assertFalse(date==date2);
+	assertEquals(date, date2);
+	date2.setDate(1, 5, 2004);
+	assertFalse(date.equals(date2));
+    }
+    
 }
