@@ -1,5 +1,5 @@
 package edu.dynamic.dynamiz.UI;
 
-public enum promptTag {
+public enum PromptTag {
 
 }

@@ -17,8 +17,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public class Display implements DisplayerInterface {
 	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 
-	public void printWelcomeMessage(){
-		System.out.println(WELCOME_MESSAGE);
+	public String printWelcomeMessage(){
+		return WELCOME_MESSAGE;
 	}
 	
 	public String dateFormatter(Calendar c){
@@ -46,18 +46,23 @@ public class Display implements DisplayerInterface {
 		return "--------------------------------------------------------------------------------------------------------";
 	}
 	
-	public void printString(String string) {
-		System.out.println(string);
+	public String printString(String str) {
+		return str;
 		
 	}
-	public void printStringList(ArrayList<String> arr) {
-		for(int i=0;i<arr.size();i++)
-			printString(arr.get(i));
+	public String printStringList(ArrayList<String> arr) {
+		String s = new String();
+		
+		for(int i=0;i<arr.size();i++){
+		s.concat(arr.get(i));
+		s.concat("\n");
+		}
+		return s;
 		
 	}
 	
-	public void displayTaskList(ArrayList<TaskItem> taskList){
-		if(taskList==null) return;
+	public String displayTaskList(ArrayList<TaskItem> taskList){
+		if(taskList==null) return  "";
 		else{
 			System.out.println(taskListTitle());
 			System.out.println(dividingLine());
