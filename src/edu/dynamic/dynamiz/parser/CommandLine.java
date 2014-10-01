@@ -79,6 +79,7 @@ public class CommandLine {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Command Type: " + command.toString() + "\n");
+		sb.append("Value" + param + "\n");
 		sb.append("Options: \n" + options.toString());
 		
 		return sb.toString();
