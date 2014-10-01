@@ -1,5 +1,8 @@
 package edu.dynamic.dynamiz.logic;
 
+
+import edu.dynamic.dynamiz.parser.Parser;
+
 import edu.dynamic.dynamiz.UI.Display;
 import edu.dynamic.dynamiz.UI.DisplayStub;
 import edu.dynamic.dynamiz.storage.Storage;
@@ -7,7 +10,6 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class Controller {
-    private DisplayStub displayer = new DisplayStub();
     private Storage storage = new Storage();
     
     /**
@@ -17,6 +19,8 @@ public class Controller {
      * Notes: This is just a stub implementation. To be updated.
      */
     public Feedback executeCommand(String input){
+	Parser parser = new Parser(input);
+	//Command command = parser.;
 	return null;
     }
     
