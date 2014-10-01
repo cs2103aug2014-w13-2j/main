@@ -18,7 +18,7 @@ import java.awt.Font;
 import javax.swing.JInternalFrame;
 
 
-public class GUI {
+public class Screen {
 
 	private JFrame frame;
 
@@ -29,7 +29,7 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI window = new GUI();
+					Screen window = new Screen();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,13 +41,19 @@ public class GUI {
 	/**
 	 * Create the application.
 	 */
-	public GUI() {
+	public Screen() {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	public void screenPrint(String str){
+		
+	}
+	public void screenPrintln(String str){
+		
+	}
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
