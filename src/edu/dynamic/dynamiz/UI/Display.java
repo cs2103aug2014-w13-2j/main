@@ -7,6 +7,7 @@ import java.awt.color.*;
 
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -17,9 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public class Display implements DisplayerInterface {
 	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 
-	public String printWelcomeMessage(){
-		return WELCOME_MESSAGE;
-	}
 	
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
@@ -36,175 +34,217 @@ public class Display implements DisplayerInterface {
 	}
 	
 
-	private static String taskListTitle(){
-		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Task","Status","Priority","Start Time","End Time");
-		
-		return s;
+	public String displayWelcomeMessage(){
+		return WELCOME_MESSAGE;
 	}
 	
-	private static String dividingLine(){
+	
+	
+	public String displayTitleLine() {
+		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Task","Status","Priority","Start Time","End Time");	
+		return s;
+	}
+
+	@Override
+	public String displayDividingLine() {
 		return "--------------------------------------------------------------------------------------------------------";
 	}
+
 	
-	public String printString(String str) {
+	@Override
+	public String displaytString(String str) {	
 		return str;
-		
 	}
-	public String printStringList(ArrayList<String> arr) {
-		String s = new String();
-		
+
+	@Override
+	public String displayStringList(ArrayList<String> arr) {	
+		if(arr == null) return "null";
+
+		StringBuilder s = new StringBuilder();
+
 		for(int i=0;i<arr.size();i++){
-		s.concat(arr.get(i));
-		s.concat("\n");
+			if(!arr.get(i).isEmpty())
+			s.append(arr.get(i).trim()).append("\n");
 		}
-		return s;
+
+		return s.toString();	
+	}
+	
+
+	@Override
+	public String displayTaskItem(TaskItem task) {
+		if(task == null) return "null task";
+		else return task.toString();
+	}
+
+	@Override
+	public String displayTaskFile(TaskItem task) {
+		if(task == null) return "null task";
+		else return task.toFileString();
+	}
+	
+	@Override
+	public String displayTaskFeedBack(TaskItem task) {
+		if(task == null) return "null task";
+		else return task.getFeedbackString();
+	}
+
+	
+
+	@Override
+	public String displayTaskList(ArrayList<TaskItem> taskList) {
+		if(taskList == null ) return "null";
 		
-	}
-	
-	public String displayTaskList(ArrayList<TaskItem> taskList){
-		if(taskList==null) return  "";
-		else{
-			System.out.println(taskListTitle());
-			System.out.println(dividingLine());
-		for(int i=0;i<taskList.size();i++){
-			TaskItem thisTask= taskList.get(i);
-			System.out.println(thisTask.toString());
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< taskList.size(); i++){
+			s.append(taskList.get(i).toString()).append("\n");
 		}
-		}
-		return null;
+		return s.toString();
 	}
-	
+
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
-		if(taskList==null) return null;
-		else{
-			System.out.println(taskListTitle());
-			System.out.println(dividingLine());
-		for(int i=0;i<taskList.length;i++){
-			TaskItem thisTask= taskList[i];
-			System.out.println(thisTask.toString());
+		if(taskList == null ) return "null";
+		
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< taskList.length; i++){
+			s.append(taskList[i].toString()).append("\n");
 		}
-		}
-		return null;
-		
+		return s.toString();
+
 	}
-	public String displayTaskItem(TaskItem task) {
-		
-		return task.toString();
-		
-	}
+
 	
-	
-	public String displayEventList(ArrayList<EventItem> eventList) {
-		if(eventList==null) return "";
-		else{
-			System.out.println(taskListTitle());
-			System.out.println(dividingLine());
-		for(int i=0;i<eventList.size();i++){
-			EventItem thisEvent= eventList.get(i);
-			System.out.println(thisEvent.toString());
-		}
-		}
-		return null;
-		
-	}
 	@Override
-	public String displayEventList(EventItem[] eventList) {
-		if(eventList==null) return "";
-		else{
-			System.out.println(taskListTitle());
-			System.out.println(dividingLine());
-		for(int i=0;i<eventList.length;i++){
-			EventItem thisEvent= eventList[i];
-			System.out.println(thisEvent.toString());
-		}
-		}
-		return "";
+	public String displayEventFeedBack(EventItem event) {
+		if(event == null) return "null event";
+		else return event.getFeedbackString();
 		
+	}
+
+	@Override
+	public String displayEventFile(EventItem event) {
+		if(event == null) return "null event";
+		else return event.toFileString();
 	}
 	@Override
 	public String displayEventItem(EventItem event) {
-		return event.toString();
-		
+		if(event == null) return "null event";
+		else return event.toString();
 	}
+	
+	@Override
+	public String displayEventList(ArrayList<EventItem> eventList) {
+		if(eventList == null ) return "null";
+		
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< eventList.size(); i++){
+			s.append(eventList.get(i).toString()).append("\n");
+		}
+		return s.toString();
+	}
+
+	@Override
+	public String displayEventList(EventItem[] eventList) {
+		if(eventList == null ) return "null";
+		
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< eventList.length; i++){
+			s.append(eventList[i].toString()).append("\n");
+		}
+		return s.toString();
+	}
+
+	
+
+
+	@Override
+	public String displayToDoItem(ToDoItem todoItem) {
+		if(todoItem == null) return "null todo Item";
+		else return todoItem.toString();
+	}
+
+	@Override
+	public String displayToDoFeedBack(ToDoItem todoItem) {
+		if(todoItem == null) return "null todo Item";
+		else return todoItem.getFeedbackString();
+	}
+
+	@Override
+	public String displayToDoFile(ToDoItem todoItem) {
+		if(todoItem == null) return "null todo Item";
+		else return todoItem.toFileString();
+	}
+	
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
-		if(todoList==null) return "";
-		else{
-			
-		for(int i=0;i<todoList.size();i++){
-			ToDoItem thisToDo= todoList.get(i);
-			System.out.println(thisToDo.toString());
+		if(todoList == null ) return "null";
+		
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< todoList.size(); i++){
+			s.append(todoList.get(i).toString()).append("\n");
 		}
+		return s.toString();
+	}
+
+	@Override
+	public String displayToDoList(ToDoItem[] todoList) {
+		if(todoList == null ) return "null";
+		
+		StringBuilder s = new StringBuilder();
+		for(int i = 0; i< todoList.length; i++){
+			s.append(todoList[i].toString()).append("\n");
 		}
-		
-	}
-	@Override
-	public void displayToDoList(ToDoItem[] todoList) {
-		if(todoList==null) return;
-		else{
-			//System.out.println(taskListTitle());
-			System.out.println(dividingLine());
-		for(int i=0;i<todoList.length;i++){
-			ToDoItem thisTodo= todoList[i];
-			System.out.println(thisTodo.toString());
-		}
-		}
-		
-		
-	}
-	@Override
-	public void displayToDoItem(ToDoItem todoItem) {
-		System.out.println(todoItem.toString());
-		
-	}
-
-	@Override
-	public void displayEventFeedBack(EventItem event) {
-		System.out.println(event.toFileString());
-		
-	}
-
-	@Override
-	public void displayEventFile(EventItem event) {
-		System.out.println(event.toString());	
-	}
-
-	@Override
-	public void displayTaskFeedBack(TaskItem task) {
-		
-		System.out.println(task.getFeedbackString());	
-	}
-
-	@Override
-	public void displayTaskFile(TaskItem taskItem) {
-		
-		System.out.println(taskItem.getFeedbackString());	
-	}
-
-
-
-	@Override
-	public void displayToDoFeedBack(ToDoItem todoItem) {
-		System.out.println(todoItem.getFeedbackString());
-		
-	}
-
-	@Override
-	public void displayToDoFile(ToDoItem todoItem) {
-		System.out.println(todoItem.toFileString());
-		
+		return s.toString();
 	}
 	
+
 	@Override
-	public void printPrompt(String promtMessage) {
-		System.out.print(promtMessage);	
+	public String displayPrompt() {
+		return "Please Enter Command:";
 	}
+
+	@Override
+	public String displayPrompt(PromptTag prompt) {
+		String tag = new String();
+		switch(prompt){
+		case EnterCommand:
+			tag = "Please Enter Command:";
+		case EnterTodoItem:
+			tag = "Please Enter Task:";
+		case EnterTaskIndex:
+			tag = "Please Enter Task Index:";
+		case InvalidCommand:
+			tag = "Please Enter Valid Command:";
+		}	
+		
+		tag+="\n";
+		
+		return tag;
+	}
+
+	@Override
+	public String displayPrompt(String promptMessage) {
+		return promptMessage;
+	}
+
 	
 	@Override
-	public void displayHelpPage() {
-		System.out.println("Help Page");	
+	public String displayFeedBack(Feedback commandFeedBack) {
+		String s = new String();
+		
+		return s;		
 	}
+
+	
+	@Override
+	public String displayHelpPage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	
 	
 	
 }

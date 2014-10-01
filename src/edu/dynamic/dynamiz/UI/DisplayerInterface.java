@@ -11,16 +11,23 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 /*Displayer:
  * Print Prompt
  * Help Page
- * Feed Back
- * Exception
+ * Feed Back:
+ * error
+ * help
+ * success
+ * 
  * 
  */
 public interface DisplayerInterface {
-	public String printFeedBack (Feedback commandFeedBack);
 	
-	public String printWelcomeMessage();
-	public String printString(String str);
-	public String printStringList(ArrayList<String> arr);
+	public String displayFeedBack (Feedback commandFeedBack);
+	
+	public String displayWelcomeMessage();
+	public String displaytString(String str);
+	public String displayStringList(ArrayList<String> arr);
+	
+	public String displayTitleLine();
+	public String displayDividingLine();
 	
 	public String displayTaskList(ArrayList<TaskItem> taskList);
 	public String displayTaskList(TaskItem[] taskList);
@@ -42,9 +49,9 @@ public interface DisplayerInterface {
 	public String displayToDoFile(ToDoItem todoItem);
 	
 	
-	public String printPrompt();
-	public String printPrompt(PromptTag prompt);
-	public String printPrompt(String promtMessage);
+	public String displayPrompt();
+	public String displayPrompt(PromptTag prompt);
+	public String displayPrompt(String promtMessage);
 
 	
 	public String displayHelpPage();
