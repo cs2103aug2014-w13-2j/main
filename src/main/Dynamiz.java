@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import edu.dynamic.dynamiz.storage.Controller;
-import edu.dynamic.dynamiz.displayer.Display;
-import edu.dynamic.dynamiz.displayer.DisplayStub;
+import edu.dynamic.dynamiz.UI.Display;
+import edu.dynamic.dynamiz.UI.DisplayStub;
 
 /**
  * The main program.

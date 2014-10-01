@@ -1,4 +1,4 @@
-package edu.dynamic.dynamiz.displayer;
+package edu.dynamic.dynamiz.UI;
 
 import java.util.ArrayList;
 import java.util.Calendar;

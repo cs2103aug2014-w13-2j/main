@@ -1,5 +1,5 @@
 package edu.dynamic.dynamiz.structure.unitTest;
-import edu.dynamic.dynamiz.displayer.*;
+import edu.dynamic.dynamiz.UI.*;
 import edu.dynamic.dynamiz.logic.*;
 import edu.dynamic.dynamiz.parser.*;
 import edu.dynamic.dynamiz.storage.*;

@@ -1,4 +1,4 @@
-package edu.dynamic.dynamiz.displayer;
+package edu.dynamic.dynamiz.UI;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
