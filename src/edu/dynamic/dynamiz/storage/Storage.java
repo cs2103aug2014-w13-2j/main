@@ -48,6 +48,15 @@ public class Storage {
     }
     
     /**
+     * Adds a new item with the specified information into the storage.
+     * @return The ToDoItem that is added to the storage by this operation.
+     * Signature and implementation to be updated.
+     */
+    public ToDoItem addItem(){
+	return null;
+    }
+    
+    /**
      * Adds the given item to the list. For use by CommandDelete's undo method.
      * @return The TodoItem that is added to the list.
      */
@@ -74,7 +83,6 @@ public class Storage {
      * Updates the item with the given id with the specified changes.
      * @return The updated ToDoItem.
      * Signature and implementation to be edited after confirming parameters returned by parser.
-     * Exceptions to be thrown on fail cases.
      */
     public ToDoItem[] updateItem(String id){
 	ToDoItem[] list = new ToDoItem[2];
@@ -131,7 +139,6 @@ public class Storage {
 	if(eventList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(eventList);
 	return eventList.toArray(new EventItem[eventList.size()]);
     }
     
@@ -144,7 +151,6 @@ public class Storage {
 	if(taskList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(taskList);
 	return taskList.toArray(new TaskItem[taskList.size()]);
     }
     
@@ -155,7 +161,7 @@ public class Storage {
      * Implementation is currently only a stub, to be properly implemented when use case requirements
      * are confirmed.
      */
-    public EventItem[] getListSortedByStartDate(){
+    public EventItem[] getEventsSortedByStartDate(){
 	if(eventList.isEmpty()){
 	    return null;
 	}
@@ -170,7 +176,7 @@ public class Storage {
      * Implementation is currently only a stub, to be properly implemented when use case requirements
      * are confirmed.
      */
-    public EventItem[] getListSortedByEndDate(){
+    public EventItem[] getEventsSortedByEndDate(){
 	if(eventList.isEmpty()){
 	    return null;
 	}
@@ -184,7 +190,7 @@ public class Storage {
      * Implementation is currently only a stub, to be properly implemented when use case requirements
      * are confirmed.
      */
-    public TaskItem[] getListSortedByDeadline(){
+    public TaskItem[] getTasksSortedByDeadline(){
 	if(taskList.isEmpty()){
 	    return null;
 	}
