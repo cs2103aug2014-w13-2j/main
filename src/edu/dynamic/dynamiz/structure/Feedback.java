@@ -5,6 +5,7 @@ package edu.dynamic.dynamiz.structure;
  * @author zixian
  */
 public class Feedback {
+    //Main data members
     private String commandType, originalCommand;
     
     //Constructor
