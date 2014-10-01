@@ -223,15 +223,14 @@ public class Display implements DisplayerInterface {
 		return tag;
 	}
 
-	@Override
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
 	}
 
 	
-	@Override
 	public String displayFeedBack(Feedback commandFeedBack) {
-		String s = new String();
+		String s = new String(); 
+	//	commandFeedBack.getClass();
 		
 		return s;		
 	}
