@@ -41,9 +41,11 @@ public interface DisplayerInterface {
 	public String displayToDoFeedBack(ToDoItem todoItem);
 	public String displayToDoFile(ToDoItem todoItem);
 	
+	
+	public String printPrompt();
+	public String printPrompt(PromptTag prompt);
 	public String printPrompt(String promtMessage);
 
-	public String printPrompt(int promptTag);
 	
 	public String displayHelpPage();
 	
