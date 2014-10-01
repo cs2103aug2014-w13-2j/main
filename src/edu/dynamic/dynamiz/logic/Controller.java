@@ -10,6 +10,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class Controller {
+    //Main data member
     private Storage storage = new Storage();
     
     /**

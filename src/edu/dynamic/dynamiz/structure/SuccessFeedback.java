@@ -1,5 +1,9 @@
 package edu.dynamic.dynamiz.structure;
 
+/**
+ * Defines the feedback object type for successful operations, excluding the help page command.
+ * @author zixian
+ */
 public class SuccessFeedback extends Feedback {
     //Main data members
     private ToDoItem[] list;
