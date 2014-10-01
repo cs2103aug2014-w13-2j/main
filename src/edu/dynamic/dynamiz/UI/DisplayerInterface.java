@@ -2,38 +2,50 @@ package edu.dynamic.dynamiz.UI;
 
 import java.util.ArrayList;
 
+
 import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/*Displayer:
+ * Print Prompt
+ * Help Page
+ * Feed Back
+ * Exception
+ * 
+ */
 public interface DisplayerInterface {
-	public void printWelcomeMessage();
-	public void printString(String str);
-	public void printStringList(ArrayList<String> arr);
+	public String printFeedBack (Feedback commandFeedBack);
 	
-	public void displayTaskList(ArrayList<TaskItem> taskList);
-	public void displayTaskList(TaskItem[] taskList);
-	public void displayTaskItem(TaskItem task);
-	public void displayTaskFeedBack(TaskItem task);
-	public void displayTaskFile(TaskItem task);
+	public String printWelcomeMessage();
+	public String printString(String str);
+	public String printStringList(ArrayList<String> arr);
 	
-	public void displayEventList(ArrayList<EventItem> eventList);
-	public void displayEventList(EventItem[] eventList);
-	public void displayEventItem(EventItem event);
-	public void displayEventFeedBack(EventItem event);
-	public void displayEventFile(EventItem event);
+	public String displayTaskList(ArrayList<TaskItem> taskList);
+	public String displayTaskList(TaskItem[] taskList);
+	public String displayTaskItem(TaskItem task);
+	public String displayTaskFeedBack(TaskItem task);
+	public String displayTaskFile(TaskItem task);
 	
-	
-	public void displayToDoList(ArrayList<ToDoItem> todoList);
-	public void displayToDoList(ToDoItem[] todoList);
-	public void displayToDoItem(ToDoItem todoItem);
-	public void displayToDoFeedBack(ToDoItem todoItem);
-	public void displayToDoFile(ToDoItem todoItem);
+	public String displayEventList(ArrayList<EventItem> eventList);
+	public String displayEventList(EventItem[] eventList);
+	public String displayEventItem(EventItem event);
+	public String displayEventFeedBack(EventItem event);
+	public String displayEventFile(EventItem event);
 	
 	
-	public void printPrompt(String promtMessage);
+	public String displayToDoList(ArrayList<ToDoItem> todoList);
+	public String displayToDoList(ToDoItem[] todoList);
+	public String displayToDoItem(ToDoItem todoItem);
+	public String displayToDoFeedBack(ToDoItem todoItem);
+	public String displayToDoFile(ToDoItem todoItem);
+	
+	public String printPrompt(String promtMessage);
 
-	public void displayHelpPage();
+	public String printPrompt(int promptTag);
+	
+	public String displayHelpPage();
 	
 	
 }
