@@ -48,10 +48,8 @@ public class Storage {
     }
     
     /**
-     * Adds the given item to the list.
+     * Adds the given item to the list. For use by CommandDelete's undo method.
      * @return The TodoItem that is added to the list.
-     * Signature and implementation to change after confirming parameters returned by parser.
-     * Exceptions to be thrown when dealing with fail cases.
      */
     public ToDoItem addItem(ToDoItem item){
 	mainList.add(item);
@@ -78,15 +76,38 @@ public class Storage {
      * Signature and implementation to be edited after confirming parameters returned by parser.
      * Exceptions to be thrown on fail cases.
      */
-    public ToDoItem updateItem(String id){
+    public ToDoItem[] updateItem(String id){
+	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
+	
+	//Makes a copy of the current version of the object
+	if(target instanceof TaskItem){
+	    list[0] = new TaskItem((TaskItem)target);
+	} else if(target instanceof EventItem){
+	    list[0] = new EventItem((EventItem)target);
+	} else{
+	    list[0] = new ToDoItem(target);
+	}
+	//Use mutator methods to update the target object.
+	list[1] = target;
+	
 	try {
 	    FileHandler.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	return target;	
+	return list;	
+    }
+    
+    /**
+     * Undoes the update done by the Command object executing the update method.
+     * item must be such that its ID matches an existing item in the storage.
+     * For use by CommandUpdate's undo method.
+     */
+    public void undoUpdate(ToDoItem item){
+	removeItem(item.getId());
+	addItem(item);
     }
     
     /**
@@ -173,6 +194,7 @@ public class Storage {
     
     /**
      * Removes the ToDoItem with the given ID from the list.
+     * For use by CommandAdd's undo method and CommandDelete's execute method.
      * @return The ToDoItem object that was removed from the list by this operation.
      */
     public ToDoItem removeItem(String id){
