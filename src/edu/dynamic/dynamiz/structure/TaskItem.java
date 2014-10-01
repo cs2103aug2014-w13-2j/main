@@ -38,6 +38,16 @@ public class TaskItem extends ToDoItem {
 	setDeadline(deadline);
     }
     
+    //Copy constructor
+    public TaskItem(TaskItem task){
+	super(task);
+	if(task.getDeadline() instanceof DateTime){
+	    setDeadline(new DateTime(task.getDeadline()));
+	} else{
+	    setDeadline(new Date(task.getDeadline()));
+	}
+    }
+    
     /**
      * Returns the string representation of the given Date object formatted
      * for EventItem.

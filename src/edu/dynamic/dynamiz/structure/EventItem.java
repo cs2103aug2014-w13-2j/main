@@ -51,6 +51,21 @@ public class EventItem extends ToDoItem {
 	setEndDate(endDate);
     }
     
+    //Copy constructor
+    public EventItem(EventItem event){
+	super(event);
+	if(event.getStartDate() instanceof DateTime){
+	    setStartDate(new DateTime(event.getStartDate()));
+	} else{
+	    setStartDate(new Date(event.getStartDate()));
+	}
+	if(event.getEndDate() instanceof DateTime){
+	    setEndDate(new DateTime(event.getEndDate()));
+	} else{
+	    setEndDate(new Date(event.getEndDate()));
+	}
+    }
+    
     /**
      * Returns the string representation of the given Date object formatted
      * for EventItem.

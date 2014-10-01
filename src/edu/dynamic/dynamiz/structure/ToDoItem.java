@@ -34,14 +34,23 @@ public class ToDoItem implements Comparable<ToDoItem>{
     
     //Constructors
     public ToDoItem(String description){
-	this(description, DEFAULT_PRIORITY);
+	this(getNextId(), description, DEFAULT_PRIORITY, DEFAULT_STATUS);
     }
     
     public ToDoItem(String description, int priority){
-	setId(getNextId());
+	this(getNextId(), description, priority, DEFAULT_STATUS);
+    }
+    
+    private ToDoItem(String id, String description, int priority, String status){
+	setId(id);
 	setDescription(description);
 	setPriority(priority);
-	setStatus(DEFAULT_STATUS);
+	setStatus(status);
+    }
+    
+    //Copy constructor
+    public ToDoItem(ToDoItem item){
+	this(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
     }
     
     @Override
@@ -67,7 +76,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     }
     
     //Gets the next id to assign to a new ToDoItem.
-    private String getNextId(){
+    private static String getNextId(){
 	StringBuilder newId = new StringBuilder(Character.toString(idLetter));
 	newId = newId.append(Integer.toString(idNum));
 	if(idNum==MAX_IDNUM){

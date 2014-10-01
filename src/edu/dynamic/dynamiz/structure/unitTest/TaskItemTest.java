@@ -73,4 +73,15 @@ public class TaskItemTest {
 	assertEquals("new status is 'in progress'", TaskItem.STATUS_INPROGRESS, task.getStatus());
 	System.out.println(task.getFeedbackString());
     }
+    
+    @Test
+    public void testCopyConstructor(){
+	TaskItem task = new TaskItem("Homework", 2, new Date(13, 10, 2014));
+	TaskItem task2 = new TaskItem(task);
+	assertFalse(task==task2);
+	assertEquals(task.getId(), task2.getId());
+	assertEquals(task, task2);
+	task2.setPriority(5);
+	assertFalse(task.getPriority()==task2.getPriority());
+    }
 }
