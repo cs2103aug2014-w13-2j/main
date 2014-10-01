@@ -2,7 +2,7 @@ package edu.dynamic.dynamiz.UI;
 /**
  * @author XYLau
  * 
- * Establish GUI Environment for Display
+ * Establish Screen for GUI
  */
 
 import java.awt.EventQueue;
