@@ -71,11 +71,12 @@ public class Display implements DisplayerInterface {
 			System.out.println(thisTask.toString());
 		}
 		}
+		return null;
 	}
 	
 	@Override
-	public void displayTaskList(TaskItem[] taskList) {
-		if(taskList==null) return;
+	public String displayTaskList(TaskItem[] taskList) {
+		if(taskList==null) return null;
 		else{
 			System.out.println(taskListTitle());
 			System.out.println(dividingLine());
@@ -84,16 +85,18 @@ public class Display implements DisplayerInterface {
 			System.out.println(thisTask.toString());
 		}
 		}
+		return null;
 		
 	}
-	public void displayTaskItem(TaskItem task) {
-		System.out.println(task.toString());
+	public String displayTaskItem(TaskItem task) {
+		
+		return task.toString();
 		
 	}
 	
 	
-	public void displayEventList(ArrayList<EventItem> eventList) {
-		if(eventList==null) return;
+	public String displayEventList(ArrayList<EventItem> eventList) {
+		if(eventList==null) return "";
 		else{
 			System.out.println(taskListTitle());
 			System.out.println(dividingLine());
@@ -102,6 +105,7 @@ public class Display implements DisplayerInterface {
 			System.out.println(thisEvent.toString());
 		}
 		}
+		return null;
 		
 	}
 	@Override
