@@ -57,7 +57,6 @@ public class Parser {
 		String optRegex = "(?<=(" + allAliases + "))" + // Lookahead for option keyword
 						  "(.*?)" + // Arguments sandwiched between 2 keywords or 1 keywords and end of line
 						  "(?=(" + allAliases + "|$))"; // Another keyword or end of line
-		System.out.println(optRegex);
 		Pattern optPattern = Pattern.compile(optRegex, Pattern.CASE_INSENSITIVE);
 		
 		Matcher optMatcher = optPattern.matcher(inputCmd);
@@ -84,11 +83,13 @@ public class Parser {
 	
 	public static void main(String[] args) {
 		String cmd = "add Meeting CS2103 from 8h30 8h45 -s 8h42 to 9h45";
+		String cmd2 = "delete 2";
+		
 		Parser parser = new Parser(cmd);
 		CommandLine cmdLine = parser.getCommandLine();
 		
+		System.out.println(parser.parse(cmd2));
 		System.out.println(cmdLine);
-		
 		
 	}
 }
