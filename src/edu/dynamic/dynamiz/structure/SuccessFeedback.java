@@ -5,6 +5,8 @@ package edu.dynamic.dynamiz.structure;
  * @author zixian
  */
 public class SuccessFeedback extends Feedback {
+    public static final String CLASSNAME = "SuccessFeedback";
+    
     //Main data members
     private ToDoItem[] list;
     
@@ -25,5 +27,10 @@ public class SuccessFeedback extends Feedback {
     
     private void setList(ToDoItem[] list){
 	this.list = list;
+    }
+    
+    @Override
+    public String getClassName(){
+	return CLASSNAME;
     }
 }
