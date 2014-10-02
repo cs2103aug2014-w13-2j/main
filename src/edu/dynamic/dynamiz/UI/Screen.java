@@ -5,76 +5,76 @@ package edu.dynamic.dynamiz.UI;
  * Establish Screen for GUI
  */
 
-import java.awt.EventQueue;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
-import javax.swing.JTextPane;
-import javax.swing.JScrollBar;
-import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JInternalFrame;
+public class Screen extends JPanel implements ActionListener {
+    protected JTextField inputScreen;
+    protected JTextArea displayScreen;
+    private final static String newline = "\n";
+
+    public Screen() {
+        super(new GridBagLayout());
+        displayScreen = new JTextArea(40, 100);
+        displayScreen.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(displayScreen);
+
+        inputScreen = new JTextField(20);
+        inputScreen.addActionListener(this);
 
 
-public class Screen {
+        //Add Components to this panel.
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridwidth = GridBagConstraints.REMAINDER;
+ 
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        add(scrollPane, c);
+        
+        c.fill = GridBagConstraints.HORIZONTAL;
+        add(inputScreen, c);
 
-	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Screen window = new Screen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    }
 
-	/**
-	 * Create the application.
-	 */
-	public Screen() {
-		initialize();
-	}
+    public void actionPerformed(ActionEvent evt) {
+        String text = inputScreen.getText();
+        
+        displayScreen.append(text + newline);
+        inputScreen.selectAll();
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	public void screenPrint(String str){
-		
-	}
-	public void screenPrintln(String str){
-		
-	}
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JLabel lblHeader = new JLabel("Dynamiz");
-		frame.getContentPane().add(lblHeader, BorderLayout.NORTH);
-		
-		
-		JTextPane txtpnVisualOutput = new JTextPane();
-		txtpnVisualOutput.setBackground(Color.BLACK);
-		txtpnVisualOutput.setForeground(Color.WHITE);
-		txtpnVisualOutput.setText("Output Display");
-		frame.getContentPane().add(txtpnVisualOutput, BorderLayout.CENTER);
-		
-		JTextPane txtpnCommandInput = new JTextPane();
-		txtpnCommandInput.setText("Command Input");
-		frame.getContentPane().add(txtpnCommandInput, BorderLayout.SOUTH);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		frame.getContentPane().add(scrollBar, BorderLayout.EAST);
-	}
+        //Make sure the new text is visible, even if there
+        //was a selection in the text area.
+        displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
+    }
 
+    /**
+     * Create the GUI and show it.  For thread safety,
+     * this method should be invoked from the
+     * event dispatch thread.
+     */
+    private static void Screen() {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Dynamiz");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //Add contents to the window.
+        frame.add(new Screen());
+
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        //Schedule a job for the event dispatch thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                Screen();
+            }
+        });
+    }
 }
