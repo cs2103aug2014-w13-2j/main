@@ -16,13 +16,13 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * @author Hu Wenyan
  * Implement Display functions for tasks, events and todoItems
  */
-public class Display implements DisplayerInterface {
+public class Displayer implements DisplayerInterface {
 	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 	
-	private static final int FeedbackTag = 1;
-	private static final int ErrorFeedbackTag = 2;
-	private static final int SuccessFeedbackTag = 3;
-	private static final int HelpFeedbackTag = 4;
+	private static final int FEEDBACK_TAG = 1;
+	private static final int ERROR_FEEDBACK_TAG = 2;
+	private static final int SUCCESS_FEEDBACK_TAG = 3;
+	private static final int HELP_FEEDBACK_TAG = 4;
 
 	
 	public String dateFormatter(Calendar c){
@@ -239,17 +239,17 @@ public class Display implements DisplayerInterface {
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
 		switch(t){
-		case HelpFeedbackTag:
+		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();
 			break;
 			
-		case ErrorFeedbackTag:
+		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s = ef.getMessage();
 			break;
 			
-		case SuccessFeedbackTag:
+		case SUCCESS_FEEDBACK_TAG:
 			StringBuilder a = new StringBuilder();
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
@@ -276,11 +276,11 @@ public class Display implements DisplayerInterface {
 	}
 	 int getFeedbackTag(Feedback f){
 		
-		if(f instanceof SuccessFeedback) return SuccessFeedbackTag;
-		if(f instanceof ErrorFeedback) return ErrorFeedbackTag;
+		if(f instanceof SuccessFeedback) return SUCCESS_FEEDBACK_TAG;
+		if(f instanceof ErrorFeedback) return ERROR_FEEDBACK_TAG;
 		
-		if(f instanceof HelpFeedback) return HelpFeedbackTag;
-		return FeedbackTag;		
+		if(f instanceof HelpFeedback) return HELP_FEEDBACK_TAG;
+		return FEEDBACK_TAG;		
 		
 	}
 
