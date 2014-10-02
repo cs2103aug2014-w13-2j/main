@@ -5,9 +5,10 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.awt.color.*;
 
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.*;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.Feedback;
+import edu.dynamic.dynamiz.structure.HelpFeedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -17,6 +18,11 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 public class Display implements DisplayerInterface {
 	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
+	
+	private static final int FeedbackTag = 1;
+	private static final int ErrorFeedbackTag = 2;
+	private static final int SuccessFeedbackTag = 3;
+	private static final int HelpFeedbackTag = 4;
 
 	
 	public String dateFormatter(Calendar c){
@@ -228,22 +234,91 @@ public class Display implements DisplayerInterface {
 	}
 
 	
-	public String displayFeedBack(Feedback commandFeedBack) {
+	public String displayFeedBack(Feedback commandFeedback) {
+		if(commandFeedback == null ) return "null";
 		String s = new String(); 
-	//	commandFeedBack.getClass();
-		
+		int t = getFeedbackTag(commandFeedback);
+		switch(t){
+		case HelpFeedbackTag:
+			HelpFeedback hf = (HelpFeedback)commandFeedback; 
+			s = hf.getHelpContent();
+			break;
+			
+		case ErrorFeedbackTag:
+			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
+			s = ef.getMessage();
+			break;
+			
+		case SuccessFeedbackTag:
+			StringBuilder a = new StringBuilder();
+			
+			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
+			
+			a.append(sf.getCommandType()).append(" succesfully!");
+			
+			getFeedbackContent(a,sf);
+			
+		default:
+			s = commandFeedback.getCommandType();
+			
+		}
 		return s;		
+	}
+	
+	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
+		ToDoItem[] list = sf.getAffectedItems();
+		if(list == null ) return;
+		else{ for( int i = 0 ; i< list.length; i++){
+			a.append(list[i].toFileString()).append("\n");
+		}			
+		}
+		
+	}
+	 int getFeedbackTag(Feedback f){
+		
+		if(f instanceof SuccessFeedback) return SuccessFeedbackTag;
+		if(f instanceof ErrorFeedback) return ErrorFeedbackTag;
+		
+		if(f instanceof HelpFeedback) return HelpFeedbackTag;
+		return FeedbackTag;		
+		
 	}
 
 	
 	@Override
 	public String displayHelpPage() {
-		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		String title = StringUtils.center("Help Page", 9);
+		sb.append(title).append("\n");
 		return null;
 	}
 
 	
 	
-	
-	
+}
+
+class StringUtils {
+
+    public static String center(String s, int size) {
+        return center(s, size, " ");
+    }
+
+    public static String center(String s, int size, String pad) {
+        if (pad == null)
+            throw new NullPointerException("pad cannot be null");
+        if (pad.length() <= 0)
+            throw new IllegalArgumentException("pad cannot be empty");
+        if (s == null || size <= s.length())
+            return s;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < (size - s.length()) / 2; i++) {
+            sb.append(pad);
+        }
+        sb.append(s);
+        while (sb.length() < size) {
+            sb.append(pad);
+        }
+        return sb.toString();
+    }
 }

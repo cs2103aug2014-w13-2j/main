@@ -11,7 +11,7 @@ public class ErrorFeedback extends Feedback {
     }
     
     /**
-     * Gets the error message associated witht he operation this feedback is for.
+     * Gets the error message associated with he operation this feedback is for.
      * @return The error message String.
      */
     public String getMessage(){
