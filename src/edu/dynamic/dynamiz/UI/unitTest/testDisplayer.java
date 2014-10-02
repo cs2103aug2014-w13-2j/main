@@ -6,9 +6,13 @@ import org.junit.Test;
 
 public class testDisplayer {
 
+	public void setUp(){
+		
+	}
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	
+	public void testDisplayString() {
+		
 	}
 
 }
