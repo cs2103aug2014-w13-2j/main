@@ -23,7 +23,6 @@ public class Screen extends JPanel implements ActionListener {
         inputScreen = new JTextField(20);
         inputScreen.addActionListener(this);
 
-
         //Add Components to this panel.
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
@@ -35,8 +34,6 @@ public class Screen extends JPanel implements ActionListener {
         
         c.fill = GridBagConstraints.HORIZONTAL;
         add(inputScreen, c);
-
-
     }
 
     public void actionPerformed(ActionEvent evt) {

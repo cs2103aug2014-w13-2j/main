@@ -31,7 +31,7 @@ public class Dynamiz {
 	
 	//Displays welcome message and command prompt.
 	//Modify as required.
-	displayer.printWelcomeMessage();
+	// displayer.printWelcomeMessage();
 	((DisplayStub)displayer).printCommandPrompt();
 	
 	//Get input from GUI. Please modify as required.
