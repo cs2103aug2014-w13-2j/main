@@ -23,7 +23,7 @@ public interface DisplayerInterface {
 	public String displayFeedBack (Feedback commandFeedBack);
 	
 	public String displayWelcomeMessage();
-	public String displaytString(String str);
+	public String displayString(String str);
 	public String displayStringList(ArrayList<String> arr);
 	
 	public String displayTitleLine();

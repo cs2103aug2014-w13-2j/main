@@ -58,7 +58,7 @@ public class Displayer implements DisplayerInterface {
 
 	
 	@Override
-	public String displaytString(String str) {	
+	public String displayString(String str) {	
 		return str;
 	}
 
