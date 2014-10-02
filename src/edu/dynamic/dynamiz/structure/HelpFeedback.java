@@ -5,6 +5,8 @@ package edu.dynamic.dynamiz.structure;
  * @author zixian
  */
 public class HelpFeedback extends Feedback {
+    public static final String CLASSNAME = "HelpFeedback";
+    
     //Main data member
     private String helpContents;
     
@@ -25,5 +27,10 @@ public class HelpFeedback extends Feedback {
     //Sets the help page content
     private void setContent(String content){
 	this.helpContents = content;
+    }
+    
+    @Override
+    public String getClassName(){
+	return CLASSNAME;
     }
 }

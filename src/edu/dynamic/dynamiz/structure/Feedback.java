@@ -5,6 +5,8 @@ package edu.dynamic.dynamiz.structure;
  * @author zixian
  */
 public class Feedback {
+    public static final String CLASSNAME = "Feedback"; 
+    
     //Main data members
     private String commandType, originalCommand;
     
@@ -28,5 +30,12 @@ public class Feedback {
      */
     public String getOriginalCommand(){
 	return originalCommand;
+    }
+    
+    /**
+     * Returns the name of this object's class.
+     */
+    public String getClassName(){
+	return CLASSNAME;
     }
 }
