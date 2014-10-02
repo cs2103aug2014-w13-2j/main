@@ -275,11 +275,12 @@ public class Displayer implements DisplayerInterface {
 		
 	}
 	 int getFeedbackTag(Feedback f){
+		String t =f.getClassName();
 		
-		if(f instanceof SuccessFeedback) return SUCCESS_FEEDBACK_TAG;
-		if(f instanceof ErrorFeedback) return ERROR_FEEDBACK_TAG;
+		if(t.equals("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
+		if(t.equals("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
+		if(t.equals("HelpFeedback")) return HELP_FEEDBACK_TAG;
 		
-		if(f instanceof HelpFeedback) return HELP_FEEDBACK_TAG;
 		return FEEDBACK_TAG;		
 		
 	}
