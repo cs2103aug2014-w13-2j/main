@@ -51,12 +51,23 @@ public class Screen extends JPanel implements ActionListener {
 		// was a selection in the text area.
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
 	}
+
 	/**
 	 * Displays a string onto the Screen with newline
+	 * 
 	 * @param text
 	 */
-	public void displayln(String text){
+	public void displayln(String text) {
 		displayScreen.append(text + newline);
+	}
+
+	/**
+	 * Displays a string onto the Screen without a newline
+	 * 
+	 * @param text
+	 */
+	public void display(String text) {
+		displayScreen.append(text);
 	}
 
 	/**
