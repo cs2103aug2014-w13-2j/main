@@ -1,15 +1,14 @@
 package edu.dynamic.dynamiz.UI;
 
-/**
- * @author XYLau
- * 
- * Establish Screen for GUI
- */
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * 
+ * @author XYLau
+ *
+ */
 public class Screen extends JPanel implements ActionListener {
 	protected JTextField inputScreen;
 	protected JTextArea displayScreen;
@@ -82,7 +81,15 @@ public class Screen extends JPanel implements ActionListener {
 		// Add contents to the window.
 		frame.add(new Screen());
 
-		// Display the window.
+		displayScreen(frame);
+	}
+
+	/**
+	 * Displays the screen
+	 * 
+	 * @param frame
+	 */
+	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
 	}
