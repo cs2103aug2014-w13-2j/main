@@ -1,4 +1,4 @@
-package edu.dynamic.dynamiz.logic;
+package edu.dynamic.dynamiz.controller;
 
 import static org.junit.Assert.*;
 

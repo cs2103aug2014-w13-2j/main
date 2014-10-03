@@ -1,6 +1,6 @@
 package edu.dynamic.dynamiz.structure.unitTest;
 import edu.dynamic.dynamiz.UI.*;
-import edu.dynamic.dynamiz.logic.*;
+import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.parser.*;
 import edu.dynamic.dynamiz.storage.*;
 import edu.dynamic.dynamiz.structure.*;

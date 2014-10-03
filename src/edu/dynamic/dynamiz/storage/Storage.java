@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import edu.dynamic.dynamiz.logic.FileHandler;
+import edu.dynamic.dynamiz.controller.FileHandler;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
