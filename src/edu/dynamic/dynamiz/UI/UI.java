@@ -5,5 +5,5 @@ package edu.dynamic.dynamiz.UI;
  * Main GUI Component
  */
 public class UI {
-
+	Screen display = new Screen();
 }
