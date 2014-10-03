@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.dynamic.dynamiz.logic.Command;
-import edu.dynamic.dynamiz.logic.CommandType;
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandType;
 
 /**
  * This is the boss right here
@@ -26,6 +26,10 @@ public class Parser {
 		}
 		
 		cmdLine = parse(inputCmd);
+	}
+	
+	public Parser() {
+		cmdLine = null;
 	}
 	
 	public CommandLine parse(String inputCmd) {
@@ -59,8 +63,18 @@ public class Parser {
 						  "(?=(" + allAliases + "|$))"; // Another keyword or end of line
 		Pattern optPattern = Pattern.compile(optRegex, Pattern.CASE_INSENSITIVE);
 		
+		String paramRegex = String.format("^(.*?)(?=(%1$s|$))", allAliases);
+		Pattern paramPattern = Pattern.compile(paramRegex, Pattern.CASE_INSENSITIVE);
+		
 		Matcher optMatcher = optPattern.matcher(inputCmd);
-		String param = optPattern.split(inputCmd)[0];
+		Matcher paramMatcher = paramPattern.matcher(inputCmd);
+		
+		String param = "";
+		if (paramMatcher.find()) {
+			param = paramMatcher.group(1);
+		}
+		
+		//String param = optPattern.split(inputCmd)[0];
 		
 		while(optMatcher.find()) {
 			String opt = optMatcher.group(1);
@@ -82,14 +96,14 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String cmd = "add Meeting CS2103 from 8h30 8h45 -s 8h42 to 9h45";
+		String cmd1 = "add Meeting CS2103 from 8h30 8h45 -s 8h42 to 9h45";
 		String cmd2 = "delete 2";
-		
-		Parser parser = new Parser(cmd);
+		String cmd3 = "update A2 from 38h40";
+		Parser parser = new Parser(cmd1);
 		CommandLine cmdLine = parser.getCommandLine();
 		
+		System.out.println(parser.parse(cmd1));
 		System.out.println(parser.parse(cmd2));
-		System.out.println(cmdLine);
-		
+		System.out.println(parser.parse(cmd3));
 	}
 }

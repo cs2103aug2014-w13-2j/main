@@ -2,8 +2,8 @@ package edu.dynamic.dynamiz.parser;
 
 import java.util.List;
 
-import edu.dynamic.dynamiz.logic.Command;
-import edu.dynamic.dynamiz.logic.CommandType;
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandType;
 
 /**
  * This is a class which stores the information of the parsed 
@@ -20,33 +20,43 @@ import edu.dynamic.dynamiz.logic.CommandType;
  *
  */
 public class CommandLine {
-	private CommandType command;
+	private CommandType commandType;
 	private Options options;
 	private String param;
+	private Command command;
 	
 	public CommandLine() {
-		this.command = null;
+		this.commandType = null;
 		this.options = null;
 		this.param = null;
 	}
 	
 	public CommandLine(CommandType cmdType, Options options, String param) {
-		this.command = cmdType;
+		this.commandType = cmdType;
 		this.options = options;
 		this.param = param;
+		
+		if (!initialiseCommand()) {
+			System.out.println("Something is not right");
+		}
 	}
 
+	private boolean initialiseCommand() {
+		
+		
+		return true;
+	}
 	/*
 	 * ========================================================================
 	 * Getters & Setters
 	 * ========================================================================
 	 */
-	public CommandType getCommand() {
-		return command;
+	public CommandType getCommandType() {
+		return commandType;
 	}
 
-	public void setCommand(CommandType command) {
-		this.command = command;
+	public void setCommandType(CommandType command) {
+		this.commandType = command;
 	}
 
 	public Options getOptions() {
@@ -64,6 +74,14 @@ public class CommandLine {
 	public void setParam(String param) {
 		this.param = param;
 	}
+	
+	public Command getCommand() {
+		return command;
+	}
+	
+	public void setCommand(Command command) {
+		this.command = command;
+	}
 	/*
 	 * ========================================================================
 	 * End of Getters & Setters
@@ -78,11 +96,23 @@ public class CommandLine {
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("Command Type: " + command.toString() + "\n");
+		sb.append("Command Type: " + commandType.toString() + "\n");
 		sb.append("Value" + param + "\n");
 		sb.append("Options: \n" + options.toString());
 		
 		return sb.toString();
 	}
 	
+	/**
+	 * This function will call the corresponding Command its execute.
+	 * For example, if the parsed CommandLine has the CommandType of 
+	 * Add. It will call CommandAdd's execute.
+	 */
+	public void execute() {
+		if (command != null) {
+			command.execute();
+		} else {
+			throw new IllegalArgumentException("Null command");
+		}
+	}
 }
