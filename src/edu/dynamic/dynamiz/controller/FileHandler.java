@@ -15,6 +15,18 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * FileHandler is a class that reads/writes task list to/from the
  * specified file or "todo.txt".
  * This class is meant to be used in the same way as Java Math class: no object instance is required.
+ * 
+ * Public Methods:
+ * static ArrayList<ToDoItem> getListFromFile()	Gets a list of ToDoItem from FileHandler's default file.
+ * static ArrayList<ToDoItem> getListFromFile(String filename)	Gets a list of ToDoItem from the specified filename
+ * static void writeListToFile(ArrayList<ToDoItem> list)	Writes the given list to FileHandler's default file
+ * static void writeListToFile(ArrayList<ToDoItem> list, String filename)	Writes the given list to the file specified by the given filename.
+ * 
+ * Private Methods:
+ * static EventItem makeEventItem(String data)	Creates an EventItem from the data read from file.
+ * static TaskItem makeTaskItem(String data)	Creates a TaskItem from the data read from file.
+ * static ToDoItem makeToDoItem(String data)	Creates a ToDoItem form the data read from file.
+ * 
  * @author zixian
  */
 public class FileHandler {
@@ -81,6 +93,7 @@ public class FileHandler {
     /**
      * Reads the task list from the from the specified filename.
      * Stops reading on encountering IOException. May return incomplete list in such case.
+     * @param filename Name of file to read list from.
      * @return An ArrayList of ToDoItem objects.
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
@@ -115,8 +128,8 @@ public class FileHandler {
     
     /**
      * Writes the tasks in list to "to-do.txt".
-     * @throws IOException if error occurs while creating output file if
-     * 		if does not exists.
+     * @param list The list of ToDoItem objects to write to file.
+     * @throws IOException if error occurs while creating output file if it does not exists.
      */
     public static void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
 	writeListToFile(list, FILENAME_DEFAULT);
@@ -124,6 +137,8 @@ public class FileHandler {
     
     /**
      * Writes the tasks in list to the specified filename.
+     * @param list The list of ToDoItem objects to write to file.
+     * @param filename The name of the file to write the list to.
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
@@ -140,8 +155,12 @@ public class FileHandler {
 	writer.close();
     }
     
-    //Creates an EventItem from the given data.
-    //Pre-condition: data must follow the format of FORMAT_EVENTITEM.
+    /**
+     * Creates an EventItem from the given data string.
+     * data must be such that data.matches(FORMAT_EVENTITEM) returns true.
+     * @param data The String representation of the EventItem object used to write to files.
+     * @return An EventItem object such that its toFileString() method returns the same string as data.
+     */
     private static EventItem makeEventItem(String data){
 	EventItem event;
 	String[] params = data.split(FILESTRING_DELIM);
@@ -185,8 +204,12 @@ public class FileHandler {
 	return event;
     }
     
-    //Creates a ToDoItem from the given data.
-    //Pre-condition: data must follow the format of FORMAT_TODOITEM.
+    /**
+     * Creates a ToDoItem from the given data string.
+     * data must be such that data.matches(FORMAT_TODOITEM) returns true.
+     * @param data The String representation of the ToDoItem object used to write to files.
+     * @return A ToDoItem object such that its toFileString() method returns the same string as data.
+     */
     private static ToDoItem makeToDoItem(String data){
 	ToDoItem item;
 	String[] params = data.split(FILESTRING_DELIM);
@@ -198,8 +221,12 @@ public class FileHandler {
 	return item;
     }
     
-    //Creates a TaskItem from the given data.
-    //Pre-condition: data must follow the format of FORMAT_TASKITEM.
+    /**
+     * Creates a TaskItem from the given data string.
+     * data must be such that data.matches(FORMAT_TASKITEM) returns true.
+     * @param data The String representation of the TaskItem object used to write to files.
+     * @return A TaskItem object such that its toFileString() method returns the same string as data.
+     */
     private static TaskItem makeTaskItem(String data){
 	TaskItem task;
 	String[] params = data.split(FILESTRING_DELIM);
