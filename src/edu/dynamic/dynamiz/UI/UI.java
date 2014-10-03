@@ -46,12 +46,18 @@ public class UI extends JPanel implements ActionListener {
 	 * command into the Screen interface
 	 */
 	public void actionPerformed(ActionEvent evt) {
-		
+
 		String text = inputScreen.getText();
-		Feedback feedback = controller.executeCommand(text);
-		String stfeedback = new String();// Wenyan's method
+		/*
+		 * To be added once controller is completed (ZX) Feedback feedback =
+		 * controller.executeCommand(text);
+		 */
+		display("Command Entered: "); // for testing purposes (XY)
+		displayln(text); 
 		
-		displayln(stfeedback);
+		// TODO: Replace with line by line string feedback once Displayer is completed (WY)
+
+		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
 		// Make sure the new text is visible, even if there
@@ -61,7 +67,6 @@ public class UI extends JPanel implements ActionListener {
 
 	/**
 	 * Displays a string onto the Screen with newline
-	 * 
 	 * @param text
 	 */
 	public void displayln(String text) {
