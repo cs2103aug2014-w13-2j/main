@@ -22,7 +22,7 @@ public class ParserTest {
 	cmdLine = parser.parse("delete A1");
 	assertEquals("A1", cmdLine.getParam());
 	
-	cmdLine = parser.parse("update A2 from 27/9/2014");
+	cmdLine = parser.parse("update A2 from 27/9/2014 18:00");
 	assertEquals("A2", cmdLine.getParam());
 	
 	cmdLine = parser.parse("Search study from today");

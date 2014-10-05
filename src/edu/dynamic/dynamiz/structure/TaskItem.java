@@ -49,6 +49,18 @@ public class TaskItem extends ToDoItem {
     }
     
     /**
+     * Converts the given item into a TaskItem.
+     * @param item The item to convert into a TaskItem.
+     * @param deadline The deadline for this task.
+     * @return An independent, downcasted copy of the original item.
+     */
+    public TaskItem(ToDoItem item, Date deadline){
+	super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
+	assert deadline!=null;
+	setDeadline(deadline);
+    }
+    
+    /**
      * Returns the string representation of the given Date object formatted
      * for EventItem.
      * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
@@ -85,14 +97,7 @@ public class TaskItem extends ToDoItem {
      */
     public void setDeadline(Date deadline){
 	if(deadline!=null){
-	    if(this.deadline==null){
-		this.deadline = deadline;
-	    } else{
-		setDeadlineDate(deadline);
-		if(deadline instanceof DateTime){
-		    setDeadlineTime(((DateTime)deadline).getHour(), ((DateTime)deadline).getMinute());
-		}
-	    }
+	    this.deadline = deadline;
 	}
     }
     

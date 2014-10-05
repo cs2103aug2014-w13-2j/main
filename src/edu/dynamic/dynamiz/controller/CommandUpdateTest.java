@@ -20,8 +20,8 @@ public class CommandUpdateTest {
     public void test() {
 	Parser parser = new Parser();
 	Storage storage = new Storage();
-	CommandLine cmdLine = parser.parse("update A2 from 38h40");
-	CommandUpdate cmd = new CommandUpdate(cmdLine.getParam(), new Options(), storage);
+	CommandLine cmdLine = parser.parse("update A3 from 4/10/2014 16:00");
+	CommandUpdate cmd = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions(), storage);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	assertEquals(2, list.length);

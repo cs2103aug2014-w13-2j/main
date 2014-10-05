@@ -51,7 +51,12 @@ public class EventItem extends ToDoItem {
 	setEndDate(endDate);
     }
     
-    //Copy constructor
+    /**
+     * Creates a new instance that is a copy of the given event.
+     * @param event The EventItem to be copied.
+     * @return An instance of EventItem that is a different reference from event but has same field members
+     * 		as event.
+     */
     public EventItem(EventItem event){
 	super(event);
 	if(event.getStartDate() instanceof DateTime){
@@ -64,6 +69,28 @@ public class EventItem extends ToDoItem {
 	} else{
 	    setEndDate(new Date(event.getEndDate()));
 	}
+    }
+    
+    /**
+     * Creates a new instance of the given item as an event, while retaining all its existing values.
+     * @param start The start date of this event.
+     * @return An instance of EventItem that is downcasted from the given ToDoItem.
+     */
+    public EventItem(ToDoItem item, Date start){
+	this(item, start, (start instanceof DateTime)? new DateTime(start): new Date(start));
+    }
+    
+    /**
+     * Creates a new instance of the given item as an event, while retaining all its existing values.
+     * @param item The ToDoItem object to downcast.
+     * @param start The start date of this event.
+     * @param end The end date of this event.
+     * @return An instance of EventItem that is downcasted from the given ToDoItem.
+     */
+    public EventItem(ToDoItem item, Date start, Date end){
+	super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
+	setStartDate(start);
+	setEndDate(end);
     }
     
     /**
@@ -118,14 +145,7 @@ public class EventItem extends ToDoItem {
      */
     public void setStartDate(Date startDate){
 	if(startDate!=null){
-	    if(this.startDate!=null){
-		int date = startDate.getDayOfMonth();
-		int month = startDate.getMonth();
-		int year = startDate.getYear();
-		this.startDate.setDate(date, month, year);
-	    } else{
-		this.startDate = startDate;
-	    }
+	    this.startDate = startDate;
 	}
     }
     
@@ -161,14 +181,7 @@ public class EventItem extends ToDoItem {
      */
     public void setEndDate(Date endDate){
 	if(endDate!=null){
-	    if(this.endDate!=null){
-		int date = endDate.getDayOfMonth();
-		int month = endDate.getMonth();
-		int year = endDate.getYear();
-		this.endDate.setDate(date, month, year);
-	    } else{
-		this.endDate = endDate;
-	    }
+	    this.endDate = endDate;
 	}
     }
     

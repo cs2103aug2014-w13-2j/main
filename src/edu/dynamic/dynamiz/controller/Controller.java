@@ -3,13 +3,10 @@ package edu.dynamic.dynamiz.controller;
 import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
 
-import edu.dynamic.dynamiz.UI.Displayer;
-import edu.dynamic.dynamiz.UI.DisplayStub;
 import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
-import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Defines the component in Dynamiz that coordinates the front-end user interface and the back end operations.

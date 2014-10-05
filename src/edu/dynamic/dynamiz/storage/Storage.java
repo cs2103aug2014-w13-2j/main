@@ -90,7 +90,7 @@ public class Storage {
      * @return The updated ToDoItem.
      * Signature and implementation to be edited after confirming parameters returned by parser.
      */
-    public ToDoItem[] updateItem(String id){
+    public ToDoItem[] updateItem(String id, int priority, Date start, Date end){
 	//Checks that id is neither null nor an empty string
 	assert id!=null && !id.isEmpty();
 	
@@ -105,7 +105,26 @@ public class Storage {
 	} else{
 	    list[0] = new ToDoItem(target);
 	}
-	//Use mutator methods to update the target object.
+
+	if(ToDoItem.isValidPriority(priority)){
+	    target.setPriority(priority);
+	}
+	
+	if(start!=null && !(target instanceof EventItem)){
+	    target = new EventItem(target, start);
+	} else if(start!=null){
+	    ((EventItem)target).setStartDate(start);
+	}
+	
+	if(end!=null){
+	    if(target instanceof EventItem){
+		((EventItem)target).setEndDate(end);
+	    } else if(target instanceof TaskItem){
+		((TaskItem)target).setDeadline(end);
+	    } else{
+		target = new TaskItem(target, end);
+	    }
+	}
 	list[1] = target;
 	
 	try {

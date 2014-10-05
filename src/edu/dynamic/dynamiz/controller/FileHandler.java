@@ -154,13 +154,13 @@ public class FileHandler {
 	String status = params[INDEX_STATUS];
 	
 	Date startDate, endDate;
-	if(params[INDEX_STARTDATE].matches(DateTime.REGEX_DATE)){
+	if(params[INDEX_STARTDATE].matches(DateTime.REGEX_DATETIME)){
 	    startDate = DateTime.makeDateTime(params[INDEX_STARTDATE]);
 	} else{
 	    startDate = Date.makeDate(params[INDEX_STARTDATE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
-	if(params[INDEX_ENDDATE].matches(DateTime.REGEX_DATE)){
+	if(params[INDEX_ENDDATE].matches(DateTime.REGEX_DATETIME)){
 	    endDate = DateTime.makeDateTime(params[INDEX_ENDDATE]);
 	} else{
 	    endDate = Date.makeDate(params[INDEX_ENDDATE].split(DATETIME_DELIM)[DATEINDEX]);
