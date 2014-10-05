@@ -86,7 +86,7 @@ public class Parser {
 			options.add(option);
 		}
 		
-		CommandLine cmdLine = new CommandLine(cmdType, options, param);
+		CommandLine cmdLine = new CommandLine(cmdType, options, param.trim());
 		
 		return cmdLine;
 	}
