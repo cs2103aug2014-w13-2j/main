@@ -181,7 +181,7 @@ public class EventItem extends ToDoItem {
      */
     public void setEndDate(Date endDate){
 	if(endDate!=null){
-	  this.endDate = endDate;
+	    this.endDate = endDate;
 	}
     }
     

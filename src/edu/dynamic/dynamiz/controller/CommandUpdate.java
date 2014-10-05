@@ -49,7 +49,7 @@ public class CommandUpdate extends Command {
     private ToDoItem[] updatedItem;
     private Options options;
     private int priority = -1;
-    private String start, end;
+    private String start = null, end = null;
     
     /**
      * Creates a new instance of this Command object that updates the ToDoItem object with the given id
@@ -67,7 +67,6 @@ public class CommandUpdate extends Command {
 	}
 	
 	this.id = id.trim();
-	//this.options = extractOptions(options);
 	this.options = extractOptions(options);
 	this.storage = storage;
 	
