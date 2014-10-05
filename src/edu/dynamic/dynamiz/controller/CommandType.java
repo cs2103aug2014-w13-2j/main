@@ -48,6 +48,20 @@ public enum CommandType {
 			// TODO Auto-generated method stub
 			return Arrays.asList(optionsArray);
 		}
+	}, LIST("display", "show") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, SEARCH("find") {
+		private final OptionType[] optionsArray = {OptionType.START_TIME, OptionType.END_TIME, OptionType.PRIORITY};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
 	};
 	
 	static private final Map<String, CommandType> ALIAS_TABLE = new HashMap<String, CommandType>();
