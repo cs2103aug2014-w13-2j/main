@@ -13,11 +13,7 @@ public class ErrorFeedback extends Feedback {
     }
     
     /**
-<<<<<<< HEAD
-     * Gets the error message associated with he operation this feedback is for.
-=======
      * Gets the error message associated with the operation this feedback is for.
->>>>>>> FETCH_HEAD
      * @return The error message String.
      */
     public String getMessage(){

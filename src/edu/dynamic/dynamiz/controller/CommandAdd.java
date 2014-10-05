@@ -4,63 +4,92 @@ package edu.dynamic.dynamiz.controller;
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.parser.Options;
+import edu.dynamic.dynamiz.storage.Storage;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * Defines the add command.
+ * @author zixian
+ * */
 public class CommandAdd implements Command {
-	private CommandType commandType;
-	private String param;
-	private Options options;
+    //The string representation of this command's type.
+    private static final String COMMAND_TYPE = "add";
+    
+    //Main data members
+    private Storage storage;	//The storage to add the new item into.
+    private String param;	//The description of the item to be added.
+    private Options options;	//The list of options for this command.
+    private ToDoItem addedItem;	//The item being added by this command.
+    
+    /**
+     * Creates a new Command object that adds a new entry into the given storage.
+     * @param options The list of options specifying extra information associated with the entry to be added.
+     * @param param The description of the entry to be added.
+     * @param storage The storage object to add the new entry into.
+     * @throws IllegalArgumentException if param is an empty string or if any of the parameters is null.
+     * */
+    public CommandAdd(Options options, String param, Storage storage) {
+	assert options!=null && isValidParam(param) && storage!=null;
 	
-	public CommandAdd(CommandType commandType, Options options, String param) {
-		if (isValidParam(param)) {
-			this.commandType = commandType;
-			this.param = param;
-			this.options = extractOptions(options);
-		} else {
-			throw new IllegalArgumentException("Invalid param");
-		}
-	}
+	this.param = param;
+	//this.options = extractOptions(options);
+	this.options = options;
+	this.storage = storage;
+    }
+    
+    /**
+     * Gets the list of applicable options for this command from the given options list.
+     * @param options The list of options to extract from.
+     * @return An Options object containing the list of applicable options for this command.
+     */
+    public Options extractOptions(Options options) {
+	Options opts = new Options();
 	
+	for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
+	    Option opt = options.getOptions(optType).get(0); // Assume that there is one Option per OptionType
+	    opts.add(opt);
+	}
+	return opts;
+    }
+    
+    /**
+     * Gets the list of items affected by the execution of this command*/
+    public ToDoItem[] getAffectedItems(){
+	//Checks the assertion that addedItem is not null
+	assert addedItem!=null;
 	
-	public Options extractOptions(Options options) {
-		Options opts = new Options();
-		
-		for (OptionType optType: commandType.getApplicableOptions()) {
-			Option opt = options.getOptions(optType).get(0); // Assume that there is one Option
-			opts.add(opt);
-		}
-		return opts;
-	}
-	
-	private boolean isValidParam(String param) {
-		return (param != null) && (!param.isEmpty());
-	}
-	@Override
-	public void execute() {
-		
-	}
-	
-	@Override
-	public void undo() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void redo() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getCommandName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	ToDoItem[] list = new ToDoItem[1];
+	list[0] = addedItem;
+	return list;
+    }
+    
+    private boolean isValidParam(String param) {
+	return (param != null) && (!param.isEmpty());
+    }
+    
+    @Override
+    /**
+     * Executes this command. Also used for redo operation.
+     */
+    public void execute() {
+	addedItem = new ToDoItem(param);
+	storage.addItem(addedItem);
+    }
+    
+    @Override
+    /**
+     * Undoes this command's execute method.
+     */
+    public void undo() {
+	storage.removeItem(addedItem.getId());
+    }
+    
+    @Override
+    /**
+     * Gets the String representation of this command's type.
+     */
+    public String getCommandName() {
+	return COMMAND_TYPE;
+    }
+    
 }

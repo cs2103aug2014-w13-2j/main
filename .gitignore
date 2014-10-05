@@ -1,2 +1,5 @@
 bin/
 output.txt
+todo.txt
+backup_todo.txt
+reset_todo.sh

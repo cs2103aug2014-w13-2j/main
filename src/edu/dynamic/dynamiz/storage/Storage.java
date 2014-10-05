@@ -48,19 +48,14 @@ public class Storage {
     }
     
     /**
-     * Adds a new item with the specified information into the storage.
-     * @return The ToDoItem that is added to the storage by this operation.
-     * Signature and implementation to be updated.
-     */
-    public ToDoItem addItem(){
-	return null;
-    }
-    
-    /**
      * Adds the given item to the list. For use by CommandDelete's undo method.
+     * @param item The ToDoItem to be added to the list.
      * @return The TodoItem that is added to the list.
      */
     public ToDoItem addItem(ToDoItem item){
+	//item must not be null.
+	assert item!=null;
+	
 	mainList.add(item);
 	searchTree.put(item.getId(), item);
 	if(item instanceof TaskItem){
@@ -85,6 +80,9 @@ public class Storage {
      * Signature and implementation to be edited after confirming parameters returned by parser.
      */
     public ToDoItem[] updateItem(String id){
+	//Checks that id is neither null nor an empty string
+	assert id!=null && !id.isEmpty();
+	
 	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
 	
@@ -114,12 +112,14 @@ public class Storage {
      * For use by CommandUpdate's undo method.
      */
     public void undoUpdate(ToDoItem item){
+	assert item!=null;
+	
 	removeItem(item.getId());
 	addItem(item);
     }
     
     /**
-     * Returns the list of tasks and events in an array sorted in lexicographical order of their ID.
+     * Gets the list of tasks and events in an array sorted in lexicographical order of their ID.
      * @return An array of ToDoItem objects sorted in lexicographical order of their ID
      * 		or null if the list is empty.
      */
@@ -201,9 +201,12 @@ public class Storage {
     /**
      * Removes the ToDoItem with the given ID from the list.
      * For use by CommandAdd's undo method and CommandDelete's execute method.
+     * @param id The id of the ToDoItem object to remove from the list.
      * @return The ToDoItem object that was removed from the list by this operation.
      */
     public ToDoItem removeItem(String id){
+	assert id!=null && !id.isEmpty();
+	
 	ToDoItem temp = searchTree.remove(id);
 	if(temp!=null){
 	    mainList.remove(temp);
