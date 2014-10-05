@@ -49,7 +49,7 @@ public class Controller {
 	    switch(cmdLine.getCommandType()){
 		case ADD: command = new CommandAdd(cmdLine.getOptions(), cmdLine.getParam(), storage);
 		break;
-		case DELETE: command = new CommandDelete();
+		case DELETE: command = new CommandDelete(cmdLine.getParam(), storage);
 		break;
 		case UPDATE: command = new CommandUpdate();
 		break;

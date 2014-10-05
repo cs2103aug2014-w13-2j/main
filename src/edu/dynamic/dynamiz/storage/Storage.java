@@ -127,6 +127,7 @@ public class Storage {
 	if(mainList.isEmpty()){
 	    return null;
 	}
+	Collections.sort(mainList);
 	return mainList.toArray(new ToDoItem[mainList.size()]);
     }
     

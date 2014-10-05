@@ -11,12 +11,11 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Defines the add command.
  * @author zixian
  * */
-public class CommandAdd implements Command {
+public class CommandAdd extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
     
     //Main data members
-    private Storage storage;	//The storage to add the new item into.
     private String param;	//The description of the item to be added.
     private Options options;	//The list of options for this command.
     private ToDoItem addedItem;	//The item being added by this command.
@@ -31,7 +30,7 @@ public class CommandAdd implements Command {
     public CommandAdd(Options options, String param, Storage storage) {
 	assert options!=null && isValidParam(param) && storage!=null;
 	
-	this.param = param;
+	this.param = param.trim();
 	//this.options = extractOptions(options);
 	this.options = options;
 	this.storage = storage;
@@ -70,6 +69,8 @@ public class CommandAdd implements Command {
     @Override
     /**
      * Executes this command. Also used for redo operation.
+     * Note: Currently only supports adding of items with only description.
+     * 		Implementation to be updated in the near future.
      */
     public void execute() {
 	addedItem = new ToDoItem(param);
