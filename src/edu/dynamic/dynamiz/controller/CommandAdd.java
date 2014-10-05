@@ -9,6 +9,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 /**
  * Defines the Command object that adds a new ToDoItem object with the given information into
  * the given storage object.
+ * Currently, the execute() method's implementation is incomplete, so this class is only able to 
+ * add ToDoItem with only description and default priority level.
  * 
  * Constructor
  * CommandAdd(Options options, String description, Storage storage)	//Creates a CommandAdd instance
@@ -64,18 +66,7 @@ public class CommandAdd extends Command {
 	}
 	return opts;
     }
-    
-    /**
-     * Gets the list of items affected by the execution of this command*/
-    public ToDoItem[] getAffectedItems(){
-	//Checks the assertion that addedItem is not null
-	assert addedItem!=null;
-	
-	ToDoItem[] list = new ToDoItem[1];
-	list[0] = addedItem;
-	return list;
-    }
-    
+
     @Override
     /**
      * Executes this command. Also used for redo operation.
@@ -90,6 +81,7 @@ public class CommandAdd extends Command {
     @Override
     /**
      * Undoes this command's execute method.
+     * Can only be called after calling this command's execute method.
      */
     public void undo() {
 	assert addedItem!=null;
@@ -105,4 +97,17 @@ public class CommandAdd extends Command {
 	return COMMAND_TYPE;
     }
     
+    /**
+     * Gets the list of items affected by the execution of this command.
+     * Can only be called after calling this command's execute method.
+     * @return A list of ToDoItem added by this command.
+     */
+    public ToDoItem[] getAffectedItems(){
+	//Checks the assertion that addedItem is not null
+	assert addedItem!=null;
+	
+	ToDoItem[] list = new ToDoItem[1];
+	list[0] = addedItem;
+	return list;
+    }
 }

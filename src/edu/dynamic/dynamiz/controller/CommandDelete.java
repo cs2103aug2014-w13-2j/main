@@ -49,6 +49,7 @@ public class CommandDelete extends Command {
     @Override
     /**
      * Undoes this command's execute method.
+     * Can only be called after calling this command's execute method.
      */
     public void undo() {
 	assert deletedItem!=null;
@@ -68,9 +69,12 @@ public class CommandDelete extends Command {
     @Override
     /**
      * Gets the list of ToDoItems affected by this command's execution.
+     * Can only be called after calling this command's execute method.
      * @return A list of ToDoItems removed by this command.
      */
     public ToDoItem[] getAffectedItems() {
+	assert deletedItem!=null;
+	
 	ToDoItem[] list = new ToDoItem[1];
 	list[0] = deletedItem;
 	return list;

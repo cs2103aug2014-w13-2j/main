@@ -19,6 +19,9 @@ public class ParserTest {
 	
 	cmdLine = parser.parse("delete A1");
 	assertEquals(" A1", cmdLine.getParam());
+	
+	cmdLine = parser.parse("update A2 from 38h40");
+	assertEquals(" A2 ", cmdLine.getParam());
     }
     
 }
