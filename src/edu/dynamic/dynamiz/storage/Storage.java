@@ -13,9 +13,17 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Defines the storage class holding the list of tasks and events.
+ * 
+ * Constructor
+ * Storage()	//Creates a new instance of this Storage object.
+ * 
+ * Public Methods(currently that can be used)
+ * ToDoItem addItem(ToDoItem)	//Adds the given item to the list.
+ * ToDoItem[] updateItem(String id)	//Updates the ToDoItem with the given id with the specified details.
+ * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
+ * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
+ * 
  * @author zixian
- * ToDo: Confirm the return type of parser and pass complexity of creating/updating items
- * 	to this class instead of Controller.
  */
 public class Storage {
     //Main data members
@@ -25,7 +33,9 @@ public class Storage {
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
     
-    //Constructor
+    /**
+     * Creates a new instance of Storage.
+     */
     public Storage(){
 	mainList = FileHandler.getListFromFile();
 	searchTree = new TreeMap<String, ToDoItem>();
@@ -104,18 +114,6 @@ public class Storage {
 	    e.printStackTrace();
 	}
 	return list;	
-    }
-    
-    /**
-     * Undoes the update done by the Command object executing the update method.
-     * item must be such that its ID matches an existing item in the storage.
-     * For use by CommandUpdate's undo method.
-     */
-    public void undoUpdate(ToDoItem item){
-	assert item!=null;
-	
-	removeItem(item.getId());
-	addItem(item);
     }
     
     /**
