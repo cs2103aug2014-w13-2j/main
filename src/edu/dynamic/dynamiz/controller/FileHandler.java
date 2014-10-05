@@ -46,13 +46,8 @@ public class FileHandler {
     private static final String FORMAT_TODOITEM = ".+; [0-9]+; .+; --/--/---- --:--; --/--/---- --:--";
     
     //Delimiters for data processing purposes.
-    private static final String DATE_DELIM = "/";
     private static final String DATETIME_DELIM = " ";
     private static final String FILESTRING_DELIM = "; ";
-    private static final String TIME_DELIM = ":";
-    
-    //Represents invalid time.
-    private static final String NULLTIME = "--:--";
     
     //Indices of various parameters in the params
     private static final int INDEX_DESCRIPTION = 0;
@@ -62,18 +57,8 @@ public class FileHandler {
     private static final int INDEX_ENDDATE = 4;
     private static final int INDEX_DEADLINE = 4;
     
-    //Indices of date and time in dateTime
+    //Index of date when splitting DateTime string.
     private static final int DATEINDEX = 0;
-    private static final int TIMEINDEX =1;
-    
-    //Indices of date, month, year in date
-    private static final int DATEINDEX_DATE = 0;
-    private static final int DATEINDEX_MONTH = 1;
-    private static final int DATEINDEX_YEAR = 2;
-    
-    //Indices of hour and minute in time
-    private static final int TIMEINDEX_HOUR = 0;
-    private static final int TIMEINDEX_MINUTE = 1;
 
     //Object for reading from file.
     private static BufferedReader reader;
@@ -168,38 +153,20 @@ public class FileHandler {
 	int priority = Integer.parseInt(params[INDEX_PRIORITY]);
 	String status = params[INDEX_STATUS];
 	
-	String[] startDateTime = params[INDEX_STARTDATE].split(DATETIME_DELIM);
-	String[] startDate = startDateTime[DATEINDEX].split(DATE_DELIM);
-	int startDay = Integer.parseInt(startDate[DATEINDEX_DATE]);
-	int startMonth = Integer.parseInt(startDate[DATEINDEX_MONTH]);
-	int startYear = Integer.parseInt(startDate[DATEINDEX_YEAR]);
-	
-	String[] endDateTime = params[INDEX_ENDDATE].split(DATETIME_DELIM);
-	String[] endDate = endDateTime[DATEINDEX].split(DATE_DELIM);
-	int endDay = Integer.parseInt(endDate[DATEINDEX_DATE]);
-	int endMonth = Integer.parseInt(endDate[DATEINDEX_MONTH]);
-	int endYear = Integer.parseInt(endDate[DATEINDEX_YEAR]);
-	
-	Date start, end;
-	if(!startDateTime[TIMEINDEX].equals(NULLTIME)){
-	    String[] startTime = startDateTime[TIMEINDEX].split(TIME_DELIM);
-	    int hour = Integer.parseInt(startTime[TIMEINDEX_HOUR]);
-	    int minute = Integer.parseInt(startTime[TIMEINDEX_MINUTE]);
-	    start = new DateTime(startDay, startMonth, startYear, hour, minute);
+	Date startDate, endDate;
+	if(params[INDEX_STARTDATE].matches(DateTime.REGEX_DATE)){
+	    startDate = DateTime.makeDateTime(params[INDEX_STARTDATE]);
 	} else{
-	    start = new Date(startDay, startMonth, startYear);
+	    startDate = Date.makeDate(params[INDEX_STARTDATE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
-	if(!endDateTime[TIMEINDEX].equals(NULLTIME)){
-	    String[] endTime = endDateTime[TIMEINDEX].split(TIME_DELIM);
-	    int hour = Integer.parseInt(endTime[TIMEINDEX_HOUR]);
-	    int minute = Integer.parseInt(endTime[TIMEINDEX_MINUTE]);
-	    end = new DateTime(endDay, endMonth, endYear, hour, minute);
+	if(params[INDEX_ENDDATE].matches(DateTime.REGEX_DATE)){
+	    endDate = DateTime.makeDateTime(params[INDEX_ENDDATE]);
 	} else{
-	    end = new Date(endDay, endMonth, endYear);
+	    endDate = Date.makeDate(params[INDEX_ENDDATE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
-	event = new EventItem(description, priority, start, end);
+	event = new EventItem(description, priority, startDate, endDate);
 	event.setStatus(status);
 	return event;
     }
@@ -233,21 +200,15 @@ public class FileHandler {
 	String description = params[0];
 	int priority = Integer.parseInt(params[INDEX_PRIORITY]);
 	String status = params[INDEX_STATUS];
-	String[] deadlineDateTime = params[INDEX_DEADLINE].split(DATETIME_DELIM);
-	String[] deadlineDate = deadlineDateTime[DATEINDEX].split(DATE_DELIM);
-	int day = Integer.parseInt(deadlineDate[DATEINDEX_DATE]);
-	int month = Integer.parseInt(deadlineDate[DATEINDEX_MONTH]);
-	int year = Integer.parseInt(deadlineDate[DATEINDEX_YEAR]);
-	if(deadlineDateTime[TIMEINDEX].equals(NULLTIME)){
-	    Date deadline = new Date(day, month, year);
-	    task = new TaskItem(description, priority, deadline);
+	
+	Date deadline;
+	if(params[INDEX_DEADLINE].matches(DateTime.REGEX_DATETIME)){
+	    deadline = DateTime.makeDateTime(params[INDEX_DEADLINE]);
 	} else{
-	    String[] time = deadlineDateTime[TIMEINDEX].split(TIME_DELIM);
-	    int hour = Integer.parseInt(time[TIMEINDEX_HOUR]);
-	    int minute = Integer.parseInt(time[TIMEINDEX_MINUTE]);
-	    DateTime deadline = new DateTime(day, month, year, hour, minute);
-	    task = new TaskItem(description, priority, deadline);
+	    deadline = Date.makeDate(params[INDEX_DEADLINE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
+	
+	task = new TaskItem(description, priority, deadline);
 	task.setStatus(status);
 	return task;
     }
