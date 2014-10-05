@@ -83,10 +83,28 @@ public class CommandAdd extends Command {
 	    priority = Integer.parseInt(this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues().get(0));
 	}
 	if(this.options.hasOption(KEYWORD_START)){
-	    start = this.options.getOptions(KEYWORD_START).get(0).getValues().get(0);
+	    List<String> startOptList = this.options.getOptions(KEYWORD_START).get(0).getValues();
+	    if(startOptList.size()>1){
+		start = startOptList.get(0)+" "+startOptList.get(1);
+		if(!start.matches(DateTime.REGEX_DATETIME)){
+		    start = startOptList.get(0);
+		}
+	    } else{
+		assert !startOptList.isEmpty();
+		start = startOptList.get(0);
+	    }
 	}
 	if(this.options.hasOption(KEYWORD_END)){
-	    end = this.options.getOptions(KEYWORD_END).get(0).getValues().get(0);
+	    List<String> endOptList = this.options.getOptions(KEYWORD_END).get(0).getValues();
+	    if(endOptList.size()>1){
+		end = endOptList.get(0)+" "+endOptList.get(1);
+		if(!end.matches(DateTime.REGEX_DATETIME)){
+		    end = endOptList.get(0);
+		}
+	    } else{
+		assert !endOptList.isEmpty();
+		end = endOptList.get(0);
+	    }
 	}
     }
     

@@ -41,7 +41,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
 	this(getNextId(), description, priority, DEFAULT_STATUS);
     }
     
-    private ToDoItem(String id, String description, int priority, String status){
+    protected ToDoItem(String id, String description, int priority, String status){
 	setId(id);
 	setDescription(description);
 	setPriority(priority);
@@ -65,6 +65,10 @@ public class ToDoItem implements Comparable<ToDoItem>{
 	    return id.equals(temp.getId());
 	}
 	return false;
+    }
+    
+    public static boolean isValidPriority(int priority){
+	return priority>0;
     }
     
     public String getDescription(){

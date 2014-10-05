@@ -2,7 +2,11 @@ package edu.dynamic.dynamiz.parser;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
+
+import edu.dynamic.dynamiz.structure.DateTime;
 
 /**
  * Test program to understand the output of parser.
@@ -20,12 +24,10 @@ public class ParserTest {
 	cmdLine = parser.parse("delete A1");
 	assertEquals(" A1", cmdLine.getParam());
 	
-	cmdLine = parser.parse("update A2 from 27/9/2014");
+	cmdLine = parser.parse("update A2 from 27/9/2014 18:00");
 	assertEquals(" A2 ", cmdLine.getParam());
 	
 	System.out.println(cmdLine);
-	
-	Options options = cmdLine.getOptions();
     }
     
 }

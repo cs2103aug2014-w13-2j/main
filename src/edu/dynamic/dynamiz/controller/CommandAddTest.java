@@ -24,7 +24,7 @@ public class CommandAddTest {
 	assertEquals("item has 1 object", 1, item.length);
 	cmd.undo();
 	
-	cmdLine = parser.parse("add Learn C++ from 31/10/2014");
+	cmdLine = parser.parse("add Learn C++ from 31/10/2014 12:00");
 	System.out.println(cmdLine);
 	cmd = new CommandAdd(cmdLine.getOptions(), cmdLine.getParam(), storage);
 	cmd.execute();
