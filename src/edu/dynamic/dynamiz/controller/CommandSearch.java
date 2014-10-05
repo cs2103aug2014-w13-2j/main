@@ -1,6 +1,8 @@
 package edu.dynamic.dynamiz.controller;
 
-public class CommandSearch implements Command {
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
+public class CommandSearch extends Command {
 
 	@Override
 	public void execute() {
@@ -28,6 +30,12 @@ public class CommandSearch implements Command {
 
 	@Override
 	public String getCommandName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ToDoItem[] getAffectedItems() {
 		// TODO Auto-generated method stub
 		return null;
 	}
