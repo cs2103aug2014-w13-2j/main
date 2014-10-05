@@ -50,7 +50,7 @@ public class Controller {
      * Note: Implementation to be updated.
      */
     public Feedback executeCommand(String input){
-	Command command;
+	Command command = null;
 	Feedback feedback;
 	try{
 	    CommandLine cmdLine = parser.parse(input);
@@ -66,6 +66,8 @@ public class Controller {
 	    }
 	    command.execute();
 	    feedback = new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+	} catch(IllegalArgumentException e){
+	    feedback = new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
 	    feedback = new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
 	}

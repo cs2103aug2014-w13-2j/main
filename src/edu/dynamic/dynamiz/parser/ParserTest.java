@@ -20,8 +20,12 @@ public class ParserTest {
 	cmdLine = parser.parse("delete A1");
 	assertEquals(" A1", cmdLine.getParam());
 	
-	cmdLine = parser.parse("update A2 from 38h40");
+	cmdLine = parser.parse("update A2 from 27/9/2014");
 	assertEquals(" A2 ", cmdLine.getParam());
+	
+	System.out.println(cmdLine);
+	
+	Options options = cmdLine.getOptions();
     }
     
 }

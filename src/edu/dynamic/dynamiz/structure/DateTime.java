@@ -12,6 +12,7 @@ public class DateTime extends Date {
     
     //The string format for time.
     private static final String FORMAT_TIME = "%1$d:%2$02d";
+    public static final String REGEX_DATETIME = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4} [0-9]{1,2}:[0-9]{1,2}";
     
     //The main additional data members
     private int hour, minute;
@@ -47,6 +48,26 @@ public class DateTime extends Date {
      */
     public DateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	setDateTime(date, month, year, hour, minute);
+    }
+    
+    /**
+     * Creates a DateTime instance from the given date string.
+     * @param dateString The string representation of the DateTiem object to make.
+     * @return A DateTime instance such that calling toString().equals(dateString) returns true.
+     * @throws IllegalArgumentException if either the date and/or the time is invalid.
+     */
+    public static DateTime makeDateTime(String dateString){
+	assert dateString.matches(REGEX_DATETIME);
+	
+	String[] dateAndTime = dateString.split(" ");
+	String[] dateArray = dateAndTime[0].split("/");
+	String[] timeArray = dateAndTime[1].split(":");
+	int day = Integer.parseInt(dateArray[0]);
+	int month = Integer.parseInt(dateArray[1]);
+	int year = Integer.parseInt(dateArray[2]);
+	int hour = Integer.parseInt(timeArray[0]);
+	int minute = Integer.parseInt(timeArray[1]);
+	return new DateTime(day, month, year, hour, minute);
     }
     
     /**

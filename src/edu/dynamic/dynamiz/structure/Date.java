@@ -12,6 +12,7 @@ public class Date implements Comparable<Date>{
     
     //String format for set date
     protected static final String FORMAT_DATE = "%1$d/%2$d/%3$d";
+    public static final String REGEX_DATE = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}";
     
     //The main data members of this class.
     private int year, month, date;
@@ -38,6 +39,21 @@ public class Date implements Comparable<Date>{
 	    throw new IllegalArgumentException();
 	}
 	setDate(date, month, year);
+    }
+    
+    /**
+     * Creates a new Date instance from the given date string.
+     * @param dateString The string representation of the date to create.
+     * @return The Date instance who's toString() method equals dateString.
+     */
+    public static Date makeDate(String dateString){
+	assert dateString.matches(REGEX_DATE);
+	
+	String[] temp = dateString.split("/");
+	int day = Integer.parseInt(temp[0]);
+	int month = Integer.parseInt(temp[1]);
+	int year = Integer.parseInt(temp[2]);
+	return new Date(day, month, year);
     }
 
     /**

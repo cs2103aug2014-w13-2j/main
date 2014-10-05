@@ -1,9 +1,15 @@
 package edu.dynamic.dynamiz.controller;
 
+import java.util.List;
+
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.parser.Options;
 import edu.dynamic.dynamiz.storage.Storage;
+import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.DateTime;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -25,31 +31,63 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Options extractOptions(Options options)	//Gets the Options list that is applicable to this command
  * 						//from the given Options list.
  * 
+ * Private Methods
+ * Date makeDate(String dateString)	//Creates a Date instance from the given date string.
+ * 
  * @author zixian
  * */
 public class CommandAdd extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
     
+    //List of options keywords
+    private static final String KEYWORD_PRIORITY = "priority";
+    private static final String KEYWORD_START = "from";
+    private static final String KEYWORD_END = "to";
+    
+    //Error messages
+    private static final String MSG_EMPTYDESCRIPTION = "Empty description string";
+    private static final String MSG_INVALIDENDDATE = "Invalid end date/deadline value";
+    private static final String MSG_INVALIDSTARTDATE = "Invalid start date value";
+    private static final String MSG_INVALIDDATES = "Invalid start/end date(s)";
+    
     //Main data members
-    private String description;	//The description of the item to be added.
     private Options options;	//The list of options for this command.
     private ToDoItem addedItem;	//The item being added by this command.
+    
+    //Data members for ToDoItem
+    private String description;	//The description of the item to be added.
+    private int priority = 0;	//Priority level.
+    private String start = null, end = null;	//Start and end/deadline dates.
     
     /**
      * Creates a new Command object that adds a new entry into the given storage.
      * @param options The list of options specifying extra information associated with the entry to be added.
      * @param description The description of the entry to be added.
      * @param storage The storage object to add the new entry into.
-     * @throws IllegalArgumentException if description is an empty string or if any of the parameters is null.
+     * @throws IllegalArgumentException if description is an empty string.
      * */
     public CommandAdd(Options options, String description, Storage storage) {
-	assert options!=null && description!=null && !description.isEmpty() && storage!=null;
+	assert options!=null && description!=null && storage!=null;
+	
+	if(description.isEmpty()){
+	    throw new IllegalArgumentException(MSG_EMPTYDESCRIPTION);
+	}
 	
 	this.description = description.trim();
-	//this.options = extractOptions(options);
-	this.options = options;
+	this.options = extractOptions(options);
 	this.storage = storage;
+	
+	//All conflicting option objects/values are resolved by taking the 1st object/value.
+	if(this.options.hasOption(KEYWORD_PRIORITY)){
+	    priority = Integer.parseInt(this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues().get(0));
+	}
+	if(this.options.hasOption(KEYWORD_START)){
+	    start = this.options.getOptions(KEYWORD_START).get(0).getValues().get(0);
+	}
+	if(this.options.hasOption(KEYWORD_END)){
+	    end = this.options.getOptions(KEYWORD_END).get(0).getValues().get(0);
+	}
     }
     
     /**
@@ -59,10 +97,14 @@ public class CommandAdd extends Command {
      */
     public Options extractOptions(Options options) {
 	Options opts = new Options();
+	List<Option> list;
 	
 	for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
-	    Option opt = options.getOptions(optType).get(0); // Assume that there is one Option per OptionType
-	    opts.add(opt);
+	    //Best effort attempt to resolve conflicting values for same option type.
+	    list = options.getOptions(optType);
+	    if(list!=null){
+		opts.add(list.get(0));
+	    }
 	}
 	return opts;
     }
@@ -70,11 +112,34 @@ public class CommandAdd extends Command {
     @Override
     /**
      * Executes this command. Also used for redo operation.
-     * Note: Currently only supports adding of items with only description.
-     * 		Implementation to be updated in the near future.
+     * @throws IllegalArgumentException if any of the dates provided by the user is invalid.
      */
     public void execute() {
-	addedItem = new ToDoItem(description);
+	if(start==null && end==null){
+	    addedItem = new ToDoItem(description, priority);
+	} else if(start==null && end!=null){
+	    try{
+		Date endDate = makeDate(end);
+		addedItem = new TaskItem(description, priority, endDate);
+	    } catch(IllegalArgumentException e){
+		throw new IllegalArgumentException(MSG_INVALIDENDDATE);
+	    } 
+	} else if(start!=null && end==null){
+	    try{
+		Date startDate = makeDate(start);
+		addedItem = new EventItem(description, priority, startDate);
+	    } catch(IllegalArgumentException e){
+		throw new IllegalArgumentException(MSG_INVALIDSTARTDATE);
+	    }
+	} else{
+	    try{
+		Date startDate = makeDate(start);
+		Date endDate = makeDate(end);
+		addedItem = new EventItem(description, priority, startDate, endDate);
+	    } catch(IllegalArgumentException e){
+		throw new IllegalArgumentException(MSG_INVALIDDATES);
+	    }
+	}
 	storage.addItem(addedItem);
     }
     
@@ -109,5 +174,22 @@ public class CommandAdd extends Command {
 	ToDoItem[] list = new ToDoItem[1];
 	list[0] = addedItem;
 	return list;
+    }
+    
+    /**
+     * Creates a Date object from the given date string.
+     * @param dateString The string representation of the Date instance to create.
+     * @return A Date instance such that toString().equals(dateString) returns true.
+     * @throws IllegalArgumentException if dateString does not represent a valid Date,
+     * 		DateTime, and day of week.
+     */
+    private Date makeDate(String dateString){
+	if(dateString.matches(Date.REGEX_DATE)){
+	    return Date.makeDate(dateString);
+	} else if(dateString.matches(DateTime.REGEX_DATETIME)){
+	    return DateTime.makeDateTime(dateString);
+	} else{
+	    return storage.getDate(dateString);
+	}
     }
 }

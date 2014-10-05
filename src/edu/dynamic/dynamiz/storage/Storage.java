@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.FileHandler;
+import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
@@ -224,5 +225,16 @@ public class Storage {
 	    e.printStackTrace();
 	}
 	return temp;
+    }
+    
+    /**
+     * Creates a Date instance based on the day of the week specified by the given date string.
+     * @param dateString The day of the week.
+     * @return A Date instance corresponding to the specified day of week in the immediate week.
+     * throws IllegalArgumentException if dateString is not a valid day of week.
+     * Note: Implementation is a stub. Currently not supported.
+     */
+    public Date getDate(String dateString){
+	throw new IllegalArgumentException();
     }
 }
