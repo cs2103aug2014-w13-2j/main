@@ -32,7 +32,7 @@ public class CommandAdd extends Command {
     private static final String COMMAND_TYPE = "add";
     
     //Main data members
-    private String param;	//The description of the item to be added.
+    private String description;	//The description of the item to be added.
     private Options options;	//The list of options for this command.
     private ToDoItem addedItem;	//The item being added by this command.
     
@@ -46,7 +46,7 @@ public class CommandAdd extends Command {
     public CommandAdd(Options options, String description, Storage storage) {
 	assert options!=null && description!=null && !description.isEmpty() && storage!=null;
 	
-	this.param = param.trim();
+	this.description = description.trim();
 	//this.options = extractOptions(options);
 	this.options = options;
 	this.storage = storage;
@@ -74,7 +74,7 @@ public class CommandAdd extends Command {
      * 		Implementation to be updated in the near future.
      */
     public void execute() {
-	addedItem = new ToDoItem(param);
+	addedItem = new ToDoItem(description);
 	storage.addItem(addedItem);
     }
     

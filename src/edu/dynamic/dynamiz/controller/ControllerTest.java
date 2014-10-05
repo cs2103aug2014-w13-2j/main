@@ -4,12 +4,22 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.Feedback;
+
 public class ControllerTest {
     
     @Test
     public void testExecuteCommand() throws Exception{
+	Feedback feedback;
 	Controller controller = new Controller();
-	controller.executeCommand("add task");
+	
+	feedback = controller.executeCommand("add Buy newspaper");
+	assertEquals("add", feedback.getCommandType());
+	assertEquals("add Buy newspaper", feedback.getOriginalCommand());
+	
+	feedback = controller.executeCommand("delete A2");
+	assertEquals("delete", feedback.getCommandType());
+	assertEquals("delete A2", feedback.getOriginalCommand());
     }
     
 }

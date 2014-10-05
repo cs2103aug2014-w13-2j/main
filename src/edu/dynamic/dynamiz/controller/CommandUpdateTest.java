@@ -26,6 +26,8 @@ public class CommandUpdateTest {
 	ToDoItem[] list = cmd.getAffectedItems();
 	assertEquals(2, list.length);
 	System.out.println(list[1]);
+	cmd.undo();
+	//Add more tests to check if undo() works.
     }
     
 }
