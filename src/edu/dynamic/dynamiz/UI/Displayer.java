@@ -204,6 +204,10 @@ public class Displayer implements DisplayerInterface {
 		String s = new String ("Please Enter Command:");
 		return s;
 	}
+	public String displayEnterCommandPrompt() {
+		String s = new String ("Please Enter Command:");
+		return s;
+	}
 
 
 	public String displayPrompt(PromptTag prompt) {
@@ -288,12 +292,8 @@ public class Displayer implements DisplayerInterface {
 		sb.append(title).append("\n");
 		return null;
 	}
-	@Override
-	public String displayEnterCommandPrompt() {
-		
-		return "Please Enter Command:";
-	}
 
+	
 	
 	
 }
