@@ -3,6 +3,22 @@ package edu.dynamic.dynamiz.controller;
 import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * Defines the Command object that deletes a ToDoItem from Storage object.
+ * 
+ * Constructor
+ * CommandDelete(String id, Storage storage)	//Creates a CommandDelete object that will delete the ToDoItem
+ * 						//with this id from the given storage.
+ * 
+ * Methods(public)
+ * void execute()	//Executes this command
+ * void undo()		//Undoes this command's execute method.
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects removed from storage by
+ * 					//this command's execute method.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ * 
+ * @author zixian
+ */
 public class CommandDelete extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "delete";
@@ -35,6 +51,8 @@ public class CommandDelete extends Command {
      * Undoes this command's execute method.
      */
     public void undo() {
+	assert deletedItem!=null;
+	
 	storage.addItem(deletedItem);
     }
     

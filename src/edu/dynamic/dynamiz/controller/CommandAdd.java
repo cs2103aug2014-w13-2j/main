@@ -1,6 +1,5 @@
 package edu.dynamic.dynamiz.controller;
 
-
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.parser.Options;
@@ -8,7 +7,22 @@ import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
- * Defines the add command.
+ * Defines the Command object that adds a new ToDoItem object with the given information into
+ * the given storage object.
+ * 
+ * Constructor
+ * CommandAdd(Options options, String description, Storage storage)	//Creates a CommandAdd instance
+ * 							//with the given Options list, the description,
+ * 							//and the storage object to add into.
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * void undo()		//Undoes this command's execute method.
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem instances added by this command.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ * Options extractOptions(Options options)	//Gets the Options list that is applicable to this command
+ * 						//from the given Options list.
+ * 
  * @author zixian
  * */
 public class CommandAdd extends Command {
@@ -23,12 +37,12 @@ public class CommandAdd extends Command {
     /**
      * Creates a new Command object that adds a new entry into the given storage.
      * @param options The list of options specifying extra information associated with the entry to be added.
-     * @param param The description of the entry to be added.
+     * @param description The description of the entry to be added.
      * @param storage The storage object to add the new entry into.
-     * @throws IllegalArgumentException if param is an empty string or if any of the parameters is null.
+     * @throws IllegalArgumentException if description is an empty string or if any of the parameters is null.
      * */
-    public CommandAdd(Options options, String param, Storage storage) {
-	assert options!=null && isValidParam(param) && storage!=null;
+    public CommandAdd(Options options, String description, Storage storage) {
+	assert options!=null && description!=null && !description.isEmpty() && storage!=null;
 	
 	this.param = param.trim();
 	//this.options = extractOptions(options);
@@ -62,10 +76,6 @@ public class CommandAdd extends Command {
 	return list;
     }
     
-    private boolean isValidParam(String param) {
-	return (param != null) && (!param.isEmpty());
-    }
-    
     @Override
     /**
      * Executes this command. Also used for redo operation.
@@ -82,6 +92,8 @@ public class CommandAdd extends Command {
      * Undoes this command's execute method.
      */
     public void undo() {
+	assert addedItem!=null;
+	
 	storage.removeItem(addedItem.getId());
     }
     
