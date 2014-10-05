@@ -6,11 +6,6 @@ import java.util.Formatter;
 import java.awt.color.*;
 
 import edu.dynamic.dynamiz.structure.*;
-import edu.dynamic.dynamiz.structure.EventItem;
-import edu.dynamic.dynamiz.structure.Feedback;
-import edu.dynamic.dynamiz.structure.HelpFeedback;
-import edu.dynamic.dynamiz.structure.TaskItem;
-import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * @author Hu Wenyan
@@ -163,7 +158,6 @@ public class Displayer implements DisplayerInterface {
 
 	
 
-
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
 		if(todoItem == null) return "null todo Item";
@@ -292,6 +286,11 @@ public class Displayer implements DisplayerInterface {
 		String title = StringUtils.center("Help Page", 9);
 		sb.append(title).append("\n");
 		return null;
+	}
+	@Override
+	public String displayEnterCommandPrompt() {
+		
+		return "Please Enter Command:";
 	}
 
 	

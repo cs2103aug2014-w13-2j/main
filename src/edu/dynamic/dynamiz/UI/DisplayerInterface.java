@@ -48,7 +48,7 @@ public interface DisplayerInterface {
 	public String displayToDoFeedBack(ToDoItem todoItem);
 	public String displayToDoFile(ToDoItem todoItem);
 	
-	
+	public String displayEnterCommandPrompt();
 	public String displayPrompt();
 	public String displayPrompt(PromptTag prompt);
 	public String displayPrompt(String promtMessage);
