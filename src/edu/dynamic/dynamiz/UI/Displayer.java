@@ -48,7 +48,8 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayDividingLine() {
-		return "--------------------------------------------------------------------------------------------------------";
+		String s = new String("--------------------------------------------------------------------------------------------------------");
+		return s;
 	}
 
 	
@@ -59,7 +60,7 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayStringList(ArrayList<String> arr) {	
-		if(arr == null) return "null";
+		if(arr == null) return new String("null");
 
 		StringBuilder s = new StringBuilder();
 
@@ -74,19 +75,19 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayTaskItem(TaskItem task) {
-		if(task == null) return "null task";
+		if(task == null) return new String("null task");
 		else return task.toString();
 	}
 
 	@Override
 	public String displayTaskFile(TaskItem task) {
-		if(task == null) return "null task";
+		if(task == null) return new String("null task");
 		else return task.toFileString();
 	}
 	
 	@Override
 	public String displayTaskFeedBack(TaskItem task) {
-		if(task == null) return "null task";
+		if(task == null) return new String("null task");
 		else return task.getFeedbackString();
 	}
 
@@ -94,7 +95,7 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayTaskList(ArrayList<TaskItem> taskList) {
-		if(taskList == null ) return "null";
+		if(taskList == null ) return new String("null");
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< taskList.size(); i++){
@@ -105,7 +106,7 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
-		if(taskList == null ) return "null";
+		if(taskList == null ) return new String("null");
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< taskList.length; i++){
@@ -118,26 +119,28 @@ public class Displayer implements DisplayerInterface {
 	
 	@Override
 	public String displayEventFeedBack(EventItem event) {
-		if(event == null) return "null event";
+		if(event == null) return new String("null event");
 		else return event.getFeedbackString();
 		
 	}
 
 	@Override
 	public String displayEventFile(EventItem event) {
-		if(event == null) return "null event";
+		String s = new String("null event");
+		if(event == null) return s;
 		else return event.toFileString();
 	}
 	@Override
 	public String displayEventItem(EventItem event) {
-		if(event == null) return "null event";
+		String s = new String("null event");
+		if(event == null) return s;
 		else return event.toString();
 	}
 	
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
-		if(eventList == null ) return "null";
-		
+		String str = new String("null event");
+		if(eventList == null) return str;
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.size(); i++){
 			s.append(eventList.get(i).toString()).append("\n");
@@ -147,7 +150,8 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayEventList(EventItem[] eventList) {
-		if(eventList == null ) return "null";
+		String str = new String("null event");
+		if(eventList == null) return str;
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.length; i++){
@@ -160,26 +164,29 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
-		if(todoItem == null) return "null todo Item";
+		String str = new String("null todoItem");
+		if(todoItem == null) return str;
 		else return todoItem.toString();
 	}
 
 	@Override
 	public String displayToDoFeedBack(ToDoItem todoItem) {
-		if(todoItem == null) return "null todo Item";
+		String str = new String("null todoItem");
+		if(todoItem == null) return str;
 		else return todoItem.getFeedbackString();
 	}
 
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
-		if(todoItem == null) return "null todo Item";
+		String str = new String("null todoItem");
+		if(todoItem == null) return str;
 		else return todoItem.toFileString();
 	}
 	
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
-		if(todoList == null ) return "null";
-		
+		String str = new String("null todoItem");
+		if(todoList == null) return str;
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.size(); i++){
 			s.append(todoList.get(i).toString()).append("\n");
@@ -189,7 +196,8 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
-		if(todoList == null ) return "null";
+		String str = new String("null todoItem");
+		if(todoList == null) return str;
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.length; i++){
