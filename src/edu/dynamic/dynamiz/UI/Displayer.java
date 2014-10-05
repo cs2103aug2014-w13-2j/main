@@ -211,23 +211,23 @@ public class Displayer implements DisplayerInterface {
 	}
 
 
-//	public String displayPrompt(PromptTag prompt) {
-//		String tag = new String();
-//		switch(prompt){
-//		case EnterCommand:
-//			tag = "Please Enter Command:";
-//		case EnterTodoItem:
-//			tag = "Please Enter Task:";
-//		case EnterTaskIndex:
-//			tag = "Please Enter Task Index:";
-//		case InvalidCommand:
-//			tag = "Please Enter Valid Command:";
-//		}	
-//		
-//		tag+="\n";
-//		
-//		return tag;
-//	}
+	public String displayPrompt(PromptTag prompt) {
+		String tag = new String();
+		switch(prompt){
+		case EnterCommand:
+			tag = "Please Enter Command:";
+		case EnterTodoItem:
+			tag = "Please Enter Task:";
+		case EnterTaskIndex:
+			tag = "Please Enter Task Index:";
+		case InvalidCommand:
+			tag = "Please Enter Valid Command:";
+		}	
+		
+		tag+="\n";
+		
+		return tag;
+	}
 
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
