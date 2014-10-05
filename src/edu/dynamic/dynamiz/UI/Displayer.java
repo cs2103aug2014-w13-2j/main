@@ -201,7 +201,8 @@ public class Displayer implements DisplayerInterface {
 
 
 	public String displayPrompt() {
-		return "Please Enter Command:";
+		String s = new String ("Please Enter Command:");
+		return s;
 	}
 
 
