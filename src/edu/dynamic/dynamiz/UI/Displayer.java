@@ -210,6 +210,7 @@ public class Displayer implements DisplayerInterface {
 
 	public String displayPrompt() {
 		String s = new String ("Please Enter Command:");
+	
 		return s;
 	}
 //	public String displayEnterCommandPrompt() {
@@ -242,7 +243,7 @@ public class Displayer implements DisplayerInterface {
 			tag = "Please Enter Valid Command:";
 		}	
 		
-		tag+="\n";
+		//tag+="\n";
 		
 		return tag;
 	}
