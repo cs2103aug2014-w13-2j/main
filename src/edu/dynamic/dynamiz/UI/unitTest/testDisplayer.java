@@ -11,10 +11,12 @@ import edu.dynamic.dynamiz.structure.*;
 
 public class testDisplayer {
 	Displayer dp = new Displayer();
-	public void setUp(){
-		
-		
+	
+	@Test
+	public void testWelcome(){
+		assertEquals(dp.displayWelcomeMessage(),"Welcome to Dynamiz!");
 	}
+	
 	@Test
 	public void testDisplayString() {
 		String t1 = "test String";
