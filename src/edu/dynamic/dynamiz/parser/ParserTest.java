@@ -28,7 +28,7 @@ public class ParserTest {
 	cmdLine = parser.parse("Search study from today");
 	assertEquals("study", cmdLine.getParam());
 	
-	cmdLine = parser.parse("Show");
+	cmdLine = parser.parse("list");
 	assertEquals("", cmdLine.getParam());
 	System.out.println(cmdLine);
 	

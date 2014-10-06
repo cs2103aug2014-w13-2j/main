@@ -59,6 +59,8 @@ public class Controller {
 			break;
 		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions(), storage);
 			break;
+		case LIST: command = new CommandList(storage);
+			break;
 		default: throw new Exception();
 	    }
 	    command.execute();
