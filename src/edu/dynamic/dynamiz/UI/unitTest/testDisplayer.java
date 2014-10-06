@@ -18,5 +18,18 @@ public class testDisplayer {
 		dp.displayString(t1);
 		assertEquals(dp.displayString(t1),t1);
 	}
+	
+	@Test
+	public void testDisplayPrompy(){
+		String t1 = "Enter condition";
+		int promptTag = 2;
+		assertEquals(dp.displayPrompt(),"Please Enter Command:");
+		
+		assertEquals(dp.displayPrompt(t1),"Enter condition");
+		
+		assertEquals(dp.displayPrompt(promptTag),"Please Enter Task:");
+		
+	}
+	
 
 }
