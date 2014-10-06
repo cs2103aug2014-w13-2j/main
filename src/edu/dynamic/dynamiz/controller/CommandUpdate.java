@@ -102,7 +102,10 @@ public class CommandUpdate extends Command {
 	
 	//Checks for any new priority value
 	if(this.options.hasOption(KEYWORD_PRIORITY)){
-	    priority = Integer.parseInt(this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues().get(0));
+	    List<String> priorityList = this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues();
+	    if(!priorityList.isEmpty()){
+		priority = Integer.parseInt(priorityList.get(0));
+	    }
 	}
 	
 	//Checks if the dates are Date or DateTime type, if applicable.
@@ -113,8 +116,7 @@ public class CommandUpdate extends Command {
 		if(!start.matches(DateTime.REGEX_DATETIME)){
 		    start = startOptList.get(OPTLISTINDEX_DATE);
 		}
-	    } else{
-		assert !startOptList.isEmpty();
+	    } else if(!startOptList.isEmpty()){
 		start = startOptList.get(OPTLISTINDEX_DATE);
 	    }
 	}
@@ -125,8 +127,7 @@ public class CommandUpdate extends Command {
 		if(!end.matches(DateTime.REGEX_DATETIME)){
 		    end = endOptList.get(OPTLISTINDEX_DATE);
 		}
-	    } else{
-		assert !endOptList.isEmpty();
+	    } else if(!endOptList.isEmpty()){
 		end = endOptList.get(OPTLISTINDEX_DATE);
 	    }
 	}

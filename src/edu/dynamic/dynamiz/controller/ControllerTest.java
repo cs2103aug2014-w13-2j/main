@@ -37,10 +37,16 @@ public class ControllerTest {
 	
 	//Changes the deadline.
 	feedback = controller.executeCommand("update A4 by 6/10/2014");
+	assertTrue(feedback instanceof SuccessFeedback);
 	
 	//Item does not get changed due to error.
 	feedback= controller.executeCommand("update A4 Go shopping");
 	assertTrue(feedback instanceof SuccessFeedback);
+	
+	feedback = controller.executeCommand("update A4 from to");
+	assertTrue(feedback instanceof SuccessFeedback);
+	System.out.println(((SuccessFeedback)feedback).getAffectedItems()[0]);
+	System.out.println(((SuccessFeedback)feedback).getAffectedItems()[1]);
     }
     
 }
