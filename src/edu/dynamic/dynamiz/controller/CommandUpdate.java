@@ -1,6 +1,7 @@
 package edu.dynamic.dynamiz.controller;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
@@ -17,7 +18,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * target object.
  * 
  * Constructor
- * CommandUpdate(String id, Options options, Storage storage)	//Creates a new instance of this Command
+ * CommandUpdate(String param, Options options, Storage storage)	//Creates a new instance of this Command
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -31,21 +32,39 @@ public class CommandUpdate extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "update";
     
+    //Error message
     private static final String MSG_EMPTYID = "Empty id string";
     
-  //List of options keywords
+    //param-related constants
+    private static final String FORMAT_PARAM = "[^\\s]+ .+";
+    private static final String PARAM_DELIM = " ";
+    private static final int INDEX_ID = 0;
+    private static final int INDEX_DESC = 1;
+    
+    //ExtractOptions constant
+    private static final int INDEX_FIRSTOPTIONOBJECT = 0;
+    
+    //List of options keywords
     private static final String KEYWORD_PRIORITY = "priority";
     private static final String KEYWORD_START = "from";
     private static final String KEYWORD_END = "to";
     
-  //Error messages
-    private static final String MSG_EMPTYDESCRIPTION = "Empty description string";
+    //OptList-related constants
+    private static final int OPTLISTINDEX_DATE = 0;
+    private static final int OPTLISTINDEX_TIME = 1;
+    private static final int OPTLIST_MINSIZE = 1;
+    
+    //UpdatedItem indeces
+    private static final int UPDATEDINDEX_OLD = 0;
+    private static final int UPDATEDINDEX_NEW = 1;
+    
+    //Error messages
     private static final String MSG_INVALIDENDDATE = "Invalid end date/deadline value";
     private static final String MSG_INVALIDSTARTDATE = "Invalid start date value";
     private static final String MSG_INVALIDDATES = "Invalid start/end date(s)";
     
     //Main data members
-    private String id;
+    private String id, description = null;
     private ToDoItem[] updatedItem;
     private Options options;
     private int priority = -1;
@@ -54,47 +73,61 @@ public class CommandUpdate extends Command {
     /**
      * Creates a new instance of this Command object that updates the ToDoItem object with the given id
      * in the given Storage object with the new information specified in the Options list.
-     * @param id The id of the ToDoItem object to update.
+     * @param param The id (and new description) of the ToDoItem object to update.
      * @param options The list of options to apply to the target ToDoItem.
      * @param storage The Storage object in which the target object is contained.
      * @throws IllegalArgumentException if id is an empty string.
      */
-    public CommandUpdate(String id, Options options, Storage storage){
-	assert id!=null && options!=null && storage!=null;
+    public CommandUpdate(String param, Options options, Storage storage){
+	assert param!=null && options!=null && storage!=null;
 	
-	if(id.isEmpty()){
+	if(param.isEmpty()){
 	    throw new IllegalArgumentException(MSG_EMPTYID);
 	}
 	
-	this.id = id.trim();
+	this.id = param.trim();
 	this.options = extractOptions(options);
 	this.storage = storage;
 	
+	//Checks param for any new description specified
+	StringTokenizer strtok = new StringTokenizer(this.id);
+	assert strtok.hasMoreTokens();
+	this.id = strtok.nextToken();
+	if(strtok.hasMoreTokens()){
+	    this.description = strtok.nextToken();
+	    while(strtok.hasMoreTokens()){
+		description+=PARAM_DELIM+strtok.nextToken();
+	    }
+	}
+	
+	//Checks for any new priority value
 	if(this.options.hasOption(KEYWORD_PRIORITY)){
 	    priority = Integer.parseInt(this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues().get(0));
 	}
+	
+	//Checks if the dates are Date or DateTime type, if applicable.
 	if(this.options.hasOption(KEYWORD_START)){
 	    List<String> startOptList = this.options.getOptions(KEYWORD_START).get(0).getValues();
-	    if(startOptList.size()>1){
-		start = startOptList.get(0)+" "+startOptList.get(1);
+	    if(startOptList.size()>OPTLIST_MINSIZE){
+		start = startOptList.get(OPTLISTINDEX_DATE)+" "+startOptList.get(OPTLISTINDEX_TIME);
 		if(!start.matches(DateTime.REGEX_DATETIME)){
-		    start = startOptList.get(0);
+		    start = startOptList.get(OPTLISTINDEX_DATE);
 		}
 	    } else{
 		assert !startOptList.isEmpty();
-		start = startOptList.get(0);
+		start = startOptList.get(OPTLISTINDEX_DATE);
 	    }
 	}
 	if(this.options.hasOption(KEYWORD_END)){
 	    List<String> endOptList = this.options.getOptions(KEYWORD_END).get(0).getValues();
-	    if(endOptList.size()>1){
-		end = endOptList.get(0)+" "+endOptList.get(1);
+	    if(endOptList.size()>OPTLIST_MINSIZE){
+		end = endOptList.get(OPTLISTINDEX_DATE)+" "+endOptList.get(OPTLISTINDEX_TIME);
 		if(!end.matches(DateTime.REGEX_DATETIME)){
-		    end = endOptList.get(0);
+		    end = endOptList.get(OPTLISTINDEX_DATE);
 		}
 	    } else{
 		assert !endOptList.isEmpty();
-		end = endOptList.get(0);
+		end = endOptList.get(OPTLISTINDEX_DATE);
 	    }
 	}
     }
@@ -112,7 +145,7 @@ public class CommandUpdate extends Command {
 	    //Selects the 1st Option when there are more than 1 Option of the same OptionType.
 	    list = options.getOptions(optType);
 	    if(list!=null){
-		opts.add(list.get(0));
+		opts.add(list.get(INDEX_FIRSTOPTIONOBJECT));
 	    }
 	}
 	return opts;
@@ -125,18 +158,18 @@ public class CommandUpdate extends Command {
      */
     public void execute() {
 	if(start==null && end==null){
-	    updatedItem = storage.updateItem(id, priority, null, null);
+	    updatedItem = storage.updateItem(id, description, priority, null, null);
 	} else if(start==null && end!=null){
 	    try{
 		Date endDate = makeDate(end);
-		updatedItem = storage.updateItem(id, priority, null, endDate);
+		updatedItem = storage.updateItem(id, description, priority, null, endDate);
 	    } catch(IllegalArgumentException e){
 		throw new IllegalArgumentException(MSG_INVALIDENDDATE);
 	    }
 	} else if(start!=null && end==null){
 	    try{
 		Date startDate = makeDate(start);
-		updatedItem = storage.updateItem(id, priority, startDate, null);
+		updatedItem = storage.updateItem(id, description, priority, startDate, null);
 	    } catch(IllegalArgumentException e){
 		throw new IllegalArgumentException(MSG_INVALIDSTARTDATE);
 	    }
@@ -144,7 +177,7 @@ public class CommandUpdate extends Command {
 	    try{
 		Date startDate = makeDate(start);
 		Date endDate = makeDate(end);
-		updatedItem = storage.updateItem(id, priority, startDate, endDate);
+		updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
 	    } catch(IllegalArgumentException e){
 		throw new IllegalArgumentException(MSG_INVALIDDATES);
 	    }
@@ -159,8 +192,8 @@ public class CommandUpdate extends Command {
     public void undo() {
 	assert updatedItem!=null;
 	
-	storage.removeItem(updatedItem[1].getId());
-	storage.addItem(updatedItem[0]);
+	storage.removeItem(updatedItem[UPDATEDINDEX_NEW].getId());
+	storage.addItem(updatedItem[UPDATEDINDEX_OLD]);
     }
     
     @Override

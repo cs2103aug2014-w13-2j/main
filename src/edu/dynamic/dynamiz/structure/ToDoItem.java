@@ -99,6 +99,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     }
     
     public void setDescription(String description){
+	assert description!=null;
 	this.description = description;
     }
     

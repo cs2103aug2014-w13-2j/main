@@ -95,7 +95,7 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, int priority, Date start, Date end){
+    public ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end){
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
@@ -111,6 +111,10 @@ public class Storage {
 	    list[0] = new EventItem((EventItem)target);
 	} else{
 	    list[0] = new ToDoItem(target);
+	}
+	
+	if(description!=null && !description.isEmpty()){
+	    target.setDescription(description);
 	}
 
 	if(ToDoItem.isValidPriority(priority)){

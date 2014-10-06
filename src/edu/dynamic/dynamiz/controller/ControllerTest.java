@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
+import edu.dynamic.dynamiz.structure.SuccessFeedback;
 
 public class ControllerTest {
     
@@ -38,9 +39,8 @@ public class ControllerTest {
 	feedback = controller.executeCommand("update A4 by 6/10/2014");
 	
 	//Item does not get changed due to error.
-	feedback= controller.executeCommand("update A4Go shopping");
-	assertTrue(feedback instanceof ErrorFeedback);
-	System.out.println(((ErrorFeedback)feedback).getMessage());
+	feedback= controller.executeCommand("update A4 Go shopping");
+	assertTrue(feedback instanceof SuccessFeedback);
     }
     
 }

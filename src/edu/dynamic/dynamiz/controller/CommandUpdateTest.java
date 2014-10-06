@@ -20,7 +20,7 @@ public class CommandUpdateTest {
     public void test() {
 	Parser parser = new Parser();
 	Storage storage = new Storage();
-	CommandLine cmdLine = parser.parse("update A3 from 4/10/2014 16:00");
+	CommandLine cmdLine = parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
 	CommandUpdate cmd = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions(), storage);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
