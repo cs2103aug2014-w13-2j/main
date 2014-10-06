@@ -129,7 +129,7 @@ public class Storage {
 		addItem(target);
 	    }
 	}
-	System.out.println(target);
+	
 	list[1] = target;
 	
 	try {
