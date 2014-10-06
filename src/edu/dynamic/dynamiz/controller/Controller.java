@@ -61,6 +61,8 @@ public class Controller {
 			break;
 		case LIST: command = new CommandList(storage);
 			break;
+		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions(), storage);
+			break;
 		default: throw new Exception();
 	    }
 	    command.execute();

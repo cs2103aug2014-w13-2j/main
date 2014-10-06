@@ -26,6 +26,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods
  * void execute()	//Executes this command.
  * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem instances added by this command.
  * String getCommandName()	//Gets the string representation of this command's type.
  * Options extractOptions(Options options)	//Gets the Options list that is applicable to this command
@@ -184,6 +185,15 @@ public class CommandAdd extends Command {
 	assert addedItem!=null;
 	
 	storage.removeItem(addedItem.getId());
+    }
+    
+    @Override
+    /**
+     * Re-execute this command.
+     * Must only be called after calling this command's undo() method.
+     */
+    public void redo(){
+	storage.addItem(addedItem);
     }
     
     @Override

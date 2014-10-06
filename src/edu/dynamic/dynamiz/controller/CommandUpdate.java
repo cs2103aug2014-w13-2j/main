@@ -23,6 +23,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods
  * void execute()	//Executes this command.
  * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects that are affected by this command.
  * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
@@ -192,6 +193,16 @@ public class CommandUpdate extends Command {
 	
 	storage.removeItem(updatedItem[UPDATEDINDEX_NEW].getId());
 	storage.addItem(updatedItem[UPDATEDINDEX_OLD]);
+    }
+    
+    @Override
+    /**
+     * Re-executes this command.
+     * Must only be called after calling this command's undo() method.
+     */
+    public void redo(){
+	storage.removeItem(updatedItem[UPDATEDINDEX_OLD].getId());
+	storage.addItem(updatedItem[UPDATEDINDEX_NEW]);
     }
     
     @Override

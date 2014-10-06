@@ -21,6 +21,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods(currently that can be used)
  * ToDoItem addItem(ToDoItem)	//Adds the given item to the list.
  * ToDoItem[] updateItem(String id)	//Updates the ToDoItem with the given id with the specified details.
+ * ToDoItem[] searchByKeyword(String keyword)	//Gets a list of items with keyword in their description.
  * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
  * 
@@ -153,6 +154,29 @@ public class Storage {
     }
     
     /**
+     * Gets a list of ToDoItem objects whose description contains this keyword.
+     * @param keyword The keyword to search in the objects.
+     * @return An array of ToDoItem objects containing keyword in their description or null
+     * 		if the list is empty.
+     */
+    public ToDoItem[] searchByKeyword(String keyword){
+	if(keyword==null || keyword.isEmpty()){
+	    return null;
+	}
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+	for(ToDoItem item: mainList){
+	    if(item.getDescription().contains(keyword)){
+		temp.add(item);
+	    }
+	}
+	if(temp.isEmpty()){
+	    return null;
+	}
+	Collections.sort(temp);
+	return temp.toArray(new ToDoItem[temp.size()]);
+    }
+    
+    /**
      * Gets the list of tasks and events in an array sorted in lexicographical order of their ID.
      * @return An array of ToDoItem objects sorted in lexicographical order of their ID
      * 		or null if the list is empty.
@@ -237,7 +261,8 @@ public class Storage {
      * Removes the ToDoItem with the given ID from the list.
      * For use by CommandAdd's undo method and CommandDelete's execute method.
      * @param id The id of the ToDoItem object to remove from the list.
-     * @return The ToDoItem object that was removed from the list by this operation.
+     * @return The ToDoItem object that was removed from the list by this operation or null if
+     * 		no such item with the given id exists..
      */
     public ToDoItem removeItem(String id){
 	assert id!=null && !id.isEmpty();

@@ -61,6 +61,14 @@ public class ControllerTest {
 	for(ToDoItem item: list){
 	    System.out.println(item);
 	}
+	System.out.println();
+	
+	feedback = controller.executeCommand("search CS");
+	list = ((SuccessFeedback)feedback).getAffectedItems();
+	for(ToDoItem item: list){
+	    System.out.println(item);
+	}
+	System.out.println();
 	
 	//Erroneous test case. To be dealt with in later stages.
 	//feedback = controller.executeCommand("add");

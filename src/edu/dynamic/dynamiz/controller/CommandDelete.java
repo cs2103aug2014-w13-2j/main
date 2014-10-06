@@ -13,6 +13,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Methods(public)
  * void execute()	//Executes this command
  * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects removed from storage by
  * 					//this command's execute method.
  * String getCommandName()	//Gets the string representation of this command's type.
@@ -55,6 +56,15 @@ public class CommandDelete extends Command {
 	assert deletedItem!=null;
 	
 	storage.addItem(deletedItem);
+    }
+    
+    @Override
+    /**
+     * Re-executes this command.
+     * Must only be called after calling this command's undo() method.
+     */
+    public void redo(){
+	execute();
     }
     
     @Override
