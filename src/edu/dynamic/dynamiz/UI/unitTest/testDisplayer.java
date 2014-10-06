@@ -28,11 +28,11 @@ public class testDisplayer {
 	public void testDisplayPrompy(){
 		String t1 = "Enter condition:";
 		int promptTag = 2;
-		assertEquals(dp.displayPrompt(),"Please Enter Command:");
+		assertEquals("Please Enter Command:",dp.displayPrompt());
 		
-		assertEquals(dp.displayPrompt(t1),"Enter condition:");
+		assertEquals("Enter condition:",dp.displayPrompt(t1));
 		
-		assertEquals(dp.displayPrompt(promptTag),"Please Enter Task:");
+		assertEquals("Please Enter Task:",dp.displayPrompt(promptTag));
 		
 	}
 	
@@ -41,9 +41,9 @@ public class testDisplayer {
 		TaskItem task1 = new TaskItem("CS2106 homework", 4, new DateTime(26, 9, 2014, 23, 59));
 		TaskItem task2 = new TaskItem("CS2105 homework", 4, new DateTime(26, 9, 2014, 23, 59));
 		TaskItem task3 = new TaskItem("CS2102 homework", 4, new DateTime(26, 9, 2014, 23, 59));
-		assertEquals(dp.displayTaskItem(task1), task1.toString());
-		assertEquals(dp.displayTaskFeedBack(task1), task1.getFeedbackString());
-		assertEquals(dp.displayTaskFile(task1), task1.toFileString());
+		assertEquals( task1.toString(),dp.displayTaskItem(task1));
+		assertEquals( task1.getFeedbackString(),dp.displayTaskFeedback(task1));
+		assertEquals( task1.toFileString(),dp.displayTaskFile(task1));
 		
 	}
 	
@@ -67,14 +67,14 @@ public class testDisplayer {
 		s+="\n";
 		
 		
-		assertEquals(dp.displayTaskList(testList), s);
+		assertEquals(s,dp.displayTaskList(testList));
 		
 		TaskItem[] testArray = new TaskItem[3];
 		testArray[0]=task1;
 		testArray[1]=task2;
 		testArray[2]=task3;
 		
-		assertEquals(dp.displayTaskList(testArray), s);
+		assertEquals(s,dp.displayTaskList(testArray));
 		
 	}
 	
@@ -88,9 +88,9 @@ public class testDisplayer {
 		itemToFile = item.toFileString();
 		
 		System.out.println(item.toString());
-		assertEquals(dp.displayToDoItem(item),itemToString);
-		assertEquals(dp.displayToDoFile(item),itemToFile);
-		assertEquals(dp.displayToDoFeedBack(item),item.getFeedbackString());
+		assertEquals(itemToString,dp.displayToDoItem(item));
+		assertEquals(itemToFile,dp.displayToDoFile(item));
+		assertEquals(item.getFeedbackString(),dp.displayToDoFeedback(item));
 			
 	}
 	
@@ -114,14 +114,14 @@ public class testDisplayer {
 		s+="\n";
 		
 		
-		assertEquals(dp.displayToDoList(todoList), s);
+		assertEquals(s, dp.displayToDoList(todoList));
 		
 		ToDoItem[] testArray = new ToDoItem[3];
 		testArray[0]=item1;
 		testArray[1]=item2;
 		testArray[2]=item3;
 		
-		assertEquals(dp.displayToDoList(testArray), s);
+		assertEquals(s, dp.displayToDoList(testArray));
 		
 	}
 	
@@ -130,9 +130,9 @@ public class testDisplayer {
 		EventItem item = new EventItem("Nana's concert", 5, new Date(27, 9, 2014));
 		
 		System.out.println(item.toString());
-		assertEquals(dp.displayEventItem(item),item.toString());
-		assertEquals(dp.displayEventFile(item),item.toFileString());
-		assertEquals(dp.displayEventFeedBack(item),item.getFeedbackString());
+		assertEquals(item.toString(),dp.displayEventItem(item));
+		assertEquals(item.toFileString(),dp.displayEventFile(item));
+		assertEquals(item.getFeedbackString(),dp.displayEventFeedback(item));
 			
 	}
 	
@@ -156,16 +156,57 @@ public class testDisplayer {
 		s+="\n";
 		
 		
-		assertEquals(dp.displayEventList(ls), s);
+		assertEquals(s,dp.displayEventList(ls));
 		
 		EventItem[] testArray = new EventItem[3];
 		testArray[0]=e1;
 		testArray[1]=e2;
 		testArray[2]=e3;
 		
-		assertEquals(dp.displayEventList(testArray), s);
+		assertEquals(s,dp.displayEventList(testArray));
 		
 	}
+	
+	@Test
+	
+	public void testDisplayFeedback(){
+		Feedback f = new Feedback("Add","CS2106 Homework");
+		Feedback ef = new ErrorFeedback("Add","CS2106 Homework","Failed");
+		Feedback hf = new HelpFeedback("Add","CS2106 Homework","Add Time");
+		Feedback sf;
+		
+		
+		assertEquals("null",dp.displayFeedback(null));
+		
+		String fstr = new String();
+		fstr=f.getOriginalCommand();
+		//fstr+=" "+f.getOriginalCommand();
+		assertEquals(fstr,dp.displayFeedback(f));
+		
+		String efstr = new String();
+		efstr = ef.getCommandType()+" "+((ErrorFeedback)ef).getMessage();
+		assertEquals(efstr,dp.displayFeedback(ef));
+		
+		String hfstr = new String();
+		hfstr =((HelpFeedback)hf).getHelpContent();
+		assertEquals(hfstr,dp.displayFeedback(hf));
+		
+		
+		ToDoItem item1 = new ToDoItem("CS2106 Essay", 1);
+		ToDoItem[] ls = new ToDoItem[1];
+		ls[0] = item1;
+		sf= new SuccessFeedback("Update","Update A3 CS2106 Essay",ls);
+		StringBuilder sfstr = new StringBuilder();
+		sfstr.append(sf.getCommandType()).append(" successfully!").append("\n");
+		sfstr.append(item1.toFileString()).append("\n");
+		
+		
+		assertEquals(sfstr.toString(),dp.displayFeedback(sf));
+		
+	}
+	
+ 
+	
 
 
 }

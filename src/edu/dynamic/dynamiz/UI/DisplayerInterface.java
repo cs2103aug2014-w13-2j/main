@@ -33,7 +33,7 @@ public interface DisplayerInterface {
 	static final int INVALID_COMMAND_PROMPT = 5;
 	
 	
-	public String displayFeedBack (Feedback commandFeedBack);
+	public String displayFeedback (Feedback commandFeedBack);
 
 	public String displayWelcomeMessage();
 	public String displayString(String str);
@@ -45,20 +45,20 @@ public interface DisplayerInterface {
 	public String displayTaskList(ArrayList<TaskItem> taskList);
 	public String displayTaskList(TaskItem[] taskList);
 	public String displayTaskItem(TaskItem task);
-	public String displayTaskFeedBack(TaskItem task);
+	public String displayTaskFeedback(TaskItem task);
 	public String displayTaskFile(TaskItem task);
 	
 	public String displayEventList(ArrayList<EventItem> eventList);
 	public String displayEventList(EventItem[] eventList);
 	public String displayEventItem(EventItem event);
-	public String displayEventFeedBack(EventItem event);
+	public String displayEventFeedback(EventItem event);
 	public String displayEventFile(EventItem event);
 	
 	
 	public String displayToDoList(ArrayList<ToDoItem> todoList);
 	public String displayToDoList(ToDoItem[] todoList);
 	public String displayToDoItem(ToDoItem todoItem);
-	public String displayToDoFeedBack(ToDoItem todoItem);
+	public String displayToDoFeedback(ToDoItem todoItem);
 	public String displayToDoFile(ToDoItem todoItem);
 	
 

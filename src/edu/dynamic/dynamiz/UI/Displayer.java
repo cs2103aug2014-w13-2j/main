@@ -86,7 +86,7 @@ public class Displayer implements DisplayerInterface {
 	}
 	
 	@Override
-	public String displayTaskFeedBack(TaskItem task) {
+	public String displayTaskFeedback(TaskItem task) {
 		if(task == null) return new String("null task");
 		else return task.getFeedbackString();
 	}
@@ -118,7 +118,7 @@ public class Displayer implements DisplayerInterface {
 
 	
 	@Override
-	public String displayEventFeedBack(EventItem event) {
+	public String displayEventFeedback(EventItem event) {
 		if(event == null) return new String("null event");
 		else return event.getFeedbackString();
 		
@@ -170,7 +170,7 @@ public class Displayer implements DisplayerInterface {
 	}
 
 	@Override
-	public String displayToDoFeedBack(ToDoItem todoItem) {
+	public String displayToDoFeedback(ToDoItem todoItem) {
 		String str = new String("null todoItem");
 		if(todoItem == null) return str;
 		else return todoItem.getFeedbackString();
@@ -253,7 +253,7 @@ public class Displayer implements DisplayerInterface {
 	}
 
 	
-	public String displayFeedBack(Feedback commandFeedback) {
+	public String displayFeedback(Feedback commandFeedback) {
 		if(commandFeedback == null ) return "null";
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
@@ -265,7 +265,8 @@ public class Displayer implements DisplayerInterface {
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
-			s = ef.getMessage();
+			s =ef.getCommandType();
+			s+=" "+ef.getMessage();
 			break;
 			
 		case SUCCESS_FEEDBACK_TAG:
@@ -273,12 +274,16 @@ public class Displayer implements DisplayerInterface {
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
 			
-			a.append(sf.getCommandType()).append(" succesfully!");
+			a.append(sf.getCommandType()).append(" successfully!").append("\n");
 			
 			getFeedbackContent(a,sf);
 			
+			s = a.toString();
+			
+			break;
 		default:
-			s = commandFeedback.getCommandType();
+			//s = commandFeedback.getCommandType();
+			s = commandFeedback.getOriginalCommand();
 			
 		}
 		return s;		
