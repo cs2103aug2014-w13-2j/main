@@ -42,19 +42,30 @@ public interface DisplayerInterface {
 	public String displayTitleLine();
 	public String displayDividingLine();
 	
+	/**
+	 * @param ArrayList<taskList> or TaskItem[]
+	 * @return String of formatted taskList
+	 */
 	public String displayTaskList(ArrayList<TaskItem> taskList);
 	public String displayTaskList(TaskItem[] taskList);
 	public String displayTaskItem(TaskItem task);
 	public String displayTaskFeedback(TaskItem task);
 	public String displayTaskFile(TaskItem task);
 	
+	/**
+	 * @param ArrayList<EventItem> or EventItem[]
+	 * @return String of formatted eventList
+	 */
 	public String displayEventList(ArrayList<EventItem> eventList);
 	public String displayEventList(EventItem[] eventList);
 	public String displayEventItem(EventItem event);
 	public String displayEventFeedback(EventItem event);
 	public String displayEventFile(EventItem event);
 	
-	
+	/**
+	 * @param ArrayList<ToDoItem> or ToDoItem[]
+	 * @return String of formatted todoList
+	 */
 	public String displayToDoList(ArrayList<ToDoItem> todoList);
 	public String displayToDoList(ToDoItem[] todoList);
 	public String displayToDoItem(ToDoItem todoItem);
@@ -65,11 +76,13 @@ public interface DisplayerInterface {
 	
 	/**
 	 * @return
-	 * @param
+	 * No @param return "Enter command:" prompt
+	 * @param promptTag, corresbonding integer tag please refer to the final int above
+	 * @param specific String promptMessage 
 	 */
 	public String displayPrompt();
 	public String displayPrompt(int promptTag);
-	public String displayPrompt(String promtMessage);
+	public String displayPrompt(String promptMessage);
 
 	
 	public String displayHelpPage();
