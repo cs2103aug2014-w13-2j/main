@@ -61,6 +61,9 @@ public class ControllerTest {
 	for(ToDoItem item: list){
 	    System.out.println(item);
 	}
+	
+	//Erroneous test case. To be dealt with in later stages.
+	//feedback = controller.executeCommand("add");
     }
     
 }

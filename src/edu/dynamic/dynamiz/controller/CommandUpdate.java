@@ -36,10 +36,7 @@ public class CommandUpdate extends Command {
     private static final String MSG_EMPTYID = "Empty id string";
     
     //param-related constants
-    private static final String FORMAT_PARAM = "[^\\s]+ .+";
     private static final String PARAM_DELIM = " ";
-    private static final int INDEX_ID = 0;
-    private static final int INDEX_DESC = 1;
     
     //ExtractOptions constant
     private static final int INDEX_FIRSTOPTIONOBJECT = 0;
@@ -54,7 +51,7 @@ public class CommandUpdate extends Command {
     private static final int OPTLISTINDEX_TIME = 1;
     private static final int OPTLIST_MINSIZE = 1;
     
-    //UpdatedItem indeces
+    //UpdatedItem indices
     private static final int UPDATEDINDEX_OLD = 0;
     private static final int UPDATEDINDEX_NEW = 1;
     

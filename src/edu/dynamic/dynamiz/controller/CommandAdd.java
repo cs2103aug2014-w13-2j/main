@@ -19,8 +19,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * add ToDoItem with only description and default priority level.
  * 
  * Constructor
- * CommandAdd(Options options, String description, Storage storage)	//Creates a CommandAdd instance
- * 							//with the given Options list, the description,
+ * CommandAdd(String description, Options options, Storage storage)	//Creates a CommandAdd instance
+ * 							//with the given description, the Options list,
  * 							//and the storage object to add into.
  * 
  * Public Methods
@@ -40,10 +40,18 @@ public class CommandAdd extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
     
+    //ExtractOptions constant
+    private static final int INDEX_FIRSTOPTIONOBJECT = 0;
+    
     //List of options keywords
     private static final String KEYWORD_PRIORITY = "priority";
     private static final String KEYWORD_START = "from";
     private static final String KEYWORD_END = "to";
+    
+    //OptList-related constants
+    private static final int OPTLISTINDEX_DATE = 0;
+    private static final int OPTLISTINDEX_TIME = 1;
+    private static final int OPTLIST_MINSIZE = 1;
     
     //Error messages
     private static final String MSG_EMPTYDESCRIPTION = "Empty description string";
@@ -62,12 +70,12 @@ public class CommandAdd extends Command {
     
     /**
      * Creates a new Command object that adds a new entry into the given storage.
-     * @param options The list of options specifying extra information associated with the entry to be added.
      * @param description The description of the entry to be added.
+     * @param options The list of options specifying extra information associated with the entry to be added.
      * @param storage The storage object to add the new entry into.
      * @throws IllegalArgumentException if description is an empty string.
      * */
-    public CommandAdd(Options options, String description, Storage storage) {
+    public CommandAdd(String description, Options options, Storage storage) {
 	assert options!=null && description!=null && storage!=null;
 	
 	if(description.isEmpty()){
@@ -79,31 +87,37 @@ public class CommandAdd extends Command {
 	this.storage = storage;
 	
 	//All conflicting option objects/values are resolved by taking the 1st object/value.
+	//Checks for any priority value specified in options.
 	if(this.options.hasOption(KEYWORD_PRIORITY)){
-	    priority = Integer.parseInt(this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues().get(0));
-	}
-	if(this.options.hasOption(KEYWORD_START)){
-	    List<String> startOptList = this.options.getOptions(KEYWORD_START).get(0).getValues();
-	    if(startOptList.size()>1){
-		start = startOptList.get(0)+" "+startOptList.get(1);
-		if(!start.matches(DateTime.REGEX_DATETIME)){
-		    start = startOptList.get(0);
-		}
-	    } else{
-		assert !startOptList.isEmpty();
-		start = startOptList.get(0);
+	    List<String> priorityList = this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues();
+	    if(!priorityList.isEmpty()){
+		priority = Integer.parseInt(priorityList.get(0));
 	    }
 	}
+	
+	//Checks for any start date value specified in options.
+	if(this.options.hasOption(KEYWORD_START)){
+	    List<String> startOptList = this.options.getOptions(KEYWORD_START).get(0).getValues();
+	    if(startOptList.size()>OPTLIST_MINSIZE){
+		start = startOptList.get(OPTLISTINDEX_DATE)+" "+startOptList.get(OPTLISTINDEX_TIME);
+		if(!start.matches(DateTime.REGEX_DATETIME)){
+		    start = startOptList.get(OPTLISTINDEX_DATE);
+		}
+	    } else if(!startOptList.isEmpty()){
+		start = startOptList.get(OPTLISTINDEX_DATE);
+	    }
+	}
+	
+	//Checks for any end date value specified in options.
 	if(this.options.hasOption(KEYWORD_END)){
 	    List<String> endOptList = this.options.getOptions(KEYWORD_END).get(0).getValues();
-	    if(endOptList.size()>1){
-		end = endOptList.get(0)+" "+endOptList.get(1);
+	    if(endOptList.size()>OPTLIST_MINSIZE){
+		end = endOptList.get(OPTLISTINDEX_DATE)+" "+endOptList.get(OPTLISTINDEX_TIME);
 		if(!end.matches(DateTime.REGEX_DATETIME)){
-		    end = endOptList.get(0);
+		    end = endOptList.get(OPTLISTINDEX_DATE);
 		}
-	    } else{
-		assert !endOptList.isEmpty();
-		end = endOptList.get(0);
+	    } else if(!endOptList.isEmpty()){
+		end = endOptList.get(OPTLISTINDEX_DATE);
 	    }
 	}
     }
@@ -121,7 +135,7 @@ public class CommandAdd extends Command {
 	    //Best effort attempt to resolve conflicting values for same option type.
 	    list = options.getOptions(optType);
 	    if(list!=null){
-		opts.add(list.get(0));
+		opts.add(list.get(INDEX_FIRSTOPTIONOBJECT));
 	    }
 	}
 	return opts;
