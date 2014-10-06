@@ -7,15 +7,11 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-/*Displayer:
- * Print Prompt
- * Help Page
- * Feed Back:
- * error
- * help
- * success
+
+/**
+ * @author Hu Wenyan
  * 
- * 
+ *
  */
 public interface DisplayerInterface {
 	
@@ -85,6 +81,9 @@ public interface DisplayerInterface {
 	public String displayPrompt(String promptMessage);
 
 	
+	/**
+	 * @return Help page in a formatted String
+	 */
 	public String displayHelpPage();
 	
 	
