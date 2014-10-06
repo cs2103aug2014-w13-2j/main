@@ -17,6 +17,10 @@ public class ControllerTest {
 	assertEquals("add", feedback.getCommandType());
 	assertEquals("add Buy newspaper", feedback.getOriginalCommand());
 	
+	feedback = controller.executeCommand("add Meeting priority 2 from 7/10/2014");
+	
+	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00");
+	
 	feedback = controller.executeCommand("delete A2");
 	assertEquals("delete", feedback.getCommandType());
 	assertEquals("delete A2", feedback.getOriginalCommand());
@@ -28,6 +32,8 @@ public class ControllerTest {
 	feedback = controller.executeCommand("update A1 to 27/9/2014 20:00");
 	assertEquals("update", feedback.getCommandType());
 	assertEquals("update A1 to 27/9/2014 20:00", feedback.getOriginalCommand());
+	
+	feedback = controller.executeCommand("update A4 by 6/10/2014");
     }
     
 }

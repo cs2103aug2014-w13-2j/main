@@ -112,6 +112,8 @@ public class Storage {
 	
 	if(start!=null && !(target instanceof EventItem)){
 	    target = new EventItem(target, start);
+	    removeItem(target.getId());
+	    addItem(target);
 	} else if(start!=null){
 	    ((EventItem)target).setStartDate(start);
 	}
@@ -123,8 +125,11 @@ public class Storage {
 		((TaskItem)target).setDeadline(end);
 	    } else{
 		target = new TaskItem(target, end);
+		removeItem(target.getId());
+		addItem(target);
 	    }
 	}
+	System.out.println(target);
 	list[1] = target;
 	
 	try {
