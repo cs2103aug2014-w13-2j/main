@@ -5,7 +5,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import edu.dynamic.dynamiz.logic.Controller;
+//import edu.dynamic.dynamiz.logic.Controller;
+import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
