@@ -14,14 +14,14 @@ public class testDisplayer {
 	
 	@Test
 	public void testWelcome(){
-		assertEquals(dp.displayWelcomeMessage(),"Welcome to Dynamiz!");
+		assertEquals("Welcome to Dynamiz!",dp.displayWelcomeMessage());
 	}
 	
 	@Test
 	public void testDisplayString() {
 		String t1 = "test String";
 		dp.displayString(t1);
-		assertEquals(dp.displayString(t1),t1);
+		assertEquals(t1,dp.displayString(t1));
 	}
 	
 	@Test
