@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
 
 public class ControllerTest {
@@ -33,7 +34,13 @@ public class ControllerTest {
 	assertEquals("update", feedback.getCommandType());
 	assertEquals("update A1 to 27/9/2014 20:00", feedback.getOriginalCommand());
 	
+	//Changes the deadline.
 	feedback = controller.executeCommand("update A4 by 6/10/2014");
+	
+	//Item does not get changed due to error.
+	feedback= controller.executeCommand("update A4Go shopping");
+	assertTrue(feedback instanceof ErrorFeedback);
+	System.out.println(((ErrorFeedback)feedback).getMessage());
     }
     
 }

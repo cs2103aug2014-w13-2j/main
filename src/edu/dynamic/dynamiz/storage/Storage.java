@@ -87,15 +87,22 @@ public class Storage {
     
     /**
      * Updates the item with the given id with the specified changes.
+     * @param id The id of the item to update.
+     * @param priority The new priority for the item to be updated, use a negative number to indicate
+     * 			no change to priority.
+     * @param start The new start date for the item, or null if start date is not to be changed.
+     * @param end The new end date for the item, or null if end date is not to be changed.
      * @return The updated ToDoItem.
-     * Signature and implementation to be edited after confirming parameters returned by parser.
+     * @throws IllegalArgumentException if there is no such item with the given id.
      */
     public ToDoItem[] updateItem(String id, int priority, Date start, Date end){
-	//Checks that id is neither null nor an empty string
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
+	
+	if(target==null)
+	    throw new IllegalArgumentException("No such ID");
 	
 	//Makes a copy of the current version of the object
 	if(target instanceof TaskItem){
