@@ -293,7 +293,7 @@ public class Displayer implements DisplayerInterface {
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list == null ) return;
 		else{ for( int i = 0 ; i< list.length; i++){
-			a.append(list[i].toFileString()).append("\n");
+			a.append(list[i].getFeedbackString()).append("\n");
 		}			
 		}
 		
