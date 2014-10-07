@@ -1,6 +1,11 @@
 package main;
+/**
+ * @author XYLau
+ */
 import edu.dynamic.dynamiz.UI.*;
 
 public class Dynamiz {
-	UI sc = new UI();
+	void main() {
+		UI sc = new UI();
+	}
 }
