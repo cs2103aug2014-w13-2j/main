@@ -5,7 +5,7 @@ package main;
 import edu.dynamic.dynamiz.UI.*;
 
 public class Dynamiz {
-	void main() {
+	public static void main() {
 		UI sc = new UI();
 	}
 }
