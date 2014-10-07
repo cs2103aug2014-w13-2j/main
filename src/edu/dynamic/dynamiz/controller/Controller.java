@@ -53,7 +53,7 @@ public class Controller {
 	    CommandLine cmdLine = parser.parse(input);
 
 	    switch(cmdLine.getCommandType()){
-		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions(), storage);
+		case ADD: command = cmdLine.getCommand();
 			break;
 		case DELETE: command = new CommandDelete(cmdLine.getParam(), storage);
 			break;
