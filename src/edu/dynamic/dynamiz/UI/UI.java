@@ -49,7 +49,7 @@ public class UI extends JPanel implements ActionListener {
 		 * To be added once controller is completed (ZX) Feedback feedback =
 		 * controller.executeCommand(text);
 		 */
-		displayln(disp.displayPrompt()); 
+		display(disp.displayPrompt()); 
 		displayln(text); 
 		
 		// Additional Feature: Retained Last-Entered Command
