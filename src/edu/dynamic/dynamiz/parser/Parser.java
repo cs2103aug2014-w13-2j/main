@@ -71,14 +71,14 @@ public class Parser {
 		
 		String param = "";
 		if (paramMatcher.find()) {
-			param = paramMatcher.group(1);
+			param = paramMatcher.group(1).trim();
 		}
 		
 		//String param = optPattern.split(inputCmd)[0];
 		
 		while(optMatcher.find()) {
 			String opt = optMatcher.group(1);
-			String[] values = optMatcher.group(2).split("\\s+");
+			String[] values = optMatcher.group(2).split("" + OptionType.DEFAULT_DELIMITER);
 			
 			List<String> newValues = Util.removeEmptyStringsInArray(values);
 			
@@ -86,7 +86,7 @@ public class Parser {
 			options.add(option);
 		}
 		
-		CommandLine cmdLine = new CommandLine(cmdType, options, param.trim());
+		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		
 		return cmdLine;
 	}
