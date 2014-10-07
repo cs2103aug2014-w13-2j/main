@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
-
+import edu.dynamic.dynamiz.controller.*;
 /**
  * 
  * @author XYLau
@@ -16,6 +16,7 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextArea displayScreen;
 	private final static String newline = "\n";
 	public static Displayer disp = new Displayer();
+	public static Controller cont = new Controller();
 	
 	public UI() {
 		super(new GridBagLayout());
@@ -55,6 +56,8 @@ public class UI extends JPanel implements ActionListener {
 		 */
 		display(disp.displayPrompt()); 
 		displayln(text); 
+		
+		display(disp.displayFeedback(cont.executeCommand(text)));
 		
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
