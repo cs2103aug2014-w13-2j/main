@@ -15,6 +15,13 @@ public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String WHITESPACE = "\\s+";
 	
+	/**
+	 * Retrieve a List<String> with the empty String removed. The String inside
+	 * the list will be trimmed.
+	 * 
+	 * @param list The list of String to be cleared
+	 * @return the cleared List<String> without empty String; and trimmed String
+	 */
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
 		for (String s: list) {
@@ -26,6 +33,13 @@ public final class Util {
 		return newList;
 	}
 	
+	/**
+	 * Retrieve a List<String> with the empty String removed. The String inside
+	 * the list will be trimmed.
+	 * 
+	 * @param array the array of String to be cleared
+	 * @return the cleared List<String> without empty String; and trimmed String
+	 */
 	public static List<String> removeEmptyStringsInArray(String[] array) {
 		List<String> list = Arrays.asList(array);
 		return removeEmptyStringsInList(list);
