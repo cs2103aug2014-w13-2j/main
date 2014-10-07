@@ -5,6 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
+import edu.dynamic.dynamiz.controller.*;
 /**
  * 
  * @author XYLau
@@ -15,6 +16,7 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextArea displayScreen;
 	private final static String newline = "\n";
 	public static Displayer disp = new Displayer();
+	public static Controller cont = new Controller();
 	
 	public UI() {
 		super(new GridBagLayout());
@@ -36,6 +38,18 @@ public class UI extends JPanel implements ActionListener {
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(inputScreen, c);
+		
+		// Welcome message
+		displayln(disp.displayWelcomeMessage());
+		displayln(disp.displayPrompt(1));
+	}
+	
+	public void run() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Screen();
+			}
+		});
 	}
 
 	/**
@@ -48,12 +62,11 @@ public class UI extends JPanel implements ActionListener {
 		 * To be added once controller is completed (ZX) Feedback feedback =
 		 * controller.executeCommand(text);
 		 */
-		display(disp.displayPrompt()); // for testing purposes (XY)
-	
+		display(disp.displayPrompt()); 
 		displayln(text); 
 		
-		// TODO: Replace with line by line string feedback once Displayer is completed (WY)
-
+		display(disp.displayFeedback(cont.executeCommand(text)));
+		
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
@@ -83,7 +96,7 @@ public class UI extends JPanel implements ActionListener {
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
 	 */
-	private static void Screen() {
+	public static void Screen() {
 		// Create and set up the window.
 		JFrame frame = new JFrame("Dynamiz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,6 +115,7 @@ public class UI extends JPanel implements ActionListener {
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 
 

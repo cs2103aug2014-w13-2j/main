@@ -25,10 +25,10 @@ public class testDisplayer {
 	}
 	
 	@Test
-	public void testDisplayPrompy(){
+	public void testDisplayPrompt(){
 		String t1 = "Enter condition:";
 		int promptTag = 2;
-		assertEquals("Please Enter Command:",dp.displayPrompt());
+		assertEquals("Please Enter Command.",dp.displayPrompt());
 		
 		assertEquals("Enter condition:",dp.displayPrompt(t1));
 		
@@ -170,18 +170,18 @@ public class testDisplayer {
 	@Test
 	
 	public void testDisplayFeedback(){
-		Feedback f = new Feedback("Add","CS2106 Homework");
+		//Feedback f = new Feedback("Add","CS2106 Homework");
 		Feedback ef = new ErrorFeedback("Add","CS2106 Homework","Failed");
 		Feedback hf = new HelpFeedback("Add","CS2106 Homework","Add Time");
 		Feedback sf;
 		
 		
 		assertEquals("null",dp.displayFeedback(null));
-		
-		String fstr = new String();
-		fstr=f.getOriginalCommand();
-		//fstr+=" "+f.getOriginalCommand();
-		assertEquals(fstr,dp.displayFeedback(f));
+//		
+//		String fstr = new String();
+//		fstr=f.getOriginalCommand();
+//		//fstr+=" "+f.getOriginalCommand();
+//		assertEquals(fstr,dp.displayFeedback(f));
 		
 		String efstr = new String();
 		efstr = ef.getCommandType()+" "+((ErrorFeedback)ef).getMessage();

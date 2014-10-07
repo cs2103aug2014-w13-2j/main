@@ -28,6 +28,10 @@ public interface DisplayerInterface {
 	static final int ENTER_TIME_PROMPT = 4;
 	static final int INVALID_COMMAND_PROMPT = 5;
 	
+	static final String ENTER_COMMAND_STR = "Please Enter Command.";
+	static final String ENTER_VALID_COMMAND_STR = "Please Enter Valid Command.";
+	static final String ENTER_TIME_PERIOD_STR = "Please Enter Time Period: ";
+	static final String ENTER_TASK_INDEX_STR = "Please Enter Index: ";
 	
 	public String displayFeedback (Feedback commandFeedBack);
 

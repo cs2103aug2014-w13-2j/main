@@ -18,6 +18,8 @@ public class Displayer implements DisplayerInterface {
 //	private static final int ERROR_FEEDBACK_TAG = 2;
 //	private static final int SUCCESS_FEEDBACK_TAG = 3;
 //	private static final int HELP_FEEDBACK_TAG = 4;
+	
+	static final String UPDATE_COMMAND = "update";
 
 	
 	public String dateFormatter(Calendar c){
@@ -209,8 +211,7 @@ public class Displayer implements DisplayerInterface {
 
 
 	public String displayPrompt() {
-		String s = new String ("Please Enter Command: ");
-	
+		String s = new String ("Command: ");
 		return s;
 	}
 //	public String displayEnterCommandPrompt() {
@@ -223,24 +224,24 @@ public class Displayer implements DisplayerInterface {
 		String tag = new String();
 		switch(promptTag){
 		case ENTER_COMMAND_PROMPT:
-			tag = "Please Enter Command: ";
+			tag = ENTER_COMMAND_STR;
 			break;
 		case ENTER_ITEM_PROMPT:
 			tag = "Please Enter Task: ";
 			break;
 		case ENTER_TASK_INDEX_PROMPT:
-			tag = "Please Enter Task Index: ";
+			tag = ENTER_TASK_INDEX_STR;
 			break;
 			
 		case ENTER_TIME_PROMPT:
-			tag = "Please Enter Time Period: ";
+			tag = ENTER_TIME_PERIOD_STR;
 			break;
 			
 		case INVALID_COMMAND_PROMPT:
-			tag = "Please Enter Valid Command: ";
+			tag = ENTER_VALID_COMMAND_STR;
 			break;
 		default:
-			tag = "Please Enter Valid Command: ";
+			tag = ENTER_VALID_COMMAND_STR;
 		}	
 		
 		//tag+="\n";
@@ -265,7 +266,7 @@ public class Displayer implements DisplayerInterface {
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
-			s =ef.getCommandType();
+			s =ef.getCommandType()+" unsuccessful!"+"\n";
 			s+=" "+ef.getMessage();
 			break;
 			
@@ -292,8 +293,16 @@ public class Displayer implements DisplayerInterface {
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list == null ) return;
-		else{ for( int i = 0 ; i< list.length; i++){
-			a.append(list[i].toFileString()).append("\n");
+		else if(sf.getCommandType().equals(UPDATE_COMMAND)){
+			assert(2==list.length);
+			a.append("Item affected:").append("\n");
+			a.append(list[0].getFeedbackString()).append("\n");
+			a.append("Updated:").append("\n");
+			a.append(list[1].getFeedbackString()).append("\n");
+		}
+		else{ 
+			for( int i = 0 ; i< list.length; i++){
+			a.append(list[i].getFeedbackString()).append("\n");
 		}			
 		}
 		
