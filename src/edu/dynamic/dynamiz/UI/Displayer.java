@@ -229,11 +229,11 @@ public class Displayer implements DisplayerInterface {
 			tag = "Please Enter Task: ";
 			break;
 		case ENTER_TASK_INDEX_PROMPT:
-			tag = "Please Enter Task Index: ";
+			tag = ENTER_TASK_INDEX_STR;
 			break;
 			
 		case ENTER_TIME_PROMPT:
-			tag = "Please Enter Time Period: ";
+			tag = ENTER_TIME_PERIOD_STR;
 			break;
 			
 		case INVALID_COMMAND_PROMPT:
