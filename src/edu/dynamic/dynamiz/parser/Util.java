@@ -13,13 +13,13 @@ import java.util.List;
  */
 public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
-	private static final String DEFAULT_DELIMITER = "\\s+";
+	private static final String WHITESPACE = "\\s+";
 	
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
 		for (String s: list) {
 			if (!s.isEmpty()) {
-				newList.add(s);
+				newList.add(s.trim());
 			}
 		}
 		
@@ -38,7 +38,7 @@ public final class Util {
 	 * @return the stripped string
 	 */
 	public static String stripFirstWord(String str) {
-		return stripFirstWord(str, DEFAULT_DELIMITER);
+		return stripFirstWord(str, WHITESPACE);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public final class Util {
 	 * @return the first word of the string
 	 */
 	public static String getFirstWord(String str) {
-		return getFirstWord(str, DEFAULT_DELIMITER);
+		return getFirstWord(str, WHITESPACE);
 	}
 	
 	/**
