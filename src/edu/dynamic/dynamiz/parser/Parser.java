@@ -74,10 +74,10 @@ public class Parser {
 			param = paramMatcher.group(1).trim();
 		}
 		
-		//String param = optPattern.split(inputCmd)[0];
-		
 		while(optMatcher.find()) {
-			String opt = optMatcher.group(1);
+			String opt = optMatcher.group(1).trim();
+			OptionType optType = OptionType.fromString(opt);
+			
 			String[] values = optMatcher.group(2).split("" + OptionType.DEFAULT_DELIMITER);
 			
 			List<String> newValues = Util.removeEmptyStringsInArray(values);

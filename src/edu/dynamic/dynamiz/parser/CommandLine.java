@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.parser;
 import java.util.List;
 
 import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandType;
 
 /**
@@ -42,7 +43,8 @@ public class CommandLine {
 	}
 
 	private boolean initialiseCommand() {
-		
+		switch (commandType) {
+		}
 		
 		return true;
 	}

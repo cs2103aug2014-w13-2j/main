@@ -76,6 +76,13 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
+	}, EXIT("end", "killme") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
 	};
 	
 	static private final Map<String, CommandType> ALIAS_TABLE = new HashMap<String, CommandType>();
