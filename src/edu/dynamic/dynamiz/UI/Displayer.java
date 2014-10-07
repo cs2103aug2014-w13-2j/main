@@ -266,7 +266,7 @@ public class Displayer implements DisplayerInterface {
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
-			s =ef.getCommandType();
+			s =ef.getCommandType()+" unsuccessful"+"\n";
 			s+=" "+ef.getMessage();
 			break;
 			
