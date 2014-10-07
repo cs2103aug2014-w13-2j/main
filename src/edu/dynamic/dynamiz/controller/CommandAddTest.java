@@ -18,7 +18,7 @@ public class CommandAddTest {
 	Parser parser = new Parser();
 	
 	CommandLine cmdLine = parser.parse("Add Learn C++");
-	CommandAdd  cmd = new CommandAdd(cmdLine.getOptions(), cmdLine.getParam(), storage);
+	CommandAdd  cmd = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions() ,storage);
 	cmd.execute();
 	ToDoItem[] item = cmd.getAffectedItems();
 	assertEquals("item has 1 object", 1, item.length);
@@ -26,7 +26,7 @@ public class CommandAddTest {
 	
 	cmdLine = parser.parse("add Learn C++ from 31/10/2014 12:00");
 	System.out.println(cmdLine);
-	cmd = new CommandAdd(cmdLine.getOptions(), cmdLine.getParam(), storage);
+	cmd = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions(), storage);
 	cmd.execute();
     }
     
@@ -35,6 +35,6 @@ public class CommandAddTest {
 	Storage storage = new Storage();
 	Parser parser = new Parser();
 	CommandLine cmdLine = parser.parse("add");
-	CommandAdd cmd = new CommandAdd(cmdLine.getOptions(), cmdLine.getParam(), storage);
+	CommandAdd cmd = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions(), storage);
     }
 }
