@@ -88,7 +88,7 @@ public class UI extends JPanel implements ActionListener {
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
 	 */
-	private static void Screen() {
+	public static void Screen() {
 		// Create and set up the window.
 		JFrame frame = new JFrame("Dynamiz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
