@@ -19,6 +19,7 @@ public class Displayer implements DisplayerInterface {
 //	private static final int SUCCESS_FEEDBACK_TAG = 3;
 //	private static final int HELP_FEEDBACK_TAG = 4;
 	
+	static final String UPDATE_COMMAND = "update";
 
 	
 	public String dateFormatter(Calendar c){
@@ -292,7 +293,15 @@ public class Displayer implements DisplayerInterface {
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list == null ) return;
-		else{ for( int i = 0 ; i< list.length; i++){
+		else if(sf.getCommandType().equals(UPDATE_COMMAND)){
+			assert(2==list.length);
+			a.append("Item affected:").append("\n");
+			a.append(list[0].getFeedbackString()).append("\n");
+			a.append("Updated:").append("\n");
+			a.append(list[1].getFeedbackString()).append("\n");
+		}
+		else{ 
+			for( int i = 0 ; i< list.length; i++){
 			a.append(list[i].getFeedbackString()).append("\n");
 		}			
 		}
