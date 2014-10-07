@@ -4,11 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-
-//import edu.dynamic.dynamiz.logic.Controller;
-import edu.dynamic.dynamiz.controller.*;
-import edu.dynamic.dynamiz.structure.Feedback;
-
+import edu.dynamic.dynamiz.UI.DisplayerInterface;
 /**
  * 
  * @author XYLau
@@ -17,9 +13,9 @@ import edu.dynamic.dynamiz.structure.Feedback;
 public class UI extends JPanel implements ActionListener {
 	protected JTextField inputScreen;
 	protected JTextArea displayScreen;
-	private Controller controller = new Controller();
 	private final static String newline = "\n";
-
+	public static Displayer disp = new Displayer();
+	
 	public UI() {
 		super(new GridBagLayout());
 		displayScreen = new JTextArea(40, 100);
@@ -53,7 +49,8 @@ public class UI extends JPanel implements ActionListener {
 		 * To be added once controller is completed (ZX) Feedback feedback =
 		 * controller.executeCommand(text);
 		 */
-		display("Command Entered: "); // for testing purposes (XY)
+		display(disp.displayPrompt()); // for testing purposes (XY)
+	
 		displayln(text); 
 		
 		// TODO: Replace with line by line string feedback once Displayer is completed (WY)
@@ -96,6 +93,7 @@ public class UI extends JPanel implements ActionListener {
 		frame.add(new UI());
 
 		displayScreen(frame);
+		
 	}
 
 	/**
@@ -114,6 +112,7 @@ public class UI extends JPanel implements ActionListener {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
+				
 			}
 		});
 	}
