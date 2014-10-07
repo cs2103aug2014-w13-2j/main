@@ -18,7 +18,7 @@ import edu.dynamic.dynamiz.UI.DisplayStub;
 /*
  * Defines the object class of the main program.
  */
-public class Dynamiz {
+public class Prototype {
     private static final String COMMAND_EXIT = "exit";
     
     private static Controller controller = new Controller();
