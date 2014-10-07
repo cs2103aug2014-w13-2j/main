@@ -25,10 +25,10 @@ public class testDisplayer {
 	}
 	
 	@Test
-	public void testDisplayPrompy(){
+	public void testDisplayPrompt(){
 		String t1 = "Enter condition:";
 		int promptTag = 2;
-		assertEquals("Please Enter Command:",dp.displayPrompt());
+		assertEquals("Please Enter Command.",dp.displayPrompt());
 		
 		assertEquals("Enter condition:",dp.displayPrompt(t1));
 		

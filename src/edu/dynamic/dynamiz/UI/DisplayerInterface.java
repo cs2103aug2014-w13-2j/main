@@ -28,6 +28,8 @@ public interface DisplayerInterface {
 	static final int ENTER_TIME_PROMPT = 4;
 	static final int INVALID_COMMAND_PROMPT = 5;
 	
+	static final String ENTER_COMMAND_STR = "Please Enter Command.";
+	static final String ENTER_VALID_COMMAND_STR = "Please Enter Valid Command.";
 	
 	public String displayFeedback (Feedback commandFeedBack);
 
