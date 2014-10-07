@@ -45,6 +45,14 @@ public class UI extends JPanel implements ActionListener {
 		displayln(disp.displayWelcomeMessage());
 		displayln(disp.displayPrompt(1));
 	}
+	
+	public void run() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Screen();
+			}
+		});
+	}
 
 	/**
 	 * Event Handler for each event, where event refers to the entry of a single
