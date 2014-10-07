@@ -36,6 +36,18 @@ public class Options implements Iterable<Option> {
 		
 		return true;
 	}
+	
+	public boolean add(List<Option> opts) {
+		if (opts.size() == 0) {
+			return false;
+		}
+		
+		for (Option opt: opts) {
+			add(opt);
+		}
+		
+		return true;
+	}
 
 	/**
 	 * Query if this List contains a particular option
@@ -64,6 +76,18 @@ public class Options implements Iterable<Option> {
 		return optionTable.containsKey(OptionType.fromString(optName));
 	}
 	
+	public boolean hasOption(OptionType optType) {
+		return optionTable.containsKey(optType);
+	}
+	
+	public Map<OptionType, List<Option>> getOptionTable() {
+		return optionTable;
+	}
+
+	public void setOptionTable(Map<OptionType, List<Option>> optionTable) {
+		this.optionTable = optionTable;
+	}
+
 	/**
 	 * Retrieve a passed Option if it exists in this List
 	 * 
@@ -100,7 +124,11 @@ public class Options implements Iterable<Option> {
 	 * @return a List of all the options of that OptionType
 	 */
 	public List<Option> getOptions(OptionType optType) {
-		return optionTable.get(optType);
+		if (hasOption(optType)) { 
+			return optionTable.get(optType);
+		} else {
+			return null;
+		}
 	}
 
 	public int getNumOfOptions() {
