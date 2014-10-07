@@ -67,13 +67,17 @@ public class UI extends JPanel implements ActionListener {
 		display(disp.displayPrompt()); 
 		displayln(text); 
 		
+		
+		
+		// TODO: Awaiting Nhan's exit feedback
+		// if (feedback.getCommandType().equalsIgnoreCase("exit")) {
+		if (text.equalsIgnoreCase("exit")) {
+			System.exit(0);
+		}
+		
 		Feedback feedback = cont.executeCommand(text);
 		display(disp.displayFeedback(feedback));
 		
-		if (feedback.getCommandType().equalsIgnoreCase("exit")) {
-			// close frame
-			
-		}
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
