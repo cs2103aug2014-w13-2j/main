@@ -14,8 +14,26 @@ import java.util.Map;
  */
 public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
+		private final int noOfArgs = ARGS_UNLIMITED;
+		
+		@Override
+		public int getNoOfArgs() {
+			return noOfArgs;
+		}
 	}, START_TIME("-s", "--starttime", "from") {
+		private final int noOfArgs = ARGS_ONE;
+		
+		@Override
+		public int getNoOfArgs() {
+			return noOfArgs;
+		}
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
+		private final int noOfArgs = ARGS_ONE;
+		
+		@Override
+		public int getNoOfArgs() {
+			return noOfArgs;
+		}
 	};
 	
 	static private final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
@@ -64,10 +82,35 @@ public enum OptionType {
 		
 		return allAliases;
 	}
+
+	
+	/** constant that specifies if the number of required arguments has not been specified */
+	public static final int ARGS_UNINITIALISED = -99;
+	
+	/** constant that specifies if the required number of arguments is 0 */
+	public static final int ARGS_NONE = 0;
+	
+	/** constant that specifies if the required number of arguments is 1 */
+	public static final int ARGS_ONE = 1;
+	
+	/** constant that specifies if the required number of arguments is 2 */
+	public static final int ARGS_TWO = 2;
+	
+	/** constant that specifies if the number of arguments is at least 1 */
+	public static final int ARGS_UNLIMITED = -2;
+	
+	/** constant that specifies if the number of arguments is none or many */
+	public static final int ARGS_OPTIONAL = -1;
+	
+	/** constant that specifies the default character for delimiter of argument values */
+	public static final char DEFAULT_DELIMITER = ',';
+	
 	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
 		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
 		this.aliases.add(this.toString().toLowerCase());
 	}
+	
+	public abstract int getNoOfArgs();
 }
