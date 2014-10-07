@@ -27,7 +27,7 @@ public class Prototype {
     //Delete when integrating GUI component
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 	
 	//Displays welcome message and command prompt.
 	//Modify as required.
@@ -53,7 +53,7 @@ public class Prototype {
 	} catch(IOException ioe){
 	    
 	}
-    }
+    }*/
 
   //Delete when integrating GUI component
     private static String getInput(){
