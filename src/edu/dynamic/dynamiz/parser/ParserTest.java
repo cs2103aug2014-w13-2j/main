@@ -25,12 +25,13 @@ public class ParserTest {
 	cmdLine = parser.parse("update A2 from 27/9/2014 18:00");
 	assertEquals("A2", cmdLine.getParam());
 	
-	cmdLine = parser.parse("Search study from today");
+	cmdLine = parser.parse("Search study from today priority high, low, not so high");
 	assertEquals("study", cmdLine.getParam());
+	
+	System.out.println(cmdLine);
 	
 	cmdLine = parser.parse("list");
 	assertEquals("", cmdLine.getParam());
-	System.out.println(cmdLine);
 	
 	Options options = cmdLine.getOptions();
     }
