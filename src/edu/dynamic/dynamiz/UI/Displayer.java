@@ -209,7 +209,7 @@ public class Displayer implements DisplayerInterface {
 
 
 	public String displayPrompt() {
-		String s = new String ("Please Enter Command:");
+		String s = new String ("Please Enter Command: ");
 	
 		return s;
 	}
@@ -223,24 +223,24 @@ public class Displayer implements DisplayerInterface {
 		String tag = new String();
 		switch(promptTag){
 		case ENTER_COMMAND_PROMPT:
-			tag = "Please Enter Command:";
+			tag = "Please Enter Command: ";
 			break;
 		case ENTER_ITEM_PROMPT:
-			tag = "Please Enter Task:";
+			tag = "Please Enter Task: ";
 			break;
 		case ENTER_TASK_INDEX_PROMPT:
-			tag = "Please Enter Task Index:";
+			tag = "Please Enter Task Index: ";
 			break;
 			
 		case ENTER_TIME_PROMPT:
-			tag = "Please Enter Time Period:";
+			tag = "Please Enter Time Period: ";
 			break;
 			
 		case INVALID_COMMAND_PROMPT:
-			tag = "Please Enter Valid Command:";
+			tag = "Please Enter Valid Command: ";
 			break;
 		default:
-			tag = "Please Enter Valid Command:";
+			tag = "Please Enter Valid Command: ";
 		}	
 		
 		//tag+="\n";
