@@ -4,7 +4,7 @@ package edu.dynamic.dynamiz.structure;
  * Defines the feedback object returned after each operation.
  * @author zixian
  */
-public class Feedback {
+public abstract class Feedback {
     public static final String CLASSNAME = "Feedback"; 
     
     //Main data members
