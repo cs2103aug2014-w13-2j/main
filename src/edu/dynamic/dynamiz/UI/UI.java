@@ -37,6 +37,10 @@ public class UI extends JPanel implements ActionListener {
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(inputScreen, c);
+		
+		// Welcome message
+		displayln(disp.displayWelcomeMessage());
+		displayln(disp.displayPrompt(1));
 	}
 
 	/**
@@ -100,6 +104,7 @@ public class UI extends JPanel implements ActionListener {
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 
 
