@@ -23,7 +23,7 @@ import edu.dynamic.dynamiz.parser.OptionType;
  *
  */
 public enum CommandType {
-	ADD("put") { 
+	ADD("put", "insert") { 
 		private final OptionType[] optionsArray = {OptionType.START_TIME, OptionType.END_TIME, OptionType.PRIORITY};
 
 		@Override
