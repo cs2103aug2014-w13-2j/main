@@ -5,6 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
+
 /**
  * 
  * @author XYLau
@@ -48,12 +49,9 @@ public class UI extends JPanel implements ActionListener {
 		 * To be added once controller is completed (ZX) Feedback feedback =
 		 * controller.executeCommand(text);
 		 */
-		display(disp.displayPrompt()); // for testing purposes (XY)
-	
+		displayln(disp.displayPrompt()); 
 		displayln(text); 
 		
-		// TODO: Replace with line by line string feedback once Displayer is completed (WY)
-
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
