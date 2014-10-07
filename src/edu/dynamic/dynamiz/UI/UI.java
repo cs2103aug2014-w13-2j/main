@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
 import edu.dynamic.dynamiz.controller.*;
+import edu.dynamic.dynamiz.structure.Feedback;
 /**
  * 
  * @author XYLau
@@ -57,8 +59,13 @@ public class UI extends JPanel implements ActionListener {
 		display(disp.displayPrompt()); 
 		displayln(text); 
 		
-		display(disp.displayFeedback(cont.executeCommand(text)));
+		Feedback feedback = cont.executeCommand(text);
+		display(disp.displayFeedback(feedback));
 		
+		if (feedback.getCommandType().equalsIgnoreCase("exit")) {
+			// close frame
+			
+		}
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
@@ -107,7 +114,6 @@ public class UI extends JPanel implements ActionListener {
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
-		
 	}
 
 
