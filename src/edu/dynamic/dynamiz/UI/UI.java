@@ -109,17 +109,24 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.append(text);
 	}
 
+	/**
+	 * Display output field in default setting (Black words, white background)
+	 */
 	private void displayColorSetDefault() {
 		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLACK);
+		displayScreen.setForeground(Color.BLUE);
 	}
 
+	/**
+	 * Display input field in default setting (Black words, white background)
+	 */	
 	private void inputColorSet() {
-		inputScreen.setForeground(Color.BLACK);
+		inputScreen.setForeground(Color.BLUE);
 	}
 
 	public void displayRed(String text){
-		
+		displayScreen.setFont(font);
+		displayScreen.setForeground(Color.RED);
 	}
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
