@@ -1,5 +1,8 @@
 package edu.dynamic.dynamiz.controller;
 
+import java.util.EmptyStackException;
+import java.util.Stack;
+
 import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
 
@@ -27,10 +30,14 @@ public class Controller {
     
     //Defines the messages used for feedback.
     private static final String MSG_INVALIDCOMMAND = "Invalid command";
+    private static final String MSG_REDOFAILED = "No more commands to redo"; 
+    private static final String MSG_UNDOFAILED = "No more past commands to undo";
     
     //Main data members
     private Parser parser;	//The Parser object to parse input commands
     private Storage storage;	//The storage that stores the data for this program.
+    private Stack<Command> undoStack, redoStack;
+    private Stack<String> cmdHistory, undoneCommands;
     
     /**
      * Creates a new Controller object for the program.
@@ -38,6 +45,11 @@ public class Controller {
     public Controller(){
 	parser = new Parser();
 	storage = new Storage();
+	undoStack = new Stack<Command>();	//Keeps track of past commands
+	redoStack = new Stack<Command>();	//Keeps track of undone commands.
+						//Clears when executing new commands while this stack is not empty.
+	cmdHistory = new Stack<String>();	//Keeps track of past command strings
+	undoneCommands = new Stack<String>();	//Keeps track of undone command strings. Same mechanism as redoStack.
     }
     
     /**
@@ -48,11 +60,14 @@ public class Controller {
      */
     public Feedback executeCommand(String input){
 	Command command = null;
-	Feedback feedback;
+	CommandType commandType;
+	String commandString;
+	//Feedback feedback;
 	try{
 	    CommandLine cmdLine = parser.parse(input);
+	    commandType = cmdLine.getCommandType();
 
-	    switch(cmdLine.getCommandType()){
+	    switch(commandType){
 		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions(), storage);
 			break;
 		case DELETE: command = new CommandDelete(cmdLine.getParam(), storage);
@@ -63,15 +78,45 @@ public class Controller {
 			break;
 		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions(), storage);
 			break;
+		//Case of undo
+		//Case of redo
 		default: throw new Exception();
 	    }
-	    command.execute();
-	    feedback = new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+	    if(commandType!=CommandType.UNDO && commandType!=CommandType.REDO){
+		command.execute();
+		if(commandType!=CommandType.LIST && commandType!=CommandType.SEARCH){
+		    undoStack.push(command);
+		    cmdHistory.push(input);
+		    redoStack.clear();
+		    undoneCommands.clear();
+		}
+		return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+	    } else if(commandType==CommandType.UNDO){
+		command = undoStack.pop();
+		commandString = cmdHistory.pop();
+		command.undo();
+		redoStack.push(command);
+		undoneCommands.push(commandString);
+		return new SuccessFeedback("undo", "undo "+commandString, command.getAffectedItems());
+	    } else{	//commandType==COMMANDTYPE.REDO
+		command = redoStack.pop();
+		commandString = undoneCommands.pop();
+		command.redo();
+		undoStack.push(command);
+		cmdHistory.push(commandString);
+		return new SuccessFeedback("redo", "redo "+commandString, command.getAffectedItems());
+	    }
+	    
+	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
+	    if(commandType==CommandType.UNDO){
+		return new ErrorFeedback("undo", input, MSG_UNDOFAILED);
+	    } else{
+		return new ErrorFeedback("redo", input, MSG_REDOFAILED);
+	    }
 	} catch(IllegalArgumentException e){
-	    feedback = new ErrorFeedback(command.getCommandName(), input, e.getMessage());
+	    return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
-	    feedback = new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
+	    return new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
 	}
-	return feedback;
     }
 }
