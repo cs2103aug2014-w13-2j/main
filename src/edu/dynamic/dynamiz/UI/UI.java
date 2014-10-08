@@ -19,11 +19,11 @@ public class UI extends JPanel implements ActionListener {
 	private final static String newline = "\n";
 	public static Displayer disp = new Displayer();
 	public static Controller cont = new Controller();
-	public static Font font = new Font("Arial",Font.PLAIN,18);
+	public static Font font = new Font("Arial",Font.PLAIN,16);
 	
 	public UI() {
 		super(new GridBagLayout());
-		displayScreen = new JTextArea(40, 100);
+		displayScreen = new JTextArea(20, 50);
 		displayScreen.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
