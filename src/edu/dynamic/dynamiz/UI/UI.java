@@ -93,8 +93,8 @@ public class UI extends JPanel implements ActionListener {
 	 * @param text
 	 */
 	public void displayln(String text) {
-		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLUE);
+		displayColorSetDefault();
+		inputColorSet();
 		displayScreen.append(text + newline);
 	}
 
@@ -104,9 +104,18 @@ public class UI extends JPanel implements ActionListener {
 	 * @param text
 	 */
 	public void display(String text) {
-		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLUE);
+		displayColorSetDefault();
+		inputColorSet();
 		displayScreen.append(text);
+	}
+
+	private void displayColorSetDefault() {
+		displayScreen.setFont(font);
+		displayScreen.setForeground(Color.BLACK);
+	}
+
+	private void inputColorSet() {
+		inputScreen.setForeground(Color.BLACK);
 	}
 
 	public void displayRed(String text){
