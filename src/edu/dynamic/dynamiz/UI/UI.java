@@ -19,6 +19,7 @@ public class UI extends JPanel implements ActionListener {
 	private final static String newline = "\n";
 	public static Displayer disp = new Displayer();
 	public static Controller cont = new Controller();
+	public static Font font = new Font("Arial",Font.PLAIN,18);
 	
 	public UI() {
 		super(new GridBagLayout());
@@ -64,6 +65,7 @@ public class UI extends JPanel implements ActionListener {
 		 * To be added once controller is completed (ZX) Feedback feedback =
 		 * controller.executeCommand(text);
 		 */
+
 		display(disp.displayPrompt()); 
 		displayln(text); 
 		
@@ -91,6 +93,8 @@ public class UI extends JPanel implements ActionListener {
 	 * @param text
 	 */
 	public void displayln(String text) {
+		displayScreen.setFont(font);
+		displayScreen.setForeground(Color.BLUE);
 		displayScreen.append(text + newline);
 	}
 
@@ -100,9 +104,14 @@ public class UI extends JPanel implements ActionListener {
 	 * @param text
 	 */
 	public void display(String text) {
+		displayScreen.setFont(font);
+		displayScreen.setForeground(Color.BLUE);
 		displayScreen.append(text);
 	}
 
+	public void displayRed(String text){
+		
+	}
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
@@ -116,6 +125,7 @@ public class UI extends JPanel implements ActionListener {
 		frame.add(new UI());
 
 		displayScreen(frame);
+		
 	}
 
 	/**
@@ -126,9 +136,11 @@ public class UI extends JPanel implements ActionListener {
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
+		
 	}
 
 
+	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
