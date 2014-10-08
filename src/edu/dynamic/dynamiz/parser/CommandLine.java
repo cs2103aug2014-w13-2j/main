@@ -1,10 +1,15 @@
 package edu.dynamic.dynamiz.parser;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.storage.Storage;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * This is a class which stores the information of the parsed 
@@ -25,11 +30,22 @@ public class CommandLine {
 	private Options options;
 	private String param;
 	private Command command;
+	private Storage storage;
 	
 	public CommandLine() {
 		this.commandType = null;
 		this.options = null;
 		this.param = null;
+		this.storage = null;
+	}
+	
+	public CommandLine(Storage storage, CommandType cmdType, Options options, String param) {
+		this.commandType = cmdType;
+		this.options = options;
+		this.param = param;
+		this.storage = storage;
+		
+		parseCommand();
 	}
 	
 	public CommandLine(CommandType cmdType, Options options, String param) {
@@ -37,17 +53,80 @@ public class CommandLine {
 		this.options = options;
 		this.param = param;
 		
-		if (!initialiseCommand()) {
-			System.out.println("Something is not right");
-		}
+		parseCommand();
 	}
 
-	private boolean initialiseCommand() {
+	private boolean parseCommand() {
 		switch (commandType) {
+			case ADD : 
+				parseAdd();
+				break;
+			case UPDATE : 
+				parseUpdate();
+				break;
+			case DELETE : 
+				parseDelete();
+				break;
+			case LIST : 
+			case SEARCH :
+			case REDO :
+			case UNDO :
+			case EXIT :
+			default : return false;
 		}
-		
 		return true;
 	}
+	
+	public void parseAdd() {
+		ToDoItem item = null;
+		Parser parser = new Parser();
+		
+		Options opts = extractOptions(this.options);
+			boolean hasStart = opts.hasOption(OptionType.START_TIME);
+			boolean hasEnd = opts.hasOption(OptionType.END_TIME);
+			boolean hasBoth = hasStart && hasEnd;
+			
+			if (hasBoth) {
+				Option startDateOpt = opts.getOptions(OptionType.START_TIME).get(0);
+				String startDate = startDateOpt.getValues().get(0);
+				
+				Option endDateOpt = opts.getOptions(OptionType.END_TIME).get(0);
+				String endDate = endDateOpt.getValues().get(0);
+				
+				item = new EventItem(param, parser.parseDate(startDate), parser.parseDate(endDate));
+			} else if (hasEnd) {
+				Option endDateOpt = opts.getOptions(OptionType.END_TIME).get(0);
+				String endDate = endDateOpt.getValues().get(0);
+				
+				item = new TaskItem(param, parser.parseDate(endDate));
+			} else {
+				item = new ToDoItem(param);
+			}
+			
+			command = new CommandAdd(item);
+	}
+	
+	public void parseUpdate() {
+		
+	}
+	
+	public void parseDelete() {
+		
+	}
+	
+    public Options extractOptions(Options options) {
+		Options opts = new Options();
+
+		for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
+			if (options.hasOption(optType)) {
+				List<Option> optList = options.getOptions(optType);
+				opts.add(optList);
+			}
+		}
+		
+		return opts;
+    }
+    
 	/*
 	 * ========================================================================
 	 * Getters & Setters
@@ -84,6 +163,17 @@ public class CommandLine {
 	public void setCommand(Command command) {
 		this.command = command;
 	}
+
+	public Storage getStorage() {
+		return storage;
+	}
+
+	public void setStorage(Storage storage) {
+		this.storage = storage;
+		if (this.command != null) {
+			this.command.setStorage(storage);
+		}
+	}
 	/*
 	 * ========================================================================
 	 * End of Getters & Setters
@@ -91,6 +181,8 @@ public class CommandLine {
 	 * 
 	 */
 	
+
+
 	public int getNumberOfOptions() {
 		return options.getNumOfOptions();
 	}
@@ -99,7 +191,7 @@ public class CommandLine {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Command Type: " + commandType.toString() + "\n");
-		sb.append("Value" + param + "\n");
+		sb.append("Value: " + param + "\n");
 		sb.append("Options: \n" + options.toString());
 		
 		return sb.toString();

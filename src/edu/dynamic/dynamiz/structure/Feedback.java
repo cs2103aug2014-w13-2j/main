@@ -1,5 +1,7 @@
 package edu.dynamic.dynamiz.structure;
 
+import edu.dynamic.dynamiz.controller.CommandType;
+
 /**
  * Defines the feedback object returned after each operation.
  * @author zixian
@@ -8,11 +10,11 @@ public abstract class Feedback {
     public static final String CLASSNAME = "Feedback"; 
     
     //Main data members
-    private String commandType, originalCommand;
-    
+    private String originalCommand;
+    private CommandType commandType;
     //Constructor
     public Feedback(String commandType, String command){
-	this.commandType = commandType;
+	this.commandType = CommandType.fromString(commandType);
 	this.originalCommand = command;
     }
     
@@ -20,7 +22,7 @@ public abstract class Feedback {
      * Gets the command type of the command this feedback is for.
      * @return The command type String.
      */
-    public String getCommandType(){
+    public CommandType getCommandType(){
 	return commandType;
     }
     

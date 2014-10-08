@@ -57,7 +57,7 @@ public class CommandAdd extends Command {
     public void execute() {
     	storage.addItem(addedItem);
     }
-    
+
     @Override
     /**
      * Undoes this command's execute method.

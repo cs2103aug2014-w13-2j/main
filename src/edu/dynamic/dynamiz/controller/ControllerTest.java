@@ -18,7 +18,7 @@ public class ControllerTest {
 	
 	//Adds a ToDoItem
 	feedback = controller.executeCommand("add Buy newspaper");
-	assertEquals("add", feedback.getCommandType());
+	assertEquals(CommandType.ADD, feedback.getCommandType());
 	assertEquals("add Buy newspaper", feedback.getOriginalCommand());
 	
 	//Adds an event
@@ -28,16 +28,16 @@ public class ControllerTest {
 	
 	//Deletes and item
 	feedback = controller.executeCommand("delete A2");
-	assertEquals("delete", feedback.getCommandType());
+	assertEquals(CommandType.DELETE, feedback.getCommandType());
 	assertEquals("delete A2", feedback.getOriginalCommand());
 	
 	//Updates an event
 	feedback = controller.executeCommand("update A1 from 27/9/2014 17:30");
-	assertEquals("update", feedback.getCommandType());
+	assertEquals(CommandType.UPDATE, feedback.getCommandType());
 	assertEquals("update A1 from 27/9/2014 17:30", feedback.getOriginalCommand());
 	
 	feedback = controller.executeCommand("update A1 to 27/9/2014 20:00");
-	assertEquals("update", feedback.getCommandType());
+	assertEquals(CommandType.UPDATE, feedback.getCommandType());
 	assertEquals("update A1 to 27/9/2014 20:00", feedback.getOriginalCommand());
 	
 	//Adds a deadline to ToDoItem.
@@ -56,7 +56,7 @@ public class ControllerTest {
 	
 	//Lists the items in storage
 	feedback = controller.executeCommand("list");
-	assertEquals("list", feedback.getCommandType());
+	assertEquals(CommandType.LIST, feedback.getCommandType());
 	ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
 	for(ToDoItem item: list){
 	    System.out.println(item);

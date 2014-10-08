@@ -13,4 +13,10 @@ public abstract class Command {
     public abstract void undo();
     public abstract String getCommandName();
     public abstract ToDoItem[] getAffectedItems();
+	public Storage getStorage() {
+		return storage;
+	}
+	public void setStorage(Storage storage) {
+		this.storage = storage;
+	}
 }

@@ -51,7 +51,7 @@ public class Controller {
 	Feedback feedback;
 	try{
 	    CommandLine cmdLine = parser.parse(input);
-
+	    cmdLine.setStorage(storage);
 	    switch(cmdLine.getCommandType()){
 		case ADD: command = cmdLine.getCommand();
 			break;
