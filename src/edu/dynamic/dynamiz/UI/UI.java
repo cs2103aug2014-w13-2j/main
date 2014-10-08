@@ -19,7 +19,7 @@ public class UI extends JPanel implements ActionListener {
 	private final static String newline = "\n";
 	public static Displayer disp = new Displayer();
 	public static Controller cont = new Controller();
-	public static Font font = new Font("Arial",Font.PLAIN,16);
+	public static Font font = new Font("Arial",Font.PLAIN,12);
 	
 	public UI() {
 		super(new GridBagLayout());
@@ -114,20 +114,25 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	private void displayColorSetDefault() {
 		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLUE);
+		displayScreen.setForeground(Color.BLACK);
 	}
 
 	/**
 	 * Display input field in default setting (Black words, white background)
 	 */	
 	private void inputColorSet() {
-		inputScreen.setForeground(Color.BLUE);
+		inputScreen.setForeground(Color.BLACK);
 	}
 
-	public void displayRed(String text){
+	/**
+	 * 
+	 */
+	public void displayRed(){
 		displayScreen.setFont(font);
 		displayScreen.setForeground(Color.RED);
 	}
+	
+	
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
