@@ -60,7 +60,7 @@ public class Controller {
      */
     public Feedback executeCommand(String input){
 	Command command = null;
-	CommandType commandType;
+	CommandType commandType = null;
 	String commandString;
 	//Feedback feedback;
 	try{
