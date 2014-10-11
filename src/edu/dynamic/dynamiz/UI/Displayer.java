@@ -297,12 +297,15 @@ public class Displayer implements DisplayerInterface {
 			assert(2==list.length);
 			a.append("Item affected:").append("\n");
 			a.append(list[0].getFeedbackString()).append("\n");
+			
 			a.append("Updated:").append("\n");
 			a.append(list[1].getFeedbackString()).append("\n");
+			
 		}
 		else{ 
 			for( int i = 0 ; i< list.length; i++){
 			a.append(list[i].getFeedbackString()).append("\n");
+			a.append("\n");
 		}			
 		}
 		
