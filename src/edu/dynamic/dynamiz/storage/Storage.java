@@ -19,8 +19,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Storage()	//Creates a new instance of this Storage object.
  * 
  * Public Methods(currently that can be used)
- * ToDoItem addItem(ToDoItem)	//Adds the given item to the list.
- * ToDoItem[] updateItem(String id)	//Updates the ToDoItem with the given id with the specified details.
+ * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
+ * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details.
  * ToDoItem[] searchByKeyword(String keyword)	//Gets a list of items with keyword in their description.
  * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
