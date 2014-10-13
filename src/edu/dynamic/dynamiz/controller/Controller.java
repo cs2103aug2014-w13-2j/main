@@ -30,8 +30,7 @@ public class Controller {
     
     //Defines the messages used for feedback.
     private static final String MSG_INVALIDCOMMAND = "Invalid command";
-    private static final String MSG_REDOFAILED = "No more commands to redo"; 
-    private static final String MSG_UNDOFAILED = "No more past commands to undo";
+    private static final String MSG_EMPTYSTACK = "No command to undo/redo";
     
     //Main data members
     private Parser parser;	//The Parser object to parse input commands
@@ -63,9 +62,34 @@ public class Controller {
 	String commandString;
 	//Feedback feedback;
 	try{
+	    /* To be scrapped after changing Parser.parse() return type to Command */
 	    CommandLine cmdLine = parser.parse(input);
 	    commandType = cmdLine.getCommandType();
+	    
+	    /* Proposed changes */
+	    //command = parser.parse(input);
+	    //if(command instanceof CommandUndo){
+	    //	((CommandUndo)command).setStacks(undoStack, redoStack);
+	    //} else if(command instanceof CommandRedo){
+		//((CommandRedo)command).setStacks(undoStack, redoStack);
+	    //}
+	    //command.execute();
+	    //if(!(command instanceof CommandList) && !(command instanceof CommandSearch) &&
+	    	//!(command instanceof CommandUndo) && !(command instanceof CommandRedo)){
+	    		//undoStack.push(command);
+	    		//cmdHistory.push(input);
+	    		//redoStack.clear();
+	    		//undoneCommands.clear();
+	    	//} else if(command instanceof CommandUndo){
+	    		//input = cmdHistory.pop();
+	    		//undoneCommands.push(input);
+		//} else if(command instanceof CommandRedo){
+	    		//input = undoneCommands.pop();
+	    		//cmdHistory.push(input);
+		//}
+	    //return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
 
+	    //To be scrapped after changing Parser.parse() to return Command object
 	    switch(commandType){
 		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
 			break;
@@ -77,8 +101,6 @@ public class Controller {
 			break;
 		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
 			break;
-		//Case of undo
-		//Case of redo
 		default: throw new Exception();
 	    }
 	    if(commandType!=CommandType.UNDO && commandType!=CommandType.REDO){
@@ -107,11 +129,7 @@ public class Controller {
 	    }
 	    
 	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
-	    if(commandType==CommandType.UNDO){
-		return new ErrorFeedback("undo", input, MSG_UNDOFAILED);
-	    } else{
-		return new ErrorFeedback("redo", input, MSG_REDOFAILED);
-	    }
+	    return new ErrorFeedback(command.getCommandName(), input, MSG_EMPTYSTACK);
 	} catch(IllegalArgumentException e){
 	    return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
