@@ -5,7 +5,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public abstract class Command {
     //Data members
-    protected Storage storage;	//The storage object to operate on.
+    protected Storage storage = Storage.getInstance();	//The storage object to operate on.
     
     //Method signatures
     public abstract void execute();

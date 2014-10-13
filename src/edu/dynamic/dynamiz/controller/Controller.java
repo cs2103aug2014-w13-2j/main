@@ -35,7 +35,6 @@ public class Controller {
     
     //Main data members
     private Parser parser;	//The Parser object to parse input commands
-    private Storage storage;	//The storage that stores the data for this program.
     private Stack<Command> undoStack, redoStack;
     private Stack<String> cmdHistory, undoneCommands;
     
@@ -44,12 +43,12 @@ public class Controller {
      */
     public Controller(){
 	parser = new Parser();
-	storage = new Storage();
 	undoStack = new Stack<Command>();	//Keeps track of past commands
 	redoStack = new Stack<Command>();	//Keeps track of undone commands.
 						//Clears when executing new commands while this stack is not empty.
 	cmdHistory = new Stack<String>();	//Keeps track of past command strings
 	undoneCommands = new Stack<String>();	//Keeps track of undone command strings. Same mechanism as redoStack.
+	Storage.getInstance();
     }
     
     /**
@@ -68,15 +67,15 @@ public class Controller {
 	    commandType = cmdLine.getCommandType();
 
 	    switch(commandType){
-		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions(), storage);
+		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
 			break;
-		case DELETE: command = new CommandDelete(cmdLine.getParam(), storage);
+		case DELETE: command = new CommandDelete(cmdLine.getParam());
 			break;
-		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions(), storage);
+		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
 			break;
-		case LIST: command = new CommandList(storage);
+		case LIST: command = new CommandList();
 			break;
-		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions(), storage);
+		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
 			break;
 		//Case of undo
 		//Case of redo

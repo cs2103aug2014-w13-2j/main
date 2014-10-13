@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -17,10 +16,9 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	Storage storage = new Storage();
 	Parser parser = new Parser();
 	CommandLine cmdLine = parser.parse("search CS");
-	CommandSearch cmd = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions(), storage);
+	CommandSearch cmd = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	for(ToDoItem item: list){

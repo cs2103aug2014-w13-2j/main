@@ -1,13 +1,12 @@
 package edu.dynamic.dynamiz.controller;
 
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Defines the command that lists all the items in the storage.
  * 
  * Constructor
- * CommandList(Storage storage)	//Creates a new instance of this list command.
+ * CommandList()	//Creates a new instance of this list command.
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -29,9 +28,8 @@ public class CommandList extends Command {
      * Creates an instance of this list command.
      * @param storage The Storage object from which to retrieve the list.
      */
-    public CommandList(Storage storage){
-	assert storage!=null;
-	this.storage = storage;
+    public CommandList(){
+
     }
     
     @Override

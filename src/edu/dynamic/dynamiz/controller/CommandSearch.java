@@ -13,7 +13,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * filtered by the specified options, in the given storage.
  * 
  * Constructor
- * CommandSearch(String keyword, Options options, Storage storage)	//Creates an instance of this command object.
+ * CommandSearch(String keyword, Options options)	//Creates an instance of this command object.
  * 
  * Public Methods
  * Options extractOptions(Options options)	//Extracts the options in this list that are applicable to this command.
@@ -43,8 +43,8 @@ public class CommandSearch extends Command {
     /**
      * Creates an instance of this search command.
      * */
-    public CommandSearch(String searchKey, Options options, Storage storage){
-	assert searchKey!=null && options!=null && storage!=null;
+    public CommandSearch(String searchKey, Options options){
+	assert searchKey!=null && options!=null;
 	
 	if(searchKey.isEmpty()){
 	    throw new IllegalArgumentException(MSG_EMPTYSEARCHSTRING);
@@ -52,7 +52,6 @@ public class CommandSearch extends Command {
 	
 	this.searchKey = searchKey.trim();
 	this.options = extractOptions(options);
-	this.storage = storage;
     }
     
     /**

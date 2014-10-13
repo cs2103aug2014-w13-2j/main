@@ -5,7 +5,6 @@ import java.util.List;
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.parser.Options;
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.DateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
@@ -19,9 +18,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * add ToDoItem with only description and default priority level.
  * 
  * Constructor
- * CommandAdd(String description, Options options, Storage storage)	//Creates a CommandAdd instance
- * 							//with the given description, the Options list,
- * 							//and the storage object to add into.
+ * CommandAdd(String description, Options options)	//Creates a CommandAdd instance
+ * 							//with the given description, the Options list
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -76,8 +74,8 @@ public class CommandAdd extends Command {
      * @param storage The storage object to add the new entry into.
      * @throws IllegalArgumentException if description is an empty string.
      * */
-    public CommandAdd(String description, Options options, Storage storage) {
-	assert options!=null && description!=null && storage!=null;
+    public CommandAdd(String description, Options options) {
+	assert options!=null && description!=null;
 	
 	if(description.isEmpty()){
 	    throw new IllegalArgumentException(MSG_EMPTYDESCRIPTION);
@@ -85,7 +83,6 @@ public class CommandAdd extends Command {
 	
 	this.description = description.trim();
 	this.options = extractOptions(options);
-	this.storage = storage;
 	
 	//All conflicting option objects/values are resolved by taking the 1st object/value.
 	//Checks for any priority value specified in options.

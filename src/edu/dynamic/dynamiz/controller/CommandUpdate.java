@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 import edu.dynamic.dynamiz.parser.Option;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.parser.Options;
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.DateTime;
 import edu.dynamic.dynamiz.structure.ToDoItem;
@@ -18,7 +17,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * target object.
  * 
  * Constructor
- * CommandUpdate(String param, Options options, Storage storage)	//Creates a new instance of this Command
+ * CommandUpdate(String param, Options options)	//Creates a new instance of this Command
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -76,8 +75,8 @@ public class CommandUpdate extends Command {
      * @param storage The Storage object in which the target object is contained.
      * @throws IllegalArgumentException if id is an empty string.
      */
-    public CommandUpdate(String param, Options options, Storage storage){
-	assert param!=null && options!=null && storage!=null;
+    public CommandUpdate(String param, Options options){
+	assert param!=null && options!=null;
 	
 	if(param.isEmpty()){
 	    throw new IllegalArgumentException(MSG_EMPTYID);
@@ -85,7 +84,6 @@ public class CommandUpdate extends Command {
 	
 	this.id = param.trim();
 	this.options = extractOptions(options);
-	this.storage = storage;
 	
 	//Checks param for any new description specified
 	StringTokenizer strtok = new StringTokenizer(this.id);

@@ -15,10 +15,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 /**
  * Defines the storage class holding the list of tasks and events.
  * 
- * Constructor
- * Storage()	//Creates a new instance of this Storage object.
- * 
  * Public Methods(currently that can be used)
+ * static Storage getInstance()	//gets the Storage instance
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details.
  * ToDoItem[] searchByKeyword(String keyword)	//Gets a list of items with keyword in their description.
@@ -34,11 +32,12 @@ public class Storage {
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
+    private static Storage storage;
     
     /**
      * Creates a new instance of Storage.
      */
-    public Storage(){
+    private Storage(){
 	mainList = FileHandler.getListFromFile();
 	searchTree = new TreeMap<String, ToDoItem>();
 	toDoItemList = new ArrayList<ToDoItem>();
@@ -57,6 +56,16 @@ public class Storage {
 		toDoItemList.add(temp);
 	    }
 	}
+    }
+    
+    /**
+     * Gets the Storage instance.
+     * @return The only Storage instance of this class.
+     */
+    public static Storage getInstance(){
+	if(storage==null)
+	    storage = new Storage();
+	return storage;
     }
     
     /**

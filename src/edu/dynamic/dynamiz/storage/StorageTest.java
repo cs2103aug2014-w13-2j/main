@@ -12,7 +12,7 @@ public class StorageTest {
     
     @Test
     public void test() {
-	Storage storage = new Storage();
+	Storage storage = Storage.getInstance();
 	ToDoItem[] list = storage.getList();
 	assertEquals(3, list.length);
 	for(int i=0; i<3; i++)
