@@ -42,9 +42,67 @@ public class CommandLine {
 	}
 
 	private boolean initialiseCommand() {
-		
+		switch(this.commandType) {
+			case ADD : 
+				this.command = parseAdd(); 
+				break;
+			case DELETE : 
+				this.command = parseDelete();
+				break;
+			case UPDATE :
+				this.command = parseUpdate();
+				break;
+			case LIST :
+				this.command = parseList();
+				break;
+			case SEARCH :
+				this.command = parseSearch();
+				break;
+			case UNDO :
+				this.command = parseUndo();
+				break;
+			case REDO :
+				this.command = parseRedo();
+				break;
+			case EXIT :
+				this.command = parseExit();
+				break;
+			default : 
+		}
 		
 		return true;
+	}
+	
+	private Command parseAdd() {
+		return null;
+	}
+	
+	private Command parseDelete() {
+		return null;
+	}
+	
+	private Command parseList() {
+		return null;
+	}
+	
+	private Command parseSearch() {
+		return null;
+	}
+	
+	private Command parseUndo() {
+		return null;
+	}
+	
+	private Command parseRedo() {
+		return null;
+	}
+	
+	private Command parseUpdate() {
+		return null;
+	}
+	
+	private Command parseExit() {
+		return null;
 	}
 	/*
 	 * ========================================================================
