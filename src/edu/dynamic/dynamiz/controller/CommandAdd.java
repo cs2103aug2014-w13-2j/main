@@ -59,14 +59,11 @@ public class CommandAdd extends Command {
     private static final String MSG_INVALIDDATES = "Invalid start/end date(s)";
     
     //Main data members
-    private Options options;	//The list of options for this command.
     private ToDoItem addedItem;	//The item being added by this command.
     
-    //Data members for ToDoItem
-    private String description;	//The description of the item to be added.
-    private int priority = 0;	//Priority level.
-    private String start = null, end = null;	//Start and end/deadline dates.
-    
+    public CommandAdd(ToDoItem addedItem) {
+    	this.addedItem = addedItem;
+    }
     /**
      * Creates a new Command object that adds a new entry into the given storage.
      * @param description The description of the entry to be added.
@@ -75,101 +72,14 @@ public class CommandAdd extends Command {
      * @throws IllegalArgumentException if description is an empty string.
      * */
     public CommandAdd(String description, Options options) {
-	assert options!=null && description!=null;
 	
-	if(description.isEmpty()){
-	    throw new IllegalArgumentException(MSG_EMPTYDESCRIPTION);
-	}
-	
-	this.description = description.trim();
-	this.options = extractOptions(options);
-	
-	//All conflicting option objects/values are resolved by taking the 1st object/value.
-	//Checks for any priority value specified in options.
-	if(this.options.hasOption(KEYWORD_PRIORITY)){
-	    List<String> priorityList = this.options.getOptions(KEYWORD_PRIORITY).get(0).getValues();
-	    if(!priorityList.isEmpty()){
-		priority = Integer.parseInt(priorityList.get(0));
-	    }
-	}
-	
-	//Checks for any start date value specified in options.
-	if(this.options.hasOption(KEYWORD_START)){
-	    List<String> startOptList = this.options.getOptions(KEYWORD_START).get(0).getValues();
-	    if(startOptList.size()>OPTLIST_MINSIZE){
-		start = startOptList.get(OPTLISTINDEX_DATE)+" "+startOptList.get(OPTLISTINDEX_TIME);
-		if(!start.matches(DateTime.REGEX_DATETIME)){
-		    start = startOptList.get(OPTLISTINDEX_DATE);
-		}
-	    } else if(!startOptList.isEmpty()){
-		start = startOptList.get(OPTLISTINDEX_DATE);
-	    }
-	}
-	
-	//Checks for any end date value specified in options.
-	if(this.options.hasOption(KEYWORD_END)){
-	    List<String> endOptList = this.options.getOptions(KEYWORD_END).get(0).getValues();
-	    if(endOptList.size()>OPTLIST_MINSIZE){
-		end = endOptList.get(OPTLISTINDEX_DATE)+" "+endOptList.get(OPTLISTINDEX_TIME);
-		if(!end.matches(DateTime.REGEX_DATETIME)){
-		    end = endOptList.get(OPTLISTINDEX_DATE);
-		}
-	    } else if(!endOptList.isEmpty()){
-		end = endOptList.get(OPTLISTINDEX_DATE);
-	    }
-	}
     }
-    
-    /**
-     * Gets the list of applicable options for this command from the given options list.
-     * @param options The list of options to extract from.
-     * @return An Options object containing the list of applicable options for this command.
-     */
-    public Options extractOptions(Options options) {
-	Options opts = new Options();
-	List<Option> list;
-	
-	for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
-	    //Best effort attempt to resolve conflicting values for same option type.
-	    list = options.getOptions(optType);
-	    if(list!=null){
-		opts.add(list.get(INDEX_FIRSTOPTIONOBJECT));
-	    }
-	}
-	return opts;
-    }
-
     @Override
     /**
      * Executes this command. Also used for redo operation.
      * @throws IllegalArgumentException if any of the dates provided by the user is invalid.
      */
     public void execute() {
-	if(start==null && end==null){
-	    addedItem = new ToDoItem(description, priority);
-	} else if(start==null && end!=null){
-	    try{
-		Date endDate = makeDate(end);
-		addedItem = new TaskItem(description, priority, endDate);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDENDDATE);
-	    } 
-	} else if(start!=null && end==null){
-	    try{
-		Date startDate = makeDate(start);
-		addedItem = new EventItem(description, priority, startDate);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDSTARTDATE);
-	    }
-	} else{
-	    try{
-		Date startDate = makeDate(start);
-		Date endDate = makeDate(end);
-		addedItem = new EventItem(description, priority, startDate, endDate);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDDATES);
-	    }
-	}
 	storage.addItem(addedItem);
     }
     
