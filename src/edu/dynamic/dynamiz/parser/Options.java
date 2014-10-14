@@ -65,6 +65,16 @@ public class Options implements Iterable<Option> {
 	}
 	
 	/**
+	 * Query if this List contains an option name
+	 * 
+	 * @param optName String name for the option
+	 * @return boolean flag if a certain option type exists.
+	 */
+	public boolean hasOption(OptionType optType) {
+		return optionTable.containsKey(optType);
+	}
+	
+	/**
 	 * Retrieve a passed Option if it exists in this List
 	 * 
 	 * @param opt an Option to search for in the List
@@ -150,4 +160,6 @@ public class Options implements Iterable<Option> {
 		
 		return sb.toString();
 	}
+
+
 }
