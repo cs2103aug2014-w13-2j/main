@@ -65,6 +65,11 @@ public enum OptionType {
 		return allAliases;
 	}
 	
+	public static int PRIORITY_URGENT = 4;
+	public static int PRIORITY_HIGH = 2;
+	public static int PRIORITY_MEDIUM = 1;
+	public static int PRIORITY_LOW = 0;
+	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
 		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
