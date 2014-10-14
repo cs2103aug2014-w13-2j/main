@@ -36,6 +36,26 @@ public class Options implements Iterable<Option> {
 		
 		return true;
 	}
+	
+	public boolean add(List<Option> optList) {
+		assert(optList != null);
+		
+		if (optList.size() <= 0) {
+			throw new IllegalArgumentException("Empty list");
+		}
+		
+		OptionType optType = OptionType.fromOption(optList.get(0));
+		for (Option op: optList) {
+			if (OptionType.fromOption(op) != optType) {
+				return false;
+			}
+		}
+		
+		optionTable.put(optType, optList);
+		return true;
+	}
+	
+
 
 	/**
 	 * Query if this List contains a particular option
@@ -160,6 +180,8 @@ public class Options implements Iterable<Option> {
 		
 		return sb.toString();
 	}
+
+
 
 
 }
