@@ -41,7 +41,7 @@ public class Controller {
      * Creates a new Controller object for the program.
      */
     public Controller(){
-	parser = new Parser();
+	parser = Parser.getInstance();
 	undoStack = new Stack<Command>();	//Keeps track of past commands
 	redoStack = new Stack<Command>();	//Keeps track of undone commands.
 						//Clears when executing new commands while this stack is not empty.

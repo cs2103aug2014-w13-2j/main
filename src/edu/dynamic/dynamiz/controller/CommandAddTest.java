@@ -12,7 +12,7 @@ public class CommandAddTest {
     
     @Test
     public void test() {
-	Parser parser = new Parser();
+	Parser parser = Parser.getInstance();
 	
 	CommandLine cmdLine = parser.parse("Add Learn C++");
 	CommandAdd  cmd = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
@@ -29,7 +29,7 @@ public class CommandAddTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalActions(){
-	Parser parser = new Parser();
+	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("add");
 	new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
     }

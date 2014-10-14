@@ -16,7 +16,7 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	Parser parser = new Parser();
+	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("search CS");
 	CommandSearch cmd = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
 	cmd.execute();

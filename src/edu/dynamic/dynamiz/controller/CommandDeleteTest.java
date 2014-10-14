@@ -11,7 +11,7 @@ public class CommandDeleteTest {
     
     @Test
     public void test() {
-	Parser parser = new Parser();
+	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("delete A1");
 	CommandDelete cmd = new CommandDelete(cmdLine.getParam());
 	cmd.execute();
