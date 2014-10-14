@@ -15,7 +15,7 @@ public class ParserTest {
     
     @Test
     public void test() {
-	Parser parser = new Parser();
+	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("add task");
 	assertEquals("task", cmdLine.getParam());
 	
@@ -37,7 +37,7 @@ public class ParserTest {
     
     @Test
     public void testAliases() {
-    	Parser parser = new Parser();
+    	Parser parser = Parser.getInstance();
     	
     	CommandLine cmdLine = null;
     	String[] addCommands = {"add sth", "AdD sth", "PUT sth", "put sth", "pUt sth"};
