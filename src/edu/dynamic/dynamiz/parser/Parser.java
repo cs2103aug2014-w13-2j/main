@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.DateTime;
 
 /**
  * This is the boss right here
@@ -17,6 +19,9 @@ import edu.dynamic.dynamiz.controller.CommandType;
  */
 public class Parser {
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
+	private static final String REGEX_DATE = "\\b(\\d{1,2}).(\\d{1,2}).(\\d{2}|\\d{4})\\b";
+	private static final String REGEX_DATETIME = "\\b(\\d{1,2}).(\\d{1,2}).(\\d{2}|\\d{4}) (\\d{1,2}):(\\d{1,2})\\b";
+	
 	private static Parser parser = null;
 	
 	private CommandLine cmdLine;
@@ -47,6 +52,38 @@ public class Parser {
 		}
 		
 		return parser;
+	}
+	
+	/**
+	 * Return a Date object after parsing from a String
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public Date parseDate(String date) {	
+		Pattern datePattern = Pattern.compile(REGEX_DATE);
+		Pattern dateTimePattern = Pattern.compile(REGEX_DATETIME);
+		
+		Matcher dateMatcher = datePattern.matcher(date);
+		Matcher dateTimeMatcher = dateTimePattern.matcher(date);
+		
+		if (dateTimeMatcher.find()) {
+			int dd = Integer.parseInt(dateTimeMatcher.group(1));
+			int mm = Integer.parseInt(dateTimeMatcher.group(2));
+			int yy = Integer.parseInt(dateTimeMatcher.group(3));
+			int hr = Integer.parseInt(dateTimeMatcher.group(4));
+			int mn = Integer.parseInt(dateTimeMatcher.group(5));
+			
+			return new DateTime(dd, mm, yy, hr, mn);
+		} else if (dateMatcher.find()) {
+			int dd = Integer.parseInt(dateMatcher.group(1));
+			int mm = Integer.parseInt(dateMatcher.group(2));
+			int yy = Integer.parseInt(dateMatcher.group(3));
+			
+			return new Date(dd, mm, yy);
+		} else {
+			throw new IllegalArgumentException("Not a valid date string");
+		}
 	}
 	
 	public CommandLine parse(String inputCmd) {
