@@ -3,7 +3,12 @@ package edu.dynamic.dynamiz.parser;
 import java.util.List;
 
 import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * This is a class which stores the information of the parsed 
@@ -74,7 +79,46 @@ public class CommandLine {
 	}
 	
 	private Command parseAdd() {
-		return null;
+		Options cmdOptions = extractOptions(this.options);
+		ToDoItem cmdItem = null;
+		Parser parser = Parser.getInstance();
+		
+		// Handling date
+		boolean hasStart = cmdOptions.hasOption(OptionType.START_TIME);
+		boolean hasEnd = cmdOptions.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		
+		Date startDate = null;
+		Date endDate = null;
+		if (hasStart) {
+			Option startDateOpt = cmdOptions.getOptions(OptionType.START_TIME).get(0);
+			String startDateStr = startDateOpt.getValues().get(0);
+			startDate = parser.parseDate(startDateStr);
+		}
+		
+		if (hasEnd) {
+			Option endDateOpt = cmdOptions.getOptions(OptionType.END_TIME).get(0);
+			String endDateStr = endDateOpt.getValues().get(0);
+			endDate = parser.parseDate(endDateStr);
+		}
+		
+		if (hasBoth) {
+			// TODO: Handle ambiguity here
+			cmdItem = new EventItem(this.param, startDate, endDate); 
+		} else if (hasEnd) {
+			cmdItem = new TaskItem(this.param, endDate);
+		} else {
+			cmdItem = new ToDoItem(this.param);
+		}
+		
+		// Handling Priority (if applicable)
+		if (cmdOptions.hasOption(OptionType.PRIORITY)) {
+			Option priorityOpt = cmdOptions.getOptions(OptionType.PRIORITY).get(0);
+			int priority = Integer.parseInt(priorityOpt.getValues().get(0));
+			cmdItem.setPriority(priority);
+		}
+		
+		return new CommandAdd(cmdItem);
 	}
 	
 	private Command parseDelete() {
@@ -104,6 +148,24 @@ public class CommandLine {
 	private Command parseExit() {
 		return null;
 	}
+	
+	/**
+	 * Get the list of applicable options from all the options given
+	 * @param options The unchecked collection of Option
+	 * @return the checked collection of Option
+	 */
+	public Options extractOptions(Options options) {
+		Options opts = new Options();
+
+		for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
+			if (options.hasOption(optType)) {
+				List<Option> optList = options.getOptions(optType);
+				opts.add(optList);
+			}
+		}
+		
+		return opts;
+    }
 	/*
 	 * ========================================================================
 	 * Getters & Setters
