@@ -17,10 +17,11 @@ import edu.dynamic.dynamiz.controller.CommandType;
  */
 public class Parser {
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
+	private static Parser parser = null;
 	
 	private CommandLine cmdLine;
 	
-	public Parser(String inputCmd) {
+	private Parser(String inputCmd) {
 		if (inputCmd.isEmpty()) {
 			throw new IllegalArgumentException("Null command is given.");
 		}
@@ -28,8 +29,24 @@ public class Parser {
 		cmdLine = parse(inputCmd);
 	}
 	
-	public Parser() {
+	private Parser() {
 		cmdLine = null;
+	}
+	
+	public static Parser getInstance() {
+		if (parser == null) {
+			parser = new Parser();
+		}
+		
+		return parser;
+	}
+	
+	public static Parser getInstance(String inputCmd) {
+		if (parser == null) {
+			parser = new Parser(inputCmd);
+		}
+		
+		return parser;
 	}
 	
 	public CommandLine parse(String inputCmd) {
