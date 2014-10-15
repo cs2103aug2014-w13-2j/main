@@ -7,6 +7,7 @@ import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
 import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.controller.CommandRedo;
+import edu.dynamic.dynamiz.controller.CommandSearch;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.controller.CommandUndo;
 import edu.dynamic.dynamiz.structure.Date;
@@ -135,8 +136,9 @@ public class CommandLine {
 	}
 	
 	private Command parseSearch() {
-		
-		return null;
+		// TODO: Implement ability to search with keywords and options
+		Options commandOptions = extractOptions(this.options);
+		return new CommandSearch(param, commandOptions);
 	}
 	
 	private Command parseUndo() {
