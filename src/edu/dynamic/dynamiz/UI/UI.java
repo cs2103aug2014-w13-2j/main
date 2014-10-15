@@ -59,7 +59,9 @@ public class UI extends JPanel implements ActionListener {
 		// Welcome message
 		displayln(disp.displayWelcomeMessage());
 		displayln(disp.displayPrompt(1));
-				
+		
+		LoggerUI.info("UI Created");
+
 	}
 	
 	public void run() {
