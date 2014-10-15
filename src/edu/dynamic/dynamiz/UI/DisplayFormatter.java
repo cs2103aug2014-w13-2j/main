@@ -12,7 +12,7 @@ import edu.dynamic.dynamiz.structure.*;
  * @author Hu Wenyan
  * Implement Display functions for tasks, events and todoItems
  */
-public class Displayer implements DisplayerInterface {
+public class DisplayFormatter implements DisplayerInterface {
 //	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 //	
 //	private static final int FEEDBACK_TAG = 1;
@@ -261,16 +261,15 @@ public class Displayer implements DisplayerInterface {
 		switch(t){
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
-			s = hf.getHelpContent();
-			
-			TagFormat.format(s, TagFormat.HELP_CONTENT);
+			s = hf.getHelpContent();		
+			s = TagFormat.format(s, TagFormat.HELP_CONTENT);
 			break;
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s =ef.getCommandType()+" unsuccessful!"+"\n";
 			s+=" "+ef.getMessage();
-			
+			//s = TagFormat.format(s, TagFormat);
 			break;
 			
 		case SUCCESS_FEEDBACK_TAG:
@@ -291,6 +290,10 @@ public class Displayer implements DisplayerInterface {
 			
 		}
 		return s;		
+	}
+	
+	private void getContent(){
+		
 	}
 	
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){

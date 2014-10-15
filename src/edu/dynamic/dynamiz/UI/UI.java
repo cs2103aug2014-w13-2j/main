@@ -19,7 +19,7 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextField inputScreen;
 	protected JTextArea displayScreen;
 	private final static String newline = "\n";
-	public static Displayer disp = new Displayer();
+	public static DisplayFormatter disp = new DisplayFormatter();
 	public static Controller cont = new Controller();
 	public static Font font = new Font("Arial",Font.PLAIN,12);
 	

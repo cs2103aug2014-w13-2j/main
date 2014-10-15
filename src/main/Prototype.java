@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 import edu.dynamic.dynamiz.controller.Controller;
 import edu.dynamic.dynamiz.structure.Feedback;
-import edu.dynamic.dynamiz.UI.Displayer;
+import edu.dynamic.dynamiz.UI.DisplayFormatter;
 import edu.dynamic.dynamiz.UI.DisplayStub;
 
 /**
@@ -22,7 +22,7 @@ public class Prototype {
     private static final String COMMAND_EXIT = "exit";
     
     private static Controller controller = new Controller();
-    private static Displayer displayer = new DisplayStub();
+    private static DisplayFormatter displayer = new DisplayStub();
     
     //Delete when integrating GUI component
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

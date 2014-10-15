@@ -2,7 +2,7 @@ package edu.dynamic.dynamiz.UI;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-public class DisplayStub extends Displayer {
+public class DisplayStub extends DisplayFormatter {
    // @Override
     public void WelcomeMessage(){
 	System.out.println(super.displayWelcomeMessage());
