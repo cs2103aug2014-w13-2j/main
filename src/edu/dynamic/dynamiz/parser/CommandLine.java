@@ -6,7 +6,9 @@ import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
 import edu.dynamic.dynamiz.controller.CommandList;
+import edu.dynamic.dynamiz.controller.CommandRedo;
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.controller.CommandUndo;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
@@ -133,15 +135,16 @@ public class CommandLine {
 	}
 	
 	private Command parseSearch() {
+		
 		return null;
 	}
 	
 	private Command parseUndo() {
-		return null;
+		return new CommandUndo();
 	}
 	
 	private Command parseRedo() {
-		return null;
+		return new CommandRedo();
 	}
 	
 	private Command parseUpdate() {
