@@ -64,10 +64,24 @@ public class CommandUpdate extends Command {
     private String id, description = null;
     private ToDoItem[] updatedItem;
     private Options options;
-    private int priority = -1;
+    private int priority = OptionType.PRIORITY_NONE;
     private String start = null, end = null;
+    private Date startDate;
+    private Date endDate;
     
+	public CommandUpdate(String id, String newDescription, int newPriority, Date newStartDate, Date newEndDate) {
+		this.id = id;
+		this.description = newDescription;
+		this.priority = newPriority;
+		this.startDate = newStartDate;
+		this.endDate = newEndDate;
+	}
+	
     /**
+     * 
+     * Refactored into CommandLine
+     * 
+     * 
      * Creates a new instance of this Command object that updates the ToDoItem object with the given id
      * in the given Storage object with the new information specified in the Options list.
      * @param param The id (and new description) of the ToDoItem object to update.
@@ -83,7 +97,6 @@ public class CommandUpdate extends Command {
 	}
 	
 	this.id = param.trim();
-	this.options = extractOptions(options);
 	
 	//Checks param for any new description specified
 	StringTokenizer strtok = new StringTokenizer(this.id);
@@ -129,56 +142,38 @@ public class CommandUpdate extends Command {
 	}
     }
     
-    /**
-     * Gets the list of applicable options for this command from the given options list.
-     * @param options The list of options to extract from.
-     * @return An Options object containing the list of applicable options for this command.
-     */
-    public Options extractOptions(Options options) {
-	Options opts = new Options();
-	List<Option> list;
-	
-	for (OptionType optType: CommandType.UPDATE.getApplicableOptions()) {
-	    //Selects the 1st Option when there are more than 1 Option of the same OptionType.
-	    list = options.getOptions(optType);
-	    if(list!=null){
-		opts.add(list.get(INDEX_FIRSTOPTIONOBJECT));
-	    }
-	}
-	return opts;
-    }
-
     @Override
     /**
      * Executes this command.
      * @throws IllegalArgumentException if start and/or end represent invalid dates.
      */
     public void execute() {
-	if(start==null && end==null){
-	    updatedItem = storage.updateItem(id, description, priority, null, null);
-	} else if(start==null && end!=null){
-	    try{
-		Date endDate = makeDate(end);
-		updatedItem = storage.updateItem(id, description, priority, null, endDate);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDENDDATE);
-	    }
-	} else if(start!=null && end==null){
-	    try{
-		Date startDate = makeDate(start);
-		updatedItem = storage.updateItem(id, description, priority, startDate, null);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDSTARTDATE);
-	    }
-	} else{
-	    try{
-		Date startDate = makeDate(start);
-		Date endDate = makeDate(end);
-		updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
-	    } catch(IllegalArgumentException e){
-		throw new IllegalArgumentException(MSG_INVALIDDATES);
-	    }
-	}
+//	if(start==null && end==null){
+//	    updatedItem = storage.updateItem(id, description, priority, null, null);
+//	} else if(start==null && end!=null){
+//	    try{
+//		Date endDate = makeDate(end);
+//		updatedItem = storage.updateItem(id, description, priority, null, endDate);
+//	    } catch(IllegalArgumentException e){
+//		throw new IllegalArgumentException(MSG_INVALIDENDDATE);
+//	    }
+//	} else if(start!=null && end==null){
+//	    try{
+//		Date startDate = makeDate(start);
+//		updatedItem = storage.updateItem(id, description, priority, startDate, null);
+//	    } catch(IllegalArgumentException e){
+//		throw new IllegalArgumentException(MSG_INVALIDSTARTDATE);
+//	    }
+//	} else{
+//	    try{
+//		Date startDate = makeDate(start);
+//		Date endDate = makeDate(end);
+//		updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
+//	    } catch(IllegalArgumentException e){
+//		throw new IllegalArgumentException(MSG_INVALIDDATES);
+//	    }
+//	}
+    	updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
     }
     
     @Override
