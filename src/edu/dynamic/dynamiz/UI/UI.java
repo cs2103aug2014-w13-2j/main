@@ -85,8 +85,8 @@ public class UI extends JPanel implements ActionListener {
 		
 		
 		if (text.equalsIgnoreCase("exit")) {
-			System.exit(0);
 			LoggerUI.info("Exit Dynamiz");
+			System.exit(0);
 		}
 		
 		Feedback feedback = cont.executeCommand(text);
