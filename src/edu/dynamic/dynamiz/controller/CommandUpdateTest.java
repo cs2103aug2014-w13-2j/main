@@ -20,8 +20,9 @@ public class CommandUpdateTest {
     public void test() {
 	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
-	CommandUpdate cmd = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
+	Command cmd = cmdLine.getCommand();
 	cmd.execute();
+	
 	ToDoItem[] list = cmd.getAffectedItems();
 	assertEquals(2, list.length);
 	System.out.println(list[1]);
