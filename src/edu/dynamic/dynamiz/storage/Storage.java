@@ -165,7 +165,7 @@ public class Storage {
     /**
      * Gets a list of ToDoItem objects whose description contains this keyword.
      * @param keyword The keyword to search in the objects.
-     * @return An array of ToDoItem objects containing keyword in their description or null
+     * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
     public ToDoItem[] searchItems(String keyword, int priority, Date start, Date end){
@@ -181,6 +181,9 @@ public class Storage {
 	}
 	if(end!=null){
 	    temp = searchByEndDate(temp, end);
+	}
+	if(temp.isEmpty()){
+	    return null;
 	}
 	return temp.toArray(new ToDoItem[temp.size()]);
     }

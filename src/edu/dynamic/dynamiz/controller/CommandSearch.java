@@ -1,6 +1,5 @@
 package edu.dynamic.dynamiz.controller;
 
-import edu.dynamic.dynamiz.parser.Options;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -9,7 +8,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * filtered by the specified options, in the given storage.
  * 
  * Constructor
- * CommandSearch(String keyword, Options options)	//Creates an instance of this command object.
+ * CommandSearch(String keyword, int priority, Date start, Date end)	//Creates an instance of this command object.
  * 
  * Public Methods
  * Options extractOptions(Options options)	//Extracts the options in this list that are applicable to this command.
@@ -22,9 +21,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public class CommandSearch extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "search";
-    
-    //Error message
-    private static final String MSG_EMPTYSEARCHSTRING = "Empty search string";
     
     //Main data members
     private String searchKey;
@@ -51,7 +47,7 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	searchList = storage.getItems(searchKey, priority, start, end);
+	searchList = storage.searchItems(searchKey, priority, start, end);
     }
 
     @Override
