@@ -79,20 +79,14 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String text = inputScreen.getText();
-		/*
-		 * To be added once controller is completed (ZX) Feedback feedback =
-		 * controller.executeCommand(text);
-		 */
 
 		display(disp.displayPrompt()); 
 		displayln(text); 
 		
 		
-		
-		// TODO: Awaiting Nhan's exit feedback
-		// if (feedback.getCommandType().equalsIgnoreCase("exit")) {
 		if (text.equalsIgnoreCase("exit")) {
 			System.exit(0);
+			LoggerUI.info("Exit Dynamiz");
 		}
 		
 		Feedback feedback = cont.executeCommand(text);
