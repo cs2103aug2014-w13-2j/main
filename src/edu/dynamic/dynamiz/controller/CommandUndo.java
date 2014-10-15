@@ -15,9 +15,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItems affected by this command.
  * String getCommandName()		//Gets the string representation of this command's type
  * void execute()	//Executes this command
- * void redo()		//Does nothing
  * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Assigns the appropriate stacks to this command for execution
- * void undo()		//Does nothing
  * 
  * @author zixian
  */
@@ -26,8 +24,8 @@ public class CommandUndo extends Command {
     private static final String COMMAND_TYPE = "undo";
     
     //Main data members
-    private Stack<Command> undoStack, redoStack;
-    private Command command;	//The command to be undone
+    private Stack<Undoable> undoStack, redoStack;
+    private Undoable command;	//The command to be undone
     
     /**
      * Creates a new instance of this undo command
@@ -41,7 +39,7 @@ public class CommandUndo extends Command {
      * @param undoStack The stack of commands to retrieve the command from.
      * @param redoStack The stack of commands to place the undone command into.
      */
-    public void setStacks(Stack<Command> undoStack, Stack<Command> redoStack){
+    public void setStacks(Stack<Undoable> undoStack, Stack<Undoable> redoStack){
 	assert undoStack!=null && redoStack!=null;
 	this.undoStack = undoStack;
 	this.redoStack = redoStack;
@@ -54,23 +52,7 @@ public class CommandUndo extends Command {
 	redoStack.push(command);
 	command.undo();
     }
-    
-    @Override
-    /**
-     * Does nothing as there is no redo for this command.
-     */
-    public void redo() {
-	
-    }
-    
-    @Override
-    /**
-     * Does nothing as there is no undo for this command.
-     */
-    public void undo() {
-	
-    }
-    
+
     @Override
     /**
      * Gets the string representation of this command's type.
@@ -88,7 +70,7 @@ public class CommandUndo extends Command {
      */
     public ToDoItem[] getAffectedItems() {
 	assert command!=null;
-	return command.getAffectedItems();
+	return ((Command)command).getAffectedItems();
     }
     
 }

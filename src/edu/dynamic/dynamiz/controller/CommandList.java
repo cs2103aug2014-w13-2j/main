@@ -10,8 +10,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * Public Methods
  * void execute()	//Executes this command.
- * void undo()		//An empty implementation of its superclass method.
- * void redo()		//An empty implementation of its superclass method.
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list retrieved by execute() method.
  * 
@@ -38,23 +36,6 @@ public class CommandList extends Command {
      */
     public void execute() {
 	itemList = storage.getList();
-    }
-    
-    @Override
-    /**
-     * Does nothing. List operation cannot be undone.
-     */
-    public void undo() {
-	
-    }
-    
-    @Override
-    /**
-     * An empty implementation of the superclass method.
-     * Does nothing since listing cannot be undone and hence redone.
-     */
-    public void redo(){
-	
     }
     
     @Override

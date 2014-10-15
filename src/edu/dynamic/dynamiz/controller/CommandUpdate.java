@@ -28,7 +28,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
  * 
  * @author zixian*/
-public class CommandUpdate extends Command {
+public class CommandUpdate extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "update";
     

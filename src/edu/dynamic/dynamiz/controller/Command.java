@@ -9,8 +9,6 @@ public abstract class Command {
     
     //Method signatures
     public abstract void execute();
-    public abstract void redo();
-    public abstract void undo();
     public abstract String getCommandName();
     public abstract ToDoItem[] getAffectedItems();
 }

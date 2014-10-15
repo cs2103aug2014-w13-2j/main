@@ -19,7 +19,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * @author zixian
  */
-public class CommandDelete extends Command {
+public class CommandDelete extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "delete";
     

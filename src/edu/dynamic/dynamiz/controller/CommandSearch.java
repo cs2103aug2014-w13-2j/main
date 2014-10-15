@@ -18,8 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods
  * Options extractOptions(Options options)	//Extracts the options in this list that are applicable to this command.
  * void execute()	//Executes this command.
- * void undo()		//An empty implementation of its superclass method.
- * void redo()		//An empty implementation of its superclass method.
  * ToDoItem[] getAffectItems()	//Gets the list of items with the keyword in their description.
  * String getCommandName()	//Gets the string representation of this command's type.
  * 
@@ -80,25 +78,7 @@ public class CommandSearch extends Command {
     public void execute() {
 	searchList = storage.searchByKeyword(searchKey);
     }
-    
-    @Override
-    /**
-     * An empty implementation of its superclass method. Does nothing since retrieval without removal
-     * cannot be undone.
-     */
-    public void undo() {
-	
-    }
-    
-    @Override
-    /**
-     * An empty implementation of its superclass method.
-     * Does nothing since search cannot be redone.
-     */
-    public void redo() {
-	
-    }
-    
+
     @Override
     /**
      * Gets the string representation of this command's type.

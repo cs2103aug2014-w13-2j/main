@@ -35,7 +35,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * @author zixian
  * */
-public class CommandAdd extends Command {
+public class CommandAdd extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
     
