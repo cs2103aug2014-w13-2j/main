@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.awt.color.*;
+import java.util.logging.*;
 
 import edu.dynamic.dynamiz.structure.*;
 
@@ -253,19 +254,23 @@ public class Displayer implements DisplayerInterface {
 
 	
 	public String displayFeedback(Feedback commandFeedback) {
-		if(commandFeedback == null ) return "null";
+		assert commandFeedback!=null;
+		
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
 		switch(t){
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();
+			
+			TagFormat.format(s, TagFormat.HELP_CONTENT);
 			break;
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s =ef.getCommandType()+" unsuccessful!"+"\n";
 			s+=" "+ef.getMessage();
+			
 			break;
 			
 		case SUCCESS_FEEDBACK_TAG:
@@ -327,11 +332,34 @@ public class Displayer implements DisplayerInterface {
 		sb.append(title).append("\n");
 		return sb.toString();
 	}	
+}
+
+class TagFormat{
+	//HTML Tag
+	//PRIORITY_TAG
+	public static final String PRIORITY_URGENT= "";
+	public static final String PRIORITY_HIGH = "";
+	public static final String PRIORITY_MEDIUN = "";
+	public static final String PRIORITY_LOW = "";
+	public static final String PRIORITY_NONE = "";
+	
+	public static final String PRIORITY = "";
+	public static final String TASK_ID = "";
+	public static final String START_TIME = "";
+	public static final String END_TIME = "";
+	public static final String TIME = "";
+	public static final String HELP_CONTENT = "";
+
+	private static final String FORMAT_HTML_TAG = "<div class:\"%s\" >%s</div>";
+
+	
+	public static String format(String content, String tag){		
+		return String.format(FORMAT_HTML_TAG, tag, content);
+	}
 	
 }
 
 class StringUtils {
-
     public static String center(String s, int size) {
         return center(s, size, " ");
     }
