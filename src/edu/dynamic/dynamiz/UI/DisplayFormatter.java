@@ -259,29 +259,33 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
 		switch(t){
+		
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();		
-			s = TagFormat.format(s, TagFormat.HELP_CONTENT);
+			s = TagFormat.format(s, TagFormat.HELP);
 			break;
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s =ef.getCommandType()+" unsuccessful!"+"\n";
-			s+=" "+ef.getMessage();
-			//s = TagFormat.format(s, TagFormat);
+			s = TagFormat.format(s, TagFormat.ERORR);		
+			s+=" "+ef.getMessage();		
 			break;
 			
 		case SUCCESS_FEEDBACK_TAG:
-			StringBuilder a = new StringBuilder();
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
 			
-			a.append(sf.getCommandType()).append(" successfully!").append("\n");
+			String sMsg = TagFormat.format(sf.getCommandType()+" successfully!",TagFormat.SUCCESS);
 			
+			sMsg = sMsg+"\n";	
+			
+			StringBuilder a = new StringBuilder();
 			getFeedbackContent(a,sf);
 			
-			s = a.toString();
+			
+			s = sMsg + a.toString();
 			
 			break;
 		default:
@@ -292,31 +296,39 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;		
 	}
 	
-	private void getContent(){
-		
-	}
+	
 	
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
 		assert list!=null;
+		
 		if(sf.getCommandType().equals(UPDATE_COMMAND)){
 			assert(2==list.length);
 			a.append("Item affected:").append("\n");
-			a.append(list[0].getFeedbackString()).append("\n");
+			a.append(formatTask(list[0])).append("\n");
 			
 			a.append("Updated:").append("\n");
-			a.append(list[1].getFeedbackString()).append("\n");
+			a.append(formatTask(list[1])).append("\n");
 			
 		}
 		else{ 
 			for( int i = 0 ; i< list.length; i++){
-			a.append(list[i].getFeedbackString()).append("\n");
+			a.append(formatTask(list[i]));
 			a.append("\n");
 		}			
 		}
 		
+		
 	}
-	 int getFeedbackTag(Feedback f){
+	
+	private String formatTask(ToDoItem item){
+		assert item!=null;
+		StringBuilder sb = new StringBuilder();
+		
+		return sb.toString();
+	}
+	
+	private int getFeedbackTag(Feedback f){
 		String t =f.getClassName();
 		
 		if(t.equals("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
@@ -327,6 +339,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		
 	}
 
+	
 	
 	@Override
 	public String displayHelpPage() {
@@ -340,27 +353,33 @@ public class DisplayFormatter implements DisplayerInterface {
 class TagFormat{
 	//HTML Tag
 	//PRIORITY_TAG
-	public static final String PRIORITY_URGENT= "";
-	public static final String PRIORITY_HIGH = "";
-	public static final String PRIORITY_MEDIUN = "";
-	public static final String PRIORITY_LOW = "";
-	public static final String PRIORITY_NONE = "";
+	public static final String SUCCESS = "";
+	public static final String HELP = "";
+	public static final String ERORR = "";
+	public static final String PROMPT = "";
 	
 	public static final String PRIORITY = "";
 	public static final String TASK_ID = "";
 	public static final String START_TIME = "";
 	public static final String END_TIME = "";
 	public static final String TIME = "";
-	public static final String HELP_CONTENT = "";
-
+	
+	public static final String PRIORITY_URGENT= "";
+	public static final String PRIORITY_HIGH = "";
+	public static final String PRIORITY_MEDIUN = "";
+	public static final String PRIORITY_LOW = "";
+	public static final String PRIORITY_NONE = "";
+	
+	
+	
 	private static final String FORMAT_HTML_TAG = "<div class:\"%s\" >%s</div>";
-
 	
 	public static String format(String content, String tag){		
 		return String.format(FORMAT_HTML_TAG, tag, content);
 	}
 	
 }
+
 
 class StringUtils {
     public static String center(String s, int size) {
