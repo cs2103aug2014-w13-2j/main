@@ -5,6 +5,7 @@ import java.util.List;
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
+import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
@@ -128,7 +129,7 @@ public class CommandLine {
 	}
 	
 	private Command parseList() {
-		return null;
+		return new CommandList();
 	}
 	
 	private Command parseSearch() {
