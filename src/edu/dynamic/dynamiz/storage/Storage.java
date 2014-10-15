@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.FileHandler;
@@ -32,7 +33,8 @@ public class Storage {
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
-    private static Storage storage;
+    private Stack<ToDoItem> completedList;	//The list of completed items
+    private static Storage storage;	//Holds the only instance of the Storage object
     
     /**
      * Creates a new instance of Storage.
@@ -43,6 +45,7 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
+	completedList = new Stack<ToDoItem>();
 	Iterator<ToDoItem> itr = mainList.iterator();
 	ToDoItem temp;
 	while(itr.hasNext()){
@@ -89,8 +92,7 @@ public class Storage {
 	try {
 	    FileHandler.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
 	}
 	return item;	
     }
@@ -156,8 +158,7 @@ public class Storage {
 	try {
 	    FileHandler.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
 	}
 	return list;	
     }
@@ -367,13 +368,33 @@ public class Storage {
     }
     
     /**
-     * Creates a Date instance based on the day of the week specified by the given date string.
-     * @param dateString The day of the week.
-     * @return A Date instance corresponding to the specified day of week in the immediate week.
-     * throws IllegalArgumentException if dateString is not a valid day of week.
-     * Note: Implementation is a stub. Currently not supported.
+     * Marks the item with the given ID as completed.
+     * Note: Currently does not write the completed item to file.
+     * @param id The id of the item to mark as completed.
+     * @return The ToDoItem that is marked as completed or null if there is no such item with the given id.
      */
-    public Date getDate(String dateString){
-	throw new IllegalArgumentException();
+    public ToDoItem completeItem(String id){
+	ToDoItem item = removeItem(id);
+	if(item!=null){
+	    if(item instanceof EventItem){
+		completedList.push(new EventItem((EventItem)item));
+	    } else if(item instanceof TaskItem){
+		completedList.push(new TaskItem((TaskItem)item));
+	    } else{
+		completedList.push(new ToDoItem(item));
+	    }
+	    item.setStatus(ToDoItem.STATUS_COMPLETED);
+	}
+	return item;
+    }
+    
+    /**
+     * Unmark the most recent item that is marked completed.
+     * @return The ToDoItem object that is unmarked from completed list.
+     */
+    public ToDoItem undoComplete(){
+	ToDoItem temp = completedList.pop();
+	addItem(temp);
+	return temp;
     }
 }
