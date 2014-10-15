@@ -10,6 +10,7 @@ import edu.dynamic.dynamiz.controller.CommandRedo;
 import edu.dynamic.dynamiz.controller.CommandSearch;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.controller.CommandUndo;
+import edu.dynamic.dynamiz.controller.CommandUpdate;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
@@ -150,7 +151,43 @@ public class CommandLine {
 	}
 	
 	private Command parseUpdate() {
-		return null;
+		Parser parser = Parser.getInstance();
+		
+		// check param. If have more than just item ID, update the description
+		String itemID = Util.getFirstWord(this.param);
+		String extraDescription = Util.stripFirstWord(this.param);
+		
+		Options commandOptions = extractOptions(this.options);
+		
+		Date commandStartDate = null;
+		Date commandEndDate = null;
+		
+		// FIXME: potential logical flaw.
+		// If there is no update in priority, but still force the storage to update.
+		// In the end, all the items in storage will have priority reset.
+		
+		int commandPriority = OptionType.PRIORITY_NONE;
+		
+		if (commandOptions.hasOption(OptionType.START_TIME)) {
+			Option startDateOpt = commandOptions.getOptions(OptionType.START_TIME).get(0);
+			String startDateStr = startDateOpt.getValues().get(0);
+			commandStartDate = parser.parseDate(startDateStr);
+		}
+		
+		if (commandOptions.hasOption(OptionType.END_TIME)) {
+			Option endDateOpt = commandOptions.getOptions(OptionType.END_TIME).get(0);
+			String endDateStr = endDateOpt.getValues().get(0);
+			commandEndDate = parser.parseDate(endDateStr);
+		}
+		
+		// TODO: Parse priority
+		
+		if (commandOptions.hasOption(OptionType.PRIORITY)) {
+			Option priorityOpt = commandOptions.getOptions(OptionType.PRIORITY).get(0);
+			commandPriority = Integer.parseInt(priorityOpt.getValues().get(0));
+		}
+		
+		return new CommandUpdate(itemID, extraDescription, commandPriority, commandStartDate, commandEndDate);
 	}
 	
 	private Command parseExit() {
