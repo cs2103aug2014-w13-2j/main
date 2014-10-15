@@ -65,11 +65,11 @@ public enum OptionType {
 		return allAliases;
 	}
 	
-	public static int PRIORITY_URGENT = 4;
-	public static int PRIORITY_HIGH = 2;
-	public static int PRIORITY_MEDIUM = 1;
-	public static int PRIORITY_LOW = 0;
-	public static int PRIORITY_NONE = -1;
+	public static int PRIORITY_URGENT = 8;
+	public static int PRIORITY_HIGH = 4;
+	public static int PRIORITY_MEDIUM = 2;
+	public static int PRIORITY_LOW = 1;
+	public static int PRIORITY_NONE = 0;
 	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
