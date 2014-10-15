@@ -2,6 +2,8 @@ package edu.dynamic.dynamiz.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -21,12 +23,24 @@ public class UI extends JPanel implements ActionListener {
 	public static Controller cont = new Controller();
 	public static Font font = new Font("Arial",Font.PLAIN,12);
 	
+	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
+	
+	
+	
+	
+	
 	public UI() {
 		super(new GridBagLayout());
+		
+		// Initialise Logger to alert above INFO level (Severe & Warning)
+		LoggerUI.setLevel(Level.INFO);
+
+		
 		displayScreen = new JTextArea(20, 50);
 		displayScreen.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
+		
 		inputScreen = new JTextField(20);
 		inputScreen.addActionListener(this);
 
@@ -45,12 +59,14 @@ public class UI extends JPanel implements ActionListener {
 		// Welcome message
 		displayln(disp.displayWelcomeMessage());
 		displayln(disp.displayPrompt(1));
+				
 	}
 	
 	public void run() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
+
 			}
 		});
 	}
@@ -121,7 +137,7 @@ public class UI extends JPanel implements ActionListener {
 	 * Display input field in default setting (Black words, white background)
 	 */	
 	private void inputColorSet() {
-		inputScreen.setForeground(Color.BLACK);
+		inputScreen.setForeground(Color.BLUE);
 	}
 
 	/**
