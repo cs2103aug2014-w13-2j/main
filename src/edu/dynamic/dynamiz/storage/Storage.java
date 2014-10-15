@@ -19,7 +19,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * static Storage getInstance()	//gets the Storage instance
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details.
- * ToDoItem[] searchByKeyword(String keyword)	//Gets a list of items with keyword in their description.
+ * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
  * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
  * 
@@ -168,21 +168,88 @@ public class Storage {
      * @return An array of ToDoItem objects containing keyword in their description or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchByKeyword(String keyword){
-	if(keyword==null || keyword.isEmpty()){
-	    return null;
+    public ToDoItem[] searchItems(String keyword, int priority, Date start, Date end){
+	ArrayList<ToDoItem> temp = mainList;;
+	if(keyword!=null && !keyword.isEmpty()){
+	    temp = searchByKeyword(temp, keyword);
 	}
+	if(priority!=-1){
+		temp = searchByPriority(temp, priority);
+	}
+	if(start!=null){
+	    temp = searchByStartDate(temp, start);
+	}
+	if(end!=null){
+	    temp = searchByEndDate(temp, end);
+	}
+	return temp.toArray(new ToDoItem[temp.size()]);
+    }
+    
+    /**
+     * Gets a list of items with the keyword in their description from the given list.
+     * @param list The list to perform search on.
+     * @return An ArrayList of ToDoItem objects whose description contain the keyword.
+     */
+    private ArrayList<ToDoItem> searchByKeyword(ArrayList<ToDoItem> list, String keyword){
+	assert list!=null && keyword!=null && !keyword.isEmpty();
 	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
-	for(ToDoItem item: mainList){
-	    if(item.getDescription().contains(keyword)){
-		temp.add(item);
+	for(ToDoItem i: list){
+	    if(i.getDescription().contains(keyword)){
+		temp.add(i);
 	    }
 	}
-	if(temp.isEmpty()){
-	    return null;
+	return temp;
+    }
+    
+    /**
+     * Gets a list of items with the given priority from the given list.
+     * @param list The list to perform search on.
+     * @param priority The priority value used to filter the items.
+     * @return An Arraylist of ToDoItem objects with the given priority level.
+     */
+    private ArrayList<ToDoItem> searchByPriority(ArrayList<ToDoItem> list, int priority){
+	assert list!=null && priority>=0;
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+	for(ToDoItem i: list){
+	    if(i.getPriority()==priority){
+		temp.add(i);
+	    }
 	}
-	Collections.sort(temp);
-	return temp.toArray(new ToDoItem[temp.size()]);
+	return temp;
+    }
+    
+    /**
+     * Gets a list of items with the given start date drom the given list.
+     * @param list The list to perform search on.
+     * @param start The start date value to search.
+     * @return An ArrayList of ToDoItem objects with the given start date.
+     */
+    private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, Date start){
+	assert start!=null && list!=null;
+	ArrayList<ToDoItem> temp = new ArrayList<>();
+	for(ToDoItem i: list){
+	    if((i instanceof EventItem) && ((EventItem)i).getStartDate().equals(start)){
+		temp.add(i);
+	    }
+	}
+	return temp;
+    }
+    
+    /**
+     * Gets a list of items with the given end date/deadline.
+     * @param list The list to perform search on.
+     * @param end The end date/deadline value to search.
+     */
+    private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, Date end){
+	assert list!=null && end!=null;
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+	for(ToDoItem i: list){
+	    if(((i instanceof EventItem) && ((EventItem)i).getEndDate().equals(end)) ||
+		    ((i instanceof TaskItem) && ((TaskItem)i).getDeadline().equals(end))){
+		temp.add(i);
+	    }
+	}
+	return temp;
     }
     
     /**

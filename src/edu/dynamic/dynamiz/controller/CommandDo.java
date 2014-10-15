@@ -35,8 +35,7 @@ public class CommandDo extends Command implements Undoable{
      * Executes this command.
      */
     public void execute() {
-	// TODO Auto-generated method stub
-	
+	completedItem = storage.completeItem(id);
     }
     
     @Override
