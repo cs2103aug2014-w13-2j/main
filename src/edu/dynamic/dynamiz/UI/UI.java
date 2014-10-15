@@ -108,6 +108,7 @@ public class UI extends JPanel implements ActionListener {
 		displayColorSetDefault();
 		inputColorSet();
 		displayScreen.append(text + newline);
+		LoggerUI.info("Display " + text);
 	}
 
 	/**
@@ -119,6 +120,8 @@ public class UI extends JPanel implements ActionListener {
 		displayColorSetDefault();
 		inputColorSet();
 		displayScreen.append(text);
+		LoggerUI.info("Display " + text);
+
 	}
 
 	/**
