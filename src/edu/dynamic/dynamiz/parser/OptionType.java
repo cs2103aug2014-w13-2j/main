@@ -69,6 +69,7 @@ public enum OptionType {
 	public static int PRIORITY_HIGH = 2;
 	public static int PRIORITY_MEDIUM = 1;
 	public static int PRIORITY_LOW = 0;
+	public static int PRIORITY_NONE = -1;
 	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
