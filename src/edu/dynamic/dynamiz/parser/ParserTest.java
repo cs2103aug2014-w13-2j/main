@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
 
 /**
@@ -22,7 +23,7 @@ public class ParserTest {
 	cmdLine = parser.parse("delete A1");
 	assertEquals("A1", cmdLine.getParam());
 	
-	cmdLine = parser.parse("update A2 from 27/9/2014 18:00");
+	cmdLine = parser.parse("add A2 from 27/9/2014 18:00");
 	assertEquals("A2", cmdLine.getParam());
 	
 	cmdLine = parser.parse("Search study from today");
@@ -30,7 +31,6 @@ public class ParserTest {
 	
 	cmdLine = parser.parse("list");
 	assertEquals("", cmdLine.getParam());
-	System.out.println(cmdLine);
 	
 	Options options = cmdLine.getOptions();
     }

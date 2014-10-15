@@ -82,7 +82,8 @@ public class Parser {
 			
 			return new Date(dd, mm, yy);
 		} else {
-			throw new IllegalArgumentException("Not a valid date string");
+			return null;
+//			throw new IllegalArgumentException("Not a valid date string");
 		}
 	}
 	
@@ -125,14 +126,14 @@ public class Parser {
 		
 		String param = "";
 		if (paramMatcher.find()) {
-			param = paramMatcher.group(1);
+			param = paramMatcher.group(1).trim();
 		}
 		
 		//String param = optPattern.split(inputCmd)[0];
 		
 		while(optMatcher.find()) {
 			String opt = optMatcher.group(1);
-			String[] values = optMatcher.group(2).split("\\s+");
+			String[] values = optMatcher.group(2).split("" + Option.DEFAULT_DELIMITER);
 			
 			List<String> newValues = Util.removeEmptyStringsInArray(values);
 			
@@ -140,7 +141,7 @@ public class Parser {
 			options.add(option);
 		}
 		
-		CommandLine cmdLine = new CommandLine(cmdType, options, param.trim());
+		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		
 		return cmdLine;
 	}
@@ -150,14 +151,9 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String cmd1 = "add Meeting CS2103 from 8h30 8h45 -s 8h42 to 9h45";
-		String cmd2 = "delete 2";
-		String cmd3 = "update A2 from 38h40";
-		Parser parser = new Parser(cmd1);
-		CommandLine cmdLine = parser.getCommandLine();
-		
-		System.out.println(parser.parse(cmd1));
-		System.out.println(parser.parse(cmd2));
-		System.out.println(parser.parse(cmd3));
+		String date1 = "15/10/2014 13:00";
+		Parser parser = Parser.getInstance();
+		Date d = parser.parseDate(date1);
+		System.out.println(d);
 	}
 }
