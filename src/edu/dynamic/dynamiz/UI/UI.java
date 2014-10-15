@@ -90,7 +90,9 @@ public class UI extends JPanel implements ActionListener {
 		}
 		
 		Feedback feedback = cont.executeCommand(text);
-		display(disp.displayFeedback(feedback));
+		String returnResult = disp.displayFeedback(feedback);
+		assert (returnResult != null);		
+		display(returnResult);
 		
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
