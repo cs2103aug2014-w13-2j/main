@@ -67,66 +67,66 @@ public class Controller {
 	    commandType = cmdLine.getCommandType();
 	    
 	    /* Proposed changes */
-	    //command = parser.parse(input);
-	    //if(command instanceof CommandUndo){
-	    //	((CommandUndo)command).setStacks(undoStack, redoStack);
-	    //} else if(command instanceof CommandRedo){
-		//((CommandRedo)command).setStacks(undoStack, redoStack);
-	    //}
-	    //command.execute();
-	    //if(!(command instanceof CommandList) && !(command instanceof CommandSearch) &&
-	    	//!(command instanceof CommandUndo) && !(command instanceof CommandRedo)){
-	    		//undoStack.push(command);
-	    		//cmdHistory.push(input);
-	    		//redoStack.clear();
-	    		//undoneCommands.clear();
-	    	//} else if(command instanceof CommandUndo){
-	    		//input = cmdHistory.pop();
-	    		//undoneCommands.push(input);
-		//} else if(command instanceof CommandRedo){
-	    		//input = undoneCommands.pop();
-	    		//cmdHistory.push(input);
-		//}
-	    //return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+	    command = parser.parse(input).getCommand();
+	    if(command instanceof CommandUndo){
+	    	((CommandUndo)command).setStacks(undoStack, redoStack);
+	    } else if(command instanceof CommandRedo){
+		((CommandRedo)command).setStacks(undoStack, redoStack);
+	    }
+	    command.execute();
+	    if(!(command instanceof CommandList) && !(command instanceof CommandSearch) &&
+	    	!(command instanceof CommandUndo) && !(command instanceof CommandRedo)){
+	    		undoStack.push(command);
+	    		cmdHistory.push(input);
+	    		redoStack.clear();
+	    		undoneCommands.clear();
+	    	} else if(command instanceof CommandUndo){
+	    		input = cmdHistory.pop();
+	    		undoneCommands.push(input);
+		} else if(command instanceof CommandRedo){
+	    		input = undoneCommands.pop();
+	    		cmdHistory.push(input);
+		}
+	    return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
 
 	    //To be scrapped after changing Parser.parse() to return Command object
-	    switch(commandType){
-		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		case DELETE: command = new CommandDelete(cmdLine.getParam());
-			break;
-		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		case LIST: command = new CommandList();
-			break;
-		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		default: throw new Exception();
-	    }
-	    if(commandType!=CommandType.UNDO && commandType!=CommandType.REDO){
-		command.execute();
-		if(commandType!=CommandType.LIST && commandType!=CommandType.SEARCH){
-		    undoStack.push(command);
-		    cmdHistory.push(input);
-		    redoStack.clear();
-		    undoneCommands.clear();
-		}
-		return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
-	    } else if(commandType==CommandType.UNDO){
-		command = undoStack.pop();
-		commandString = cmdHistory.pop();
-		command.undo();
-		redoStack.push(command);
-		undoneCommands.push(commandString);
-		return new SuccessFeedback("undo", "undo "+commandString, command.getAffectedItems());
-	    } else{	//commandType==COMMANDTYPE.REDO
-		command = redoStack.pop();
-		commandString = undoneCommands.pop();
-		command.redo();
-		undoStack.push(command);
-		cmdHistory.push(commandString);
-		return new SuccessFeedback("redo", "redo "+commandString, command.getAffectedItems());
-	    }
+//	    switch(commandType){
+//		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
+//			break;
+//		case DELETE: command = new CommandDelete(cmdLine.getParam());
+//			break;
+//		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
+//			break;
+//		case LIST: command = new CommandList();
+//			break;
+//		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
+//			break;
+//		default: throw new Exception();
+//	    }
+//	    if(commandType!=CommandType.UNDO && commandType!=CommandType.REDO){
+//		command.execute();
+//		if(commandType!=CommandType.LIST && commandType!=CommandType.SEARCH){
+//		    undoStack.push(command);
+//		    cmdHistory.push(input);
+//		    redoStack.clear();
+//		    undoneCommands.clear();
+//		}
+//		return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+//	    } else if(commandType==CommandType.UNDO){
+//		command = undoStack.pop();
+//		commandString = cmdHistory.pop();
+//		command.undo();
+//		redoStack.push(command);
+//		undoneCommands.push(commandString);
+//		return new SuccessFeedback("undo", "undo "+commandString, command.getAffectedItems());
+//	    } else{	//commandType==COMMANDTYPE.REDO
+//		command = redoStack.pop();
+//		commandString = undoneCommands.pop();
+//		command.redo();
+//		undoStack.push(command);
+//		cmdHistory.push(commandString);
+//		return new SuccessFeedback("redo", "redo "+commandString, command.getAffectedItems());
+//	    }
 	    
 	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
 	    return new ErrorFeedback(command.getCommandName(), input, MSG_EMPTYSTACK);
