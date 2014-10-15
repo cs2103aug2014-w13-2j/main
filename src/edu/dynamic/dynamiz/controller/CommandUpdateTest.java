@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.parser.CommandLine;
-import edu.dynamic.dynamiz.parser.Options;
 import edu.dynamic.dynamiz.parser.Parser;
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
