@@ -3,6 +3,8 @@ package edu.dynamic.dynamiz.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,10 +25,14 @@ public class Parser {
 	private static final String REGEX_DATETIME = "\\b(\\d{1,2}).(\\d{1,2}).(\\d{2}|\\d{4}) (\\d{1,2}):(\\d{1,2})\\b";
 	
 	private static Parser parser = null;
-	
+	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
+			
 	private CommandLine cmdLine;
 	
 	private Parser(String inputCmd) {
+		LoggerParser.setLevel(Level.INFO);
+		LoggerParser.info("Parser initiliased");
+		
 		if (inputCmd.isEmpty()) {
 			throw new IllegalArgumentException("Null command is given.");
 		}
@@ -61,36 +67,58 @@ public class Parser {
 	 * @return
 	 */
 	public Date parseDate(String date) {	
+		assert(date != null);
+		
 		Pattern datePattern = Pattern.compile(REGEX_DATE);
 		Pattern dateTimePattern = Pattern.compile(REGEX_DATETIME);
 		
 		Matcher dateMatcher = datePattern.matcher(date);
 		Matcher dateTimeMatcher = dateTimePattern.matcher(date);
 		
+		Date parsedDate = null;
 		if (dateTimeMatcher.find()) {
 			int dd = Integer.parseInt(dateTimeMatcher.group(1));
 			int mm = Integer.parseInt(dateTimeMatcher.group(2));
 			int yy = Integer.parseInt(dateTimeMatcher.group(3));
 			int hr = Integer.parseInt(dateTimeMatcher.group(4));
 			int mn = Integer.parseInt(dateTimeMatcher.group(5));
-			
-			return new DateTime(dd, mm, yy, hr, mn);
+
+			parsedDate = new DateTime(dd, mm, yy, hr, mn);
 		} else if (dateMatcher.find()) {
 			int dd = Integer.parseInt(dateMatcher.group(1));
 			int mm = Integer.parseInt(dateMatcher.group(2));
 			int yy = Integer.parseInt(dateMatcher.group(3));
-			
-			return new Date(dd, mm, yy);
+
+			parsedDate = new Date(dd, mm, yy);
 		} else {
-			return null;
-//			throw new IllegalArgumentException("Not a valid date string");
+			parsedDate = parseImplicitDate(date);
+			if (parsedDate == null) {
+				LoggerParser.severe("Invalid date string format");
+			}
 		}
+		
+		return parsedDate;
+	}
+	
+	private Date parseImplicitDate(String date) {
+		assert(date != null);
+		
+		date = date.trim().toLowerCase();
+		
+		// TODO: Parsing possible natural languages
+		
+		switch(date) {
+			case "tomorrow" :
+			case "today" :
+			case "":
+				default: break;
+		}
+		
+		return null;
 	}
 	
 	public CommandLine parse(String inputCmd) {
-		if (inputCmd.isEmpty()) {
-			throw new IllegalArgumentException("Null input command");
-		}
+		assert(inputCmd != null);
 		
 		String commandWord = Util.getFirstWord(inputCmd);
 		CommandType cmdType = CommandType.fromString(commandWord);
@@ -128,8 +156,6 @@ public class Parser {
 		if (paramMatcher.find()) {
 			param = paramMatcher.group(1).trim();
 		}
-		
-		//String param = optPattern.split(inputCmd)[0];
 		
 		while(optMatcher.find()) {
 			String opt = optMatcher.group(1);

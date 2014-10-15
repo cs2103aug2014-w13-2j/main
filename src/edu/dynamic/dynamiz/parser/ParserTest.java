@@ -19,7 +19,7 @@ public class ParserTest {
 	Parser parser = Parser.getInstance();
 	CommandLine cmdLine = parser.parse("add task");
 	assertEquals("task", cmdLine.getParam());
-	
+
 	cmdLine = parser.parse("delete A1");
 	assertEquals("A1", cmdLine.getParam());
 	

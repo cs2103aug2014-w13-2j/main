@@ -96,25 +96,29 @@ public class CommandLine {
 		
 		Date startDate = null;
 		Date endDate = null;
-		if (hasStart) {
-			Option startDateOpt = commandOptions.getOptions(OptionType.START_TIME).get(0);
-			String startDateStr = startDateOpt.getValues().get(0);
-			startDate = parser.parseDate(startDateStr);
-		}
-		
-		if (hasEnd) {
-			Option endDateOpt = commandOptions.getOptions(OptionType.END_TIME).get(0);
-			String endDateStr = endDateOpt.getValues().get(0);
-			endDate = parser.parseDate(endDateStr);
-		}
-		
-		if (hasBoth) {
-			// TODO: Handle ambiguity here
-			commandItem = new EventItem(this.param, startDate, endDate); 
-		} else if (hasEnd) {
-			commandItem = new TaskItem(this.param, endDate);
-		} else {
-			commandItem = new ToDoItem(this.param);
+		try {
+			if (hasStart) {
+				Option startDateOpt = commandOptions.getOptions(OptionType.START_TIME).get(0);
+				String startDateStr = startDateOpt.getValues().get(0);
+				startDate = parser.parseDate(startDateStr);
+			}
+			
+			if (hasEnd) {
+				Option endDateOpt = commandOptions.getOptions(OptionType.END_TIME).get(0);
+				String endDateStr = endDateOpt.getValues().get(0);
+				endDate = parser.parseDate(endDateStr);
+			}
+			
+			if (hasBoth) {
+				// TODO: Handle ambiguity here
+				commandItem = new EventItem(this.param, startDate, endDate); 
+			} else if (hasEnd) {
+				commandItem = new TaskItem(this.param, endDate);
+			} else {
+				commandItem = new ToDoItem(this.param);
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO: Implement Exception handling here
 		}
 		
 		// Handling Priority (if applicable)
@@ -185,6 +189,8 @@ public class CommandLine {
 		if (commandOptions.hasOption(OptionType.PRIORITY)) {
 			Option priorityOpt = commandOptions.getOptions(OptionType.PRIORITY).get(0);
 			commandPriority = Integer.parseInt(priorityOpt.getValues().get(0));
+		} else {
+			commandPriority = OptionType.PRIORITY_UNCHANGED;
 		}
 		
 		return new CommandUpdate(itemID, extraDescription, commandPriority, commandStartDate, commandEndDate);

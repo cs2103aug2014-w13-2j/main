@@ -47,6 +47,9 @@ public class Controller {
 						//Clears when executing new commands while this stack is not empty.
 	cmdHistory = new Stack<String>();	//Keeps track of past command strings
 	undoneCommands = new Stack<String>();	//Keeps track of undone command strings. Same mechanism as redoStack.
+	
+	
+	
 	Storage.getInstance();
     }
     
@@ -62,17 +65,18 @@ public class Controller {
 	String commandString;
 	//Feedback feedback;
 	try{
-	    /* To be scrapped after changing Parser.parse() return type to Command */
-	    CommandLine cmdLine = parser.parse(input);
-	    commandType = cmdLine.getCommandType();
-	    
+//	    /* To be scrapped after changing Parser.parse() return type to Command */
+//	    CommandLine cmdLine = parser.parse(input);
+//	    commandType = cmdLine.getCommandType();
+//	    
 	    /* Proposed changes */
 	    command = parser.parse(input).getCommand();
 	    if(command instanceof CommandUndo){
 	    	((CommandUndo)command).setStacks(undoStack, redoStack);
 	    } else if(command instanceof CommandRedo){
-		((CommandRedo)command).setStacks(undoStack, redoStack);
+	    	((CommandRedo)command).setStacks(undoStack, redoStack);
 	    }
+	    
 	    command.execute();
 	    if(!(command instanceof CommandList) && !(command instanceof CommandSearch) &&
 	    	!(command instanceof CommandUndo) && !(command instanceof CommandRedo)){
