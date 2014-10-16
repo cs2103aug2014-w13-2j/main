@@ -1,11 +1,6 @@
 package edu.dynamic.dynamiz.controller;
 
-import java.util.List;
-
-import edu.dynamic.dynamiz.parser.Option;
-import edu.dynamic.dynamiz.parser.OptionType;
-import edu.dynamic.dynamiz.parser.Options;
-import edu.dynamic.dynamiz.storage.Storage;
+import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -13,13 +8,11 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * filtered by the specified options, in the given storage.
  * 
  * Constructor
- * CommandSearch(String keyword, Options options)	//Creates an instance of this command object.
+ * CommandSearch(String keyword, int priority, Date start, Date end)	//Creates an instance of this command object.
  * 
  * Public Methods
  * Options extractOptions(Options options)	//Extracts the options in this list that are applicable to this command.
  * void execute()	//Executes this command.
- * void undo()		//An empty implementation of its superclass method.
- * void redo()		//An empty implementation of its superclass method.
  * ToDoItem[] getAffectItems()	//Gets the list of items with the keyword in their description.
  * String getCommandName()	//Gets the string representation of this command's type.
  * 
@@ -29,48 +22,24 @@ public class CommandSearch extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "search";
     
-    //ExtractOptions constant
-    private static final int INDEX_FIRSTOPTIONOBJECT = 0;
-    
-    //Error message
-    private static final String MSG_EMPTYSEARCHSTRING = "Empty search string";
-    
     //Main data members
     private String searchKey;
-    private Options options;
+    private int priority;
+    private Date start, end;
     private ToDoItem[] searchList = null;
     
     /**
      * Creates an instance of this search command.
-     * */
-    public CommandSearch(String searchKey, Options options){
-	assert searchKey!=null && options!=null;
-	
-	if(searchKey.isEmpty()){
-	    throw new IllegalArgumentException(MSG_EMPTYSEARCHSTRING);
-	}
-	
-	this.searchKey = searchKey.trim();
-	this.options = extractOptions(options);
-    }
-    
-    /**
-     * Gets the list of applicable options for this command from the given options list.
-     * @param options The list of options to extract from.
-     * @return An Options object containing the list of applicable options for this command.
+     * @param keyword The keyword to search by, or null if search by keyword is not required.
+     * @param priority The priority level of the item(s) to search, or -1 if not required.
+     * @param start The start date of the item(s) to search, or null if not required.
+     * @param end The end date of the item(s)to search, or null if not required.
      */
-    public Options extractOptions(Options options) {
-	Options opts = new Options();
-	List<Option> list;
-	
-	for (OptionType optType: CommandType.ADD.getApplicableOptions()) {
-	    //Best effort attempt to resolve conflicting values for same option type.
-	    list = options.getOptions(optType);
-	    if(list!=null){
-		opts.add(list.get(INDEX_FIRSTOPTIONOBJECT));
-	    }
-	}
-	return opts;
+    public CommandSearch(String searchKey, int priority, Date start, Date end){
+	this.searchKey = searchKey;
+	this.priority = priority;
+	this.start = start;
+	this.end = end;
     }
     
     @Override
@@ -78,27 +47,9 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	searchList = storage.searchByKeyword(searchKey);
+	searchList = storage.searchItems(searchKey, priority, start, end);
     }
-    
-    @Override
-    /**
-     * An empty implementation of its superclass method. Does nothing since retrieval without removal
-     * cannot be undone.
-     */
-    public void undo() {
-	
-    }
-    
-    @Override
-    /**
-     * An empty implementation of its superclass method.
-     * Does nothing since search cannot be redone.
-     */
-    public void redo() {
-	
-    }
-    
+
     @Override
     /**
      * Gets the string representation of this command's type.

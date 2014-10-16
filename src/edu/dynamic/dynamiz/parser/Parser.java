@@ -27,34 +27,13 @@ public class Parser {
 	private static Parser parser = null;
 	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
 			
-	private CommandLine cmdLine;
-	
-	private Parser(String inputCmd) {
-		LoggerParser.setLevel(Level.INFO);
-		LoggerParser.info("Parser initiliased");
-		
-		if (inputCmd.isEmpty()) {
-			throw new IllegalArgumentException("Null command is given.");
-		}
-		
-		cmdLine = parse(inputCmd);
-	}
-	
 	private Parser() {
-		cmdLine = null;
+		
 	}
 	
 	public static Parser getInstance() {
 		if (parser == null) {
 			parser = new Parser();
-		}
-		
-		return parser;
-	}
-	
-	public static Parser getInstance(String inputCmd) {
-		if (parser == null) {
-			parser = new Parser(inputCmd);
 		}
 		
 		return parser;
@@ -117,7 +96,12 @@ public class Parser {
 		return null;
 	}
 	
-	public CommandLine parse(String inputCmd) {
+	public Command parse(String inputCmd) {
+		CommandLine cmdLine = parseCommandLine(inputCmd);
+		return cmdLine.getCommand();
+	}
+	
+	public CommandLine parseCommandLine(String inputCmd) {
 		assert(inputCmd != null);
 		
 		String commandWord = Util.getFirstWord(inputCmd);
@@ -168,12 +152,7 @@ public class Parser {
 		}
 		
 		CommandLine cmdLine = new CommandLine(cmdType, options, param);
-		
 		return cmdLine;
-	}
-	
-	public CommandLine getCommandLine() {
-		return this.cmdLine;
 	}
 	
 	public static void main(String[] args) {

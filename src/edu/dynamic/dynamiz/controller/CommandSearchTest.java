@@ -4,8 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.parser.CommandLine;
-import edu.dynamic.dynamiz.parser.Parser;
+import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -16,11 +15,10 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	Parser parser = Parser.getInstance();
-	CommandLine cmdLine = parser.parse("search CS");
-	CommandSearch cmd = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
+	CommandSearch cmd = new CommandSearch("CS", -1, null, new Date(29, 9, 2014));
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
+	System.out.println(list.length);
 	for(ToDoItem item: list){
 	    System.out.println(item);
 	}

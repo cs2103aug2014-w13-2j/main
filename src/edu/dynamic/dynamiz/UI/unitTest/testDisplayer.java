@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.UI.Displayer;
+import edu.dynamic.dynamiz.UI.DisplayFormatter;
 import edu.dynamic.dynamiz.structure.*;
 
 public class testDisplayer {
-	Displayer dp = new Displayer();
+	DisplayFormatter dp = new DisplayFormatter();
 	
 	@Test
 	public void testWelcome(){
@@ -204,8 +204,7 @@ public class testDisplayer {
 		assertEquals(sfstr.toString(),dp.displayFeedback(sf));
 		
 	}
-	
- 
+
 	
 
 

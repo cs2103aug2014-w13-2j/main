@@ -2,6 +2,8 @@ package edu.dynamic.dynamiz.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -17,16 +19,28 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextField inputScreen;
 	protected JTextArea displayScreen;
 	private final static String newline = "\n";
-	public static Displayer disp = new Displayer();
+	public static DisplayFormatter disp = new DisplayFormatter();
 	public static Controller cont = new Controller();
 	public static Font font = new Font("Arial",Font.PLAIN,12);
 	
+	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
+	
+	
+	
+	
+	
 	public UI() {
 		super(new GridBagLayout());
+		
+		// Initialise Logger to alert above INFO level (Severe & Warning)
+		LoggerUI.setLevel(Level.INFO);
+
+		
 		displayScreen = new JTextArea(20, 50);
 		displayScreen.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
+		
 		inputScreen = new JTextField(20);
 		inputScreen.addActionListener(this);
 
@@ -45,12 +59,16 @@ public class UI extends JPanel implements ActionListener {
 		// Welcome message
 		displayln(disp.displayWelcomeMessage());
 		displayln(disp.displayPrompt(1));
+		
+		LoggerUI.info("UI Created");
+
 	}
 	
 	public void run() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
+
 			}
 		});
 	}
@@ -61,24 +79,20 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String text = inputScreen.getText();
-		/*
-		 * To be added once controller is completed (ZX) Feedback feedback =
-		 * controller.executeCommand(text);
-		 */
 
 		display(disp.displayPrompt()); 
 		displayln(text); 
 		
 		
-		
-		// TODO: Awaiting Nhan's exit feedback
-		// if (feedback.getCommandType().equalsIgnoreCase("exit")) {
 		if (text.equalsIgnoreCase("exit")) {
+			LoggerUI.info("Exit Dynamiz");
 			System.exit(0);
 		}
 		
 		Feedback feedback = cont.executeCommand(text);
-		display(disp.displayFeedback(feedback));
+		String returnResult = disp.displayFeedback(feedback);
+		assert (returnResult != null);		
+		display(returnResult);
 		
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
@@ -96,6 +110,7 @@ public class UI extends JPanel implements ActionListener {
 		displayColorSetDefault();
 		inputColorSet();
 		displayScreen.append(text + newline);
+		LoggerUI.info("Display " + text);
 	}
 
 	/**
@@ -107,6 +122,8 @@ public class UI extends JPanel implements ActionListener {
 		displayColorSetDefault();
 		inputColorSet();
 		displayScreen.append(text);
+		LoggerUI.info("Display " + text);
+
 	}
 
 	/**
@@ -121,7 +138,7 @@ public class UI extends JPanel implements ActionListener {
 	 * Display input field in default setting (Black words, white background)
 	 */	
 	private void inputColorSet() {
-		inputScreen.setForeground(Color.BLACK);
+		inputScreen.setForeground(Color.BLUE);
 	}
 
 	/**

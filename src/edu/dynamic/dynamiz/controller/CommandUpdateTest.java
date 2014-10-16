@@ -19,8 +19,7 @@ public class CommandUpdateTest {
     @Test
     public void test() {
 	Parser parser = Parser.getInstance();
-	CommandLine cmdLine = parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
-	Command cmd = cmdLine.getCommand();
+	CommandUpdate cmd = (CommandUpdate) parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
 	cmd.execute();
 	
 	ToDoItem[] list = cmd.getAffectedItems();

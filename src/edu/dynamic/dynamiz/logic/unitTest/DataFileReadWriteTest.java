@@ -9,23 +9,23 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.controller.FileHandler;
+import edu.dynamic.dynamiz.controller.DataFileReadWrite;
 
-public class FileHandlerTest {
+public class DataFileReadWriteTest {
     
     @Test
     public void testGetListFromFile() {
-	ArrayList<ToDoItem> list = FileHandler.getListFromFile();
+	ArrayList<ToDoItem> list = DataFileReadWrite.getListFromFile();
 	assertEquals("list has 3 items", 3, list.size());
     }
     
     @Test
     public void testWriteToFile() {
 	try{
-	    ArrayList<ToDoItem> list = FileHandler.getListFromFile();
+	    ArrayList<ToDoItem> list = DataFileReadWrite.getListFromFile();
 	    //FileHandler.writeListToFile(list, "output.txt");
-	    FileHandler.writeListToFile(list);
-	    list = FileHandler.getListFromFile();
+	    DataFileReadWrite.writeListToFile(list);
+	    list = DataFileReadWrite.getListFromFile();
 	    assertEquals("list has 3 items", 3, list.size());
 	} catch(IOException ioe){
 	    

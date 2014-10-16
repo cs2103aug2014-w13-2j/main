@@ -1,14 +1,5 @@
 package edu.dynamic.dynamiz.controller;
 
-import java.util.List;
-
-import edu.dynamic.dynamiz.parser.Option;
-import edu.dynamic.dynamiz.parser.OptionType;
-import edu.dynamic.dynamiz.parser.Options;
-import edu.dynamic.dynamiz.structure.Date;
-import edu.dynamic.dynamiz.structure.DateTime;
-import edu.dynamic.dynamiz.structure.EventItem;
-import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -35,35 +26,13 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * @author zixian
  * */
-public class CommandAdd extends Command {
+public class CommandAdd extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
-    
-    //ExtractOptions constant
-    private static final int INDEX_FIRSTOPTIONOBJECT = 0;
-    
-    //List of options keywords
-    private static final String KEYWORD_PRIORITY = "priority";
-    private static final String KEYWORD_START = "from";
-    private static final String KEYWORD_END = "to";
-    
-    //OptList-related constants
-    private static final int OPTLISTINDEX_DATE = 0;
-    private static final int OPTLISTINDEX_TIME = 1;
-    private static final int OPTLIST_MINSIZE = 1;
-    
-    //Error messages
-    private static final String MSG_EMPTYDESCRIPTION = "Empty description string";
-    private static final String MSG_INVALIDENDDATE = "Invalid end date/deadline value";
-    private static final String MSG_INVALIDSTARTDATE = "Invalid start date value";
-    private static final String MSG_INVALIDDATES = "Invalid start/end date(s)";
     
     //Main data members
     private ToDoItem addedItem;	//The item being added by this command.
     
-    public CommandAdd(ToDoItem addedItem) {
-    	this.addedItem = addedItem;
-    }
     /**
      * Creates a new Command object that adds a new entry into the given storage.
      * @param description The description of the entry to be added.
@@ -71,13 +40,14 @@ public class CommandAdd extends Command {
      * @param storage The storage object to add the new entry into.
      * @throws IllegalArgumentException if description is an empty string.
      * */
-    public CommandAdd(String description, Options options) {
-	
+    public CommandAdd(ToDoItem item) {
+	assert item!=null;
+	this.addedItem = item;
     }
+
     @Override
     /**
      * Executes this command. Also used for redo operation.
-     * @throws IllegalArgumentException if any of the dates provided by the user is invalid.
      */
     public void execute() {
 	storage.addItem(addedItem);
@@ -89,8 +59,6 @@ public class CommandAdd extends Command {
      * Can only be called after calling this command's execute method.
      */
     public void undo() {
-	assert addedItem!=null;
-	
 	storage.removeItem(addedItem.getId());
     }
     
@@ -100,12 +68,13 @@ public class CommandAdd extends Command {
      * Must only be called after calling this command's undo() method.
      */
     public void redo(){
-	storage.addItem(addedItem);
+	execute();
     }
     
     @Override
     /**
      * Gets the String representation of this command's type.
+     * @return The String representation of this command's type.
      */
     public String getCommandName() {
 	return COMMAND_TYPE;
@@ -123,22 +92,5 @@ public class CommandAdd extends Command {
 	ToDoItem[] list = new ToDoItem[1];
 	list[0] = addedItem;
 	return list;
-    }
-    
-    /**
-     * Creates a Date object from the given date string.
-     * @param dateString The string representation of the Date instance to create.
-     * @return A Date instance such that toString().equals(dateString) returns true.
-     * @throws IllegalArgumentException if dateString does not represent a valid Date,
-     * 		DateTime, and day of week.
-     */
-    private Date makeDate(String dateString){
-	if(dateString.matches(Date.REGEX_DATE)){
-	    return Date.makeDate(dateString);
-	} else if(dateString.matches(DateTime.REGEX_DATETIME)){
-	    return DateTime.makeDateTime(dateString);
-	} else{
-	    return storage.getDate(dateString);
-	}
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.awt.color.*;
+import java.util.logging.*;
 
 import edu.dynamic.dynamiz.structure.*;
 
@@ -11,16 +12,25 @@ import edu.dynamic.dynamiz.structure.*;
  * @author Hu Wenyan
  * Implement Display functions for tasks, events and todoItems
  */
-public class Displayer implements DisplayerInterface {
+public class DisplayFormatter implements DisplayerInterface {
 //	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
 //	
 //	private static final int FEEDBACK_TAG = 1;
 //	private static final int ERROR_FEEDBACK_TAG = 2;
 //	private static final int SUCCESS_FEEDBACK_TAG = 3;
 //	private static final int HELP_FEEDBACK_TAG = 4;
-	
+	static final boolean HTML_TAG = false;
 	static final String UPDATE_COMMAND = "update";
 
+	private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+			"Deadline: %4$s\n"+"Status: %5$s";
+	
+	private static final String FORMAT_FEEDBACKSTRING_HTML = 
+									"ID: <div class:\"%s\">%1$s</div>\n"
+									+"Desc:<div class:\"%s\">%2$s</div>\n"
+									+"Priority: <div class:\"%s\">%3$d</div>\n"
+									+"Deadline: <div class:\"%s\">%4$s</div>\n"
+									+"Status: <div class:\"%s\">%5$s</div>";
 	
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
@@ -77,27 +87,30 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayTaskItem(TaskItem task) {
-		if(task == null) return new String("null task");
-		else return task.toString();
+		assert task!=null;
+		//if(task == null) return new String("null task");
+		 return task.toString();
 	}
 
 	@Override
 	public String displayTaskFile(TaskItem task) {
-		if(task == null) return new String("null task");
-		else return task.toFileString();
+		assert task!=null;
+		//if(task == null) return new String("null task");
+		return task.toFileString();
 	}
 	
 	@Override
 	public String displayTaskFeedback(TaskItem task) {
-		if(task == null) return new String("null task");
-		else return task.getFeedbackString();
+		assert task!=null;
+		//if(task == null) return new String("null task");
+		return task.getFeedbackString();
 	}
 
 	
 
 	@Override
 	public String displayTaskList(ArrayList<TaskItem> taskList) {
-		if(taskList == null ) return new String("null");
+		assert taskList!=null;
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< taskList.size(); i++){
@@ -108,7 +121,7 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
-		if(taskList == null ) return new String("null");
+		assert taskList!=null;
 		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< taskList.length; i++){
@@ -121,28 +134,27 @@ public class Displayer implements DisplayerInterface {
 	
 	@Override
 	public String displayEventFeedback(EventItem event) {
-		if(event == null) return new String("null event");
-		else return event.getFeedbackString();
+		assert event!=null;
+		 return event.getFeedbackString();
 		
 	}
 
 	@Override
 	public String displayEventFile(EventItem event) {
-		String s = new String("null event");
-		if(event == null) return s;
-		else return event.toFileString();
+		assert event!=null;
+		String s = new String();
+		return event.toFileString();
 	}
 	@Override
 	public String displayEventItem(EventItem event) {
-		String s = new String("null event");
-		if(event == null) return s;
-		else return event.toString();
+		assert event!=null;
+		return event.toString();
 	}
 	
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
-		String str = new String("null event");
-		if(eventList == null) return str;
+		assert eventList!=null;
+		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.size(); i++){
 			s.append(eventList.get(i).toString()).append("\n");
@@ -152,9 +164,8 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayEventList(EventItem[] eventList) {
-		String str = new String("null event");
-		if(eventList == null) return str;
-		
+		assert eventList!=null;
+		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.length; i++){
 			s.append(eventList[i].toString()).append("\n");
@@ -166,29 +177,29 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
-		String str = new String("null todoItem");
-		if(todoItem == null) return str;
-		else return todoItem.toString();
+		assert todoItem !=null;
+		String str = new String();
+		return todoItem.toString();
 	}
 
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
-		String str = new String("null todoItem");
-		if(todoItem == null) return str;
-		else return todoItem.getFeedbackString();
+		assert todoItem !=null;
+		String str = new String();
+		return todoItem.getFeedbackString();
 	}
 
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
-		String str = new String("null todoItem");
-		if(todoItem == null) return str;
-		else return todoItem.toFileString();
+		assert todoItem !=null;
+		String str = new String(); 
+		return todoItem.toFileString();
 	}
 	
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
-		String str = new String("null todoItem");
-		if(todoList == null) return str;
+		assert todoList !=null;
+		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.size(); i++){
 			s.append(todoList.get(i).toString()).append("\n");
@@ -198,9 +209,8 @@ public class Displayer implements DisplayerInterface {
 
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
-		String str = new String("null todoItem");
-		if(todoList == null) return str;
-		
+		assert todoList !=null;
+		String str = new String();		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.length; i++){
 			s.append(todoList[i].toString()).append("\n");
@@ -212,6 +222,7 @@ public class Displayer implements DisplayerInterface {
 
 	public String displayPrompt() {
 		String s = new String ("Command: ");
+		 s = TagFormat.format(s, TagFormat.PROMPT); 
 		return s;
 	}
 //	public String displayEnterCommandPrompt() {
@@ -242,44 +253,51 @@ public class Displayer implements DisplayerInterface {
 			break;
 		default:
 			tag = ENTER_VALID_COMMAND_STR;
-		}	
-		
+		}		
 		//tag+="\n";
-		
+		 tag = TagFormat.format(tag, TagFormat.PROMPT);
 		return tag;
 	}
 
 	public String displayPrompt(String promptMessage) {
+		 promptMessage = TagFormat.format(promptMessage, TagFormat.PROMPT);
 		return promptMessage;
 	}
 
 	
 	public String displayFeedback(Feedback commandFeedback) {
-		if(commandFeedback == null ) return "null";
+		assert commandFeedback!=null;
+		
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
 		switch(t){
+		
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
-			s = hf.getHelpContent();
+			s = hf.getHelpContent();		
+			 s = TagFormat.format(s, TagFormat.HELP);
 			break;
 			
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s =ef.getCommandType()+" unsuccessful!"+"\n";
-			s+=" "+ef.getMessage();
+			 s = TagFormat.format(s, TagFormat.ERORR);		
+			s+=" "+ef.getMessage();		
 			break;
 			
 		case SUCCESS_FEEDBACK_TAG:
-			StringBuilder a = new StringBuilder();
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
 			
-			a.append(sf.getCommandType()).append(" successfully!").append("\n");
+			String sMsg = sf.getCommandType()+" successfully!";
+			 sMsg = TagFormat.format(sMsg, TagFormat.SUCCESS);
+			sMsg = sMsg+"\n";	
 			
+			StringBuilder a = new StringBuilder();
 			getFeedbackContent(a,sf);
 			
-			s = a.toString();
+			
+			s = sMsg + a.toString();
 			
 			break;
 		default:
@@ -290,27 +308,77 @@ public class Displayer implements DisplayerInterface {
 		return s;		
 	}
 	
+	
+	
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
-		if(list == null ) return;
-		else if(sf.getCommandType().equals(UPDATE_COMMAND)){
+		assert list!=null;
+		
+		if(sf.getCommandType().equals(UPDATE_COMMAND)){
 			assert(2==list.length);
 			a.append("Item affected:").append("\n");
-			a.append(list[0].getFeedbackString()).append("\n");
+		
+			a.append(formatTask(list[0])).append("\n");
 			
 			a.append("Updated:").append("\n");
-			a.append(list[1].getFeedbackString()).append("\n");
+			a.append(formatTask(list[1])).append("\n");
 			
 		}
 		else{ 
 			for( int i = 0 ; i< list.length; i++){
-			a.append(list[i].getFeedbackString()).append("\n");
+			a.append(formatTask(list[i]));
 			a.append("\n");
 		}			
 		}
 		
+		
 	}
-	 int getFeedbackTag(Feedback f){
+	
+	private String formatTask(ToDoItem item){
+		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+				"Deadline: %4$s\n"+"Status: %5$s";
+		
+		final String FORMAT_FEEDBACKSTRING_HTML = 
+										"ID: <div class:\"%s\">%1$s</div>\n"
+										+"Desc:<div class:\"%s\">%2$s</div>\n"
+										+"Priority: <div class:\"%s\">%3$d</div>\n"
+										+"Deadline: <div class:\"%s\">%4$s</div>\n"
+										+"Status: <div class:\"%s\">%5$s</div>";
+		assert item!=null;
+		StringBuilder sb = new StringBuilder();
+		String ID = item.getId();
+		 ID = TagFormat.format(ID, TagFormat.TASK_ID);
+		String des = item.getDescription();
+		 des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
+		int pri = item.getPriority();
+		String prioS = TagFormat.formatPri(pri);
+		String stas = item.getStatus();
+		stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
+		sb.append(ID).append("\n").
+		append(des).append("\n").
+		append(prioS).append("\n").
+		append(stas).append("\n");
+		if(item instanceof TaskItem){
+			TaskItem t = (TaskItem)item;
+			String ddl = t.getDeadlineString();
+			ddl = TagFormat.format(ddl, TagFormat.END_TIME);
+			sb.append(ddl).append("\n");
+		}
+		else if (item instanceof EventItem){
+			EventItem t = (EventItem)item;
+			String starT = t.getStartDateString();
+			starT = TagFormat.format(starT, TagFormat.START_TIME);
+			String endT = t.getEndDateString();
+			endT =  TagFormat.format(starT, TagFormat.END_TIME);
+			sb.append(starT).append("\n").
+			append(endT).append("\n");
+			
+		}
+		
+		return sb.toString();
+	}
+	
+	private int getFeedbackTag(Feedback f){
 		String t =f.getClassName();
 		
 		if(t.equals("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
@@ -322,21 +390,89 @@ public class Displayer implements DisplayerInterface {
 	}
 
 	
+	
 	@Override
 	public String displayHelpPage() {
 		StringBuilder sb = new StringBuilder();
 		String title = StringUtils.center("Help Page", 9);
 		sb.append(title).append("\n");
-		return null;
-	}
+		return sb.toString();
+	}	
+}
 
+class TagFormat{
+	//HTML Tag
+	//PRIORITY_TAG
+	public static final String SUCCESS = "";
+	public static final String HELP = "";
+	public static final String ERORR = "";
+	public static final String PROMPT = "";
+	
+	public static final String PRIORITY = "";
+	public static final String TASK_ID = "";
+	public static final String TASK_DESCRIPTION = "";
+	public static final String TASK_STATUS = "";
+	public static final String START_TIME = "";
+	public static final String END_TIME = "";
+	public static final String TIME = "";
+	
+	public static final String PRIORITY_URGENT= "";
+	public static final int TAG_URGENT= 5;
+	
+	public static final String PRIORITY_HIGH = "";
+	public static final int TAG_HIGH= 4;
+	
+	public static final String PRIORITY_MEDIUN = "";
+	public static final int TAG_MEDIUM= 3;
+	
+	public static final String PRIORITY_LOW = "";
+	public static final int TAG_LOW= 2;
+	
+	public static final String PRIORITY_NONE = "";
+	public static final int TAG_NONE= 1;
 	
 	
+	
+	private static final String FORMAT_HTML_TAG = "<div class:\"%s\" >%s</div>";
+	
+	public static String format(String content, String tag){
+		if(!DisplayFormatter.HTML_TAG) return content;
+		return String.format(FORMAT_HTML_TAG, tag, content);
+	}
+	
+	public static String formatPri(int tag){
+		if(!DisplayFormatter.HTML_TAG) return String.valueOf(tag);
+		String tagS = new String();
+		switch(tag){
+		case TAG_URGENT:
+			tagS = PRIORITY_URGENT;
+			break;
+			
+		case TAG_HIGH:
+			tagS = PRIORITY_HIGH;
+			break;
+			
+		case TAG_MEDIUM:
+			tagS = PRIORITY_MEDIUN;
+			break;
+			
+		case TAG_LOW:
+			tagS = PRIORITY_LOW;
+			break;
+			
+		case TAG_NONE:
+			tagS = PRIORITY_NONE;
+			break;
+		
+		
+		}
+		return String.format(tagS, String.valueOf(tag));
+	}
 	
 }
 
-class StringUtils {
 
+class StringUtils {
     public static String center(String s, int size) {
         return center(s, size, " ");
     }

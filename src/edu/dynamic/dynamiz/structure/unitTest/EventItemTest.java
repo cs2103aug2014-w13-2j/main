@@ -7,6 +7,7 @@ import org.junit.Test;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.DateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class EventItemTest {
     
@@ -56,6 +57,8 @@ public class EventItemTest {
 	event2.setEndDate(new Date(1, 11, 2014));
 	assertFalse(event.getEndDate().equals(event2.getEndDate()));
 	assertEquals(event.getId(), event2.getId());
+	event2.setStatus(ToDoItem.STATUS_COMPLETED);
+	assertFalse(event.getStatus().equals(event2.getStatus()));
     }
     
     //@Test Test shows the pool of ID strings is shared.

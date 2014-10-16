@@ -30,26 +30,23 @@ public class Controller {
     
     //Defines the messages used for feedback.
     private static final String MSG_INVALIDCOMMAND = "Invalid command";
-    private static final String MSG_EMPTYSTACK = "No command to undo/redo";
+    private static final String MSG_EMPTYSTACK = "No command to %1$s";
     
     //Main data members
     private Parser parser;	//The Parser object to parse input commands
-    private Stack<Command> undoStack, redoStack;
-    private Stack<String> cmdHistory, undoneCommands;
+    private Stack<Undoable> undoStack, redoStack;	//Tracks commands being executed/undone
+    private Stack<String> cmdHistory, undoneCommands;	//Tracks command strings being executed/undone
     
     /**
      * Creates a new Controller object for the program.
      */
     public Controller(){
 	parser = Parser.getInstance();
-	undoStack = new Stack<Command>();	//Keeps track of past commands
-	redoStack = new Stack<Command>();	//Keeps track of undone commands.
+	undoStack = new Stack<Undoable>();	//Keeps track of past commands
+	redoStack = new Stack<Undoable>();	//Keeps track of undone commands.
 						//Clears when executing new commands while this stack is not empty.
 	cmdHistory = new Stack<String>();	//Keeps track of past command strings
 	undoneCommands = new Stack<String>();	//Keeps track of undone command strings. Same mechanism as redoStack.
-	
-	
-	
 	Storage.getInstance();
     }
     
@@ -61,80 +58,31 @@ public class Controller {
      */
     public Feedback executeCommand(String input){
 	Command command = null;
-	CommandType commandType = null;
-	String commandString;
-	//Feedback feedback;
+
 	try{
-//	    /* To be scrapped after changing Parser.parse() return type to Command */
-//	    CommandLine cmdLine = parser.parse(input);
-//	    commandType = cmdLine.getCommandType();
-//	    
-	    /* Proposed changes */
-	    command = parser.parse(input).getCommand();
+	    command = parser.parse(input);	//this method throws IllegalArgumentException
 	    if(command instanceof CommandUndo){
 	    	((CommandUndo)command).setStacks(undoStack, redoStack);
 	    } else if(command instanceof CommandRedo){
-	    	((CommandRedo)command).setStacks(undoStack, redoStack);
+		((CommandRedo)command).setStacks(undoStack, redoStack);
 	    }
 	    
-	    command.execute();
-	    if(!(command instanceof CommandList) && !(command instanceof CommandSearch) &&
-	    	!(command instanceof CommandUndo) && !(command instanceof CommandRedo)){
-	    		undoStack.push(command);
-	    		cmdHistory.push(input);
-	    		redoStack.clear();
-	    		undoneCommands.clear();
-	    	} else if(command instanceof CommandUndo){
-	    		input = cmdHistory.pop();
-	    		undoneCommands.push(input);
-		} else if(command instanceof CommandRedo){
-	    		input = undoneCommands.pop();
-	    		cmdHistory.push(input);
-		}
-	    return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
-
-	    //To be scrapped after changing Parser.parse() to return Command object
-//	    switch(commandType){
-//		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
-//			break;
-//		case DELETE: command = new CommandDelete(cmdLine.getParam());
-//			break;
-//		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
-//			break;
-//		case LIST: command = new CommandList();
-//			break;
-//		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
-//			break;
-//		default: throw new Exception();
-//	    }
-//	    if(commandType!=CommandType.UNDO && commandType!=CommandType.REDO){
-//		command.execute();
-//		if(commandType!=CommandType.LIST && commandType!=CommandType.SEARCH){
-//		    undoStack.push(command);
-//		    cmdHistory.push(input);
-//		    redoStack.clear();
-//		    undoneCommands.clear();
-//		}
-//		return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
-//	    } else if(commandType==CommandType.UNDO){
-//		command = undoStack.pop();
-//		commandString = cmdHistory.pop();
-//		command.undo();
-//		redoStack.push(command);
-//		undoneCommands.push(commandString);
-//		return new SuccessFeedback("undo", "undo "+commandString, command.getAffectedItems());
-//	    } else{	//commandType==COMMANDTYPE.REDO
-//		command = redoStack.pop();
-//		commandString = undoneCommands.pop();
-//		command.redo();
-//		undoStack.push(command);
-//		cmdHistory.push(commandString);
-//		return new SuccessFeedback("redo", "redo "+commandString, command.getAffectedItems());
-//	    }
+	    command.execute();	//If exceptions occur during execution, the command object does not go into undo stack
+	    if(command instanceof Undoable){
+		undoStack.push((Undoable) command);
+		cmdHistory.push(input);
+    		redoStack.clear();
+    		undoneCommands.clear();
+	    } else if(command instanceof CommandUndo){
+    		undoneCommands.push(cmdHistory.pop());
+	    } else if(command instanceof CommandRedo){
+    		cmdHistory.push(undoneCommands.pop());
+	    }
 	    
+	     return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
 	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
-	    return new ErrorFeedback(command.getCommandName(), input, MSG_EMPTYSTACK);
-	} catch(IllegalArgumentException e){
+	    return new ErrorFeedback(command.getCommandName(), input, String.format(MSG_EMPTYSTACK, command.getCommandName()));
+	} catch(IllegalArgumentException e){	//Thrown by parser and storage operations
 	    return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
 	    return new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
