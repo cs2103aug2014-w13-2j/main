@@ -17,6 +17,7 @@ public class StorageTest {
 	assertEquals(3, list.length);
 	for(int i=0; i<3; i++)
 	    System.out.println(list[i]);
+	System.out.println();
 	ToDoItem temp = storage.removeItem("A1");
 	assertEquals("A1", temp.getId());
 	list = storage.getList();
@@ -27,4 +28,13 @@ public class StorageTest {
 	assertEquals("A4", list[2].getId());
     }
     
+    @Test
+    public void testCompleteItem(){
+	Storage storage = Storage.getInstance();
+	ToDoItem item = storage.completeItem("A2");
+	System.out.println(item);
+	ToDoItem item2 = storage.undoComplete();
+	
+	System.out.println(item2);
+    }
 }

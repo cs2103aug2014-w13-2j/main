@@ -25,6 +25,10 @@ public class CommandDo extends Command implements Undoable{
     private String id;
     private ToDoItem feedbackItem;
     
+    /**
+     * Creates a new instance of this command.
+     * @param id The ID of the item to mark as completed.
+     */
     public CommandDo(String id){
 	assert id!=null && !id.isEmpty();
 	this.id = id;
