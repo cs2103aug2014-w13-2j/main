@@ -46,6 +46,10 @@ public class CommandUndo extends Command {
     }
     
     @Override
+    /**
+     * Executes this command.
+     * @throws EmptyStackException if the undo stack is empty.
+     */
     public void execute() throws EmptyStackException {
 	assert undoStack!=null && redoStack!=null;
 	command = undoStack.pop();
