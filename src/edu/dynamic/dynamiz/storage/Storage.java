@@ -9,7 +9,10 @@ import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
 import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.EndDateComparator;
 import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.PriorityComparator;
+import edu.dynamic.dynamiz.structure.StartDateComparator;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -19,10 +22,13 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods(currently that can be used)
  * static Storage getInstance()	//gets the Storage instance
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
- * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details.
- * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
  * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
+ * ToDoItem[] getListSortedByEndDate()	//Gets a list of ToDoItem sorted in ascending order by end date.
+ * ToDoItem[] getListSortedByPriority()	//Gets a list of ToDoItem sorted in descending order by priority.
+ * ToDoItem[] getListSortedByStartDate()	//Gets a list of ToDoItem sorted in ascending order by start date.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
+ * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
+ * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
  * 
  * @author zixian
  */
@@ -268,6 +274,45 @@ public class Storage {
 	    return null;
 	}
 	Collections.sort(mainList);
+	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Gets a list that is sorted by start date in ascending order.
+     * @return An array of ToDoItem sorted in ascending order by start date
+     * 		or null if there is no item in the storage.
+     .*/
+    public ToDoItem[] getListSortedByStartDate(){
+	if(mainList.isEmpty()){
+	    return null;
+	}
+	Collections.sort(mainList, new StartDateComparator());
+	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Gets a list that is sorted by end date in ascending order.
+     * @return An array of ToDoItem sorted in ascending order by end date
+     * 		or null if there is no item in the storage.
+     .*/
+    public ToDoItem[] getListSortedByEndDate(){
+	if(mainList.isEmpty()){
+	    return null;
+	}
+	Collections.sort(mainList, new EndDateComparator());
+	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Gets a list of ToDoItem sorted in descending order by priority level.
+     * @return An array of ToDoItem sorted in descending order by priority or
+     * 		null if there is no item in this storage.
+     */
+    public ToDoItem[] getListSortedByPriority(){
+	if(mainList.isEmpty()){
+	    return null;
+	}
+	Collections.sort(mainList, Collections.reverseOrder(new PriorityComparator()));
 	return mainList.toArray(new ToDoItem[mainList.size()]);
     }
     

@@ -36,5 +36,27 @@ public class StorageTest {
 	ToDoItem item2 = storage.undoComplete();
 	
 	System.out.println(item2);
+	System.out.println();
+    }
+    
+    @Test
+    public void testSorting(){
+	Storage storage = Storage.getInstance();
+	ToDoItem[] list = storage.getListSortedByEndDate();
+	/*for(ToDoItem i: list)
+	    System.out.println(i);
+	System.out.println();*/
+	
+	System.out.println("Sort by start date");
+	list = storage.getListSortedByStartDate();
+	for(ToDoItem i: list)
+	    System.out.println(i);
+	System.out.println();
+	
+	System.out.println("Sort by priority");
+	list = storage.getListSortedByPriority();
+	for(ToDoItem i: list)
+	    System.out.println(i.getPriority());
+	System.out.println();
     }
 }
