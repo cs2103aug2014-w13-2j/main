@@ -2,6 +2,17 @@ package edu.dynamic.dynamiz.structure;
 
 import java.util.Comparator;
 
+/**
+ * Defines the comparator object to compare ToDoItem objects by their end dates.
+ * 
+ * Constructor
+ * EndDateComparator()	//Creates a new instance of this comparator.
+ * 
+ * Public Methods
+ * int compare(ToDoItem item1, ToDoItem item2)	//Compares item 1 and item2
+ * 
+ * @author zixian
+ */
 public class EndDateComparator implements Comparator<ToDoItem>{
     
     /**
