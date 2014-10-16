@@ -156,7 +156,7 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String date1 = "15/10/2014 13:00";
+		String date1 = "5/10/2014 13:00";
 		Parser parser = Parser.getInstance();
 		Date d = parser.parseDate(date1);
 		System.out.println(d);
