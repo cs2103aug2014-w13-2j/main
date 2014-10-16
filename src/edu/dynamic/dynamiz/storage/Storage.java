@@ -100,6 +100,7 @@ public class Storage {
     /**
      * Updates the item with the given id with the specified changes.
      * @param id The id of the item to update.
+     * @param description The new description of the target object.
      * @param priority The new priority for the item to be updated, use a negative number to indicate
      * 			no change to priority.
      * @param start The new start date for the item, or null if start date is not to be changed.
@@ -107,14 +108,15 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end){
+    public ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end) {
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
 	
-	if(target==null)
+	if(target==null){
 	    throw new IllegalArgumentException("No such ID");
+	}
 	
 	//Makes a copy of the current version of the object
 	if(target instanceof TaskItem){
@@ -341,28 +343,28 @@ public class Storage {
      * Removes the ToDoItem with the given ID from the list.
      * For use by CommandAdd's undo method and CommandDelete's execute method.
      * @param id The id of the ToDoItem object to remove from the list.
-     * @return The ToDoItem object that was removed from the list by this operation or null if
-     * 		no such item with the given id exists..
+     * @return The ToDoItem object that was removed from the list by this operation.
+     * @throws IllegalArgumentException if no item with the given ID is found.
      */
     public ToDoItem removeItem(String id){
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem temp = searchTree.remove(id);
-	if(temp!=null){
-	    mainList.remove(temp);
-	    if(temp instanceof TaskItem){
-		taskList.remove((TaskItem)temp);
-	    } else if(temp instanceof EventItem){
-		eventList.remove((EventItem)temp);
-	    } else{
-		toDoItemList.remove(temp);
-	    }
+	if(temp==null){
+	    throw new IllegalArgumentException("No such ID.");
+	}
+	mainList.remove(temp);
+	if(temp instanceof TaskItem){
+	    taskList.remove((TaskItem)temp);
+	} else if(temp instanceof EventItem){
+	    eventList.remove((EventItem)temp);
+	} else{
+	    toDoItemList.remove(temp);
 	}
 	try {
 	    FileHandler.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    
 	}
 	return temp;
     }
@@ -371,7 +373,8 @@ public class Storage {
      * Marks the item with the given ID as completed.
      * Note: Currently does not write the completed item to file.
      * @param id The id of the item to mark as completed.
-     * @return The ToDoItem that is marked as completed or null if there is no such item with the given id.
+     * @return The ToDoItem that is marked as completed.
+     * @throws IllegalArgumentException if there is no item with the given ID.
      */
     public ToDoItem completeItem(String id){
 	ToDoItem item = removeItem(id);

@@ -58,42 +58,16 @@ public class Controller {
      */
     public Feedback executeCommand(String input){
 	Command command = null;
-	CommandType commandType = null;
-
+	
 	try{
-	    /* To be scrapped after changing Parser.parse() return type to Command */
-	    CommandLine cmdLine = parser.parse(input);
-	    commandType = cmdLine.getCommandType();
-	    
-	    /* Proposed changes */
-	    //command = parser.parse(input);
-	    //if(command instanceof CommandUndo){
-	    //	((CommandUndo)command).setStacks(undoStack, redoStack);
-	    //} else if(command instanceof CommandRedo){
-		//((CommandRedo)command).setStacks(undoStack, redoStack);
-	    //}
-
-	    //To be scrapped after changing Parser.parse() to return Command object
-	    switch(commandType){
-		case ADD: command = new CommandAdd(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		case DELETE: command = new CommandDelete(cmdLine.getParam());
-			break;
-		case UPDATE: command = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		case LIST: command = new CommandList();
-			break;
-		case SEARCH: command = new CommandSearch(cmdLine.getParam(), cmdLine.getOptions());
-			break;
-		case UNDO: command = new CommandUndo();
-			((CommandUndo)command).setStacks(undoStack, redoStack);
-			break;
-		case REDO: command = new CommandRedo();
-			break;
-		default: throw new Exception();
+	    command = parser.parse(input);	//this method throws IllegalArgumentException
+	    if(command instanceof CommandUndo){
+	    	((CommandUndo)command).setStacks(undoStack, redoStack);
+	    } else if(command instanceof CommandRedo){
+		((CommandRedo)command).setStacks(undoStack, redoStack);
 	    }
 	    
-	    command.execute();
+	    command.execute();	//If exceptions occur during execution, the command object does not go into undo stack
 	    if(command instanceof Undoable){
 		undoStack.push((Undoable) command);
 		cmdHistory.push(input);
@@ -109,7 +83,7 @@ public class Controller {
 	    
 	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
 	    return new ErrorFeedback(command.getCommandName(), input, String.format(MSG_EMPTYSTACK, command.getCommandName()));
-	} catch(IllegalArgumentException e){
+	} catch(IllegalArgumentException e){	//Thrown by parser and storage operations
 	    return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
 	    return new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);

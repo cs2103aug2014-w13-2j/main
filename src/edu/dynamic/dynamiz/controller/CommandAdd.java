@@ -59,7 +59,6 @@ public class CommandAdd extends Command implements Undoable {
      * Can only be called after calling this command's execute method.
      */
     public void undo() {
-	assert addedItem!=null;
 	storage.removeItem(addedItem.getId());
     }
     
