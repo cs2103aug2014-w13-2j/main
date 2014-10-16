@@ -8,11 +8,14 @@ public class CommandDoTest {
     
     @Test
     public void test() {
-	CommandDo cmd = new CommandDo("A1");
+	CommandDo cmd = new CommandDo("A2");
 	cmd.execute();
 	System.out.println(cmd.getAffectedItems()[0]);
-	
-	cmd = new CommandDo("A4");
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testIllegalOperations(){
+	Command cmd = new CommandDo("A4");
 	cmd.execute();
 	assertTrue(cmd.getAffectedItems()==null);
     }
