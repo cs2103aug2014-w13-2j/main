@@ -72,6 +72,10 @@ public class CommandUpdate extends Command implements Undoable {
 	
 	storage.removeItem(updatedItem[UPDATEDINDEX_NEW].getId());
 	storage.addItem(updatedItem[UPDATEDINDEX_OLD]);
+	ToDoItem[] temp = new ToDoItem[2];
+	temp[UPDATEDINDEX_OLD] = updatedItem[UPDATEDINDEX_NEW];
+	temp[UPDATEDINDEX_NEW] = updatedItem[UPDATEDINDEX_OLD];
+	updatedItem = temp;
     }
     
     @Override

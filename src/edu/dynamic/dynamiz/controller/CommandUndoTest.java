@@ -6,11 +6,13 @@ import java.util.Stack;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
 public class CommandUndoTest {
     
     @Test
     public void test() {
-	CommandDo cmd = new CommandDo("A2");
+	Command cmd = new CommandDo("A2");
 	cmd.execute();
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();
@@ -20,6 +22,21 @@ public class CommandUndoTest {
 	undo.setStacks(undoStack, redoStack);
 	undo.execute();
 	System.out.println(undo.getAffectedItems()[0]);
+	System.out.println();
+	
+	cmd = new CommandUpdate("A2", null, 4, null, null);
+	cmd.execute();
+	ToDoItem[] list = cmd.getAffectedItems();
+	for(ToDoItem i: list)
+	    System.out.println(i);
+	System.out.println();
+	undoStack.push((Undoable)cmd);
+	undo.execute();
+	list = undo.getAffectedItems();
+	for(ToDoItem i: list)
+	    System.out.println(i);
+	System.out.println();
+	
     }
     
 }
