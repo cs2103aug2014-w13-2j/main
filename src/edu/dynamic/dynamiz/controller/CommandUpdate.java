@@ -10,7 +10,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * target object.
  * 
  * Constructor
- * CommandUpdate(String param, Options options)	//Creates a new instance of this Command
+ * CommandUpdate(String id, String description, int priority, Date start, Date end)	//Creates a new instance of this Command
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -18,7 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void redo()		//Redo this command.
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects that are affected by this command.
- * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
  * 
  * @author zixian*/
 public class CommandUpdate extends Command implements Undoable {

@@ -66,7 +66,7 @@ public class DateTimeTest {
     @Test
     public void testCompareTo(){
 	Date date = new Date();
-	DateTime dt1 = new DateTime();
+	Date dt1 = new DateTime();
 	DateTime dt2 = new DateTime(5, 5, 1995, 22, 59);
 	assertTrue("date==dt1", date.compareTo(dt1)==0);
 	assertTrue("dt1<dt2", dt1.compareTo(dt2)<0);
