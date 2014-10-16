@@ -29,7 +29,7 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * 
  * @author zixian
  */
-public class FileHandler {
+public class DataFileReadWrite {
     //Name of the default file to read from/write to.
     private static final String FILENAME_DEFAULT = "todo.txt";
     

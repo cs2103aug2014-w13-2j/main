@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import edu.dynamic.dynamiz.controller.FileHandler;
+import edu.dynamic.dynamiz.controller.DataFileReadWrite;
 import edu.dynamic.dynamiz.structure.Date;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
@@ -40,7 +40,7 @@ public class Storage {
      * Creates a new instance of Storage.
      */
     private Storage(){
-	mainList = FileHandler.getListFromFile();
+	mainList = DataFileReadWrite.getListFromFile();
 	searchTree = new TreeMap<String, ToDoItem>();
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
@@ -90,7 +90,7 @@ public class Storage {
 	    toDoItemList.add(item);
 	}
 	try {
-	    FileHandler.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -158,7 +158,7 @@ public class Storage {
 	list[1] = target;
 	
 	try {
-	    FileHandler.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -362,7 +362,7 @@ public class Storage {
 	    toDoItemList.remove(temp);
 	}
 	try {
-	    FileHandler.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
 	} catch (IOException e) {
 	    
 	}
