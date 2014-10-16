@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
+import edu.dynamic.dynamiz.structure.DateTime;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -17,8 +18,8 @@ public class CommandUpdateTest {
     @Test
     public void test() {
 	Parser parser = Parser.getInstance();
-	CommandLine cmdLine = parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
-	CommandUpdate cmd = new CommandUpdate(cmdLine.getParam(), cmdLine.getOptions());
+	parser.parse("update A3 Midterm for CS2105 from 4/10/2014 16:00");
+	CommandUpdate cmd = new CommandUpdate("A3", "Midterm for CS2105", -1, new DateTime(4, 10, 2014, 16, 0), null);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	assertEquals(2, list.length);
