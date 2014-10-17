@@ -23,8 +23,7 @@ public class CommandAddTest {
 	assertEquals("item has 1 object", 1, item.length);
 	cmd.undo();
 	
-	cmd = (CommandAdd) parser.parse("add Learn C++ from 31/10/2014 12:00");
-	// cmd = new CommandAdd(new EventItem("Learn C++", new DateTime(31, 10, 2014, 12, 0)));
+	cmd = (CommandAdd) parser.parse("add Learn C++ from 31/10/2014 12:00 to 11/11/2014 12:00");
 	cmd.execute();
     }
     
