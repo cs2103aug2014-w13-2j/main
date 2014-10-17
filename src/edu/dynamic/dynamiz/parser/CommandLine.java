@@ -133,7 +133,7 @@ public class CommandLine {
 			int priority = Integer.parseInt(getFirstOptionValue(commandOptions, OptionType.PRIORITY));
 			commandItem.setPriority(priority);
 		}
-
+		
 		return new CommandAdd(commandItem);
 	}
 
