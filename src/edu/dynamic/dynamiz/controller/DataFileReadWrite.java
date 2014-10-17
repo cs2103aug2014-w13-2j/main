@@ -29,7 +29,7 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * 
  * @author zixian
  */
-public class FileHandler {
+public class DataFileReadWrite {
     //Name of the default file to read from/write to.
     private static final String FILENAME_DEFAULT = "todo.txt";
     
@@ -153,17 +153,17 @@ public class FileHandler {
 	int priority = Integer.parseInt(params[INDEX_PRIORITY]);
 	String status = params[INDEX_STATUS];
 	
-	Date startDate, endDate;
-	if(params[INDEX_STARTDATE].matches(DateTime.REGEX_DATETIME)){
-	    startDate = DateTime.makeDateTime(params[INDEX_STARTDATE]);
+	MyDate startDate, endDate;
+	if(params[INDEX_STARTDATE].matches(MyDateTime.REGEX_DATETIME)){
+	    startDate = MyDateTime.makeDateTime(params[INDEX_STARTDATE]);
 	} else{
-	    startDate = Date.makeDate(params[INDEX_STARTDATE].split(DATETIME_DELIM)[DATEINDEX]);
+	    startDate = MyDate.makeDate(params[INDEX_STARTDATE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
-	if(params[INDEX_ENDDATE].matches(DateTime.REGEX_DATETIME)){
-	    endDate = DateTime.makeDateTime(params[INDEX_ENDDATE]);
+	if(params[INDEX_ENDDATE].matches(MyDateTime.REGEX_DATETIME)){
+	    endDate = MyDateTime.makeDateTime(params[INDEX_ENDDATE]);
 	} else{
-	    endDate = Date.makeDate(params[INDEX_ENDDATE].split(DATETIME_DELIM)[DATEINDEX]);
+	    endDate = MyDate.makeDate(params[INDEX_ENDDATE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
 	event = new EventItem(description, priority, startDate, endDate);
@@ -201,11 +201,11 @@ public class FileHandler {
 	int priority = Integer.parseInt(params[INDEX_PRIORITY]);
 	String status = params[INDEX_STATUS];
 	
-	Date deadline;
-	if(params[INDEX_DEADLINE].matches(DateTime.REGEX_DATETIME)){
-	    deadline = DateTime.makeDateTime(params[INDEX_DEADLINE]);
+	MyDate deadline;
+	if(params[INDEX_DEADLINE].matches(MyDateTime.REGEX_DATETIME)){
+	    deadline = MyDateTime.makeDateTime(params[INDEX_DEADLINE]);
 	} else{
-	    deadline = Date.makeDate(params[INDEX_DEADLINE].split(DATETIME_DELIM)[DATEINDEX]);
+	    deadline = MyDate.makeDate(params[INDEX_DEADLINE].split(DATETIME_DELIM)[DATEINDEX]);
 	}
 	
 	task = new TaskItem(description, priority, deadline);

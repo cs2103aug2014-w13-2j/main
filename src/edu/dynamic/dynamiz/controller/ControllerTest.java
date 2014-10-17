@@ -23,9 +23,9 @@ public class ControllerTest {
 	
 	//Adds an event
 	feedback = controller.executeCommand("add Meeting priority 2 from 7/10/2014");
-	
 	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00");
 	
+	feedback = controller.executeCommand("add A from 1/1/2000 13:00 to 2/1/2000 14:00");
 	//Deletes and item
 	feedback = controller.executeCommand("delete A2");
 	assertEquals("delete", feedback.getCommandType());
@@ -50,7 +50,7 @@ public class ControllerTest {
 	
 	//Tests program's handling of invalid options.
 	feedback = controller.executeCommand("update A4 from to");
-	assertTrue(feedback instanceof SuccessFeedback);
+	assertFalse(feedback instanceof SuccessFeedback);
 	//System.out.println(((SuccessFeedback)feedback).getAffectedItems()[0]);
 	//System.out.println(((SuccessFeedback)feedback).getAffectedItems()[1]);
 	

@@ -5,7 +5,7 @@ package edu.dynamic.dynamiz.structure;
  * Defines an object containing both date and time. Time is defined using 24-hour clock.
  * @author zixian
  */
-public class DateTime extends Date {
+public class MyDateTime extends MyDate {
     //The default time values
     private static final int DEFAULT_HOUR = 0;
     private static final int DEFAULT_MINUTE = 0;
@@ -20,17 +20,17 @@ public class DateTime extends Date {
     /**
      * Creates a new DateTime object with the default date and time.
      */
-    public DateTime(){
+    public MyDateTime(){
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
     /**
      * Downcast constructor for Date object and copy constructor for DateTime object.
      */
-    public DateTime(Date date){
+    public MyDateTime(MyDate date){
 	this(date.getDayOfMonth(), date.getMonth(), date.getYear());
-	if(date instanceof DateTime){
-	    DateTime temp = (DateTime)date;
+	if(date instanceof MyDateTime){
+	    MyDateTime temp = (MyDateTime)date;
 	    setTime(temp.getHour(), temp.getMinute());
 	}
     }
@@ -38,7 +38,7 @@ public class DateTime extends Date {
     /**
      * Creates a new DateTime object with the specified date, using the default time.
      */
-    public DateTime(int date, int month, int year) throws IllegalArgumentException{
+    public MyDateTime(int date, int month, int year) throws IllegalArgumentException{
 	this(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
     }
     
@@ -46,7 +46,7 @@ public class DateTime extends Date {
      * Creates a new DateTime object with the specified date and time details.
      * @throws IllegalArgumentException if the date and time is invalid on the calendar of 24-hour clock.
      */
-    public DateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
+    public MyDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	setDateTime(date, month, year, hour, minute);
     }
     
@@ -56,7 +56,7 @@ public class DateTime extends Date {
      * @return A DateTime instance such that calling toString().equals(dateString) returns true.
      * @throws IllegalArgumentException if either the date and/or the time is invalid.
      */
-    public static DateTime makeDateTime(String dateString){
+    public static MyDateTime makeDateTime(String dateString){
 	assert dateString.matches(REGEX_DATETIME);
 	
 	String[] dateAndTime = dateString.split(" ");
@@ -67,7 +67,7 @@ public class DateTime extends Date {
 	int year = Integer.parseInt(dateArray[2]);
 	int hour = Integer.parseInt(timeArray[0]);
 	int minute = Integer.parseInt(timeArray[1]);
-	return new DateTime(day, month, year, hour, minute);
+	return new MyDateTime(day, month, year, hour, minute);
     }
     
     /**
@@ -140,18 +140,18 @@ public class DateTime extends Date {
     }
 
     @Override
-    public int compareTo(Date date2){
-	if(!(date2 instanceof DateTime)){
-	    return compareTo(new DateTime(date2));
+    public int compareTo(MyDate date2){
+	if(!(date2 instanceof MyDateTime)){
+	    return compareTo(new MyDateTime(date2));
 	} else{
-	    return compareTo((DateTime)date2);
+	    return compareTo((MyDateTime)date2);
 	}
     }
     
     /**
      * Performs the same compareTo method between 2 DateTime objects.
      */
-    private int compareTo(DateTime date2){
+    private int compareTo(MyDateTime date2){
 	int result = super.compareTo(date2);
 	if(result==0){
 	    if(hour!=date2.getHour()){

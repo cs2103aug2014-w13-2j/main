@@ -19,7 +19,7 @@ public final class Util {
 		List<String> newList = new ArrayList<String>();
 		for (String s: list) {
 			if (!s.isEmpty()) {
-				newList.add(s);
+				newList.add(s.trim());
 			}
 		}
 		

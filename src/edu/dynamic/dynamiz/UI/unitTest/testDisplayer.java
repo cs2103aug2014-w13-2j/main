@@ -38,9 +38,9 @@ public class testDisplayer {
 	
 	@Test
 	public void testDisplayTask(){
-		TaskItem task1 = new TaskItem("CS2106 homework", 4, new DateTime(26, 9, 2014, 23, 59));
-		TaskItem task2 = new TaskItem("CS2105 homework", 4, new DateTime(26, 9, 2014, 23, 59));
-		TaskItem task3 = new TaskItem("CS2102 homework", 4, new DateTime(26, 9, 2014, 23, 59));
+		TaskItem task1 = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
+		TaskItem task2 = new TaskItem("CS2105 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
+		TaskItem task3 = new TaskItem("CS2102 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
 		assertEquals( task1.toString(),dp.displayTaskItem(task1));
 		assertEquals( task1.getFeedbackString(),dp.displayTaskFeedback(task1));
 		assertEquals( task1.toFileString(),dp.displayTaskFile(task1));
@@ -49,9 +49,9 @@ public class testDisplayer {
 	
 	@Test 
 	public void testDisplayTaskList(){
-		TaskItem task1 = new TaskItem("CS2106 homework", 4, new DateTime(26, 9, 2014, 23, 59));
-		TaskItem task2 = new TaskItem("CS2105 homework", 4, new DateTime(26, 9, 2014, 23, 59));
-		TaskItem task3 = new TaskItem("CS2102 homework", 4, new DateTime(26, 9, 2014, 23, 59));
+		TaskItem task1 = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
+		TaskItem task2 = new TaskItem("CS2105 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
+		TaskItem task3 = new TaskItem("CS2102 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
 		
 		ArrayList<TaskItem> testList = new ArrayList<TaskItem>();
 		testList.add(task1);
@@ -127,7 +127,7 @@ public class testDisplayer {
 	
 	@Test
 	public void testDisplayEvent(){
-		EventItem item = new EventItem("Nana's concert", 5, new Date(27, 9, 2014));
+		EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));
 		
 		System.out.println(item.toString());
 		assertEquals(item.toString(),dp.displayEventItem(item));
@@ -138,9 +138,9 @@ public class testDisplayer {
 	
 	@Test 
 	public void testEventList(){
-		EventItem e1 = new EventItem("Nana's concert", 5, new Date(27, 9, 2014));
-		EventItem e2 = new EventItem("CS2105 midterms", new DateTime(4, 10, 2014, 17, 0));
-		EventItem e3=  new EventItem("Birthday", new Date(31, 10, 2014));
+		EventItem e1 = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));
+		EventItem e2 = new EventItem("CS2105 midterms", new MyDateTime(4, 10, 2014, 17, 0));
+		EventItem e3=  new EventItem("Birthday", new MyDate(31, 10, 2014));
 		
 		ArrayList<EventItem> ls = new ArrayList<EventItem>();
 		ls.add(e1);

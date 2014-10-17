@@ -49,6 +49,7 @@ public class CommandRedo extends Command {
     @Override
     /**
      * Executes this command.
+     * @throws EmptyStackException if the redo stack is empty.
      */
     public void execute() throws EmptyStackException {
 	assert undoStack!=null && redoStack!=null;

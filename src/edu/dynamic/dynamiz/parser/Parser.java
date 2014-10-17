@@ -3,11 +3,15 @@ package edu.dynamic.dynamiz.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
 
 /**
  * This is the boss right here
@@ -17,20 +21,14 @@ import edu.dynamic.dynamiz.controller.CommandType;
  */
 public class Parser {
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
+	private static final String REGEX_DATE = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\b";
+	private static final String REGEX_DATETIME = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\s+(\\d{1,2})\\D*(\\d{1,2})\\b";
+	
 	private static Parser parser = null;
-	
-	private CommandLine cmdLine;
-	
-	private Parser(String inputCmd) {
-		if (inputCmd.isEmpty()) {
-			throw new IllegalArgumentException("Null command is given.");
-		}
-		
-		cmdLine = parse(inputCmd);
-	}
-	
+	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
+			
 	private Parser() {
-		cmdLine = null;
+		
 	}
 	
 	public static Parser getInstance() {
@@ -41,18 +39,69 @@ public class Parser {
 		return parser;
 	}
 	
-	public static Parser getInstance(String inputCmd) {
-		if (parser == null) {
-			parser = new Parser(inputCmd);
+	/**
+	 * Return a Date object after parsing from a String
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public MyDate parseDate(String date) {	
+		assert(date != null);
+		Pattern datePattern = Pattern.compile(REGEX_DATE);
+		Pattern dateTimePattern = Pattern.compile(REGEX_DATETIME);
+		
+		Matcher dateMatcher = datePattern.matcher(date);
+		Matcher dateTimeMatcher = dateTimePattern.matcher(date);
+		
+		MyDate parsedDate = null;
+		if (dateTimeMatcher.find()) {
+			int dd = Integer.parseInt(dateTimeMatcher.group(1));
+			int mm = Integer.parseInt(dateTimeMatcher.group(2));
+			int yy = Integer.parseInt(dateTimeMatcher.group(3));
+			int hr = Integer.parseInt(dateTimeMatcher.group(4));
+			int mn = Integer.parseInt(dateTimeMatcher.group(5));
+
+			parsedDate = new MyDateTime(dd, mm, yy, hr, mn);
+		} else if (dateMatcher.find()) {
+			int dd = Integer.parseInt(dateMatcher.group(1));
+			int mm = Integer.parseInt(dateMatcher.group(2));
+			int yy = Integer.parseInt(dateMatcher.group(3));
+
+			parsedDate = new MyDate(dd, mm, yy);
+		} else {
+			parsedDate = parseImplicitDate(date);
+			if (parsedDate == null) {
+				LoggerParser.severe("Invalid date string format:" + date);
+			}
 		}
 		
-		return parser;
+		return parsedDate;
 	}
 	
-	public CommandLine parse(String inputCmd) {
-		if (inputCmd.isEmpty()) {
-			throw new IllegalArgumentException("Null input command");
+	private MyDate parseImplicitDate(String date) {
+		assert(date != null);
+		
+		date = date.trim().toLowerCase();
+		
+		// TODO: Parsing possible natural languages
+		
+		switch(date) {
+			case "tomorrow" :
+			case "today" :
+			case "":
+				default: break;
 		}
+		
+		return null;
+	}
+	
+	public Command parse(String inputCmd) {
+		CommandLine cmdLine = parseCommandLine(inputCmd);
+		return cmdLine.getCommand();
+	}
+	
+	public CommandLine parseCommandLine(String inputCmd) {
+		assert(inputCmd != null);
 		
 		String commandWord = Util.getFirstWord(inputCmd);
 		CommandType cmdType = CommandType.fromString(commandWord);
@@ -88,14 +137,12 @@ public class Parser {
 		
 		String param = "";
 		if (paramMatcher.find()) {
-			param = paramMatcher.group(1);
+			param = paramMatcher.group(1).trim();
 		}
-		
-		//String param = optPattern.split(inputCmd)[0];
 		
 		while(optMatcher.find()) {
 			String opt = optMatcher.group(1);
-			String[] values = optMatcher.group(2).split("\\s+");
+			String[] values = optMatcher.group(2).split("" + Option.DEFAULT_DELIMITER);
 			
 			List<String> newValues = Util.removeEmptyStringsInArray(values);
 			
@@ -103,24 +150,16 @@ public class Parser {
 			options.add(option);
 		}
 		
-		CommandLine cmdLine = new CommandLine(cmdType, options, param.trim());
-		
+		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		return cmdLine;
 	}
 	
-	public CommandLine getCommandLine() {
-		return this.cmdLine;
-	}
-	
 	public static void main(String[] args) {
-		String cmd1 = "add Meeting CS2103 from 8h30 8h45 -s 8h42 to 9h45";
-		String cmd2 = "delete 2";
-		String cmd3 = "update A2 from 38h40";
-		Parser parser = new Parser(cmd1);
-		CommandLine cmdLine = parser.getCommandLine();
+		String date1 = "05.10.14";
+		Parser parser = Parser.getInstance();
+		MyDate d = parser.parseDate(date1);
+		System.out.println(d);
 		
-		System.out.println(parser.parse(cmd1));
-		System.out.println(parser.parse(cmd2));
-		System.out.println(parser.parse(cmd3));
+		
 	}
 }

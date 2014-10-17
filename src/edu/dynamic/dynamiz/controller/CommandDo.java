@@ -23,8 +23,12 @@ public class CommandDo extends Command implements Undoable{
     
     //Main data members
     private String id;
-    private ToDoItem completedItem;
+    private ToDoItem feedbackItem;
     
+    /**
+     * Creates a new instance of this command.
+     * @param id The ID of the item to mark as completed.
+     */
     public CommandDo(String id){
 	assert id!=null && !id.isEmpty();
 	this.id = id;
@@ -35,8 +39,7 @@ public class CommandDo extends Command implements Undoable{
      * Executes this command.
      */
     public void execute() {
-	// TODO Auto-generated method stub
-	
+	feedbackItem = storage.completeItem(id);
     }
     
     @Override
@@ -52,7 +55,7 @@ public class CommandDo extends Command implements Undoable{
      * Undo this command.
      */
     public void undo(){
-	
+	feedbackItem = storage.undoComplete();
     }
     
     @Override
@@ -72,11 +75,11 @@ public class CommandDo extends Command implements Undoable{
      * 		with the given id does not exist in storage.
      */
     public ToDoItem[] getAffectedItems() {
-	if(completedItem==null){
+	if(feedbackItem==null){
 	    return null;
 	}
 	ToDoItem[] list = new ToDoItem[1];
-	list[0] = completedItem;
+	list[0] = feedbackItem;
 	return list;
     }
     

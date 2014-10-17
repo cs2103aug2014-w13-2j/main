@@ -27,12 +27,12 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
-	public String dateFormatter(Date d){
+	public String dateFormatter(MyDate d){
 		
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
-	public String timeFormatter(Date d){
+	public String timeFormatter(MyDate d){
 		String s = String.format("%tH:%tM", d);
 		return s;
 	}
@@ -324,6 +324,35 @@ public class DisplayFormatter implements DisplayerInterface {
 	private String formatTask(ToDoItem item){
 		assert item!=null;
 		StringBuilder sb = new StringBuilder();
+
+		String ID = item.getId();
+		 ID = TagFormat.format(ID, TagFormat.TASK_ID);
+		String des = item.getDescription();
+		 des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
+		int pri = item.getPriority();
+		String prioS = TagFormat.formatPri(pri);
+		String stas = item.getStatus();
+		stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
+		sb.append(ID).append("\n").
+		append(des).append("\n").
+		append(prioS).append("\n").
+		append(stas).append("\n");
+		if(item instanceof TaskItem){
+			TaskItem t = (TaskItem)item;
+			String ddl = t.getDeadlineString();
+			ddl = TagFormat.format(ddl, TagFormat.END_TIME);
+			sb.append(ddl).append("\n");
+		}
+		else if (item instanceof EventItem){
+			EventItem t = (EventItem)item;
+			String starT = t.getStartDateString();
+			starT = TagFormat.format(starT, TagFormat.START_TIME);
+			String endT = t.getEndDateString();
+			endT =  TagFormat.format(endT, TagFormat.END_TIME);
+			sb.append(starT).append("\n").
+			append(endT).append("\n");
+			
+		}
 		
 		return sb.toString();
 	}
