@@ -23,7 +23,6 @@ public class ControllerTest {
 	
 	//Adds an event
 	feedback = controller.executeCommand("add Meeting priority 2 from 7/10/2014");
-	
 	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00");
 	
 	//Deletes and item
