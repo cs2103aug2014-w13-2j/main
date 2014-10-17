@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.controller;
 
+import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -21,6 +22,7 @@ public class CommandList extends Command {
     
     //Main data members
     private ToDoItem[] itemList = null;
+    private OptionType[] optionsList = null; 
     
     /**
      * Creates an instance of this list command.
@@ -30,13 +32,22 @@ public class CommandList extends Command {
 
     }
     
+    /**
+     * Creates a new instance of this command with the list of data field types to sort the list by.
+     * @param optionsList The list of options to sort the list by. The array should contain options
+     * 		in decreasing order of precedence.
+     */
+    public CommandList(OptionType[] optionsList){
+	this.optionsList = optionsList;
+    }
+    
     
     @Override
     /**
      * Executes this command.
      */
     public void execute() {
-	itemList = storage.getList();
+	itemList = storage.getList(optionsList);
     }
     
     @Override
