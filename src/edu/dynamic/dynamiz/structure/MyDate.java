@@ -4,7 +4,7 @@ package edu.dynamic.dynamiz.structure;
  * Defines the date in the format DD/MM/YYYY.
  * @author zixian
  */
-public class Date implements Comparable<Date>{
+public class MyDate implements Comparable<MyDate>{
     //Default date values.
     protected static final int DEFAULT_DAY = 1;
     protected static final int DEFAULT_MONTH = 1;
@@ -20,12 +20,12 @@ public class Date implements Comparable<Date>{
     /**
      * Creates and initialises this Date object to 1 January 1970.
      */
-    public Date(){
+    public MyDate(){
 	this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
     }
     
     //Copy constructor
-    public Date(Date date){
+    public MyDate(MyDate date){
 	this(date.getDayOfMonth(), date.getMonth(), date.getYear());
     }
     
@@ -34,7 +34,7 @@ public class Date implements Comparable<Date>{
      * @throws IllegalArgumentException if any of the values cause the date to be incorrect
      * 		on the actual calendar.
      */
-    public Date(int date, int month, int year) throws IllegalArgumentException{
+    public MyDate(int date, int month, int year) throws IllegalArgumentException{
 	if(!isValidDate(date, month, year)){
 	    throw new IllegalArgumentException();
 	}
@@ -46,14 +46,14 @@ public class Date implements Comparable<Date>{
      * @param dateString The string representation of the date to create.
      * @return The Date instance who's toString() method equals dateString.
      */
-    public static Date makeDate(String dateString){
+    public static MyDate makeDate(String dateString){
 	assert dateString.matches(REGEX_DATE);
 	
 	String[] temp = dateString.split("/");
 	int day = Integer.parseInt(temp[0]);
 	int month = Integer.parseInt(temp[1]);
 	int year = Integer.parseInt(temp[2]);
-	return new Date(day, month, year);
+	return new MyDate(day, month, year);
     }
 
     /**
@@ -157,7 +157,7 @@ public class Date implements Comparable<Date>{
      * 		integer if this come later than date2, negative integer
      * 		if this comes earlier than date2.
      */
-    public int compareTo(Date date2){
+    public int compareTo(MyDate date2){
 	Class<?> thisClass = this.getClass();
 	Class<?> date2Class = date2.getClass();
 	if(!thisClass.equals(date2Class)){
@@ -174,8 +174,8 @@ public class Date implements Comparable<Date>{
     
     @Override
     public boolean equals(Object obj){
-	if(obj instanceof Date){
-	    Date temp = (Date)obj;
+	if(obj instanceof MyDate){
+	    MyDate temp = (MyDate)obj;
 	    return compareTo(temp)==0;
 	}
 	return false;

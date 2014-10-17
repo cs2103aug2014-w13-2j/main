@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -15,7 +15,7 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	CommandSearch cmd = new CommandSearch("CS", -1, null, new Date(29, 9, 2014));
+	CommandSearch cmd = new CommandSearch("CS", -1, null, new MyDate(29, 9, 2014));
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	System.out.println(list.length);

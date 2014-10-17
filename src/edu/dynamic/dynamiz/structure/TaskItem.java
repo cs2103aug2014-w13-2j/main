@@ -19,13 +19,13 @@ public class TaskItem extends ToDoItem {
     private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- %5$s";
     
     //Main data member
-    private Date deadline;
+    private MyDate deadline;
     
     /* Constructor */
     /**
      * Creates a new task with the specified deadline, using default priority level.
      */
-    public TaskItem(String description, Date deadline){
+    public TaskItem(String description, MyDate deadline){
 	super(description);
 	setDeadline(deadline);
     }
@@ -33,7 +33,7 @@ public class TaskItem extends ToDoItem {
     /**
      * Creates a new task with the given priority and deadline.
      */
-    public TaskItem(String description, int priority, Date deadline){
+    public TaskItem(String description, int priority, MyDate deadline){
 	super(description, priority);
 	setDeadline(deadline);
     }
@@ -41,10 +41,10 @@ public class TaskItem extends ToDoItem {
     //Copy constructor
     public TaskItem(TaskItem task){
 	super(task);
-	if(task.getDeadline() instanceof DateTime){
-	    setDeadline(new DateTime(task.getDeadline()));
+	if(task.getDeadline() instanceof MyDateTime){
+	    setDeadline(new MyDateTime(task.getDeadline()));
 	} else{
-	    setDeadline(new Date(task.getDeadline()));
+	    setDeadline(new MyDate(task.getDeadline()));
 	}
     }
     
@@ -54,7 +54,7 @@ public class TaskItem extends ToDoItem {
      * @param deadline The deadline for this task.
      * @return An independent, downcasted copy of the original item.
      */
-    public TaskItem(ToDoItem item, Date deadline){
+    public TaskItem(ToDoItem item, MyDate deadline){
 	super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
 	assert deadline!=null;
 	setDeadline(deadline);
@@ -66,8 +66,8 @@ public class TaskItem extends ToDoItem {
      * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
      * Null time is --:--
      */
-    private String getDateString(Date date){
-	if(date instanceof DateTime){
+    private String getDateString(MyDate date){
+	if(date instanceof MyDateTime){
 	    return date.toString();
 	} else{
 	    return date.toString()+FORMAT_EMPTYTIME;
@@ -78,7 +78,7 @@ public class TaskItem extends ToDoItem {
      * Gets the deadline for this task.
      * @return A Date reference to the deadline for this task.
      */
-    public Date getDeadline(){
+    public MyDate getDeadline(){
 	return deadline;
     }
     
@@ -95,7 +95,7 @@ public class TaskItem extends ToDoItem {
      * Does nothing if specified deadline is null.
      * Equivalent to setDeadlineDate() if deadline is not a DateTime object.
      */
-    public void setDeadline(Date deadline){
+    public void setDeadline(MyDate deadline){
 	if(deadline!=null){
 	    this.deadline = deadline;
 	}
@@ -105,7 +105,7 @@ public class TaskItem extends ToDoItem {
      * Sets the deadline date for this task.
      * Does nothing if specified deadline is null.
      */
-    public void setDeadlineDate(Date deadline){
+    public void setDeadlineDate(MyDate deadline){
 	if(deadline!=null){
 	    this.deadline.setDate(deadline.getDayOfMonth(), deadline.getMonth(), deadline.getYear());
 	}
@@ -116,11 +116,11 @@ public class TaskItem extends ToDoItem {
      * Does nothing if the specified time is invalid on the 24-hour clock.
      */
     public void setDeadlineTime(int hour, int minute){
-	if(DateTime.isValidTime(hour, minute)){
-	    if(!(this.deadline instanceof DateTime)){
-		this.deadline = new DateTime(this.deadline);
+	if(MyDateTime.isValidTime(hour, minute)){
+	    if(!(this.deadline instanceof MyDateTime)){
+		this.deadline = new MyDateTime(this.deadline);
 	    }
-	    ((DateTime)deadline).setTime(hour, minute);
+	    ((MyDateTime)deadline).setTime(hour, minute);
 	}
     }
     

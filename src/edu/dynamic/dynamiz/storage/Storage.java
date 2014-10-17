@@ -8,7 +8,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.EndDateComparator;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.PriorityComparator;
@@ -114,7 +114,7 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end) {
+    public ToDoItem[] updateItem(String id, String description, int priority, MyDate start, MyDate end) {
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
@@ -177,7 +177,7 @@ public class Storage {
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchItems(String keyword, int priority, Date start, Date end){
+    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end){
 	ArrayList<ToDoItem> temp = mainList;;
 	if(keyword!=null && !keyword.isEmpty()){
 	    temp = searchByKeyword(temp, keyword);
@@ -236,7 +236,7 @@ public class Storage {
      * @param start The start date value to search.
      * @return An ArrayList of ToDoItem objects with the given start date.
      */
-    private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, Date start){
+    private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, MyDate start){
 	assert start!=null && list!=null;
 	ArrayList<ToDoItem> temp = new ArrayList<>();
 	for(ToDoItem i: list){
@@ -252,7 +252,7 @@ public class Storage {
      * @param list The list to perform search on.
      * @param end The end date/deadline value to search.
      */
-    private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, Date end){
+    private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, MyDate end){
 	assert list!=null && end!=null;
 	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
 	for(ToDoItem i: list){

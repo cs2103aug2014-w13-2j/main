@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
-import edu.dynamic.dynamiz.structure.Date;
-import edu.dynamic.dynamiz.structure.DateTime;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
 
 /**
  * This is the boss right here
@@ -45,7 +45,7 @@ public class Parser {
 	 * @param date
 	 * @return
 	 */
-	public Date parseDate(String date) {	
+	public MyDate parseDate(String date) {	
 		assert(date != null);
 		
 		Pattern datePattern = Pattern.compile(REGEX_DATE);
@@ -54,7 +54,7 @@ public class Parser {
 		Matcher dateMatcher = datePattern.matcher(date);
 		Matcher dateTimeMatcher = dateTimePattern.matcher(date);
 		
-		Date parsedDate = null;
+		MyDate parsedDate = null;
 		if (dateTimeMatcher.find()) {
 			int dd = Integer.parseInt(dateTimeMatcher.group(1));
 			int mm = Integer.parseInt(dateTimeMatcher.group(2));
@@ -62,13 +62,13 @@ public class Parser {
 			int hr = Integer.parseInt(dateTimeMatcher.group(4));
 			int mn = Integer.parseInt(dateTimeMatcher.group(5));
 
-			parsedDate = new DateTime(dd, mm, yy, hr, mn);
+			parsedDate = new MyDateTime(dd, mm, yy, hr, mn);
 		} else if (dateMatcher.find()) {
 			int dd = Integer.parseInt(dateMatcher.group(1));
 			int mm = Integer.parseInt(dateMatcher.group(2));
 			int yy = Integer.parseInt(dateMatcher.group(3));
 
-			parsedDate = new Date(dd, mm, yy);
+			parsedDate = new MyDate(dd, mm, yy);
 		} else {
 			parsedDate = parseImplicitDate(date);
 			if (parsedDate == null) {
@@ -79,7 +79,7 @@ public class Parser {
 		return parsedDate;
 	}
 	
-	private Date parseImplicitDate(String date) {
+	private MyDate parseImplicitDate(String date) {
 		assert(date != null);
 		
 		date = date.trim().toLowerCase();
@@ -158,7 +158,7 @@ public class Parser {
 	public static void main(String[] args) {
 		String date1 = "5/10/2014 13:00";
 		Parser parser = Parser.getInstance();
-		Date d = parser.parseDate(date1);
+		MyDate d = parser.parseDate(date1);
 		System.out.println(d);
 	}
 }

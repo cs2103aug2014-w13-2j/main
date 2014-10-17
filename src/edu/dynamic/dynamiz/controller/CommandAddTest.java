@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
-import edu.dynamic.dynamiz.structure.DateTime;
+import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 

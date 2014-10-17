@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -22,7 +22,7 @@ public class StorageTest {
 	assertEquals("A1", temp.getId());
 	list = storage.getList();
 	assertEquals(2, list.length);
-	storage.addItem(new TaskItem("CS2105 Programming Assignment 2", new Date(13, 10, 2014)));
+	storage.addItem(new TaskItem("CS2105 Programming Assignment 2", new MyDate(13, 10, 2014)));
 	list = storage.getList();
 	assertEquals(3, list.length);
 	assertEquals("A4", list[2].getId());
