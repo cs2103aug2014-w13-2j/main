@@ -21,8 +21,8 @@ import edu.dynamic.dynamiz.structure.DateTime;
  */
 public class Parser {
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
-	private static final String REGEX_DATE = "\\b(\\d{1,2}).(\\d{1,2}).(\\d{2}|\\d{4})\\b";
-	private static final String REGEX_DATETIME = "\\b(\\d{1,2}).(\\d{1,2}).(\\d{2}|\\d{4}) (\\d{1,2}):(\\d{1,2})\\b";
+	private static final String REGEX_DATE = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\b";
+	private static final String REGEX_DATETIME = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\s+(\\d{1,2})\\D*(\\d{1,2})\\b";
 	
 	private static Parser parser = null;
 	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
@@ -45,9 +45,7 @@ public class Parser {
 	 * @param date
 	 * @return
 	 */
-	public Date parseDate(String date) {	
-		assert(date != null);
-		
+	public Date parseDate(String date) {
 		Pattern datePattern = Pattern.compile(REGEX_DATE);
 		Pattern dateTimePattern = Pattern.compile(REGEX_DATETIME);
 		
@@ -72,7 +70,7 @@ public class Parser {
 		} else {
 			parsedDate = parseImplicitDate(date);
 			if (parsedDate == null) {
-				LoggerParser.severe("Invalid date string format");
+				LoggerParser.severe("Invalid date string format:" + date);
 			}
 		}
 		
@@ -156,9 +154,11 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String date1 = "5/10/2014 13:00";
+		String date1 = "05.10.14";
 		Parser parser = Parser.getInstance();
 		Date d = parser.parseDate(date1);
 		System.out.println(d);
+		
+		
 	}
 }
