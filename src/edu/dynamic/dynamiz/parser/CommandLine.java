@@ -11,7 +11,7 @@ import edu.dynamic.dynamiz.controller.CommandSearch;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.controller.CommandUndo;
 import edu.dynamic.dynamiz.controller.CommandUpdate;
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
@@ -105,8 +105,8 @@ public class CommandLine {
 		boolean hasBoth = hasStart && hasEnd;
 
 		try {
-			Date startDate = null;
-			Date endDate = null;
+			MyDate startDate = null;
+			MyDate endDate = null;
 			
 			if (hasStart) {
 				startDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));
@@ -151,8 +151,8 @@ public class CommandLine {
 		Options commandOptions = extractOptions(this.options);
 		
 		// Parse Start and End Date
-		Date commandStartDate = null;
-		Date commandEndDate = null;
+		MyDate commandStartDate = null;
+		MyDate commandEndDate = null;
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
 		
 		if (commandOptions.hasOption(OptionType.START_TIME)) {
@@ -186,8 +186,8 @@ public class CommandLine {
 		Options commandOptions = extractOptions(this.options);
 
 		// Parse Start and End Date
-		Date commandStartDate = null;
-		Date commandEndDate = null;
+		MyDate commandStartDate = null;
+		MyDate commandEndDate = null;
 		
 		if (commandOptions.hasOption(OptionType.START_TIME)) {
 			commandStartDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));

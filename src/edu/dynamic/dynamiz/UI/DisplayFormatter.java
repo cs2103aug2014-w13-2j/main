@@ -36,12 +36,12 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
-	public String dateFormatter(Date d){
+	public String dateFormatter(MyDate d){
 		
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
-	public String timeFormatter(Date d){
+	public String timeFormatter(MyDate d){
 		String s = String.format("%tH:%tM", d);
 		return s;
 	}

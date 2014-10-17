@@ -8,7 +8,8 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.parser.OptionType;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.EndDateComparator;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.PriorityComparator;
@@ -22,10 +23,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods(currently that can be used)
  * static Storage getInstance()	//gets the Storage instance
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
- * ToDoItem[] getList()	//Gets the list of ToDoItem objects held by this storage.
- * ToDoItem[] getListSortedByEndDate()	//Gets a list of ToDoItem sorted in ascending order by end date.
- * ToDoItem[] getListSortedByPriority()	//Gets a list of ToDoItem sorted in descending order by priority.
- * ToDoItem[] getListSortedByStartDate()	//Gets a list of ToDoItem sorted in ascending order by start date.
+ * ToDoItem[] getList(OptionsType[] optionsList)	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
  * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
@@ -114,7 +112,7 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end) {
+    public ToDoItem[] updateItem(String id, String description, int priority, MyDate start, MyDate end) {
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
@@ -177,7 +175,7 @@ public class Storage {
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchItems(String keyword, int priority, Date start, Date end){
+    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end){
 	ArrayList<ToDoItem> temp = mainList;;
 	if(keyword!=null && !keyword.isEmpty()){
 	    temp = searchByKeyword(temp, keyword);
@@ -236,7 +234,7 @@ public class Storage {
      * @param start The start date value to search.
      * @return An ArrayList of ToDoItem objects with the given start date.
      */
-    private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, Date start){
+    private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, MyDate start){
 	assert start!=null && list!=null;
 	ArrayList<ToDoItem> temp = new ArrayList<>();
 	for(ToDoItem i: list){
@@ -252,7 +250,7 @@ public class Storage {
      * @param list The list to perform search on.
      * @param end The end date/deadline value to search.
      */
-    private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, Date end){
+    private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, MyDate end){
 	assert list!=null && end!=null;
 	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
 	for(ToDoItem i: list){
@@ -265,54 +263,32 @@ public class Storage {
     }
     
     /**
-     * Gets the list of tasks and events in an array sorted in lexicographical order of their ID.
-     * @return An array of ToDoItem objects sorted in lexicographical order of their ID
-     * 		or null if the list is empty.
+     * Gets the list of tasks and events in an array sorted according to optionsList.
+     * @param optionsList The list of data fields to sort the list by in descending order of precedence
+     * 		or null if no other sorting criteria is required.
+     * 		Eg. {a, b} means most importantly, sort by a. For all items with same value of a, sort by b.
+     * @return An array of ToDoItem objects sorted according to sorting criteria or null
+     * 		if the storage has no item.
      */
-    public ToDoItem[] getList(){
+    public ToDoItem[] getList(OptionType[] optionsList){
 	if(mainList.isEmpty()){
 	    return null;
 	}
 	Collections.sort(mainList);
-	return mainList.toArray(new ToDoItem[mainList.size()]);
-    }
-    
-    /**
-     * Gets a list that is sorted by start date in ascending order.
-     * @return An array of ToDoItem sorted in ascending order by start date
-     * 		or null if there is no item in the storage.
-     .*/
-    public ToDoItem[] getListSortedByStartDate(){
-	if(mainList.isEmpty()){
-	    return null;
+	if(optionsList!=null){
+	    int size = optionsList.length;
+	    while(size-->0){
+		switch(optionsList[size]){
+		    case PRIORITY: Collections.sort(mainList, Collections.reverseOrder(new PriorityComparator()));
+		    	break;
+		    case START_TIME: Collections.sort(mainList, new StartDateComparator());
+		    	break;
+		    case END_TIME: Collections.sort(mainList, new EndDateComparator());
+		    	break;
+		    default: break;
+		}
+	    }
 	}
-	Collections.sort(mainList, new StartDateComparator());
-	return mainList.toArray(new ToDoItem[mainList.size()]);
-    }
-    
-    /**
-     * Gets a list that is sorted by end date in ascending order.
-     * @return An array of ToDoItem sorted in ascending order by end date
-     * 		or null if there is no item in the storage.
-     .*/
-    public ToDoItem[] getListSortedByEndDate(){
-	if(mainList.isEmpty()){
-	    return null;
-	}
-	Collections.sort(mainList, new EndDateComparator());
-	return mainList.toArray(new ToDoItem[mainList.size()]);
-    }
-    
-    /**
-     * Gets a list of ToDoItem sorted in descending order by priority level.
-     * @return An array of ToDoItem sorted in descending order by priority or
-     * 		null if there is no item in this storage.
-     */
-    public ToDoItem[] getListSortedByPriority(){
-	if(mainList.isEmpty()){
-	    return null;
-	}
-	Collections.sort(mainList, Collections.reverseOrder(new PriorityComparator()));
 	return mainList.toArray(new ToDoItem[mainList.size()]);
     }
     

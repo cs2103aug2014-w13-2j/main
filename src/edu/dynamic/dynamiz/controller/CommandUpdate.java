@@ -2,7 +2,7 @@ package edu.dynamic.dynamiz.controller;
 
 
 import edu.dynamic.dynamiz.parser.OptionType;
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -37,8 +37,8 @@ public class CommandUpdate extends Command implements Undoable {
  
     private int priority = OptionType.PRIORITY_NONE;
 
-    private Date startDate;
-    private Date endDate;
+    private MyDate startDate;
+    private MyDate endDate;
     
      /**
      * Creates a new instance of this Command object that updates the ToDoItem object with the given id
@@ -47,9 +47,9 @@ public class CommandUpdate extends Command implements Undoable {
      * @param description The new description for the item, or null if it is not to be changed.
      * @param priority The new priority of the item, or -1 if it is not to be changed.
      * @param start The new start date of this item, or null if it is not to be changed.
-     * @param end The new end date of this item, or null if it is not to be changed..
+     * @param end The new end date of this item, or null if it is not to be changed.
      */
-	public CommandUpdate(String id, String newDescription, int newPriority, Date newStartDate, Date newEndDate) {
+	public CommandUpdate(String id, String newDescription, int newPriority, MyDate newStartDate, MyDate newEndDate) {
 		assert id != null && !id.isEmpty();
 		this.id = id;
 		this.description = newDescription;

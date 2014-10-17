@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
-import edu.dynamic.dynamiz.structure.Date;
+import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
  * Test program to understand the output of parser.
@@ -60,7 +60,7 @@ public class ParserTest {
     public void testParsingDate() {
     	Parser parser = Parser.getInstance();
     	
-    	Date date = parser.parseDate("17.10.2014");
+    	MyDate date = parser.parseDate("17.10.2014");
     	assertEquals("17/10/2014", date.toString());
     	
     	date = parser.parseDate("17//10//14");

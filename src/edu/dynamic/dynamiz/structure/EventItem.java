@@ -26,26 +26,26 @@ public class EventItem extends ToDoItem {
     
     
     //Main data members
-    private Date startDate, endDate;
+    private MyDate startDate, endDate;
     
     /* Constructors */
     //For events that start and end on the same day.
-    public EventItem(String description, Date date){
-	this(description, date, (date instanceof DateTime)? new DateTime(date): new Date(date));
+    public EventItem(String description, MyDate date){
+	this(description, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
     }
     
-    public EventItem(String description, int priority, Date date){
-	this(description, priority, date, (date instanceof DateTime)? new DateTime(date): new Date(date));
+    public EventItem(String description, int priority, MyDate date){
+	this(description, priority, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
     }
     
     //For events that start and end on different days.
-    public EventItem(String description, Date startDate, Date endDate){
+    public EventItem(String description, MyDate startDate, MyDate endDate){
 	super(description);
 	setStartDate(startDate);
 	setEndDate(endDate);
     }
     
-    public EventItem(String description, int priority, Date startDate, Date endDate){
+    public EventItem(String description, int priority, MyDate startDate, MyDate endDate){
 	super(description, priority);
 	setStartDate(startDate);
 	setEndDate(endDate);
@@ -59,15 +59,15 @@ public class EventItem extends ToDoItem {
      */
     public EventItem(EventItem event){
 	super(event);
-	if(event.getStartDate() instanceof DateTime){
-	    setStartDate(new DateTime(event.getStartDate()));
+	if(event.getStartDate() instanceof MyDateTime){
+	    setStartDate(new MyDateTime(event.getStartDate()));
 	} else{
-	    setStartDate(new Date(event.getStartDate()));
+	    setStartDate(new MyDate(event.getStartDate()));
 	}
-	if(event.getEndDate() instanceof DateTime){
-	    setEndDate(new DateTime(event.getEndDate()));
+	if(event.getEndDate() instanceof MyDateTime){
+	    setEndDate(new MyDateTime(event.getEndDate()));
 	} else{
-	    setEndDate(new Date(event.getEndDate()));
+	    setEndDate(new MyDate(event.getEndDate()));
 	}
     }
     
@@ -76,8 +76,8 @@ public class EventItem extends ToDoItem {
      * @param start The start date of this event.
      * @return An instance of EventItem that is downcasted from the given ToDoItem.
      */
-    public EventItem(ToDoItem item, Date start){
-	this(item, start, (start instanceof DateTime)? new DateTime(start): new Date(start));
+    public EventItem(ToDoItem item, MyDate start){
+	this(item, start, (start instanceof MyDateTime)? new MyDateTime(start): new MyDate(start));
     }
     
     /**
@@ -87,7 +87,7 @@ public class EventItem extends ToDoItem {
      * @param end The end date of this event.
      * @return An instance of EventItem that is downcasted from the given ToDoItem.
      */
-    public EventItem(ToDoItem item, Date start, Date end){
+    public EventItem(ToDoItem item, MyDate start, MyDate end){
 	super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
 	setStartDate(start);
 	setEndDate(end);
@@ -99,8 +99,8 @@ public class EventItem extends ToDoItem {
      * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
      * Null time is --:--
      */
-    private String getDateString(Date date){
-	if(date instanceof DateTime){
+    private String getDateString(MyDate date){
+	if(date instanceof MyDateTime){
 	    return date.toString();
 	} else{
 	    return date.toString()+FORMAT_EMPTYTIME;
@@ -111,7 +111,7 @@ public class EventItem extends ToDoItem {
      * Returns the start date of this event.
      * @return A Date object of the start date or null if the start date is not set.
      */
-    public Date getStartDate(){
+    public MyDate getStartDate(){
 	return startDate;
     }
     
@@ -127,7 +127,7 @@ public class EventItem extends ToDoItem {
      * Returns the end date of this event.
      * @return A Date object of the end date or null if the end date is not set.
      */
-    public Date getEndDate(){
+    public MyDate getEndDate(){
 	return endDate;
     }
     
@@ -143,7 +143,7 @@ public class EventItem extends ToDoItem {
      * Sets the start date for this event.
      * Does nothing if the given startDate is null.
      */
-    public void setStartDate(Date startDate){
+    public void setStartDate(MyDate startDate){
 	if(startDate!=null){
 	    this.startDate = startDate;
 	}
@@ -154,11 +154,11 @@ public class EventItem extends ToDoItem {
      * Does nothing if the specified time is invalid on 24-hour clock.
      */
     public void setStartTime(int hour, int minute){
-	if(DateTime.isValidTime(hour, minute)){
-	    if(!(startDate instanceof DateTime)){
-		startDate = new DateTime(startDate);
+	if(MyDateTime.isValidTime(hour, minute)){
+	    if(!(startDate instanceof MyDateTime)){
+		startDate = new MyDateTime(startDate);
 	    } 
-	    ((DateTime)startDate).setTime(hour, minute);
+	    ((MyDateTime)startDate).setTime(hour, minute);
 	}
     }
     
@@ -167,11 +167,11 @@ public class EventItem extends ToDoItem {
      * Does nothing if the specified time is invalid on 24-hour clock.
      */
     public void setEndTime(int hour, int minute){
-	if(DateTime.isValidTime(hour, minute)){
-	    if(!(endDate instanceof DateTime)){
-		endDate = new DateTime(endDate);
+	if(MyDateTime.isValidTime(hour, minute)){
+	    if(!(endDate instanceof MyDateTime)){
+		endDate = new MyDateTime(endDate);
 	    } 
-	    ((DateTime)endDate).setTime(hour, minute); 
+	    ((MyDateTime)endDate).setTime(hour, minute); 
 	}
     }
     
@@ -179,7 +179,7 @@ public class EventItem extends ToDoItem {
      * Sets the end date for this event.
      * Does nothing if the given endDate is null.
      */
-    public void setEndDate(Date endDate){
+    public void setEndDate(MyDate endDate){
 	if(endDate!=null){
 	    this.endDate = endDate;
 	}

@@ -3,7 +3,6 @@ package edu.dynamic.dynamiz.controller;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-import edu.dynamic.dynamiz.parser.CommandLine;
 import edu.dynamic.dynamiz.parser.Parser;
 
 import edu.dynamic.dynamiz.storage.Storage;

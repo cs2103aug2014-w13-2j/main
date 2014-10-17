@@ -14,10 +14,10 @@ public class EndDateComparatorTest {
     public void test() {
 	EndDateComparator comp = new EndDateComparator();
 	ToDoItem todo = new ToDoItem("A");
-	EventItem event = new EventItem("A", new DateTime(31, 12, 2014, 17, 17));
-	EventItem event2 = new EventItem("B", new Date(25, 12, 2014));
-	TaskItem task = new TaskItem("A", new Date(1, 1, 2015));
-	TaskItem task2 = new TaskItem("B", new DateTime(14, 1, 2015, 19, 25));
+	EventItem event = new EventItem("A", new MyDateTime(31, 12, 2014, 17, 17));
+	EventItem event2 = new EventItem("B", new MyDate(25, 12, 2014));
+	TaskItem task = new TaskItem("A", new MyDate(1, 1, 2015));
+	TaskItem task2 = new TaskItem("B", new MyDateTime(14, 1, 2015, 19, 25));
 	assertTrue(comp.compare(event, todo)<0);
 	assertTrue(comp.compare(todo, event)>0);
 	assertTrue(comp.compare(task, todo)<0);
