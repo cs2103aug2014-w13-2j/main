@@ -369,7 +369,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			String starT = t.getStartDateString();
 			starT = TagFormat.format(starT, TagFormat.START_TIME);
 			String endT = t.getEndDateString();
-			endT =  TagFormat.format(starT, TagFormat.END_TIME);
+			endT =  TagFormat.format(endT, TagFormat.END_TIME);
 			sb.append(starT).append("\n").
 			append(endT).append("\n");
 			
