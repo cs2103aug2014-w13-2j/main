@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.sun.javafx.scene.paint.GradientUtils.Parser;
-
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
