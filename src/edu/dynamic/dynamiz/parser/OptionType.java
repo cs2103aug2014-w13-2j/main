@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
-	}, START_TIME("-s", "--starttime", "from") {
+	}, START_TIME("-s", "--starttime", "from", "on") {
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
 	};
 	
