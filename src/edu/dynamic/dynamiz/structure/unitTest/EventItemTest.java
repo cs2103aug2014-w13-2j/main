@@ -18,23 +18,14 @@ public class EventItemTest {
 	EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));
 	assertEquals("Nana's concert; 5; pending; 27/9/2014 --:--; 27/9/2014 --:--", item.toFileString());
 	
-	item.setStartTime(18, 30);
-	assertEquals("Nana's concert; 5; pending; 27/9/2014 18:30; 27/9/2014 --:--", item.toFileString());
-	
 	item = new EventItem("CS2105 midterms", new MyDateTime(4, 10, 2014, 17, 0));
 	assertEquals("CS2105 midterms; 0; pending; 4/10/2014 17:00; 4/10/2014 17:00", item.toFileString());
-	item.setEndTime(18, 0);
-	assertEquals("CS2105 midterms; 0; pending; 4/10/2014 17:00; 4/10/2014 18:00", item.toFileString());
     }
     
     @Test
     public void testToFileString(){
 	EventItem item = new EventItem("Nana's concert", 5, new MyDateTime(27, 9, 2014, 17, 30), new MyDate(27, 9, 2014));
 	assertEquals("Nana's concert; 5; pending; 27/9/2014 17:30; 27/9/2014 --:--", item.toFileString());
-	
-	item.setStartTime(18, 30);
-	item.setEndTime(22, 0);
-	assertEquals("Nana's concert; 5; pending; 27/9/2014 18:30; 27/9/2014 22:00", item.toFileString());
     }
     
     @Test
