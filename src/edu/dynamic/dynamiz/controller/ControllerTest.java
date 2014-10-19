@@ -34,6 +34,7 @@ public class ControllerTest {
 	//assertEquals("delete A2", feedback.getOriginalCommand());
 	
 	//Updates an event
+	//Date currently cannot be parsed.
 	feedback = controller.executeCommand("update A1 on 27/9/2014 17:30");
 	assertEquals("update", feedback.getCommandType());
 	//assertEquals("update A1 from 27/9/2014 17:30", feedback.getOriginalCommand());
