@@ -94,6 +94,16 @@ public class EventItem extends ToDoItem {
     }
     
     /**
+     * Creates a new EventItem instance from the given TaskItem.
+     * This is not typecasting but is a copy conversion.
+     * @param task The TaskItem object to be converted.
+     * @start The start date of the new event.
+     */
+    public EventItem(TaskItem task, MyDate start){
+	this(task, start, task.getDeadline());
+    }
+    
+    /**
      * Returns the string representation of the given Date object formatted
      * for EventItem.
      * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
