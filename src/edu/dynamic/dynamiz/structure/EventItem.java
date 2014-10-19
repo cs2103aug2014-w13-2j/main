@@ -1,20 +1,26 @@
 package edu.dynamic.dynamiz.structure;
 
-
 /**
  * Defines each event in the To-Do list.
  * Each event is defined as having start and/or end date(s).
- * Possible usage: new EventItem(description, Date eventDate)	//start and end dates are the same with no specified time.
- * 		   new EventItem(description, DateTime eventDateTime)	//both start and end times will be the same.
- * 		   new EventItem(description, Date start, Date end)	//start and end dates can be different with no specified time.
- * 		   new EventItem(description, Date start, DateTime end)	//end has specified time while start does not.
- * 		   new EventItem(description, DateTime start, Date end)	//start has specified time while end does not.
- * 		   new EventItem(description, DateTime start, DateTime end)	//both start and end have specified times and can be different.
- * 		   new EventItem(description, priority, date) or
- * 		   new EventItem(description, priority, start, end)	//to initialise priority.
- * 		   set start/end dates with setStartDate()/setEndDate() respectively.
- * 		   set start/end times with setStartTime()/setEndTime() respectively.
- * 		   set date and time by using the above 2 uses together.
+ * 
+ * Constructors
+ * EventItem(String description, MyDate eventDate)	//start and end dates are the same with no specified time.
+ * EventItem(String description, MyDate start, MyDate end)	//start and end dates can be different with no specified time.
+ * EventItem(String description, int priority, MyDate date)
+ * EventItem(String description, int priority, MyDate start, MyDate end)	//The full form of constructor
+ * EventItem(EventItem event)	//Creates a new copy of the given event.
+ * EventItem(ToDoItem item, MyDate start, MyDate end)	//Converts ToDoItem to EventItem
+ * EventItem(TaskItem task, MyDate start)	//Converts TaskItem into EventItem
+ * 
+ * Public Methods
+ * MyDate getEndDate()	//Gets the end date for this event.
+ * String getEndDateString()	//Gets the string representation of this event's end date.
+ * MyDate getStartDate()	//gets the start date for this event.
+ * String getStartDateString()	//Gets the string representation of this event's start date.
+ * void setEndDate(MyDate end)	//Sets the end date for this event.
+ * void setStartDate(MyDate start)	//Sets the start date for this event.
+ * 
  * @author zixian
  */
 public class EventItem extends ToDoItem {
@@ -29,22 +35,44 @@ public class EventItem extends ToDoItem {
     private MyDate startDate, endDate;
     
     /* Constructors */
-    //For events that start and end on the same day.
+    /**
+     * Creates a new instance of this event.
+     * @param description The event's description.
+     * @param date The event's start and end date.
+     */
     public EventItem(String description, MyDate date){
 	this(description, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
     }
     
+    /**
+     * Creates a new instance of this event.
+     * @param description The event's description.
+     * @param priority The event's priority level.
+     * @param date The event's start and end date.
+     */
     public EventItem(String description, int priority, MyDate date){
 	this(description, priority, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
     }
     
-    //For events that start and end on different days.
+    /**
+     * Creates a new instance of this event.
+     * @param description The event's description.
+     * @param startDate The event's start date.
+     * @param end The event's end date.
+     */
     public EventItem(String description, MyDate startDate, MyDate endDate){
 	super(description);
 	setStartDate(startDate);
 	setEndDate(endDate);
     }
     
+    /**
+     * Creates a new instance of this event.
+     * @param description The event's description.
+     * @param priority The event's priority.
+     * @param startDate The event's start date.
+     * @param endDate The event's end date.
+     */
     public EventItem(String description, int priority, MyDate startDate, MyDate endDate){
 	super(description, priority);
 	setStartDate(startDate);
@@ -52,10 +80,9 @@ public class EventItem extends ToDoItem {
     }
     
     /**
-     * Creates a new instance that is a copy of the given event.
+     * Creates a copy of the given event. The resulting instance, e, is such that
+     * e!=event and e.equals(event) returns true.
      * @param event The EventItem to be copied.
-     * @return An instance of EventItem that is a different reference from event but has same field members
-     * 		as event.
      */
     public EventItem(EventItem event){
 	super(event);
@@ -151,63 +178,47 @@ public class EventItem extends ToDoItem {
 
     /**
      * Sets the start date for this event.
-     * Does nothing if the given startDate is null.
+     * @param startDate The new start date for this event.
      */
     public void setStartDate(MyDate startDate){
-	if(startDate!=null){
-	    this.startDate = startDate;
-	}
-    }
-    
-    /**
-     * Updates the start time for this event.
-     * Does nothing if the specified time is invalid on 24-hour clock.
-     */
-    public void setStartTime(int hour, int minute){
-	if(MyDateTime.isValidTime(hour, minute)){
-	    if(!(startDate instanceof MyDateTime)){
-		startDate = new MyDateTime(startDate);
-	    } 
-	    ((MyDateTime)startDate).setTime(hour, minute);
-	}
-    }
-    
-    /**
-     * Updates the end time for this event.
-     * Does nothing if the specified time is invalid on 24-hour clock.
-     */
-    public void setEndTime(int hour, int minute){
-	if(MyDateTime.isValidTime(hour, minute)){
-	    if(!(endDate instanceof MyDateTime)){
-		endDate = new MyDateTime(endDate);
-	    } 
-	    ((MyDateTime)endDate).setTime(hour, minute); 
-	}
+	assert startDate!=null;
+	this.startDate = startDate;
     }
     
     /**
      * Sets the end date for this event.
-     * Does nothing if the given endDate is null.
+     * @param endDate The new end date for this event.
      */
     public void setEndDate(MyDate endDate){
-	if(endDate!=null){
-	    this.endDate = endDate;
-	}
+	assert endDate!=null;
+	this.endDate = endDate;
     }
     
     @Override
+    /**
+     * Gets a String representation of this event.
+     * @return The String representation of this event.
+     */
     public String toString(){
 	return String.format(FORMAT_PRINTSTRING, id, description, priority, status,
 		     		getDateString(startDate), getDateString(endDate));
     }
     
     @Override
+    /**
+     * Gets a String representation of this event for feedback use.
+     * @return The String representation of this event formatted for feedback purpose.
+     */
     public String getFeedbackString(){
 	return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, getDateString(startDate),
 				getDateString(endDate), status);
     }
     
     @Override
+    /**
+     * Gets the String representation of this event used for file I/O purpose.
+     * @return The String representation of this event formatted for file I/O.
+     */
     public String toFileString(){
 	return String.format(FORMAT_FILESTRING, description, priority, status,
 				getDateString(startDate), getDateString(endDate));
