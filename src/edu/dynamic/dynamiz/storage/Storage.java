@@ -168,7 +168,11 @@ public class Storage {
     
     /**
      * Gets a list of ToDoItem objects whose description contains this keyword.
-     * @param keyword The keyword to search in the objects.
+     * @param keyword The keyword to search in the objects or null if no search by keyword is needed.
+     * @param priority The priority level to the item(s) to search or -1 if not needed.
+     * @param start the start date of the item(s) to search or null if search by start date is not needed.
+     * @param end The end date of the item(s) t search or null if search by end date is not needed.
+     * @param optList The list of options(in descending precedence) to sort search results by.
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
