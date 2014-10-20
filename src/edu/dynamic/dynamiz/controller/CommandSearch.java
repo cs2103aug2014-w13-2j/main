@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.controller;
 
+import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
@@ -35,7 +36,7 @@ public class CommandSearch extends Command {
      * @param start The start date of the item(s) to search, or null if not required.
      * @param end The end date of the item(s)to search, or null if not required.
      */
-    public CommandSearch(String searchKey, int priority, MyDate start, MyDate end){
+    public CommandSearch(String searchKey, int priority, MyDate start, MyDate end, OptionType[] optList){
 	this.searchKey = searchKey;
 	this.priority = priority;
 	this.start = start;
