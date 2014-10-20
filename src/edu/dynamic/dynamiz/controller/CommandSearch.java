@@ -28,6 +28,7 @@ public class CommandSearch extends Command {
     private int priority;
     private MyDate start, end;
     private ToDoItem[] searchList = null;
+    private OptionType[] optList;
     
     /**
      * Creates an instance of this search command.
@@ -41,6 +42,7 @@ public class CommandSearch extends Command {
 	this.priority = priority;
 	this.start = start;
 	this.end = end;
+	this.optList = optList;
     }
     
     @Override
@@ -48,7 +50,7 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	searchList = storage.searchItems(searchKey, priority, start, end);
+	searchList = storage.searchItems(searchKey, priority, start, end, optList);
     }
 
     @Override

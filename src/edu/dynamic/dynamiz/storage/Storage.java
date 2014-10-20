@@ -3,8 +3,6 @@ package edu.dynamic.dynamiz.storage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
@@ -37,7 +35,7 @@ public class Storage {
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
-    private Stack<ToDoItem> completedList;	//The list of completed items
+    private ArrayList<ToDoItem> completedList;	//The list of completed items
     private static Storage storage;	//Holds the only instance of the Storage object
     
     /**
@@ -49,11 +47,10 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
-	completedList = new Stack<ToDoItem>();
-	Iterator<ToDoItem> itr = mainList.iterator();
-	ToDoItem temp;
-	while(itr.hasNext()){
-	    temp = itr.next();
+	completedList = DataFileReadWrite.getListFromFile("completed.txt");
+	
+	//Adds each item in mainList to ID search tree
+	for(ToDoItem temp: mainList){
 	    searchTree.put(temp.getId(), temp);
 	    if(temp instanceof TaskItem){
 		taskList.add((TaskItem)temp);
@@ -416,11 +413,11 @@ public class Storage {
 	ToDoItem item = removeItem(id);
 	if(item!=null){
 	    if(item instanceof EventItem){
-		completedList.push(new EventItem((EventItem)item));
+		completedList.add(new EventItem((EventItem)item));
 	    } else if(item instanceof TaskItem){
-		completedList.push(new TaskItem((TaskItem)item));
+		completedList.add(new TaskItem((TaskItem)item));
 	    } else{
-		completedList.push(new ToDoItem(item));
+		completedList.add(new ToDoItem(item));
 	    }
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
 	}
@@ -432,7 +429,7 @@ public class Storage {
      * @return The ToDoItem object that is unmarked from completed list.
      */
     public ToDoItem undoComplete(){
-	ToDoItem temp = completedList.pop();
+	ToDoItem temp = completedList.remove(completedList.size()-1);
 	addItem(temp);
 	return temp;
     }
