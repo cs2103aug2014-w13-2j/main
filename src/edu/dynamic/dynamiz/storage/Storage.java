@@ -51,7 +51,6 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
-	completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
 	completedBuffer = new Stack<ToDoItem>();
 	
 	//Adds each item in mainList to ID search tree
@@ -348,7 +347,7 @@ public class Storage {
 	if(eventList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(eventList);
+	Collections.sort(eventList, new StartDateComparator());
 	return eventList.toArray(new EventItem[eventList.size()]);
     }
     
@@ -363,21 +362,19 @@ public class Storage {
 	if(eventList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(eventList);
+	Collections.sort(eventList, new EndDateComparator());
 	return eventList.toArray(new EventItem[eventList.size()]);
     }
     
     /**
      * Gets the list of deadline tasks sorted in ascending order of their deadlines.
      * @return An array of TaskItem objects sorted in ascending order of their deadlines.
-     * Implementation is currently only a stub, to be properly implemented when use case requirements
-     * are confirmed.
      */
     public TaskItem[] getTasksSortedByDeadline(){
 	if(taskList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(taskList);
+	Collections.sort(taskList, new EndDateComparator());
 	return taskList.toArray(new TaskItem[taskList.size()]);
     }
     
@@ -421,6 +418,9 @@ public class Storage {
     public ToDoItem completeItem(String id){
 	ToDoItem item = removeItem(id);
 	if(item!=null){
+	    if(completedList==null){
+		completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
+	    }
 	    completedList.add(item.toFileString());
 	    completedBuffer.push(item);
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
@@ -431,9 +431,12 @@ public class Storage {
     
     /**
      * Unmark the most recent item that is marked completed.
+     * Should only be called after a call to completeItem() method and number of calls
+     * to this method should not exceed that of completeItem() method.
      * @return The ToDoItem object that is unmarked from completed list.
      */
     public ToDoItem undoComplete(){
+	assert completedList!=null && !completedBuffer.isEmpty();
 	ToDoItem temp = completedBuffer.pop();
 	completedList.remove(completedList.size()-1);	//The item being removed is always the last element
 							//as it is the most recently added item.
