@@ -19,8 +19,10 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * Public Methods:
  * static ArrayList<ToDoItem> getListFromFile()	Gets a list of ToDoItem from FileHandler's default file.
  * static ArrayList<ToDoItem> getListFromFile(String filename)	Gets a list of ToDoItem from the specified filename
+ * static ArrayList<String> getTextFileContentByLine(String filename)	//Gets a list of content from text file on per-line basis.
  * static void writeListToFile(ArrayList<ToDoItem> list)	Writes the given list to FileHandler's default file
  * static void writeListToFile(ArrayList<ToDoItem> list, String filename)	Writes the given list to the file specified by the given filename.
+ * static void writeListToFile(ArrayList<String> list, String filename)	//Writes the given list of strings to file.
  * 
  * Private Methods:
  * static EventItem makeEventItem(String data)	Creates an EventItem from the data read from file.
@@ -76,6 +78,29 @@ public class DataFileReadWrite {
     }
     
     /**
+     * Gets a list of text on a per-line basis.
+     * @param filename The name of the text file to read from.
+     * @return A list of text lines read from the given file, an empty list if file is empty or does not exist,
+     * 		and partially-filled list if an IOException occurred during the reading.
+     */
+    public static ArrayList<String> getTextFileContentByLine(String filename){
+	assert filename!=null && !filename.isEmpty();
+	File inFile = new File(filename);
+	ArrayList<String> list = new ArrayList<String>();
+	try{
+	    reader = new BufferedReader(new FileReader(inFile));
+	    String input;
+	    while((input = reader.readLine())!=null){
+		list.add(input);
+	    }
+	    reader.close();
+	} catch(IOException e){
+	    
+	}
+	return list;
+    }
+    
+    /**
      * Reads the task list from the from the specified filename.
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @param filename Name of file to read list from.
@@ -116,8 +141,8 @@ public class DataFileReadWrite {
      * @param list The list of ToDoItem objects to write to file.
      * @throws IOException if error occurs while creating output file if it does not exists.
      */
-    public static void writeListToFile(ArrayList<ToDoItem> list) throws IOException {
-	writeListToFile(list, FILENAME_DEFAULT);
+    public static void writeItemsToFile(ArrayList<ToDoItem> list) throws IOException {
+	writeItemsToFile(list, FILENAME_DEFAULT);
     }
     
     /**
@@ -127,17 +152,36 @@ public class DataFileReadWrite {
      * @throws IOException if error occurs while creating output file if
      * 		if does not exists.
      */
-    public static void writeListToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
+    public static void writeItemsToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
 	File file = new File(filename);
 	if(!file.exists()){
 	    file.createNewFile();
 	}
 	writer = new PrintWriter(file);
-	int numItems = list.size();
-	for(int i=0; i<numItems; i++){
-	    writer.println(list.get(i).toFileString());
+	for(ToDoItem item: list){
+	    writer.println(item.toFileString());
 	}
 	writer.close();
+    }
+    
+    /**
+     * Writes the given list of string to the given file, with each element in the list
+     * written on a separate line.
+     * @param list The list to be written to the file.
+     * @param filename The name of the file to write to.
+     */
+    public static void writeListToFile(ArrayList<String> list, String filename){
+	File outFile = new File(filename);
+	try{
+	    outFile.createNewFile();
+	    writer = new PrintWriter(outFile);
+	    for(String str: list){
+		writer.println(str);
+	    }
+	    writer.close();
+	} catch(IOException e){
+	    
+	}
     }
     
     /**

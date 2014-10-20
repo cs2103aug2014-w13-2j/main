@@ -24,7 +24,7 @@ public class DataFileReadWriteTest {
 	try{
 	    ArrayList<ToDoItem> list = DataFileReadWrite.getListFromFile();
 	    //FileHandler.writeListToFile(list, "output.txt");
-	    DataFileReadWrite.writeListToFile(list);
+	    DataFileReadWrite.writeItemsToFile(list);
 	    list = DataFileReadWrite.getListFromFile();
 	    assertEquals("list has 3 items", 3, list.size());
 	} catch(IOException ioe){

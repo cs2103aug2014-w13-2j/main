@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.storage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
@@ -29,13 +30,16 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * @author zixian
  */
 public class Storage {
+    private static final String COMPLETED_FILENAME = "completed.txt";
+    
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
     private ArrayList<ToDoItem> toDoItemList;	//Holds items without any dates
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
-    private ArrayList<ToDoItem> completedList;	//The list of completed items
+    private ArrayList<String> completedList;	//The list of completed items in string representation.
+    private Stack<ToDoItem> completedBuffer;	//Buffered list of items marked as completed.
     private static Storage storage;	//Holds the only instance of the Storage object
     
     /**
@@ -47,7 +51,8 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
-	completedList = DataFileReadWrite.getListFromFile("completed.txt");
+	completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
+	completedBuffer = new Stack<ToDoItem>();
 	
 	//Adds each item in mainList to ID search tree
 	for(ToDoItem temp: mainList){
@@ -91,7 +96,7 @@ public class Storage {
 	    toDoItemList.add(item);
 	}
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -159,7 +164,7 @@ public class Storage {
 	list[1] = target;
 	
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -399,7 +404,7 @@ public class Storage {
 	    toDoItemList.remove(temp);
 	}
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 	    
 	}
@@ -416,14 +421,10 @@ public class Storage {
     public ToDoItem completeItem(String id){
 	ToDoItem item = removeItem(id);
 	if(item!=null){
-	    if(item instanceof EventItem){
-		completedList.add(new EventItem((EventItem)item));
-	    } else if(item instanceof TaskItem){
-		completedList.add(new TaskItem((TaskItem)item));
-	    } else{
-		completedList.add(new ToDoItem(item));
-	    }
+	    completedList.add(item.toFileString());
+	    completedBuffer.push(item);
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
+	    DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
 	}
 	return item;
     }
@@ -433,8 +434,11 @@ public class Storage {
      * @return The ToDoItem object that is unmarked from completed list.
      */
     public ToDoItem undoComplete(){
-	ToDoItem temp = completedList.remove(completedList.size()-1);
+	ToDoItem temp = completedBuffer.pop();
+	completedList.remove(completedList.size()-1);	//The item being removed is always the last element
+							//as it is the most recently added item.
 	addItem(temp);
+	DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
 	return temp;
     }
 }
