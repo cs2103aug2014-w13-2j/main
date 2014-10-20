@@ -25,7 +25,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
  * ToDoItem[] getList(OptionsType[] optionsList)	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
- * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
+ * ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList)	//Gets a list of items with the given parameter values.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
  * 
  * @author zixian
@@ -175,7 +175,7 @@ public class Storage {
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end){
+    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList){
 	ArrayList<ToDoItem> temp = mainList;;
 	if(keyword!=null && !keyword.isEmpty()){
 	    temp = searchByKeyword(temp, keyword);
@@ -191,6 +191,12 @@ public class Storage {
 	}
 	if(temp.isEmpty()){
 	    return null;
+	}
+	if(optList!=null){
+	    int size = optList.length;
+	    while(size-->0){
+		sortListByOption(temp, optList[size]);
+	    }
 	}
 	return temp.toArray(new ToDoItem[temp.size()]);
     }
@@ -278,18 +284,27 @@ public class Storage {
 	if(optionsList!=null){
 	    int size = optionsList.length;
 	    while(size-->0){
-		switch(optionsList[size]){
-		    case PRIORITY: Collections.sort(mainList, Collections.reverseOrder(new PriorityComparator()));
-		    	break;
-		    case START_TIME: Collections.sort(mainList, new StartDateComparator());
-		    	break;
-		    case END_TIME: Collections.sort(mainList, new EndDateComparator());
-		    	break;
-		    default: break;
-		}
+		sortListByOption(mainList, optionsList[size]);
 	    }
 	}
 	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Sorts the given list by the given option type.
+     * @param list The list to sort.
+     * @optType The option to sort the list by.
+     */
+    private void sortListByOption(ArrayList<ToDoItem> list, OptionType optType){
+	switch(optType){
+	    case PRIORITY: Collections.sort(list, Collections.reverseOrder(new PriorityComparator()));
+	    	break;
+	    case START_TIME: Collections.sort(list, new StartDateComparator());
+	    	break;
+	    case END_TIME: Collections.sort(list, new EndDateComparator());
+	    	break;
+	    default: break;
+	}
     }
     
     /**
