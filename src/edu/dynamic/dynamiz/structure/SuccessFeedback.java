@@ -19,7 +19,7 @@ public class SuccessFeedback extends Feedback {
     /**
      * Gets the list of ToDoItem objects affected by the operation
      * specified by the original command.
-     * @return An array of ToDoItem objects.
+     * @return An array of ToDoItem objects or null if the list is empty.
      */
     public ToDoItem[] getAffectedItems(){
 	return list;
