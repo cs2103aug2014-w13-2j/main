@@ -409,12 +409,12 @@ class TagFormat{
 	
 	
 	
-	public static int PRIORITY_URGENT = 8;
-	public static int PRIORITY_HIGH = 4;
-	public static int PRIORITY_MEDIUM = 2;
-	public static int PRIORITY_LOW = 1;
-	public static int PRIORITY_NONE = 0;
-	public static int PRIORITY_UNCHANGED = -1;
+	public static final int PRIORITY_URGENT = 8;
+	public static final int PRIORITY_HIGH = 4;
+	public static final int PRIORITY_MEDIUM = 2;
+	public static final int PRIORITY_LOW = 1;
+	public static final int PRIORITY_NONE = 0;
+	public static final int PRIORITY_UNCHANGED = -1;
 	
 	
 	
@@ -428,25 +428,23 @@ class TagFormat{
 		String s = new String();
 		String content = new String();
 		switch(pri){
-//		case PRIORITY_NONE:
-//			s = PRIORITY_NONE_TAG;
-//			break;
-//		case PRIORITY_LOW:
-//			s = PRIORITY_LOW_TAG;
-//			break;
-//			
-//		case PRIORITY_MEDIUM:
-//			s = PRIORITY_MEDIUN_TAG;
-//			break;
-//		case PRIORITY_HIGH:
-//			s = PRIORITY_HIGH_TAG;
-//			break;
-//		case PRIORITY_URGENT:
-//			s = PRIORITY_URGENT_TAG;
-//			break;
-//		case PRIORITY_LOW:
-//			s = PRIORITY_LOW_TAG;
-//			break;
+		case PRIORITY_NONE:
+			s = PRIORITY_NONE_TAG;
+			break;
+		case PRIORITY_LOW:
+			s = PRIORITY_LOW_TAG;
+			break;
+			
+		case PRIORITY_MEDIUM:
+			s = PRIORITY_MEDIUN_TAG;
+			break;
+		case PRIORITY_HIGH:
+			s = PRIORITY_HIGH_TAG;
+			break;
+		case PRIORITY_URGENT:
+			s = PRIORITY_URGENT_TAG;
+			break;
+		
 		default:
 			s = PRIORITY_NONE_TAG;
 			content = "None";
