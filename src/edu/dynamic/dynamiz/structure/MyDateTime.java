@@ -1,5 +1,8 @@
 package edu.dynamic.dynamiz.structure;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 /**
  * Defines an object containing both date and time. Time is defined using 24-hour clock.
@@ -48,6 +51,25 @@ public class MyDateTime extends MyDate {
      */
     public MyDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	setDateTime(date, month, year, hour, minute);
+    }
+    
+    /**
+     * Create a new DateTime object with the given java.util.Date
+     * @param date the given Date to be converted into MyDateTime
+     */
+    public MyDateTime(Date date) {
+    	assert date != null;
+    	
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(date);
+    	
+    	int dd = calendar.get(Calendar.DAY_OF_MONTH);
+    	int mm = calendar.get(Calendar.MONTH);
+    	int yyyy = calendar.get(Calendar.YEAR);
+    	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    	int min = calendar.get(Calendar.MINUTE);
+    	
+    	setDateTime(dd, mm, yyyy, hour, min);
     }
     
     /**
