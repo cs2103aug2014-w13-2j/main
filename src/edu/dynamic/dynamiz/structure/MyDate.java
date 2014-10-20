@@ -1,5 +1,7 @@
 package edu.dynamic.dynamiz.structure;
 
+import java.util.Date;
+
 /**
  * Defines the date in the format DD/MM/YYYY.
  * @author zixian
