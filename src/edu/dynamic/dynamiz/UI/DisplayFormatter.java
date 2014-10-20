@@ -293,7 +293,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			s = commandFeedback.getOriginalCommand();
 			
 		}
-		return "<html>"+s;		
+		return "<html>"+s+"</html>";		
 	}
 	
 	
