@@ -4,10 +4,13 @@ import edu.dynamic.dynamiz.structure.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.TaskItem;
 
@@ -29,9 +32,6 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * @author zixian
  */
 public class DataFileReadWrite {
-    
-    private static final String MSG_MISSINGFILE = "%1$s is missing, creating new empty file...";
-
     /*
      * Defines regular expression format for each TaskItem object
      * represented on each line.
@@ -63,6 +63,9 @@ public class DataFileReadWrite {
     //Object for writing to file.
     private static PrintWriter writer;
     
+    //The logger to log any errors.
+    private static Logger logger = Logger.getLogger(DataFileReadWrite.class.getName());
+    
     /**
      * Gets a list of text on a per-line basis.
      * @param filename The name of the text file to read from.
@@ -80,8 +83,10 @@ public class DataFileReadWrite {
 		list.add(input);
 	    }
 	    reader.close();
+	} catch(FileNotFoundException e){
+	    logger.log(Level.WARNING, "{0} does not exist.", filename);
 	} catch(IOException e){
-	    
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
 	return list;
     }
@@ -98,7 +103,7 @@ public class DataFileReadWrite {
 	
 	try{
 	    if(!file.exists()){
-		printFileMissingMessage(filename);
+		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
 	    }
 	    reader = new BufferedReader(new FileReader(file));
@@ -116,8 +121,8 @@ public class DataFileReadWrite {
 		lineInput = reader.readLine();
 	    }
 	    reader.close();
-	} catch(IOException ioe){
-	    
+	} catch(IOException e){
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
 	return tempList;
     }
@@ -142,7 +147,7 @@ public class DataFileReadWrite {
 	    }
 	    writer.close();
 	} catch(IOException e){
-	    
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
     }
     
@@ -217,9 +222,5 @@ public class DataFileReadWrite {
 	task = new TaskItem(description, priority, deadline);
 	task.setStatus(status);
 	return task;
-    }
-    
-    private static void printFileMissingMessage(String filename){
-	System.out.println(String.format(MSG_MISSINGFILE, filename));
     }
 }
