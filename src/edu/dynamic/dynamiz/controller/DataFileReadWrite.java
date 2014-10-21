@@ -64,7 +64,7 @@ public class DataFileReadWrite {
     private static PrintWriter writer;
     
     //The logger to log any errors.
-    private static Logger logger = Logger.getLogger(DataFileReadWrite.class.getName());
+    private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller.DataFileReadWrite");
     
     /**
      * Gets a list of text on a per-line basis.
