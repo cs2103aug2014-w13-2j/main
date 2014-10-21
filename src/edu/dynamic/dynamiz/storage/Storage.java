@@ -1,12 +1,12 @@
 package edu.dynamic.dynamiz.storage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 import java.util.TreeMap;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
+import edu.dynamic.dynamiz.controller.WriteToFileThread;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.EndDateComparator;
@@ -32,6 +32,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public class Storage {
     private static final String COMPLETED_FILENAME = "completed.txt";
     private static final String TODOLIST_FILENAME = "todo.txt";
+    private static final String OUTPUT_FILENAME = "output.txt";
     
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
@@ -95,11 +96,8 @@ public class Storage {
 	} else{
 	    toDoItemList.add(item);
 	}
-	try {
-	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
-	} catch (IOException e) {
-
-	}
+	Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+	writeToFile.run();
 	return item;	
     }
     
@@ -125,13 +123,7 @@ public class Storage {
 	}
 	
 	//Makes a copy of the current version of the object
-	if(target instanceof TaskItem){
-	    list[0] = new TaskItem((TaskItem)target);
-	} else if(target instanceof EventItem){
-	    list[0] = new EventItem((EventItem)target);
-	} else{
-	    list[0] = new ToDoItem(target);
-	}
+	list[0] = makeCopy(target);
 	
 	if(description!=null && !description.isEmpty()){
 	    target.setDescription(description);
@@ -163,11 +155,8 @@ public class Storage {
 	
 	list[1] = target;
 	
-	try {
-	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
-	} catch (IOException e) {
-
-	}
+	Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+	writeToFile.run();
 	return list;	
     }
     
@@ -401,11 +390,8 @@ public class Storage {
 	} else{
 	    toDoItemList.remove(temp);
 	}
-	try {
-	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
-	} catch (IOException e) {
-	    
-	}
+	Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+	writeToFile.run();
 	return temp;
     }
     
@@ -422,10 +408,12 @@ public class Storage {
 	    if(completedList==null){
 		completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
 	    }
-	    completedList.add(item.toFileString());
 	    completedBuffer.push(item);
+	    item = makeCopy(item);
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
-	    DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
+	    completedList.add(item.toFileString());
+	    Thread writeToFile = new WriteToFileThread(completedList.toArray(new String[completedList.size()]), COMPLETED_FILENAME);
+	    writeToFile.run();
 	}
 	return item;
     }
@@ -442,7 +430,20 @@ public class Storage {
 	completedList.remove(completedList.size()-1);	//The item being removed is always the last element
 							//as it is the most recently added item.
 	addItem(temp);
-	DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
+	Thread writeToFile = new WriteToFileThread(completedList.toArray(new String[completedList.size()]), COMPLETED_FILENAME);
+	writeToFile.run();
 	return temp;
+    }
+    
+    //Creates a duplicate copy of the given item.
+    private ToDoItem makeCopy(ToDoItem item){
+	assert item!=null;
+	if(item instanceof EventItem){
+	    return new EventItem((EventItem)item);
+	} else if(item instanceof TaskItem){
+	    return new TaskItem((TaskItem)item);
+	} else{
+	    return new ToDoItem(item);
+	}
     }
 }
