@@ -22,7 +22,7 @@ public class ControllerTest {
 	assertEquals("add Buy newspaper", feedback.getOriginalCommand());
 	
 	//Adds an event
-	feedback = controller.executeCommand("add Meeting priority 2 from 7/10/2014");
+	feedback = controller.executeCommand("add Meeting priority 2 from 7/10/2014 to 8/10/2014");
 	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00");
 	
 	feedback = controller.executeCommand("add A from 1/1/2000 13:00 to 2/1/2000 14:00");
