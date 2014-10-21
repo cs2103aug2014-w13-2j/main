@@ -3,7 +3,6 @@ package edu.dynamic.dynamiz.storage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -25,19 +24,22 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
  * ToDoItem[] getList(OptionsType[] optionsList)	//Gets the list of ToDoItem objects held by this storage.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
- * ToDoItem[] searchItems(String keyword, int priority, Date start, Date end)	//Gets a list of items with the given parameter values.
+ * ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList)	//Gets a list of items with the given parameter values.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
  * 
  * @author zixian
  */
 public class Storage {
+    private static final String COMPLETED_FILENAME = "completed.txt";
+    
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
     private ArrayList<ToDoItem> toDoItemList;	//Holds items without any dates
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
-    private Stack<ToDoItem> completedList;	//The list of completed items
+    private ArrayList<String> completedList;	//The list of completed items in string representation.
+    private Stack<ToDoItem> completedBuffer;	//Buffered list of items marked as completed.
     private static Storage storage;	//Holds the only instance of the Storage object
     
     /**
@@ -49,11 +51,10 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
-	completedList = new Stack<ToDoItem>();
-	Iterator<ToDoItem> itr = mainList.iterator();
-	ToDoItem temp;
-	while(itr.hasNext()){
-	    temp = itr.next();
+	completedBuffer = new Stack<ToDoItem>();
+	
+	//Adds each item in mainList to ID search tree
+	for(ToDoItem temp: mainList){
 	    searchTree.put(temp.getId(), temp);
 	    if(temp instanceof TaskItem){
 		taskList.add((TaskItem)temp);
@@ -94,7 +95,7 @@ public class Storage {
 	    toDoItemList.add(item);
 	}
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -162,7 +163,7 @@ public class Storage {
 	list[1] = target;
 	
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 
 	}
@@ -171,11 +172,15 @@ public class Storage {
     
     /**
      * Gets a list of ToDoItem objects whose description contains this keyword.
-     * @param keyword The keyword to search in the objects.
+     * @param keyword The keyword to search in the objects or null if no search by keyword is needed.
+     * @param priority The priority level to the item(s) to search or -1 if not needed.
+     * @param start the start date of the item(s) to search or null if search by start date is not needed.
+     * @param end The end date of the item(s) t search or null if search by end date is not needed.
+     * @param optList The list of options(in descending precedence) to sort search results by.
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end){
+    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList){
 	ArrayList<ToDoItem> temp = mainList;;
 	if(keyword!=null && !keyword.isEmpty()){
 	    temp = searchByKeyword(temp, keyword);
@@ -191,6 +196,12 @@ public class Storage {
 	}
 	if(temp.isEmpty()){
 	    return null;
+	}
+	if(optList!=null){
+	    int size = optList.length;
+	    while(size-->0){
+		sortListByOption(temp, optList[size]);
+	    }
 	}
 	return temp.toArray(new ToDoItem[temp.size()]);
     }
@@ -278,18 +289,27 @@ public class Storage {
 	if(optionsList!=null){
 	    int size = optionsList.length;
 	    while(size-->0){
-		switch(optionsList[size]){
-		    case PRIORITY: Collections.sort(mainList, Collections.reverseOrder(new PriorityComparator()));
-		    	break;
-		    case START_TIME: Collections.sort(mainList, new StartDateComparator());
-		    	break;
-		    case END_TIME: Collections.sort(mainList, new EndDateComparator());
-		    	break;
-		    default: break;
-		}
+		sortListByOption(mainList, optionsList[size]);
 	    }
 	}
 	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Sorts the given list by the given option type.
+     * @param list The list to sort.
+     * @optType The option to sort the list by.
+     */
+    private void sortListByOption(ArrayList<ToDoItem> list, OptionType optType){
+	switch(optType){
+	    case PRIORITY: Collections.sort(list, Collections.reverseOrder(new PriorityComparator()));
+	    	break;
+	    case START_TIME: Collections.sort(list, new StartDateComparator());
+	    	break;
+	    case END_TIME: Collections.sort(list, new EndDateComparator());
+	    	break;
+	    default: break;
+	}
     }
     
     /**
@@ -327,7 +347,7 @@ public class Storage {
 	if(eventList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(eventList);
+	Collections.sort(eventList, new StartDateComparator());
 	return eventList.toArray(new EventItem[eventList.size()]);
     }
     
@@ -342,21 +362,19 @@ public class Storage {
 	if(eventList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(eventList);
+	Collections.sort(eventList, new EndDateComparator());
 	return eventList.toArray(new EventItem[eventList.size()]);
     }
     
     /**
      * Gets the list of deadline tasks sorted in ascending order of their deadlines.
      * @return An array of TaskItem objects sorted in ascending order of their deadlines.
-     * Implementation is currently only a stub, to be properly implemented when use case requirements
-     * are confirmed.
      */
     public TaskItem[] getTasksSortedByDeadline(){
 	if(taskList.isEmpty()){
 	    return null;
 	}
-	Collections.sort(taskList);
+	Collections.sort(taskList, new EndDateComparator());
 	return taskList.toArray(new TaskItem[taskList.size()]);
     }
     
@@ -383,7 +401,7 @@ public class Storage {
 	    toDoItemList.remove(temp);
 	}
 	try {
-	    DataFileReadWrite.writeListToFile(mainList, "output.txt");
+	    DataFileReadWrite.writeItemsToFile(mainList, "output.txt");
 	} catch (IOException e) {
 	    
 	}
@@ -400,25 +418,30 @@ public class Storage {
     public ToDoItem completeItem(String id){
 	ToDoItem item = removeItem(id);
 	if(item!=null){
-	    if(item instanceof EventItem){
-		completedList.push(new EventItem((EventItem)item));
-	    } else if(item instanceof TaskItem){
-		completedList.push(new TaskItem((TaskItem)item));
-	    } else{
-		completedList.push(new ToDoItem(item));
+	    if(completedList==null){
+		completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
 	    }
+	    completedList.add(item.toFileString());
+	    completedBuffer.push(item);
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
+	    DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
 	}
 	return item;
     }
     
     /**
      * Unmark the most recent item that is marked completed.
+     * Should only be called after a call to completeItem() method and number of calls
+     * to this method should not exceed that of completeItem() method.
      * @return The ToDoItem object that is unmarked from completed list.
      */
     public ToDoItem undoComplete(){
-	ToDoItem temp = completedList.pop();
+	assert completedList!=null && !completedBuffer.isEmpty();
+	ToDoItem temp = completedBuffer.pop();
+	completedList.remove(completedList.size()-1);	//The item being removed is always the last element
+							//as it is the most recently added item.
 	addItem(temp);
+	DataFileReadWrite.writeListToFile(completedList, COMPLETED_FILENAME);
 	return temp;
     }
 }

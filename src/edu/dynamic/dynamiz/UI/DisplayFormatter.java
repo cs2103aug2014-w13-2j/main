@@ -27,15 +27,15 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
-	public String dateFormatter(MyDate d){
-		
-		String s = String.format("%tm,%td,%ty", d);
-		return s;
-	}
-	public String timeFormatter(MyDate d){
-		String s = String.format("%tH:%tM", d);
-		return s;
-	}
+//	public String dateFormatter(MyDate d){
+//		
+//		String s = String.format("%tm,%td,%ty", d);
+//		return s;
+//	}
+//	public String timeFormatter(MyDate d){
+//		String s = String.format("%tH:%tM", d);
+//		return s;
+//	}
 	
 
 	public String displayWelcomeMessage(){
@@ -293,14 +293,17 @@ public class DisplayFormatter implements DisplayerInterface {
 			s = commandFeedback.getOriginalCommand();
 			
 		}
-		return s;		
+		return "<html>"+s+"</html>";		
 	}
 	
 	
 	
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
-		assert list!=null;
+		if( list==null){
+			a.append("The list is empty!");
+			return;
+		}
 		
 		if(sf.getCommandType().equals(UPDATE_COMMAND)){
 			assert(2==list.length);
@@ -326,13 +329,13 @@ public class DisplayFormatter implements DisplayerInterface {
 		StringBuilder sb = new StringBuilder();
 
 		String ID = item.getId();
-		 ID = TagFormat.format(ID, TagFormat.TASK_ID);
+		// ID = TagFormat.format(ID, TagFormat.TASK_ID);
 		String des = item.getDescription();
-		 des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
+		// des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
 		int pri = item.getPriority();
 		String prioS = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
-		stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
+		//stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
 		sb.append(ID).append("\n").
 		append(des).append("\n").
 		append(prioS).append("\n").
@@ -340,15 +343,15 @@ public class DisplayFormatter implements DisplayerInterface {
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
 			String ddl = t.getDeadlineString();
-			ddl = TagFormat.format(ddl, TagFormat.END_TIME);
+			//ddl = TagFormat.format(ddl, TagFormat.END_TIME);
 			sb.append(ddl).append("\n");
 		}
 		else if (item instanceof EventItem){
 			EventItem t = (EventItem)item;
 			String starT = t.getStartDateString();
-			starT = TagFormat.format(starT, TagFormat.START_TIME);
+			//starT = TagFormat.format(starT, TagFormat.START_TIME);
 			String endT = t.getEndDateString();
-			endT =  TagFormat.format(endT, TagFormat.END_TIME);
+			//endT =  TagFormat.format(endT, TagFormat.END_TIME);
 			sb.append(starT).append("\n").
 			append(endT).append("\n");
 			
@@ -387,24 +390,69 @@ class TagFormat{
 	public static final String ERORR = "";
 	public static final String PROMPT = "";
 	
-	public static final String PRIORITY = "";
+	public static final String PRIORITY = "PRIORITY_HEADER";
 	public static final String TASK_ID = "";
+	public static final String TASK_DESCRIPTION = "";
+	public static final String TASK_STATUS = "";
 	public static final String START_TIME = "";
 	public static final String END_TIME = "";
 	public static final String TIME = "";
 	
-	public static final String PRIORITY_URGENT= "";
-	public static final String PRIORITY_HIGH = "";
-	public static final String PRIORITY_MEDIUN = "";
-	public static final String PRIORITY_LOW = "";
-	public static final String PRIORITY_NONE = "";
+	public static final String PRIORITY_URGENT_TAG= "PRIORITY_URGERNT";
+	public static final String PRIORITY_HIGH_TAG = "PRIORITY_HIGH";
+	public static final String PRIORITY_MEDIUN_TAG = "PRIORITY_MEDIUN";
+	public static final String PRIORITY_LOW_TAG = "PRIORITY_LOW";
+	public static final String PRIORITY_NONE_TAG = "PRIORITY_NONE";
 	
 	
 	
-	private static final String FORMAT_HTML_TAG = "<div class:\"%s\" >%s</div>";
+	
+	
+	
+	public static final int PRIORITY_URGENT = 8;
+	public static final int PRIORITY_HIGH = 4;
+	public static final int PRIORITY_MEDIUM = 2;
+	public static final int PRIORITY_LOW = 1;
+	public static final int PRIORITY_NONE = 0;
+	public static final int PRIORITY_UNCHANGED = -1;
+	
+	
+	
+	private static final String FORMAT_HTML_TAG = "<div class: %s >%s</div>";
 	
 	public static String format(String content, String tag){		
 		return String.format(FORMAT_HTML_TAG, tag, content);
+	}
+	
+	public static String formatPri(int pri){
+		String s = new String();
+		String content = new String();
+		switch(pri){
+		case PRIORITY_NONE:
+			s = PRIORITY_NONE_TAG;
+			break;
+		case PRIORITY_LOW:
+			s = PRIORITY_LOW_TAG;
+			break;
+			
+		case PRIORITY_MEDIUM:
+			s = PRIORITY_MEDIUN_TAG;
+			break;
+		case PRIORITY_HIGH:
+			s = PRIORITY_HIGH_TAG;
+			break;
+		case PRIORITY_URGENT:
+			s = PRIORITY_URGENT_TAG;
+			break;
+		
+		default:
+			s = PRIORITY_NONE_TAG;
+			content = "None";
+			break;
+			
+		}
+		s = String.format(FORMAT_HTML_TAG, s,content);
+		return s;
 	}
 	
 }
