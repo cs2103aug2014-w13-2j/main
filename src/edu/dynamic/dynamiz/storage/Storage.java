@@ -31,6 +31,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 public class Storage {
     private static final String COMPLETED_FILENAME = "completed.txt";
+    private static final String TODOLIST_FILENAME = "todo.txt";
     
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
@@ -46,7 +47,7 @@ public class Storage {
      * Creates a new instance of Storage.
      */
     private Storage(){
-	mainList = DataFileReadWrite.getListFromFile();
+	mainList = DataFileReadWrite.getListFromFile(TODOLIST_FILENAME);
 	searchTree = new TreeMap<String, ToDoItem>();
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
