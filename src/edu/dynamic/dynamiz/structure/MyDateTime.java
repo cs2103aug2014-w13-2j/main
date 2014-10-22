@@ -64,8 +64,8 @@ public class MyDateTime extends MyDate {
     	calendar.setTime(date);
     	
     	int dd = calendar.get(Calendar.DAY_OF_MONTH);
-    	int mm = calendar.get(Calendar.MONTH);
-    	int yyyy = calendar.get(Calendar.YEAR);
+    	int mm = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH starts from 0
+     	int yyyy = calendar.get(Calendar.YEAR);
     	int hour = calendar.get(Calendar.HOUR_OF_DAY);
     	int min = calendar.get(Calendar.MINUTE);
     	
