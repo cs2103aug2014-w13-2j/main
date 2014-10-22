@@ -1,10 +1,13 @@
 package edu.dynamic.dynamiz.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
+import edu.dynamic.dynamiz.controller.CommandDo;
+import edu.dynamic.dynamiz.controller.CommandHelp;
 import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.controller.CommandRedo;
 import edu.dynamic.dynamiz.controller.CommandSearch;
@@ -78,6 +81,12 @@ public class CommandLine {
 				break;
 			case REDO:
 				this.command = parseRedo();
+				break;
+			case HELP:
+				this.command = parseHelp();
+				break;
+			case DO:
+				this.command = parseDo();
 				break;
 			case EXIT:
 				this.command = parseExit();
@@ -155,6 +164,9 @@ public class CommandLine {
 		MyDate commandEndDate = null;
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
 		
+		String commandOrderStr;
+		List<OptionType> commandOrderList= new ArrayList<OptionType>();
+		
 		if (commandOptions.hasOption(OptionType.START_TIME)) {
 			commandStartDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));
 		}
@@ -167,7 +179,15 @@ public class CommandLine {
 			commandPriority = Integer.parseInt(getFirstOptionValue(commandOptions, OptionType.PRIORITY));
 		}
 		
-		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate);
+		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
+			commandOrderStr = getFirstOptionValue(commandOptions, OptionType.ORDER_BY);
+			for (String s: commandOrderStr.split("" + Option.DEFAULT_DELIMITER)) {
+				commandOrderList.add(OptionType.fromString(s));
+			}
+		}
+		
+		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate,
+									(OptionType[]) commandOrderList.toArray());
 	}
 
 	private Command parseUndo() {
@@ -207,6 +227,15 @@ public class CommandLine {
 				commandStartDate, commandEndDate);
 	}
 
+	private Command parseHelp() {
+		// TODO: Implement command Help
+		return new CommandHelp();
+	}
+	
+	private Command parseDo() {
+		return new CommandDo(param);
+	}
+	
 	private Command parseExit() {
 		return null;
 	}
