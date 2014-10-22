@@ -4,10 +4,13 @@ import edu.dynamic.dynamiz.structure.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.TaskItem;
 
@@ -17,12 +20,9 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * This class is meant to be used in the same way as Java Math class: no object instance is required.
  * 
  * Public Methods:
- * static ArrayList<ToDoItem> getListFromFile()	Gets a list of ToDoItem from FileHandler's default file.
  * static ArrayList<ToDoItem> getListFromFile(String filename)	Gets a list of ToDoItem from the specified filename
  * static ArrayList<String> getTextFileContentByLine(String filename)	//Gets a list of content from text file on per-line basis.
- * static void writeListToFile(ArrayList<ToDoItem> list)	Writes the given list to FileHandler's default file
- * static void writeListToFile(ArrayList<ToDoItem> list, String filename)	Writes the given list to the file specified by the given filename.
- * static void writeListToFile(ArrayList<String> list, String filename)	//Writes the given list of strings to file.
+ * static void writeListToFile(String[] list, String filename)	//Writes the given list of strings to file.
  * 
  * Private Methods:
  * static EventItem makeEventItem(String data)	Creates an EventItem from the data read from file.
@@ -32,11 +32,6 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * @author zixian
  */
 public class DataFileReadWrite {
-    //Name of the default file to read from/write to.
-    private static final String FILENAME_DEFAULT = "todo.txt";
-    
-    private static final String MSG_MISSINGFILE = "%1$s is missing, creating new empty file...";
-
     /*
      * Defines regular expression format for each TaskItem object
      * represented on each line.
@@ -68,14 +63,8 @@ public class DataFileReadWrite {
     //Object for writing to file.
     private static PrintWriter writer;
     
-    /**
-     * Reads the task list from "todo.txt".
-     * Stops reading on encountering IOException. May return incomplete list in such case.
-     * @return An ArrayList of ToDoItem objects.
-     */
-    public static ArrayList<ToDoItem> getListFromFile(){
-	return getListFromFile(FILENAME_DEFAULT);
-    }
+    //The logger to log any errors.
+    private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller.DataFileReadWrite");
     
     /**
      * Gets a list of text on a per-line basis.
@@ -94,8 +83,10 @@ public class DataFileReadWrite {
 		list.add(input);
 	    }
 	    reader.close();
+	} catch(FileNotFoundException e){
+	    logger.log(Level.WARNING, "{0} does not exist.", filename);
 	} catch(IOException e){
-	    
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
 	return list;
     }
@@ -112,7 +103,7 @@ public class DataFileReadWrite {
 	
 	try{
 	    if(!file.exists()){
-		printFileMissingMessage(filename);
+		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
 	    }
 	    reader = new BufferedReader(new FileReader(file));
@@ -130,38 +121,10 @@ public class DataFileReadWrite {
 		lineInput = reader.readLine();
 	    }
 	    reader.close();
-	} catch(IOException ioe){
-	    
+	} catch(IOException e){
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
 	return tempList;
-    }
-    
-    /**
-     * Writes the tasks in list to "to-do.txt".
-     * @param list The list of ToDoItem objects to write to file.
-     * @throws IOException if error occurs while creating output file if it does not exists.
-     */
-    public static void writeItemsToFile(ArrayList<ToDoItem> list) throws IOException {
-	writeItemsToFile(list, FILENAME_DEFAULT);
-    }
-    
-    /**
-     * Writes the tasks in list to the specified filename.
-     * @param list The list of ToDoItem objects to write to file.
-     * @param filename The name of the file to write the list to.
-     * @throws IOException if error occurs while creating output file if
-     * 		if does not exists.
-     */
-    public static void writeItemsToFile(ArrayList<ToDoItem> list, String filename) throws IOException {
-	File file = new File(filename);
-	if(!file.exists()){
-	    file.createNewFile();
-	}
-	writer = new PrintWriter(file);
-	for(ToDoItem item: list){
-	    writer.println(item.toFileString());
-	}
-	writer.close();
     }
     
     /**
@@ -170,17 +133,21 @@ public class DataFileReadWrite {
      * @param list The list to be written to the file.
      * @param filename The name of the file to write to.
      */
-    public static void writeListToFile(ArrayList<String> list, String filename){
+    public static synchronized void writeListToFile(String[] list, String filename){
 	File outFile = new File(filename);
 	try{
 	    outFile.createNewFile();
+	    Thread currentThread = Thread.currentThread();
 	    writer = new PrintWriter(outFile);
 	    for(String str: list){
 		writer.println(str);
+		if(currentThread.isInterrupted()){
+		    break;
+		}
 	    }
 	    writer.close();
 	} catch(IOException e){
-	    
+	    logger.log(Level.SEVERE, "IO Exception.");
 	}
     }
     
@@ -255,9 +222,5 @@ public class DataFileReadWrite {
 	task = new TaskItem(description, priority, deadline);
 	task.setStatus(status);
 	return task;
-    }
-    
-    private static void printFileMissingMessage(String filename){
-	System.out.println(String.format(MSG_MISSINGFILE, filename));
     }
 }

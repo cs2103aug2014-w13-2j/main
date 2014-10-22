@@ -4,12 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * JUnit test class for CommandDo.
+ * @author zixian
+ */
 public class CommandDoTest {
     
     @Test
     public void test() {
 	CommandDo cmd = new CommandDo("A2");
 	cmd.execute();
+	System.out.println(cmd.getAffectedItems()[0]);
+	
+	cmd.undo();
 	System.out.println(cmd.getAffectedItems()[0]);
     }
     
@@ -19,5 +26,4 @@ public class CommandDoTest {
 	cmd.execute();
 	assertTrue(cmd.getAffectedItems()==null);
     }
-    
 }
