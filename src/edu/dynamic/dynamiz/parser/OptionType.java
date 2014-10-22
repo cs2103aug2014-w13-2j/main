@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * OptionType to help with aliases for Option
+ * OptionType enum class is a class to hold the various options applicable to many commands.
+ * Using OptionType allows the users to specify the PRIORITY, START_TIME, END_TIME, or
+ * ORDER_BY options for each items.
+ * 
+ * This enum class mainly facilitates the functionalities of Command classes as well as help in
+ * Parsing of the command.
  * 
  * @author nhan
  *
@@ -16,20 +21,51 @@ public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
 	}, START_TIME("-s", "--starttime", "from", "on") {
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
-	};
+	}, ORDER_BY("-o", "--orderby", "sort by");
 	
-	static private final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
+	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
+	private static String ALL_ALIASES = "";
+	
+	public static int PRIORITY_URGENT = 8;
+	public static int PRIORITY_HIGH = 4;
+	public static int PRIORITY_MEDIUM = 2;
+	public static int PRIORITY_LOW = 1;
+	public static int PRIORITY_NONE = 0;
+	public static int PRIORITY_UNCHANGED = -1;	
+	
+	private static final char OPTION_SIGNAL_CHARACTER = '-';
 	static {
+		StringBuffer allAliases = new StringBuffer();
+		String toBeAppended = ""; 
+		
 		for (OptionType opt: OptionType.values()) {
 			// Normalising by lowercase all
 			for (String alias: opt.aliases) {
 				ALIAS_TABLE.put(alias.toLowerCase(), opt);
+				
+				if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
+					String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
+					toBeAppended = String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias);  
+				} else {
+					toBeAppended = "\\b" + alias + "\\b" + "|";
+				}
+				allAliases.append(toBeAppended);
 			}
 		}
+		
+		// Remove the last | character
+		ALL_ALIASES = allAliases.substring(0, allAliases.length() - 1);
 	}
 	
-	static public OptionType fromString(String value) {
+	/**
+	 * Retrieve the OptionType instance given the string of one of the option
+	 * alias
+	 * 
+	 * @param value the String identification of the option
+	 * @return OptionType instance corresponding to the string value
+	 */
+	public static OptionType fromString(String value) {
 		if (value == null) {
 			throw new NullPointerException("Null alias");
 		}
@@ -44,7 +80,13 @@ public enum OptionType {
 		return opt;
 	}
 	
-	static public OptionType fromOption(Option opt) {
+	/**
+	 * Retrieve the OptionType instance given a parsed Option.
+	 * 
+	 * @param opt the Option to get the OptionType from
+	 * @return the OptionType instance indicating the Option given
+	 */
+	public static OptionType fromOption(Option opt) {
 		if (opt == null) {
 			throw new NullPointerException("Null option");
 		}
@@ -52,11 +94,12 @@ public enum OptionType {
 		return fromString(opt.getOptName());
 	}
 	
-	public List<String> getAliases() {
-		return this.aliases;
-	}
-	
-	static public List<String> getAllAliases() {
+	/**
+	 * Retrieve a List<String> of all the aliases of all the OptionType
+	 * 
+	 * @return a List of String of all the string representation of  the OptionType
+	 */
+	public static List<String> getAllAliases() {
 		List<String> allAliases = new ArrayList<String>();
 		for (OptionType opts: OptionType.values()) {
 			allAliases.addAll(opts.aliases);
@@ -65,12 +108,18 @@ public enum OptionType {
 		return allAliases;
 	}
 	
-	public static int PRIORITY_URGENT = 8;
-	public static int PRIORITY_HIGH = 4;
-	public static int PRIORITY_MEDIUM = 2;
-	public static int PRIORITY_LOW = 1;
-	public static int PRIORITY_NONE = 0;
-	public static int PRIORITY_UNCHANGED = -1;
+	/**
+	 * Retrieve a String of all the aliases of all the OptionType
+	 * given in the representation of Regular Expression.
+	 * 
+	 * For example: alias_a|alias_b|alias_c
+	 * 
+	 * @return a concatenated string of all the Aliases given in a form of OR regular expression
+	 *  
+	 */
+	public static String getAllAliasesRegex() {
+		return ALL_ALIASES;
+	}
 	
 	private List<String> aliases;
 	private OptionType(String... aliases) {
