@@ -1,12 +1,13 @@
 package edu.dynamic.dynamiz.parser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.joestelmach.natty.DateGroup;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
@@ -20,7 +21,6 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
  *
  */
 public class Parser {
-	private static final char OPTION_SIGNAL_CHARACTER = '-';
 	private static final String REGEX_DATE = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\b";
 	private static final String REGEX_DATETIME = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\s+(\\d{1,2})\\D*(\\d{1,2})\\b";
 	
@@ -78,21 +78,19 @@ public class Parser {
 		return parsedDate;
 	}
 	
-	private MyDate parseImplicitDate(String date) {
-		assert(date != null);
+	private MyDate parseImplicitDate(String dateStr) {
+		assert(dateStr != null);
 		
-		date = date.trim().toLowerCase();
-		
-		// TODO: Parsing possible natural languages
-		
-		switch(date) {
-			case "tomorrow" :
-			case "today" :
-			case "":
-				default: break;
+		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = nattyParser.parse(dateStr);
+		if (!groups.isEmpty()) {
+			DateGroup group = groups.get(0);
+			Date date = group.getDates().get(0);
+			
+			return new MyDateTime(date);
+		} else {
+			return null;
 		}
-		
-		return null;
 	}
 	
 	public Command parse(String inputCmd) {
@@ -109,20 +107,7 @@ public class Parser {
 		inputCmd = Util.stripFirstWord(inputCmd);
 		Options options = new Options();
 		
-		String allAliases = "";
-		for (String alias: OptionType.getAllAliases()) {
-			String toBeAppended = null;
-			
-			if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
-				String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
-				toBeAppended = String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias);  
-			} else {
-				toBeAppended = "\\b" + alias + "\\b" + "|";
-			}
-			allAliases += toBeAppended;
-		}
-		
-		allAliases = allAliases.substring(0, allAliases.length() - 1);
+		String allAliases = OptionType.getAllAliasesRegex();
 		
 		String optRegex = "(?<=(" + allAliases + "))" + // Lookahead for option keyword
 						  "(.*?)" + // Arguments sandwiched between 2 keywords or 1 keywords and end of line
@@ -155,11 +140,17 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String date1 = "05.10.14";
-		Parser parser = Parser.getInstance();
-		MyDate d = parser.parseDate(date1);
-		System.out.println(d);
+		String dateStr = "from Tuesday 2pm to Wednesday 4pm";
+		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = nattyParser.parse(dateStr);
 		
-		
+		for (DateGroup group: groups) {
+			List<Date> dates = group.getDates();
+			for (Date date: dates) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				System.out.println(cal.get(Calendar.DAY_OF_MONTH));
+			}
+		}
 	}
 }
