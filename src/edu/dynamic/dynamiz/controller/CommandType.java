@@ -76,6 +76,21 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
+	}, HELP("man") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, DO("done", "mark") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			// TODO Auto-generated method stub
+			return Arrays.asList(optionsArray);
+		}
 	}, EXIT() {
 		private final OptionType[] optionsArray = {};
 		
