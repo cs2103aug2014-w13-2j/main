@@ -10,6 +10,10 @@ import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * JUnit test class for Storage.
+ * @author zixian
+ */
 public class StorageTest {
     
     @Test

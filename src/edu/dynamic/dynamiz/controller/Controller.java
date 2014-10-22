@@ -12,6 +12,7 @@ import edu.dynamic.dynamiz.parser.Parser;
 import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
+import edu.dynamic.dynamiz.structure.HelpFeedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
 
 /**
@@ -93,8 +94,10 @@ public class Controller {
 	    } else if(command instanceof CommandRedo){
     		cmdHistory.push(undoneCommands.pop());
 	    }
-	    
-	     return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+	    if(command instanceof CommandHelp){
+		return new HelpFeedback(command.getCommandName(), input, ((CommandHelp)command).getContent());
+	    }
+	    return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
 	} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
 	    return new ErrorFeedback(command.getCommandName(), input, String.format(MSG_EMPTYSTACK, command.getCommandName()));
 	} catch(IllegalArgumentException e){	//Thrown by parser and storage operations
