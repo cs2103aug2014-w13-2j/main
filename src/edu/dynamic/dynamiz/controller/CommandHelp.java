@@ -9,6 +9,20 @@ import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * Defines command to display help contents from help files.
+ * 
+ * Constructor
+ * CommandHelp()	//Creates a command to get the main help page.
+ * CommandHelp(CommandType command)	//Creates a command to get the specified command's help page.
+ * 
+ * Public Methods
+ * String getCommandName()	//Gets the String representation of this command's type.
+ * String getContent()	//Gets the contents of the help page.
+ * void execute()	//Executes this command.
+ * 
+ * @author zixian
+ */
 public class CommandHelp extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "help";
@@ -55,6 +69,9 @@ public class CommandHelp extends Command {
     }
     
     @Override
+    /**
+     * Executes this command.
+     */
     public void execute() {
 	File helpFile;
 	if(command==null){
