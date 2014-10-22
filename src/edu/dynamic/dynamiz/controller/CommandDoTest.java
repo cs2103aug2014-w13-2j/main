@@ -11,6 +11,9 @@ public class CommandDoTest {
 	CommandDo cmd = new CommandDo("A2");
 	cmd.execute();
 	System.out.println(cmd.getAffectedItems()[0]);
+	
+	cmd.undo();
+	System.out.println(cmd.getAffectedItems()[0]);
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -19,5 +22,4 @@ public class CommandDoTest {
 	cmd.execute();
 	assertTrue(cmd.getAffectedItems()==null);
     }
-    
 }

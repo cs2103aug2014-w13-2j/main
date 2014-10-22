@@ -95,4 +95,9 @@ public class ControllerTest {
 	System.out.println();
     }
     
+    @Ignore
+    public void testDo(){
+	
+    }
+    
 }
