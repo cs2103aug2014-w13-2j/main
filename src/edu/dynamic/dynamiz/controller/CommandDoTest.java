@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * JUnit test class for CommandDo.
+ * @author zixian
+ */
 public class CommandDoTest {
     
     @Test
