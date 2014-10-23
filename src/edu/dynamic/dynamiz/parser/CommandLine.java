@@ -103,6 +103,11 @@ public class CommandLine {
 			
 		return optionStr;
 	}
+	
+	private List<String> getFirstOptionValues(Options commandOptions, OptionType optionType) {
+		Option option = commandOptions.getOptions(optionType).get(0);
+		return option.getValues();
+	}
 
 	private Command parseAdd() {
 		Options commandOptions = extractOptions(this.options);
@@ -164,7 +169,6 @@ public class CommandLine {
 		MyDate commandEndDate = null;
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
 		
-		String commandOrderStr;
 		List<OptionType> commandOrderList= new ArrayList<OptionType>();
 		
 		if (commandOptions.hasOption(OptionType.START_TIME)) {
@@ -180,8 +184,8 @@ public class CommandLine {
 		}
 		
 		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
-			commandOrderStr = getFirstOptionValue(commandOptions, OptionType.ORDER_BY);
-			for (String s: commandOrderStr.split("" + Option.DEFAULT_DELIMITER)) {
+			List<String> commandOrderStrList = getFirstOptionValues(commandOptions, OptionType.ORDER_BY);
+			for (String s: commandOrderStrList) {
 				commandOrderList.add(OptionType.fromString(s));
 			}
 		}
