@@ -109,7 +109,7 @@ public class HTMLScreen extends JPanel implements ActionListener {
 			System.exit(0);
 		}
 
-		Feedback feedback = cont.executeCommand(text);
+		// Feedback feedback = cont.executeCommand(text);
 		String returnResult = disp.displayFeedback(feedback);
 		assert (returnResult != null);
 		display(returnResult);
@@ -150,7 +150,6 @@ public class HTMLScreen extends JPanel implements ActionListener {
 		frame.add(new HTMLScreen());
 
 		displayScreen(frame);
-
 	}
 
 	/**
@@ -161,7 +160,6 @@ public class HTMLScreen extends JPanel implements ActionListener {
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
-
 	}
 
 	public static void main(String[] args) {
