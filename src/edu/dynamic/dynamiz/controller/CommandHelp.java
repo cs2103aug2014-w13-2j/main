@@ -35,15 +35,15 @@ public class CommandHelp extends Command {
     private static final char LINE_TERMINATOR = '\n';
     
     //Defines the help page files
-    private static final String HELPFILE_MAIN = "help.txt";
-    private static final String HELPFILE_ADD = "help_add.txt";
-    private static final String HELPFILE_DELETE = "help_delete.txt";
-    private static final String HELPFILE_DO = "help_do.txt";
-    private static final String HELPFILE_LIST = "help_list.txt";
-    private static final String HELPFILE_REDO = "help_redo.txt";
-    private static final String HELPFILE_SEARCH = "help_search.txt";
-    private static final String HELPFILE_UNDO = "help_undo.txt";
-    private static final String HELPFILE_UPDATE = "help_update.txt";
+    private static final String HELPFILE_MAIN = "help/help.txt";
+    private static final String HELPFILE_ADD = "help/help_add.txt";
+    private static final String HELPFILE_DELETE = "help/help_delete.txt";
+    private static final String HELPFILE_DO = "help/help_do.txt";
+    private static final String HELPFILE_LIST = "help/help_list.txt";
+    private static final String HELPFILE_REDO = "help/help_redo.txt";
+    private static final String HELPFILE_SEARCH = "help/help_search.txt";
+    private static final String HELPFILE_UNDO = "help/help_undo.txt";
+    private static final String HELPFILE_UPDATE = "help/help_update.txt";
     
     //Logger to log errors
     private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller");
@@ -82,8 +82,8 @@ public class CommandHelp extends Command {
 			break;
 		case DELETE: helpFile = new File(HELPFILE_DELETE);
 			break;
-		//case DO: helpFile = new File(HELPFILE_DO);
-			//break;
+		case DO: helpFile = new File(HELPFILE_DO);
+			break;
 		case LIST: helpFile = new File(HELPFILE_LIST);
 			break;
 		case REDO: helpFile = new File(HELPFILE_REDO);
