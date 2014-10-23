@@ -430,19 +430,24 @@ class TagFormat{
 		switch(pri){
 		case PRIORITY_NONE:
 			s = PRIORITY_NONE_TAG;
+			content = "None";
 			break;
 		case PRIORITY_LOW:
 			s = PRIORITY_LOW_TAG;
+			content = "Low";
 			break;
 			
 		case PRIORITY_MEDIUM:
 			s = PRIORITY_MEDIUN_TAG;
+			content = "Medium";
 			break;
 		case PRIORITY_HIGH:
 			s = PRIORITY_HIGH_TAG;
+			content = "High";
 			break;
 		case PRIORITY_URGENT:
 			s = PRIORITY_URGENT_TAG;
+			content = "Urgent";
 			break;
 		
 		default:
