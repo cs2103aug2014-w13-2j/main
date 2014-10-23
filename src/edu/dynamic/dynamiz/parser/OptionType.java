@@ -19,9 +19,11 @@ import java.util.Map;
  */
 public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
-	}, START_TIME("-s", "--starttime", "from", "on") {
+	}, START_TIME("-s", "--starttime", "from") {
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
-	}, ORDER_BY("-o", "--orderby", "sort by");
+	}, ORDER_BY("-o", "--orderby", "sort by") {		
+	}, START_END_TIME("on"){		
+	};
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
@@ -69,7 +71,6 @@ public enum OptionType {
 		if (value == null) {
 			throw new NullPointerException("Null alias");
 		}
-
 		// Normalising input
 		OptionType opt = ALIAS_TABLE.get(value.toLowerCase());
 
