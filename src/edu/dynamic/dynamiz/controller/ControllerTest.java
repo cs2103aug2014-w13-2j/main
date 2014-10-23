@@ -85,7 +85,7 @@ public class ControllerTest {
     @Ignore
     public void testSearch(){
 	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("search CS");
+	Feedback feedback = controller.executeCommand("search B");
 	ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
 	for(ToDoItem item: list){
 	    System.out.println(item);
@@ -93,9 +93,13 @@ public class ControllerTest {
 	System.out.println();
     }
     
-    @Ignore
+    @Test
     public void testDo(){
-	
+	Controller controller = new Controller();
+	Feedback feedback = controller.executeCommand("do A1");
+	assertTrue(feedback instanceof SuccessFeedback);
+	System.out.println(((SuccessFeedback)feedback).getAffectedItems()[0]);
+	System.out.println();
     }
     
 }

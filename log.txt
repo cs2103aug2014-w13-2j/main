@@ -2,47 +2,69 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2014-10-23T08:41:05</date>
-  <millis>1414024865663</millis>
-  <sequence>8</sequence>
+  <date>2014-10-23T11:15:29</date>
+  <millis>1414034129572</millis>
+  <sequence>0</sequence>
   <logger>edu.dynamic.dynamiz.controller</logger>
   <level>INFO</level>
   <class>edu.dynamic.dynamiz.controller.Controller</class>
   <method>executeCommand</method>
-  <thread>12</thread>
-  <message>Executing "add Something from tomorrow to the day after tomorrow"</message>
+  <thread>1</thread>
+  <message>Executing "update A1 priority 8"</message>
 </record>
 <record>
-  <date>2014-10-23T08:41:18</date>
-  <millis>1414024878398</millis>
-  <sequence>12</sequence>
+  <date>2014-10-23T11:15:32</date>
+  <millis>1414034132373</millis>
+  <sequence>1</sequence>
   <logger>edu.dynamic.dynamiz.controller</logger>
   <level>INFO</level>
   <class>edu.dynamic.dynamiz.controller.Controller</class>
   <method>executeCommand</method>
-  <thread>12</thread>
+  <thread>1</thread>
   <message>Executing "list"</message>
 </record>
 <record>
-  <date>2014-10-23T08:41:40</date>
-  <millis>1414024900453</millis>
-  <sequence>16</sequence>
+  <date>2014-10-23T11:15:45</date>
+  <millis>1414034145412</millis>
+  <sequence>2</sequence>
   <logger>edu.dynamic.dynamiz.controller</logger>
   <level>INFO</level>
   <class>edu.dynamic.dynamiz.controller.Controller</class>
   <method>executeCommand</method>
-  <thread>12</thread>
-  <message>Executing "update A4 -s 24/10/2014 00:00"</message>
+  <thread>1</thread>
+  <message>Executing "update A2 priority 4"</message>
 </record>
 <record>
-  <date>2014-10-23T08:41:42</date>
-  <millis>1414024902886</millis>
-  <sequence>20</sequence>
+  <date>2014-10-23T11:15:57</date>
+  <millis>1414034157843</millis>
+  <sequence>3</sequence>
   <logger>edu.dynamic.dynamiz.controller</logger>
   <level>INFO</level>
   <class>edu.dynamic.dynamiz.controller.Controller</class>
   <method>executeCommand</method>
-  <thread>12</thread>
+  <thread>1</thread>
+  <message>Executing "update A3 priority 2"</message>
+</record>
+<record>
+  <date>2014-10-23T11:16:04</date>
+  <millis>1414034164928</millis>
+  <sequence>4</sequence>
+  <logger>edu.dynamic.dynamiz.controller</logger>
+  <level>INFO</level>
+  <class>edu.dynamic.dynamiz.controller.Controller</class>
+  <method>executeCommand</method>
+  <thread>1</thread>
+  <message>Executing "update A4 priority 2"</message>
+</record>
+<record>
+  <date>2014-10-23T11:16:06</date>
+  <millis>1414034166944</millis>
+  <sequence>5</sequence>
+  <logger>edu.dynamic.dynamiz.controller</logger>
+  <level>INFO</level>
+  <class>edu.dynamic.dynamiz.controller.Controller</class>
+  <method>executeCommand</method>
+  <thread>1</thread>
   <message>Executing "list"</message>
 </record>
 </log>
