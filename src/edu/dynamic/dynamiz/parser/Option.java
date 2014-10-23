@@ -25,7 +25,7 @@ import java.util.Set;
  * Modelled after CLI library
  */
 
-public class Option implements OptionInterface{
+public class Option{
 	/*=========================================================================
 	 * Constants
 	 * ========================================================================
