@@ -110,7 +110,7 @@ public class CommandLine {
 	}
 
 	private Command parseAdd() {
-		Options commandOptions = extractOptions(this.options);
+		Options commandOptions = extractOptions(this.options, CommandType.ADD);
 		ToDoItem commandItem = null;
 
 		// Handling date
@@ -157,7 +157,7 @@ public class CommandLine {
 	}
 
 	private Command parseList() {
-		Options commandOptions = extractOptions(this.options);
+		Options commandOptions = extractOptions(this.options, CommandType.LIST);
 		
 		// Parse Start and End Date
 		List<MyDate> commandStartDateList = new ArrayList<MyDate>();
@@ -187,7 +187,7 @@ public class CommandLine {
 
 	private Command parseSearch() {
 		// TODO: Implement ability to search with keywords and options
-		Options commandOptions = extractOptions(this.options);
+		Options commandOptions = extractOptions(this.options, CommandType.SEARCH);
 		
 		// Parse Start and End Date
 		MyDate commandStartDate = null;
@@ -232,7 +232,7 @@ public class CommandLine {
 		String itemID = Util.getFirstWord(this.param);
 		String extraDescription = Util.stripFirstWord(this.param);
 
-		Options commandOptions = extractOptions(this.options);
+		Options commandOptions = extractOptions(this.options, CommandType.UPDATE);
 
 		// Parse Start and End Date
 		MyDate commandStartDate = null;
@@ -276,10 +276,10 @@ public class CommandLine {
 	 *            The unchecked collection of Option
 	 * @return the checked collection of Option
 	 */
-	public Options extractOptions(Options options) {
+	public Options extractOptions(Options options, CommandType commandType) {
 		Options opts = new Options();
 
-		for (OptionType optType : CommandType.ADD.getApplicableOptions()) {
+		for (OptionType optType : commandType.getApplicableOptions()) {
 			if (options.hasOption(optType)) {
 				List<Option> optList = options.getOptions(optType);
 				opts.add(optList);
