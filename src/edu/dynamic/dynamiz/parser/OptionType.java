@@ -21,7 +21,7 @@ public enum OptionType {
 	PRIORITY("-p", "--priority", "priority") {
 	}, START_TIME("-s", "--starttime", "from", "on") {
 	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
-	}, ORDER_BY("-o", "--orderby", "sort by");
+	}, ORDER_BY("-o", "--orderby", "sort by", "orderby");
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
