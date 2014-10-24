@@ -216,7 +216,7 @@ public class CommandLine {
 		}
 		
 		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate,
-									(OptionType[]) commandOrderList.toArray());
+									commandOrderList.toArray(new OptionType[commandOrderList.size()]));
 	}
 
 	private Command parseUndo() {
