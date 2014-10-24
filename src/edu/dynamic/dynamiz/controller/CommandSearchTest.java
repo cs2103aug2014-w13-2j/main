@@ -15,7 +15,7 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	CommandSearch cmd = new CommandSearch("A", -1, null, new MyDate(10, 10, 2014), null);
+	CommandSearch cmd = new CommandSearch("CS", -1, null, new MyDate(31, 10, 2014), null);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	System.out.println(list.length);

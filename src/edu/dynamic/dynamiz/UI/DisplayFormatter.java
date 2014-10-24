@@ -326,25 +326,28 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	private String formatTask(ToDoItem item){
 		assert item!=null;
+		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+					"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
 		StringBuilder sb = new StringBuilder();
 
 		String ID = item.getId();
-		// ID = TagFormat.format(ID, TagFormat.TASK_ID);
+		 //ID = TagFormat.format(ID, TagFormat.TASK_ID);
 		String des = item.getDescription();
-		// des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
+		 //des = TagFormat.format(des, TagFormat.TASK_DESCRIPTION);
 		int pri = item.getPriority();
 		String prioS = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
 		//stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
-		sb.append(ID).append("\n").
-		append(des).append("\n").
-		append(prioS).append("\n").
-		append(stas).append("\n");
+		sb.append("ID: ").append(ID).append("\n").
+		append("Desc: ").append(des).append("\n").
+		append("Priority: ").append(prioS).append("\n").
+		append("Status:").append(stas).append("\n");
+		
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
 			String ddl = t.getDeadlineString();
 			//ddl = TagFormat.format(ddl, TagFormat.END_TIME);
-			sb.append(ddl).append("\n");
+			sb.append("Deadline: ").append(ddl).append("\n");
 		}
 		else if (item instanceof EventItem){
 			EventItem t = (EventItem)item;
@@ -352,8 +355,8 @@ public class DisplayFormatter implements DisplayerInterface {
 			//starT = TagFormat.format(starT, TagFormat.START_TIME);
 			String endT = t.getEndDateString();
 			//endT =  TagFormat.format(endT, TagFormat.END_TIME);
-			sb.append(starT).append("\n").
-			append(endT).append("\n");
+			sb.append("Start Time: ").append(starT).append("\n").
+			append("End Time:").append(endT).append("\n");
 			
 		}
 		
@@ -385,6 +388,7 @@ public class DisplayFormatter implements DisplayerInterface {
 class TagFormat{
 	//HTML Tag
 	//PRIORITY_TAG
+	private static boolean TAG = true;
 	public static final String SUCCESS = "";
 	public static final String HELP = "";
 	public static final String ERORR = "";
@@ -400,14 +404,9 @@ class TagFormat{
 	
 	public static final String PRIORITY_URGENT_TAG= "PRIORITY_URGERNT";
 	public static final String PRIORITY_HIGH_TAG = "PRIORITY_HIGH";
-	public static final String PRIORITY_MEDIUN_TAG = "PRIORITY_MEDIUN";
+	public static final String PRIORITY_MEDIUM_TAG = "PRIORITY_MEDIUM";
 	public static final String PRIORITY_LOW_TAG = "PRIORITY_LOW";
 	public static final String PRIORITY_NONE_TAG = "PRIORITY_NONE";
-	
-	
-	
-	
-	
 	
 	public static final int PRIORITY_URGENT = 8;
 	public static final int PRIORITY_HIGH = 4;
@@ -417,11 +416,11 @@ class TagFormat{
 	public static final int PRIORITY_UNCHANGED = -1;
 	
 	
-	
-	private static final String FORMAT_HTML_TAG = "<div class: %s >%s</div>";
+	private static final String FORMAT_HTML_TAG = "<div clas = %s >%s</div>";
 	
 	public static String format(String content, String tag){		
-		return String.format(FORMAT_HTML_TAG, tag, content);
+		if(TAG) return String.format(FORMAT_HTML_TAG, tag, content);
+		return content;
 	}
 	
 	public static String formatPri(int pri){
@@ -431,6 +430,7 @@ class TagFormat{
 		case PRIORITY_NONE:
 			s = PRIORITY_NONE_TAG;
 			content = "None";
+			
 			break;
 		case PRIORITY_LOW:
 			s = PRIORITY_LOW_TAG;
@@ -438,7 +438,7 @@ class TagFormat{
 			break;
 			
 		case PRIORITY_MEDIUM:
-			s = PRIORITY_MEDIUN_TAG;
+			s = PRIORITY_MEDIUM_TAG;
 			content = "Medium";
 			break;
 		case PRIORITY_HIGH:
@@ -457,7 +457,8 @@ class TagFormat{
 			
 		}
 		s = String.format(FORMAT_HTML_TAG, s,content);
-		return s;
+		if(TAG)return s;
+		return content;
 	}
 	
 }
