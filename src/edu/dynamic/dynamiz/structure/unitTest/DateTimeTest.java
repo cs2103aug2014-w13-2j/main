@@ -7,14 +7,19 @@ import org.junit.Test;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 
+/**
+ * Defines the JUnit test for MyDateTime class.
+ * @author zixian
+ */
 public class DateTimeTest {
     
     @Test
     public void testDateTime() {
-	MyDateTime dt = new MyDateTime();
-	assertEquals("Day of month is 1", 1, dt.getDayOfMonth());
-	assertEquals("Month is 1", 1, dt.getMonth());
-	assertEquals("Year is 1970", 1970, dt.getYear());
+	//Boundary value using leap year
+	MyDateTime dt = new MyDateTime(29, 2, 2012);
+	assertEquals("Day of month is 29", 29, dt.getDayOfMonth());
+	assertEquals("Month is 2", 2, dt.getMonth());
+	assertEquals("Year is 2012", 2012, dt.getYear());
     }
     
     @Test
@@ -28,8 +33,9 @@ public class DateTimeTest {
     @Test
     public void testDateTimeIntIntIntIntInt() {
 	try{
-	    MyDateTime dt = new MyDateTime(2, 3, 1992, 9, 0);
-	    assertEquals("Hour is 9", 9, dt.getHour());
+	    //boundary time value
+	    MyDateTime dt = new MyDateTime(2, 3, 1992, 0, 0);
+	    assertEquals("Hour is 0", 0, dt.getHour());
 	    assertEquals("Minute is 0", 0, dt.getMinute());
 	    dt.setTime(9, 30);
 	    assertEquals("Hour is 9", 9, dt.getHour());
@@ -57,6 +63,7 @@ public class DateTimeTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalDateTime(){
+	//Tests invalid date/time values
 	MyDateTime dt = new MyDateTime(-1, -1, -1, -1, -1);
 	dt = new MyDateTime(1, 1, 1970, 12, 70);
 	dt.setDateTime(30, 2, 2014, 13, 45);
@@ -67,7 +74,8 @@ public class DateTimeTest {
     public void testCompareTo(){
 	MyDate date = new MyDate();
 	MyDate dt1 = new MyDateTime();
-	MyDateTime dt2 = new MyDateTime(5, 5, 1995, 22, 59);
+	//boundary time value
+	MyDateTime dt2 = new MyDateTime(5, 5, 1995, 23, 59);
 	assertTrue("date==dt1", date.compareTo(dt1)==0);
 	assertTrue("dt1<dt2", dt1.compareTo(dt2)<0);
 	assertTrue("dt2>dt1", dt2.compareTo(dt1)>0);
