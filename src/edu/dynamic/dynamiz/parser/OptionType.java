@@ -18,10 +18,10 @@ import java.util.Map;
  *
  */
 public enum OptionType {
-	PRIORITY("-p", "--priority", "priority") {
-	}, START_TIME("-s", "--starttime", "from", "on") {
-	}, END_TIME("-d", "--deadline", "--endtime", "to", "by") {
-	}, ORDER_BY("-o", "--orderby", "sortby", "orderby");
+	PRIORITY("-p", "priority") {
+	}, START_TIME("-s", "starttime", "from", "on") {
+	}, END_TIME("-d", "deadline", "endtime", "to", "by") {
+	}, ORDER_BY("-o", "orderby", "sortby");
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
