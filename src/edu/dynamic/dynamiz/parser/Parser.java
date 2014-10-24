@@ -107,10 +107,26 @@ public class Parser {
 		inputCmd = Util.stripFirstWord(inputCmd);
 		Options options = new Options();
 		
+		// Parse orderby
+		String orderRegex = String.format("(.*)(%1$s)(.*$)", OptionType.ORDER_BY.getAliasesRegex());
+		Pattern orderPattern = Pattern.compile(orderRegex, Pattern.CASE_INSENSITIVE);
+		Matcher orderMatcher = orderPattern.matcher(inputCmd);
+		
+		if (orderMatcher.find()) {
+			inputCmd = orderMatcher.group(1);
+			String opt = orderMatcher.group(2);
+			String[] values = orderMatcher.group(3).split("" + Option.DEFAULT_DELIMITER);
+			
+			List<String> newValues = Util.removeEmptyStringsInArray(values);
+			
+			Option option = new Option(opt, newValues);
+			options.add(option);
+		}
+		
 		String allAliases = OptionType.getAllAliasesRegex();
 		
 		String optRegex = "(?<=(" + allAliases + "))" + // Lookahead for option keyword
-						  "(.*?)" + // Arguments sandwiched between 2 keywords or 1 keywords and end of line
+						  "(.*?)" + 					// Arguments sandwiched between 2 keywords or 1 keywords and end of line
 						  "(?=(" + allAliases + "|$))"; // Another keyword or end of line
 		Pattern optPattern = Pattern.compile(optRegex, Pattern.CASE_INSENSITIVE);
 		
@@ -140,17 +156,5 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		String dateStr = "from Tuesday 2pm to Wednesday 4pm";
-		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
-		List<DateGroup> groups = nattyParser.parse(dateStr);
-		
-		for (DateGroup group: groups) {
-			List<Date> dates = group.getDates();
-			for (Date date: dates) {
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(date);
-				System.out.println(cal.get(Calendar.DAY_OF_MONTH));
-			}
-		}
 	}
 }
