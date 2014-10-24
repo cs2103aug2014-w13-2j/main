@@ -72,4 +72,10 @@ public class ParserTest {
     	date = parser.parseDate("next Thursday");
     	
     }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testInvalidCommand(){
+	Parser parser = Parser.getInstance();
+	parser.parse("ls");
+    }
 }
