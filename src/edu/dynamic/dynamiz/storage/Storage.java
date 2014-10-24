@@ -134,7 +134,11 @@ public class Storage {
 	}
 	
 	if(start!=null && !(target instanceof EventItem)){
-	    target = new EventItem(target, start);
+	    if(target instanceof TaskItem){
+		target = new EventItem((TaskItem)target, start);
+	    } else{
+		target = new EventItem(target, start);
+	    }
 	    removeItem(target.getId());
 	    addItem(target);
 	} else if(start!=null){

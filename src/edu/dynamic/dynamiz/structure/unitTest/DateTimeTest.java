@@ -15,7 +15,7 @@ public class DateTimeTest {
     
     @Test
     public void testDateTime() {
-	//Boundary value using leap year
+	//Boundary value using leap year of partition of valid date.
 	MyDateTime dt = new MyDateTime(29, 2, 2012);
 	assertEquals("Day of month is 29", 29, dt.getDayOfMonth());
 	assertEquals("Month is 2", 2, dt.getMonth());
@@ -63,7 +63,7 @@ public class DateTimeTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalDateTime(){
-	//Tests invalid date/time values
+	//Tests invalid date/time values partition
 	MyDateTime dt = new MyDateTime(-1, -1, -1, -1, -1);
 	dt = new MyDateTime(1, 1, 1970, 12, 70);
 	dt.setDateTime(30, 2, 2014, 13, 45);

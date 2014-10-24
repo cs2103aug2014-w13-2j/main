@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.structure.MyDate;
 
+/**
+ * Defines the JUnit test for MyDate class.
+ * @author zixian
+ */
 public class DateTest {
     
     @Test
@@ -82,9 +86,12 @@ public class DateTest {
     
     @Test
     public void testIsValidDate(){
+	//Boundary value for partition of valid input
 	assertTrue("29/2/2012 is valid date", MyDate.isValidDate(29, 2, 2012));
 	assertTrue("31/10/2014 is valid date", MyDate.isValidDate(31, 10, 2014));
 	assertTrue("2/3/1992 is valid date", MyDate.isValidDate(2, 3, 1992));
+	
+	//Value in partition of invalid input
 	assertFalse("0/0/0 is invalid date", MyDate.isValidDate(0, 0, 0));
 	assertFalse("32/2/-1 is invalid date", MyDate.isValidDate(32, 2, -1));
 	assertFalse("29/2/2100 is invalid date", MyDate.isValidDate(29, 2, 2100));
