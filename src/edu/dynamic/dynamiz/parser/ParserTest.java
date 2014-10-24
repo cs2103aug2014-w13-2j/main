@@ -33,7 +33,8 @@ public class ParserTest {
 		cmdLine = parser.parseCommandLine("list -s tomorrow today yesterday orderby -s to priority");
 		assertEquals("", cmdLine.getParam());
 		System.out.println(cmdLine);
-
+		
+		
 		Options options = cmdLine.getOptions();
     }
     
