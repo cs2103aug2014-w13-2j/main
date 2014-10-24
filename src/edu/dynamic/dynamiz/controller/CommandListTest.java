@@ -36,5 +36,4 @@ public class CommandListTest {
 	    System.out.println(i);
 	System.out.println();
     }
-    
 }
