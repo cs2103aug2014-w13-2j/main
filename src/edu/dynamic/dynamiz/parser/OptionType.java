@@ -117,4 +117,17 @@ public enum OptionType {
 		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
 		this.aliases.add(this.toString().toLowerCase());
 	}
+	
+	public String getAliasesRegex() {
+		StringBuffer regEx = new StringBuffer();
+		for (String alias: aliases) {
+			if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
+				String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
+				regEx.append(String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias));  
+			} else {
+				regEx.append("\\b" + alias + "\\b" + "|");
+			}
+		}
+		return regEx.substring(0, regEx.length() - 1);
+	}
 }
