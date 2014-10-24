@@ -181,8 +181,7 @@ public class CommandLine {
 			commandOrderList = extractOptionTypeList(commandOptions);
 		}
 		
-		
-		return new CommandList((OptionType[]) commandOrderList.toArray());
+		return new CommandList(commandOrderList.toArray(new OptionType[commandOrderList.size()]));
 	}
 
 
