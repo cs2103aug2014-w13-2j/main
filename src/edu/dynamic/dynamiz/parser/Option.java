@@ -49,7 +49,7 @@ public class Option{
 	public static final int ARGS_OPTIONAL = -1;
 	
 	/** constant that specifies the default character for delimiter of argument values */
-	public static final char DEFAULT_DELIMITER = ',';
+	public static final char DEFAULT_DELIMITER = ' ';
 	
 	/*=========================================================================
 	 * Class attributes
