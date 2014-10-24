@@ -157,8 +157,34 @@ public class CommandLine {
 	}
 
 	private Command parseList() {
-		return new CommandList();
+		Options commandOptions = extractOptions(this.options);
+		
+		// Parse Start and End Date
+		List<MyDate> commandStartDateList = new ArrayList<MyDate>();
+		List<MyDate> commandEndDateList = new ArrayList<MyDate>();
+		List<Integer> commandPriorityList = new ArrayList<Integer>();
+		List<OptionType> commandOrderList = new ArrayList<OptionType>();
+		
+		if (commandOptions.hasOption(OptionType.START_TIME)) {
+			commandStartDateList = extractDateList(commandOptions, OptionType.START_TIME);
+		}
+		
+		if (commandOptions.hasOption(OptionType.END_TIME)) {
+			commandEndDateList = extractDateList(commandOptions, OptionType.END_TIME);
+		}
+		
+		if (commandOptions.hasOption(OptionType.PRIORITY)) {
+			commandPriorityList = extractPriorityList(commandOptions);
+		}
+		
+		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
+			commandOrderList = extractOptionTypeList(commandOptions);
+		}
+		
+		
+		return new CommandList((OptionType[]) commandOrderList.toArray());
 	}
+
 
 	private Command parseSearch() {
 		// TODO: Implement ability to search with keywords and options
@@ -263,7 +289,76 @@ public class CommandLine {
 
 		return opts;
 	}
-
+	
+	public List<MyDate> extractDateList(Options options, OptionType dateType) {
+		List<String> values = options.getOptions(dateType).get(0).getValues();
+		List<MyDate> dateList = new ArrayList<MyDate>();
+		
+		for (String value: values) {
+			MyDate date = parser.parseDate(value);
+			if (date != null) {
+				dateList.add(date);
+			}
+		}
+		
+		return dateList;
+	}
+	
+	public List<Integer> extractPriorityList(Options options) {
+		List<String> values = options.getOptions(OptionType.PRIORITY).get(0).getValues();
+		List<Integer> priorityList = new ArrayList<Integer>();
+		
+		for (String value: values) {
+			Integer priority = Integer.parseInt(value);
+			priorityList.add(priority);
+		}
+		
+		return priorityList;
+	}
+	
+	public List<OptionType> extractOptionTypeList(Options options) {
+		List<String> values = options.getOptions(OptionType.ORDER_BY).get(0).getValues();
+		List<OptionType> typeList = new ArrayList<OptionType>();
+		
+		for (String value: values) {
+			typeList.add(OptionType.fromString(value));
+		}
+		
+		return typeList;
+	}
+	
+	// TODO: Need tested for refactor
+	public List<Object> extractValueList(Options options, OptionType type) {
+		List<String> values = options.getOptions(type).get(0).getValues();
+		List<Object> valueList = new ArrayList<Object>();
+		
+		for (String value: values) {
+			switch (type) {
+				case START_TIME : // Fall through
+				case END_TIME :
+					MyDate date = parser.parseDate(value);
+					if (date != null) {
+						valueList.add(date);
+					}
+					break;
+				case PRIORITY :
+					Integer priority = Integer.parseInt(value);
+					if (priority != null) {
+						valueList.add(priority);
+					}
+					break;
+				case ORDER_BY :
+					OptionType optType = OptionType.fromString(value);
+					if (optType != null) {
+						valueList.add(optType);
+					}
+					break;
+				default: throw new IllegalArgumentException();
+			}
+		}
+		
+		return valueList;
+	}
 	/*
 	 * ========================================================================
 	 * Getters & Setters
