@@ -27,8 +27,8 @@ public class ParserTest {
 		cmdLine = parser.parseCommandLine("add A2 from 27/9/2014 18:00");
 		assertEquals("A2", cmdLine.getParam());
 
-		cmdLine = parser.parseCommandLine("Search study from today");
-		assertEquals("study", cmdLine.getParam());
+		//cmdLine = parser.parseCommandLine("Search study from today");
+		//assertEquals("study", cmdLine.getParam());
 
 		cmdLine = parser.parseCommandLine("list");
 		assertEquals("", cmdLine.getParam());
@@ -73,9 +73,22 @@ public class ParserTest {
     	
     }
     
+    @Test
+    public void testListCommand(){
+	Parser parser = Parser.getInstance();
+	parser.parse("list");
+	parser.parse("list -orderby -s");
+    }
+    
     @Test(expected=IllegalArgumentException.class)
     public void testInvalidCommand(){
 	Parser parser = Parser.getInstance();
 	parser.parse("ls");
+    }
+    
+    @Test
+    public void testSearch(){
+	Parser parser = Parser.getInstance();
+	parser.parse("search CS");
     }
 }

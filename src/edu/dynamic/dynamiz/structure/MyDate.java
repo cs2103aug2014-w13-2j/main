@@ -178,7 +178,7 @@ public class MyDate implements Comparable<MyDate>{
     public boolean equals(Object obj){
 	if(obj instanceof MyDate){
 	    MyDate temp = (MyDate)obj;
-	    return compareTo(temp)==0;
+	    return (date==temp.getDayOfMonth()) && (month==temp.getMonth()) && (year==temp.getYear());
 	}
 	return false;
     }
