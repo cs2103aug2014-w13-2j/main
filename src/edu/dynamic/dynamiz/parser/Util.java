@@ -56,7 +56,7 @@ public final class Util {
 		
 		String firstWord = getFirstWord(str, regEx);
 		
-		return str.replaceFirst(firstWord, "");
+		return str.replaceFirst(firstWord, "").trim();
 	}
 	
 	/**
