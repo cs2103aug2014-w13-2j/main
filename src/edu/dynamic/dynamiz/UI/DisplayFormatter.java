@@ -215,11 +215,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String ("Command: ");
 		return s;
 	}
-//	public String displayEnterCommandPrompt() {
-//		String s = new String ("Please Enter Command:");
-//		return s;
-//	}
-
 
 	public String displayPrompt(int promptTag) {
 		String tag = new String();
@@ -254,25 +249,21 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	
 	public String displayFeedback(Feedback commandFeedback) {
-		assert commandFeedback!=null;
-		
+		assert commandFeedback!=null;	
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
-		switch(t){
-		
+		switch(t){		
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();		
 			s = TagFormat.format(s, TagFormat.HELP);
-			break;
-			
+			break;		
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
 			s =ef.getCommandType()+" unsuccessful!"+"\n";
 			s = TagFormat.format(s, TagFormat.ERORR);		
 			s+=" "+ef.getMessage();		
-			break;
-			
+			break;			
 		case SUCCESS_FEEDBACK_TAG:
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
@@ -289,7 +280,6 @@ public class DisplayFormatter implements DisplayerInterface {
 			
 			break;
 		default:
-			//s = commandFeedback.getCommandType();
 			s = commandFeedback.getOriginalCommand();
 			
 		}
@@ -300,7 +290,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	private void getFeedbackContent(StringBuilder a, SuccessFeedback sf){
 		ToDoItem[] list = sf.getAffectedItems();
-		if( list==null){
+		if(list==null){
 			a.append("The list is empty!");
 			return;
 		}
