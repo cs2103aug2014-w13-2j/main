@@ -154,18 +154,5 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
-		com.joestelmach.natty.Parser parser = new com.joestelmach.natty.Parser();
-		List<DateGroup> groups = parser.parse("the day before next thursday at noon");
-		for(DateGroup group: groups) {
-		  List dates = group.getDates();
-		  int line = group.getLine();
-		  int column = group.getPosition();
-		  String matchingValue = group.getText();
-		  System.out.println(group.isTimeInferred());
-		  String syntaxTree = group.getSyntaxTree().toStringTree();
-		  System.out.println(syntaxTree);
-		  Date recursUntil = group.getRecursUntil();
-		}
-		
 	}
 }
