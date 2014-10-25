@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextAreaBuilder;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -20,10 +21,15 @@ public class GUI extends Application {
 		// Set output area
 		TextArea ta = TextAreaBuilder.create().prefWidth(800).prefHeight(600).wrapText(true).build();
 		ta.setEditable(false);
-		bp.setCenter(ta);
+		
+		bp.setTop(ta);
 		
 		ta.setText(disp.displayWelcomeMessage()+"\n");
 		ta.appendText(disp.displayPrompt(1)+"\n");
+		
+		// Set input area
+		TextField tf = new TextField();
+		bp.setBottom(tf);
 		
 		primaryStage.setScene(new Scene(bp));
 		primaryStage.show();
