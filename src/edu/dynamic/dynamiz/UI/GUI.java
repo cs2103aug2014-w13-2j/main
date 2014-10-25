@@ -46,10 +46,9 @@ public class GUI extends Application {
 	    ((Group) scene.getRoot()).getChildren().add(hbox);
 
 	    // html editor
-	    primaryStage.setWidth(650650);
+	    primaryStage.setWidth(650);
         primaryStage.setHeight(300);   
         final HTMLEditor htmlEditor = new HTMLEditor();
-        htmlEditor.setPrefHeight(245);
         Scene htmlscene = new Scene(htmlEditor);   
 	    
 		// display Scene
