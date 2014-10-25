@@ -45,52 +45,50 @@ public class Parser {
 	 * @param date
 	 * @return
 	 */
-	public MyDate parseDate(String date) {	
-		assert(date != null);
-		Pattern datePattern = Pattern.compile(REGEX_DATE);
-		Pattern dateTimePattern = Pattern.compile(REGEX_DATETIME);
+	public MyDate parseDate(String dateStr) {	
+		assert dateStr != null;
 		
-		Matcher dateMatcher = datePattern.matcher(date);
-		Matcher dateTimeMatcher = dateTimePattern.matcher(date);
-		
-		MyDate parsedDate = null;
-		if (dateTimeMatcher.find()) {
-			int dd = Integer.parseInt(dateTimeMatcher.group(1));
-			int mm = Integer.parseInt(dateTimeMatcher.group(2));
-			int yy = Integer.parseInt(dateTimeMatcher.group(3));
-			int hr = Integer.parseInt(dateTimeMatcher.group(4));
-			int mn = Integer.parseInt(dateTimeMatcher.group(5));
-
-			parsedDate = new MyDateTime(dd, mm, yy, hr, mn);
-		} else if (dateMatcher.find()) {
-			int dd = Integer.parseInt(dateMatcher.group(1));
-			int mm = Integer.parseInt(dateMatcher.group(2));
-			int yy = Integer.parseInt(dateMatcher.group(3));
-
-			parsedDate = new MyDate(dd, mm, yy);
-		} else {
-			parsedDate = parseImplicitDate(date);
-			if (parsedDate == null) {
-				LoggerParser.severe("Invalid date string format:" + date);
-			}
-		}
-		
-		return parsedDate;
-	}
-	
-	private MyDate parseImplicitDate(String dateStr) {
-		assert(dateStr != null);
+		String dateStrUS = changeDateFormatUKToUS(dateStr);
 		
 		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
-		List<DateGroup> groups = nattyParser.parse(dateStr);
+		List<DateGroup> groups = nattyParser.parse(dateStrUS);
 		if (!groups.isEmpty()) {
 			DateGroup group = groups.get(0);
 			Date date = group.getDates().get(0);
-			
-			return new MyDateTime(date);
+			if (group.isTimeInferred()) {
+				return new MyDate(date);
+			} else {
+				return new MyDateTime(date);
+			}
 		} else {
+			LoggerParser.warning("Invalid date string: " + dateStr);
 			return null;
+		}	
+	}	
+
+	/**
+	 * Change date format from dd/mm/yy(yy) to mm/dd/yy(yy) format for natty parsing
+	 * 
+	 * @param dateStr date string in format dd/mm/yy(yy)
+	 * @return date string in format mm/dd/yy(yy)
+	 */
+	public String changeDateFormatUKToUS(String dateStr) {
+		assert(dateStr != null);
+		
+		Pattern datePattern = Pattern.compile(REGEX_DATE);
+		Matcher dateMatcher = datePattern.matcher(dateStr);
+		StringBuffer sb = new StringBuffer(dateStr.length());
+		while(dateMatcher.find()) {
+			String newDate = String.format("%1$s/%2$s/%3$s", dateMatcher.group(2), 
+															 dateMatcher.group(1), 
+														 	 dateMatcher.group(3));
+			
+			dateMatcher.appendReplacement(sb, Matcher.quoteReplacement(newDate));
 		}
+		
+		dateStr = dateMatcher.appendTail(sb).toString();
+		
+		return dateStr;
 	}
 	
 	public Command parse(String inputCmd) {
@@ -156,5 +154,18 @@ public class Parser {
 	}
 	
 	public static void main(String[] args) {
+		com.joestelmach.natty.Parser parser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = parser.parse("the day before next thursday at noon");
+		for(DateGroup group: groups) {
+		  List dates = group.getDates();
+		  int line = group.getLine();
+		  int column = group.getPosition();
+		  String matchingValue = group.getText();
+		  System.out.println(group.isTimeInferred());
+		  String syntaxTree = group.getSyntaxTree().toStringTree();
+		  System.out.println(syntaxTree);
+		  Date recursUntil = group.getRecursUntil();
+		}
+		
 	}
 }
