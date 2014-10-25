@@ -13,11 +13,18 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		BorderPane p = new  BorderPane();
+		BorderPane bp = new  BorderPane();
+	
+		Text t = new Text("Welcome to Dynamiz!");
+		t.setFont(Font.font("Arial", 60));
+		t.setEffect(new DropShadow(2,3,3,Color.BLUE));
 		
+		
+		bp.setCenter(t);
+			
 		primaryStage.setTitle("Dynamiz");
 		
-		primaryStage.setScene(new Scene(p));
+		primaryStage.setScene(new Scene(bp));
 		primaryStage.show();
 		
 		
