@@ -65,9 +65,6 @@ public class ParserTest {
     	MyDate date = parser.parseDate("17.10.2014");
     	assertEquals("17/10/2014", date.toString());
     	
-    	date = parser.parseDate("17//10//14");
-    	assertEquals("17/10/14", date.toString());
-    	
     	date = parser.parseDate("end of October 4pm");
     	assertEquals("31/10/2014 16:00", date.toString());
     	
