@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -43,7 +44,20 @@ public class MyDate implements Comparable<MyDate>{
 	setDate(date, month, year);
     }
     
-    /**
+    public MyDate(Date date) {
+    	assert date != null;
+    	
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(date);
+    	
+    	int dd = calendar.get(Calendar.DAY_OF_MONTH);
+    	int mm = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH starts from 0
+     	int yyyy = calendar.get(Calendar.YEAR);
+    	
+    	setDate(dd, mm, yyyy);
+	}
+
+	/**
      * Creates a new Date instance from the given date string.
      * @param dateString The string representation of the date to create.
      * @return The Date instance who's toString() method equals dateString.
