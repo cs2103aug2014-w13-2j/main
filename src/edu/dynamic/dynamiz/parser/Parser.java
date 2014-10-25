@@ -1,6 +1,5 @@
 package edu.dynamic.dynamiz.parser;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -15,14 +14,15 @@ import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 
 /**
- * This is the boss right here
+ * This is a Parser class that will parse the given input from the user into CommandLine object
+ * which in turn into Command object of suitable type. It also provides the parsing of Date in explicit form
+ * e.g. 13/12/2014 or implicit form, e.g. next Thurs. 
  * 
  * @author nhan
  *
  */
 public class Parser {
 	private static final String REGEX_DATE = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\b";
-	private static final String REGEX_DATETIME = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\s+(\\d{1,2})\\D*(\\d{1,2})\\b";
 	
 	private static Parser parser = null;
 	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
@@ -40,7 +40,7 @@ public class Parser {
 	}
 	
 	/**
-	 * Return a Date object after parsing from a String
+	 * Retrieve a MyDate object of 
 	 * 
 	 * @param date
 	 * @return
@@ -75,20 +75,7 @@ public class Parser {
 	public String changeDateFormatUKToUS(String dateStr) {
 		assert(dateStr != null);
 		
-		Pattern datePattern = Pattern.compile(REGEX_DATE);
-		Matcher dateMatcher = datePattern.matcher(dateStr);
-		StringBuffer sb = new StringBuffer(dateStr.length());
-		while(dateMatcher.find()) {
-			String newDate = String.format("%1$s/%2$s/%3$s", dateMatcher.group(2), 
-															 dateMatcher.group(1), 
-														 	 dateMatcher.group(3));
-			
-			dateMatcher.appendReplacement(sb, Matcher.quoteReplacement(newDate));
-		}
-		
-		dateStr = dateMatcher.appendTail(sb).toString();
-		
-		return dateStr;
+		return dateStr.replaceAll(REGEX_DATE, "$2/$1/$3");
 	}
 	
 	public Command parse(String inputCmd) {
