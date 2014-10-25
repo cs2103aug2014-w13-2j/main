@@ -3,6 +3,7 @@
 	<classpathentry excluding="main/Search&amp;Filter/|main/Search&amp;Filter/" kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/antlr-runtime-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/gunit-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ical4j-1.0.2.jar"/>
