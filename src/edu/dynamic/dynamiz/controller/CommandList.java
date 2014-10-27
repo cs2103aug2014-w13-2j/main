@@ -32,14 +32,14 @@ public class CommandList extends Command {
      * Creates a new instance of this command with the list of field values to use
      * for filtering and the list of options to use for sorting the filtered list.
      * @param keywords The list of keywords used to filter items or null if unused.
-     * @param priority The priority levels used to filter items or null if unused.
+     * @param priorities The priority levels used to filter items or null if unused.
      * @param start The list of start date values used to filter the items or null if unused.
      * @param end The list of end date values used to filter the items or null if unused.
      * @param options The list of options(in decreasing precedence) used to sort the filtered list
      * 		or null if unused.
      */
-    public CommandList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options){
-	this.priority = priority;
+    public CommandList(int[] priorities, MyDate[] start, MyDate[] end, OptionType[] options){
+	this.priority = priorities;
 	this.start = start;
 	this.end = end;
 	this.optionsList = options;
