@@ -1,13 +1,15 @@
 package edu.dynamic.dynamiz.controller;
 
 import edu.dynamic.dynamiz.parser.OptionType;
+import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Defines the command that lists all the items in the storage.
  * 
  * Constructor
- * CommandList()	//Creates a new instance of this list command.
+ * CommandList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options)
+ * 								//Creates a new instance of this list command.
  * 
  * Public Methods
  * void execute()	//Executes this command.
@@ -22,23 +24,25 @@ public class CommandList extends Command {
     
     //Main data members
     private ToDoItem[] itemList = null;
+    private int[] priority;
+    private MyDate[] start, end;
     private OptionType[] optionsList = null; 
     
     /**
-     * Creates an instance of this list command.
-     * @param storage The Storage object from which to retrieve the list.
+     * Creates a new instance of this command with the list of field values to use
+     * for filtering and the list of options to use for sorting the filtered list.
+     * @param keywords The list of keywords used to filter items or null if unused.
+     * @param priority The priority levels used to filter items or null if unused.
+     * @param start The list of start date values used to filter the items or null if unused.
+     * @param end The list of end date values used to filter the items or null if unused.
+     * @param options The list of options(in decreasing precedence) used to sort the filtered list
+     * 		or null if unused.
      */
-    public CommandList(){
-
-    }
-    
-    /**
-     * Creates a new instance of this command with the list of data field types to sort the list by.
-     * @param optionsList The list of options to sort the list by. The array should contain options
-     * 		in decreasing order of precedence.
-     */
-    public CommandList(OptionType[] optionsList){
-	this.optionsList = optionsList;
+    public CommandList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options){
+	this.priority = priority;
+	this.start = start;
+	this.end = end;
+	this.optionsList = options;
     }
     
     
@@ -47,7 +51,7 @@ public class CommandList extends Command {
      * Executes this command.
      */
     public void execute() {
-	itemList = storage.getList(optionsList);
+	itemList = storage.getList(priority, start, end, optionsList);
     }
     
     @Override
