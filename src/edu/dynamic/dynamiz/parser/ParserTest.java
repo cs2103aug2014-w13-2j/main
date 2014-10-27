@@ -30,10 +30,9 @@ public class ParserTest {
 		//cmdLine = parser.parseCommandLine("Search study from today");
 		//assertEquals("study", cmdLine.getParam());
 
-		cmdLine = parser.parseCommandLine("list -s tomorrow today yesterday orderby -s,to,priority");
+		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
-		
-		Options options = cmdLine.getOptions();
+		System.out.println(cmdLine);
     }
     
     @Test
