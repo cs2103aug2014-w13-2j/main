@@ -32,11 +32,15 @@ public class TestProgram {
 		    SuccessFeedback sFeedback = (SuccessFeedback)feedback;
 		    if(sFeedback.getCommandType().equals("list") || sFeedback.getCommandType().equals("search")){
 			ToDoItem[] list = sFeedback.getAffectedItems();
+			if (list != null) {
 			for(ToDoItem i: list){
 			    System.out.println(i);
 			}
-			System.out.println();
-		    } else{
+			} else {
+				System.out.println("-- No items --");
+			}
+			System.out.println(); 
+		    } else {
 			System.out.println("Successfully executed \""+input+"\".");
 		    }
 		} else if(feedback instanceof HelpFeedback){
