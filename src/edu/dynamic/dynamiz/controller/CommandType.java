@@ -55,20 +55,22 @@ public enum CommandType {
 			return Arrays.asList(optionsArray);
 		}
 	}, LIST("display", "show") {
-		private final OptionType[] optionsArray = {OptionType.START_TIME,
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY,
+												   OptionType.START_TIME,
 												   OptionType.END_TIME,
 												   OptionType.PRIORITY,
-												   OptionType.ORDER_BY};
+												   OptionType.ON_TIME};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
 	}, SEARCH("find") {
-		private final OptionType[] optionsArray = {OptionType.START_TIME, 
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY, 
+												   OptionType.START_TIME, 
 												   OptionType.END_TIME, 
 												   OptionType.PRIORITY,
-												   OptionType.ORDER_BY};
+												   OptionType.ON_TIME};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
