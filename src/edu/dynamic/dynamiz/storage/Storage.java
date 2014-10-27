@@ -2,6 +2,8 @@ package edu.dynamic.dynamiz.storage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -22,7 +24,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods(currently that can be used)
  * static Storage getInstance()	//gets the Storage instance
  * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
- * ToDoItem[] getList(OptionsType[] optionsList)	//Gets the list of ToDoItem objects held by this storage.
+ * ToDoItem[] getList(OptionType[] options)	//Gets the full list of items.
+ * ToDoItem[] getList(String[] keywords, int[] priority, MyDate[] start, MyDate end, OptionsType[] optionsList)
+ * 						//Gets the filtered list of items.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
  * ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList)	//Gets a list of items with the given parameter values.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
@@ -269,24 +273,108 @@ public class Storage {
     
     /**
      * Gets the list of tasks and events in an array sorted according to optionsList.
-     * @param optionsList The list of data fields to sort the list by in descending order of precedence
+     * @param options The list of data fields to sort the list by in descending order of precedence
      * 		or null if no other sorting criteria is required.
      * 		Eg. {a, b} means most importantly, sort by a. For all items with same value of a, sort by b.
      * @return An array of ToDoItem objects sorted according to sorting criteria or null
      * 		if the storage has no item.
      */
-    public ToDoItem[] getList(OptionType[] optionsList){
+    private ToDoItem[] getList(OptionType[] options){
 	if(mainList.isEmpty()){
 	    return null;
 	}
 	Collections.sort(mainList);
-	if(optionsList!=null){
-	    int size = optionsList.length;
+	if(options!=null){
+	    int size = options.length;
 	    while(size-->0){
-		sortListByOption(mainList, optionsList[size]);
+		sortListByOption(mainList, options[size]);
 	    }
 	}
 	return mainList.toArray(new ToDoItem[mainList.size()]);
+    }
+    
+    /**
+     * Gets the list of items filtered using the given field values, sorted using the given options list
+     * in descending order of precedence. If no filtering values are used at all, the full list of items
+     * will be returned instead.
+     * @param priority The list of priority values used for filtering or null if not used.
+     * @param start The list of start dates used for filtering or null if not used.
+     * @param end The list of end dates used for filtering or null if not used.
+     * @param options The list of field types in descending order of precedence used to sort the list.
+     * @return A filtered array of ToDoItem sorted using options.
+     */
+    public ToDoItem[] getList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options){
+	if(priority==null && start==null && end==null){
+	    return getList(options);
+	}
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();	//To hold the resulting list
+	
+	//Hash table is used for quick access in search.
+	//Probability of collision for small value set is low so efficiency is OK.
+	HashSet<Integer> priorityList = new HashSet<Integer>();
+	HashSet<MyDate> startList = new HashSet<MyDate>();
+	HashSet<MyDate> endList = new HashSet<MyDate>();
+	
+	//Fills the hash tables with distinct values(if applicable).
+	if(priority!=null){
+	    for(int i: priority){
+		if(!priorityList.contains(i)){
+		    priorityList.add(i);
+		}
+	    }
+	}
+	
+	if(start!=null){
+	    for(MyDate i: start){
+		if(!startList.contains(i)){
+		    startList.add(i);
+		}
+	    }
+	}
+	
+	if(end!=null){
+	    for(MyDate i: end){
+		if(!endList.contains(i)){
+		    endList.add(i);
+		}
+	    }
+	}
+	
+	//Performs big union(OR) filtering by values.
+	Iterator<ToDoItem> itr = mainList.iterator();
+	ToDoItem item;
+	while(itr.hasNext()){
+	    item = itr.next();
+	    if(priorityList.contains(item.getPriority())){
+		temp.add(item);
+		continue;
+	    }
+	    if((item instanceof EventItem)){
+		if((startList.contains(((EventItem)item).getStartDate())) ||
+			endList.contains(endList.contains(((EventItem)item).getEndDate()))){
+		    	temp.add(item);
+		    	continue;
+		}
+	    } else if((item instanceof TaskItem) && endList.contains(((TaskItem)item).getDeadline())){
+		temp.add(item);
+		continue;
+	    }
+	}
+	
+	//Sorts the filtered list.
+	Collections.sort(temp);
+	if(options!=null){
+	    int size = options.length;
+	    while(size-->0){
+		sortListByOption(temp, options[size]);
+	    }
+	}
+	
+	//Returns the filtered list as an array.
+	if(temp.isEmpty()){
+	    return null;
+	}
+	return temp.toArray(new ToDoItem[temp.size()]);
     }
     
     /**
