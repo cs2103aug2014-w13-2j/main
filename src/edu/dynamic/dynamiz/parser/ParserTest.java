@@ -32,8 +32,6 @@ public class ParserTest {
 
 		cmdLine = parser.parseCommandLine("list -s tomorrow today yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
-		System.out.println(cmdLine);
-		
 		
 		Options options = cmdLine.getOptions();
     }
@@ -73,21 +71,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testListCommand(){
-	Parser parser = Parser.getInstance();
-	parser.parse("list");
-	parser.parse("list orderby -s");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidCommand(){
-	Parser parser = Parser.getInstance();
-	parser.parse("ls");
-    }
-    
-    @Test
-    public void testSearch(){
-	Parser parser = Parser.getInstance();
-	parser.parse("search CS");
+    public void testParseAndExtractOption() {
+    	
     }
 }
