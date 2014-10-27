@@ -2,7 +2,7 @@ package edu.dynamic.dynamiz.UI;
 
 import java.awt.event.ActionEvent;
 /**
- * Interface for Screen
+ * Interface for UI
  * @author XYLau
  */
 public interface UIInterface {

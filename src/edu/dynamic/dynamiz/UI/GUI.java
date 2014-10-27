@@ -9,7 +9,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+/**
+ * Originally Planned JavaFX UI for Dynamiz. 
+ * TODO: Delete this file. - XY 27/10/14
+ * @author "XYLau"
+ *
+ */
 public class GUI extends Application {
 	public static DisplayFormatter disp = new DisplayFormatter();
 	
