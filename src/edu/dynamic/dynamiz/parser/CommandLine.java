@@ -188,7 +188,31 @@ public class CommandLine {
 			commandOrderList = extractOptionTypeList(commandOptions);
 		}
 		
-		return new CommandList(commandOrderList.toArray(new OptionType[commandOrderList.size()]));
+		int[] priorities = null;
+		MyDate[] startDates = null;
+		MyDate[] endDates = null;
+		OptionType[] orderings = null;
+		
+		if (!commandStartDateList.isEmpty()) {
+			startDates = commandStartDateList.toArray(new MyDate[commandStartDateList.size()]);
+		}
+		
+		if (!commandEndDateList.isEmpty()) {
+			endDates = commandEndDateList.toArray(new MyDate[commandEndDateList.size()]);
+		}
+		
+		if (!commandPriorityList.isEmpty()) {
+			priorities = new int[commandPriorityList.size()];
+			for (int i = 0; i < commandPriorityList.size(); i++) {
+				priorities[i] = commandPriorityList.get(i);
+			}
+		}
+		
+		if (!commandOrderList.isEmpty()) {
+			orderings = commandOrderList.toArray(new OptionType[commandOrderList.size()]);
+		}
+		
+		return new CommandList(priorities, startDates, endDates, orderings);
 	}
 
 
