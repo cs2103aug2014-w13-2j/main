@@ -97,18 +97,6 @@ public class CommandLine {
 		return true;
 	}
 
-	private String getFirstOptionValue(Options commandOptions, OptionType optionType) {
-		Option option = commandOptions.getOptions(optionType).get(0);
-		String optionStr = option.getValues().get(0);
-			
-		return optionStr;
-	}
-	
-	private List<String> getFirstOptionValues(Options commandOptions, OptionType optionType) {
-		Option option = commandOptions.getOptions(optionType).get(0);
-		return option.getValues();
-	}
-
 	private Command parseAdd() {
 		Options commandOptions = extractOptions(this.options, CommandType.ADD);
 		ToDoItem commandItem = null;
@@ -128,6 +116,25 @@ public class CommandLine {
 			
 			if (hasEnd) {
 				endDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.END_TIME));
+			}
+			
+			if (commandOptions.hasOption(OptionType.ON_TIME)) {
+				MyDate onDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.ON_TIME));
+				int dd = onDate.getDayOfMonth();
+				int mm = onDate.getMonth();
+				int yy = onDate.getYear();
+				
+				if (startDate != null) {
+					startDate.setDate(dd, mm, yy);
+				} else {
+					startDate = onDate;
+				}
+				
+				if (endDate != null) {
+					endDate.setDate(dd, mm, yy);
+				} else {
+					endDate = onDate;
+				}
 			}
 			
 			if (hasBoth) {
@@ -267,6 +274,20 @@ public class CommandLine {
 	
 	private Command parseExit() {
 		return null;
+	}
+	
+	
+	private String getFirstOptionValue(Options commandOptions, OptionType optionType) {
+		List<Option> optionList = commandOptions.getOptions(optionType);
+		Option option = optionList.get(optionList.size() - 1);
+		String optionStr = option.getValues().get(0);
+			
+		return optionStr;
+	}
+	
+	private List<String> getFirstOptionValues(Options commandOptions, OptionType optionType) {
+		Option option = commandOptions.getOptions(optionType).get(0);
+		return option.getValues();
 	}
 
 	/**
