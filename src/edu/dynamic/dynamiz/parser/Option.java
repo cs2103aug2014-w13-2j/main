@@ -62,6 +62,16 @@ public class Option{
 		this.values = values;
 	}
 	
+	/**
+	 * Construct an Option object with a given OptionType as String and a list of argument values.
+	 * @param typeString OptionType in String
+	 * @param values List of values
+	 */
+	public Option(String typeString, List<String> values) {
+		this.optionType = OptionType.fromString(typeString);
+		this.values = values;
+	}
+	
 	/*=========================================================================
 	 * Getter & Setter Methods
 	 * ========================================================================
