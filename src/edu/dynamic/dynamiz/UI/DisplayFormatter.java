@@ -378,7 +378,7 @@ public class DisplayFormatter implements DisplayerInterface {
 class TagFormat{
 	//HTML Tag
 	//PRIORITY_TAG
-	private static boolean TAG = true;
+	private static boolean TAG = false;
 	public static final String SUCCESS = "";
 	public static final String HELP = "";
 	public static final String ERORR = "";
