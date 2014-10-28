@@ -350,7 +350,7 @@ public class Storage {
 	    }
 	    if((item instanceof EventItem)){
 		if((startList.contains(((EventItem)item).getStartDate())) ||
-			endList.contains(endList.contains(((EventItem)item).getEndDate()))){
+			endList.contains(((EventItem)item).getEndDate())){
 		    	temp.add(item);
 		    	continue;
 		}
