@@ -19,13 +19,40 @@ import java.util.Map;
  */
 public enum OptionType {
 	PRIORITY("-p", "priority") {
-	}, START_TIME("-s", "starttime", "from", "on") {
+		@Override
+		public String getParsingRegex() {
+			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
+		}
+	}, START_TIME("-s", "starttime", "from") {
+		@Override
+		public String getParsingRegex() {
+			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
+		}
 	}, END_TIME("-d", "deadline", "endtime", "to", "by") {
-	}, ORDER_BY("-o", "orderby", "sortby");
+		@Override
+		String getParsingRegex() {
+			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
+		}
+	}, ON_TIME("on") {
+		@Override
+		String getParsingRegex() {
+			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
+		}
+	}, ORDER_BY("-o", "orderby", "sortby") {
+		@Override
+		String getParsingRegex() {
+			return String.format(RIGHT_END_FORMAT, getAliasesRegex());
+		}
+	};
+	
+	private static final String SANDWICH_FORMAT = "(%1$s)" + // Lookahead for targeted option keyword
+			  									  "(.*?)" +       // Arguments sandwiched between 2 keywords or 1 keywords and end of line
+			  									  "(?=%2$s|$)"; // Another keyword or end of line to mark the end
+	private static final String RIGHT_END_FORMAT = "(%1$s)(.*)$";
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	
-	private static String ALL_ALIASES = "";
+	private static String allAliasesRegex = "";
 	
 	public static int PRIORITY_URGENT = 8;
 	public static int PRIORITY_HIGH = 4;
@@ -37,25 +64,18 @@ public enum OptionType {
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
 	static {
 		StringBuffer allAliases = new StringBuffer();
-		String toBeAppended = ""; 
 		
 		for (OptionType opt: OptionType.values()) {
 			// Normalising by lowercase all
 			for (String alias: opt.aliases) {
 				ALIAS_TABLE.put(alias.toLowerCase(), opt);
-				
-				if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
-					String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
-					toBeAppended = String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias);  
-				} else {
-					toBeAppended = "\\b" + alias + "\\b" + "|";
-				}
-				allAliases.append(toBeAppended);
 			}
+			allAliases.append(opt.aliasesRegex);
+			allAliases.append("|");
 		}
 		
 		// Remove the last | character
-		ALL_ALIASES = allAliases.substring(0, allAliases.length() - 1);
+		allAliasesRegex = allAliases.substring(0, allAliases.length() - 1);
 	}
 	
 	/**
@@ -91,7 +111,7 @@ public enum OptionType {
 			throw new NullPointerException("Null option");
 		}
 		
-		return fromString(opt.getOptName());
+		return opt.getOptionType();
 	}
 	
 	/**
@@ -109,18 +129,17 @@ public enum OptionType {
 	}
 	
 	public static String getAllAliasesRegex() {
-		return ALL_ALIASES;
+		return allAliasesRegex;
 	}
 	
 	private List<String> aliases;
+	private String aliasesRegex;
 	private OptionType(String... aliases) {
 		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
 		this.aliases.add(this.toString().toLowerCase());
-	}
-	
-	public String getAliasesRegex() {
+		
 		StringBuffer regEx = new StringBuffer();
-		for (String alias: aliases) {
+		for (String alias: this.aliases) {
 			if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
 				String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
 				regEx.append(String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias));  
@@ -128,6 +147,13 @@ public enum OptionType {
 				regEx.append("\\b" + alias + "\\b" + "|");
 			}
 		}
-		return regEx.substring(0, regEx.length() - 1);
+		aliasesRegex = regEx.substring(0, regEx.length() - 1);
 	}
+	
+	public String getAliasesRegex() {
+		return aliasesRegex;
+	}
+	
+	abstract String getParsingRegex();
+
 }

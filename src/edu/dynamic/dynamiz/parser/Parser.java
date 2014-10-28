@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.parser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -61,10 +62,87 @@ public class Parser {
 				return new MyDateTime(date);
 			}
 		} else {
-			LoggerParser.warning("Invalid date string: " + dateStr);
+			LoggerParser.warning("Unrecognised date string: " + dateStr);
 			return null;
 		}	
+	}
+	
+	public List<String> parseDateList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		
+		for (String dateStr: unparsedList) {
+			MyDate date = parseDate(dateStr);
+			if (date != null) {
+				parsedList.add(date.toString());
+			}
+		}
+		
+		return parsedList;
 	}	
+
+	public List<String> parsePriorityList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String priority: unparsedList) {
+			// TODO: Implement checking of valid Priority String
+			if (true) {//if (OptionType.PRIORITY.isValidString(priority)) {
+				parsedList.add(priority);
+			}
+		}
+		
+		return parsedList;
+	}
+
+	/**
+	 * Parse the input with the given regular expression based on the OptionType given.
+	 * The general format of the Pattern is as followed:
+	 * - Group 0: part to remove if there is a matching
+	 * - Group 1: matching keyword of OptionType
+	 * - Group 2: argument associating matching option type
+	 * 
+	 * @param input The unparsed input
+	 * @param type OptionType to match the Option in return
+	 * @return an Option that is correctly parse or a null if there is no matching.
+	 */
+	public Option parseOptionAndExtract(StringBuffer input, OptionType type) {
+		Option option = null;
+		String regEx = type.getParsingRegex();
+		Pattern pattern = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(input.toString());
+
+		while (matcher.find()) {
+			String argument = matcher.group(2);
+			String[] values = argument.split("" + Option.DEFAULT_DELIMITER);
+
+			// Sanitise values
+			List<String> valueList = Util.removeEmptyStringsInArray(values);
+			
+			switch (type) {
+				case START_TIME : // Fall through
+				case END_TIME :   // Fall through
+				case ON_TIME : 
+					List<String> dateList = parseDateList(valueList);
+					if (!dateList.isEmpty()) {
+						option = new Option(type, dateList);
+						input.replace(matcher.start(), matcher.end(), "");
+					}
+					break;
+				case PRIORITY :
+					List<String> priorityList = parsePriorityList(valueList);
+					if (!priorityList.isEmpty()) {
+						option = new Option(type, priorityList);
+						input.replace(matcher.start(), matcher.end(), "");
+					}
+					break;
+				case ORDER_BY :
+					option = new Option(type, valueList);
+					input.replace(matcher.start(), matcher.end(), "");
+					break;
+				default: throw new IllegalArgumentException("Invalid OptionType is given");
+			}
+		}
+		
+		return option;
+	}
 
 	/**
 	 * Change date format from dd/mm/yy(yy) to mm/dd/yy(yy) format for natty parsing
@@ -92,54 +170,22 @@ public class Parser {
 		inputCmd = Util.stripFirstWord(inputCmd);
 		Options options = new Options();
 		
-		// Parse orderby
-		String orderRegex = String.format("(.*)(%1$s)(.*$)", OptionType.ORDER_BY.getAliasesRegex());
-		Pattern orderPattern = Pattern.compile(orderRegex, Pattern.CASE_INSENSITIVE);
-		Matcher orderMatcher = orderPattern.matcher(inputCmd);
-		
-		if (orderMatcher.find()) {
-			inputCmd = orderMatcher.group(1);
-			String opt = orderMatcher.group(2);
-			String[] values = orderMatcher.group(3).split("" + Option.DEFAULT_DELIMITER);
-			
-			List<String> newValues = Util.removeEmptyStringsInArray(values);
-			
-			Option option = new Option(opt, newValues);
-			options.add(option);
+		StringBuffer inputCmdBuffer = new StringBuffer(inputCmd);
+	
+		for (OptionType optType: cmdType.getApplicableOptions()) {
+			Option option = parseOptionAndExtract(inputCmdBuffer, optType);
+			if (option != null) {
+				options.add(option);
+			}
 		}
 		
-		String allAliases = OptionType.getAllAliasesRegex();
-		
-		String optRegex = "(?<=(" + allAliases + "))" + // Lookahead for option keyword
-						  "(.*?)" + 					// Arguments sandwiched between 2 keywords or 1 keywords and end of line
-						  "(?=(" + allAliases + "|$))"; // Another keyword or end of line
-		Pattern optPattern = Pattern.compile(optRegex, Pattern.CASE_INSENSITIVE);
-		
-		String paramRegex = String.format("^(.*?)(?=(%1$s|$))", allAliases);
-		Pattern paramPattern = Pattern.compile(paramRegex, Pattern.CASE_INSENSITIVE);
-		
-		Matcher optMatcher = optPattern.matcher(inputCmd);
-		Matcher paramMatcher = paramPattern.matcher(inputCmd);
-		
-		String param = "";
-		if (paramMatcher.find()) {
-			param = paramMatcher.group(1).trim();
-		}
-		
-		while(optMatcher.find()) {
-			String opt = optMatcher.group(1);
-			String[] values = optMatcher.group(2).split("" + Option.DEFAULT_DELIMITER);
-			
-			List<String> newValues = Util.removeEmptyStringsInArray(values);
-			
-			Option option = new Option(opt, newValues);
-			options.add(option);
-		}
-		
+		String param = inputCmdBuffer.toString().trim();
 		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		return cmdLine;
 	}
 	
 	public static void main(String[] args) {
+		Parser parser = Parser.getInstance();
+		
 	}
 }

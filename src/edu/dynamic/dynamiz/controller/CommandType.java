@@ -24,7 +24,10 @@ import edu.dynamic.dynamiz.parser.OptionType;
  */
 public enum CommandType {
 	ADD("put") { 
-		private final OptionType[] optionsArray = {OptionType.START_TIME, OptionType.END_TIME, OptionType.PRIORITY};
+		private final OptionType[] optionsArray = {OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
@@ -41,7 +44,10 @@ public enum CommandType {
 			return Arrays.asList(optionsArray);
 		}
 	}, UPDATE("upd", "modify", "mod", "edit", "change") {
-		private final OptionType[] optionsArray = {OptionType.START_TIME, OptionType.END_TIME, OptionType.PRIORITY};
+		private final OptionType[] optionsArray = {OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
@@ -49,20 +55,22 @@ public enum CommandType {
 			return Arrays.asList(optionsArray);
 		}
 	}, LIST("display", "show") {
-		private final OptionType[] optionsArray = {OptionType.START_TIME,
-													OptionType.END_TIME,
-													OptionType.PRIORITY,
-													OptionType.ORDER_BY};
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY,
+												   OptionType.START_TIME,
+												   OptionType.END_TIME,
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
 	}, SEARCH("find") {
-		private final OptionType[] optionsArray = {OptionType.START_TIME, 
-													OptionType.END_TIME, 
-													OptionType.PRIORITY,
-													OptionType.ORDER_BY};
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY, 
+												   OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
