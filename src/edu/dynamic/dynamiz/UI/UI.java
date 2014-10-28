@@ -10,6 +10,7 @@ import javax.swing.*;
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
 import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.structure.Feedback;
+
 /**
  * 
  * @author XYLau
@@ -21,29 +22,27 @@ public class UI extends JPanel implements ActionListener {
 	private final static String newline = "\n";
 	public static DisplayFormatter disp = new DisplayFormatter();
 	public static Controller cont = new Controller();
-	public static Font font = new Font("Arial",Font.PLAIN,12);
-	
+	public static Font font = new Font("Arial", Font.PLAIN, 12);
+
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
-	
-	
-	
-	
-	
+
 	public UI() {
 		super(new GridBagLayout());
-		
+
 		// Initialise Logger to alert above INFO level (Severe & Warning)
 		LoggerUI.setLevel(Level.INFO);
 
-		
 		displayScreen = new JTextArea(20, 50);
 		displayScreen.setEditable(false);
+		displayScreen.setFont(font);
+		displayScreen.setForeground(Color.BLACK);
+
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
-		
 		inputScreen = new JTextField(20);
 		inputScreen.addActionListener(this);
-
+		inputScreen.setForeground(Color.BLUE); 
+		
 		// Add Components to this panel.
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = GridBagConstraints.REMAINDER;
@@ -55,15 +54,14 @@ public class UI extends JPanel implements ActionListener {
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(inputScreen, c);
-		
-		// Welcome message
-		displayln(disp.displayWelcomeMessage());
-		displayln(disp.displayPrompt(1));
-		
-		LoggerUI.info("UI Created");
 
+		// Welcome message
+		displayScreen.append(disp.displayWelcomeMessage()+newline);
+		displayScreen.append(disp.displayPrompt(1)+newline);
+
+		LoggerUI.info("UI Created");
 	}
-	
+
 	public void run() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -79,21 +77,21 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String text = inputScreen.getText();
-
-		display(disp.displayPrompt()); 
-		displayln(text); 
+		
+		displayScreen.append(disp.displayPrompt());
+		displayScreen.append(text + newline);
 		
 		
 		if (text.equalsIgnoreCase("exit")) {
 			LoggerUI.info("Exit Dynamiz");
 			System.exit(0);
 		}
-		
+
 		Feedback feedback = cont.executeCommand(text);
 		String returnResult = disp.displayFeedback(feedback);
-		assert (returnResult != null);		
-		display(returnResult);
-		
+		assert (returnResult != null);
+		displayScreen.append(returnResult+newline);
+
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
@@ -102,54 +100,8 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
 	}
 
-	/**
-	 * Displays a string onto the Screen with newline
-	 * @param text
-	 */
-	public void displayln(String text) {
-		displayColorSetDefault();
-		inputColorSet();
-		displayScreen.append(text + newline);
-		LoggerUI.info("Display " + text);
-	}
+	//-------------------------------------------------------------------------------------------------
 
-	/**
-	 * Displays a string onto the Screen without a newline
-	 * 
-	 * @param text
-	 */
-	public void display(String text) {
-		displayColorSetDefault();
-		inputColorSet();
-		displayScreen.append(text);
-		LoggerUI.info("Display " + text);
-
-	}
-
-	/**
-	 * Display output field in default setting (Black words, white background)
-	 */
-	private void displayColorSetDefault() {
-		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLACK);
-	}
-
-	/**
-	 * Display input field in default setting (Black words, white background)
-	 */	
-	private void inputColorSet() {
-		inputScreen.setForeground(Color.BLUE);
-	}
-
-	/**
-	 * 
-	 */
-	public void displayRed(){
-		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.RED);
-	}
-	
-	
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event dispatch thread.
@@ -163,22 +115,10 @@ public class UI extends JPanel implements ActionListener {
 		frame.add(new UI());
 
 		displayScreen(frame);
-		
-	}
 
-	/**
-	 * Displays the screen
-	 * 
-	 * @param frame
-	 */
-	private static void displayScreen(JFrame frame) {
-		frame.pack();
-		frame.setVisible(true);
-		
 	}
 
 
-	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
@@ -188,4 +128,15 @@ public class UI extends JPanel implements ActionListener {
 			}
 		});
 	}
+	/**
+	 * Displays the screen
+	 * 
+	 * @param frame
+	 */
+	private static void displayScreen(JFrame frame) {
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
 }
