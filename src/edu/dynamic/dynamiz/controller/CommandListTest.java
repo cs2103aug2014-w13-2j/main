@@ -44,7 +44,7 @@ public class CommandListTest {
 	pri[0] = 2;
 	pri[1] = 4;
 	MyDate[] end = new MyDate[2];
-	end[0] = new MyDate(31, 10, 2014);
+	end[0] = new MyDate(29, 10, 2014);
 	end[1] = new MyDate(1, 11, 2014);
 	Command cmd = new CommandList(pri, null, end, null);
 	cmd.execute();
