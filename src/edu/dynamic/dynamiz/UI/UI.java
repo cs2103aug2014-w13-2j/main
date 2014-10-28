@@ -40,7 +40,7 @@ public class UI extends JPanel implements ActionListener {
 
 		displayScreen = new JTextPane();
 		displayScreen.setEditable(false);
-		// TODO: Set displayScreen to fixed size for viewing 
+
 		doc = displayScreen.getStyledDocument();
 
 		keyWord = new SimpleAttributeSet();
@@ -48,7 +48,10 @@ public class UI extends JPanel implements ActionListener {
 		StyleConstants.setBold(keyWord, true);
 
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
-
+		
+		// Set displayScreen to fixed size for viewing 
+		scrollPane.getViewport().setPreferredSize(new Dimension(1000,500));
+		
 		inputScreen = new JTextField(100);
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE); 
@@ -80,7 +83,6 @@ public class UI extends JPanel implements ActionListener {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
-
 			}
 		});
 	}
@@ -93,6 +95,7 @@ public class UI extends JPanel implements ActionListener {
 		String input = inputScreen.getText();
 		try
 		{
+			// Command Prompt Display 
 		    doc.insertString(doc.getLength(), disp.displayPrompt(), keyWord );
 		    doc.insertString(doc.getLength(), input+newline, keyWord);
 
@@ -101,10 +104,12 @@ public class UI extends JPanel implements ActionListener {
 				System.exit(0);
 			}
 
+		    // Command Feedback
 			Feedback feedback = cont.executeCommand(input);
 			String returnResult = disp.displayFeedback(feedback);
 			assert (returnResult != null);
 			
+			// Feedback Display
 			doc.insertString(doc.getLength(), divider + newline, null );
 		    doc.insertString(doc.getLength(), returnResult+newline, null);
 		    doc.insertString(doc.getLength(), divider+newline, null);
