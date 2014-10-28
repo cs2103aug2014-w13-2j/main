@@ -76,22 +76,26 @@ public class UI extends JPanel implements ActionListener {
 	 * command into the Screen interface
 	 */
 	public void actionPerformed(ActionEvent evt) {
-		String text = inputScreen.getText();
-		
+		String input = inputScreen.getText();
+
 		displayScreen.append(disp.displayPrompt());
-		displayScreen.append(text + newline);
+		displayScreen.append(input + newline);
 		
-		
-		if (text.equalsIgnoreCase("exit")) {
+		if (input.equalsIgnoreCase("exit")) {
 			LoggerUI.info("Exit Dynamiz");
 			System.exit(0);
 		}
 
-		Feedback feedback = cont.executeCommand(text);
+		Feedback feedback = cont.executeCommand(input);
 		String returnResult = disp.displayFeedback(feedback);
 		assert (returnResult != null);
+		
+		displayScreen.append("------------------------------------------------------------------------------------" + newline);
 		displayScreen.append(returnResult+newline);
-
+		
+		displayScreen.append("Execution complete."+ newline);
+		displayScreen.append("------------------------------------------------------------------------------------" + newline);
+		
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
