@@ -6,6 +6,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
 import edu.dynamic.dynamiz.controller.*;
@@ -18,28 +21,35 @@ import edu.dynamic.dynamiz.structure.Feedback;
  */
 public class UI extends JPanel implements ActionListener {
 	protected JTextField inputScreen;
-	protected JTextArea displayScreen;
+	protected JTextPane displayScreen;
 	private final static String newline = "\n";
 	public static DisplayFormatter disp = new DisplayFormatter();
 	public static Controller cont = new Controller();
 	public static Font font = new Font("Arial", Font.PLAIN, 12);
-
+	public StyledDocument doc;
+	private String divider = "------------------------------------------------------------------------------------";
+	private SimpleAttributeSet keyWord;
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
+	
 	public UI() {
 		super(new GridBagLayout());
 
 		// Initialise Logger to alert above INFO level (Severe & Warning)
 		LoggerUI.setLevel(Level.INFO);
 
-		displayScreen = new JTextArea(20, 50);
+		displayScreen = new JTextPane();
 		displayScreen.setEditable(false);
-		displayScreen.setFont(font);
-		displayScreen.setForeground(Color.BLACK);
+		// TODO: Set displayScreen to fixed size for viewing 
+		doc = displayScreen.getStyledDocument();
+
+		keyWord = new SimpleAttributeSet();
+		StyleConstants.setForeground(keyWord, Color.BLUE);
+		StyleConstants.setBold(keyWord, true);
 
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
-		inputScreen = new JTextField(20);
+		inputScreen = new JTextField(100);
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE); 
 		
@@ -56,9 +66,13 @@ public class UI extends JPanel implements ActionListener {
 		add(inputScreen, c);
 
 		// Welcome message
-		displayScreen.append(disp.displayWelcomeMessage()+newline);
-		displayScreen.append(disp.displayPrompt(1)+newline);
-
+		try
+		{
+		    doc.insertString(0, disp.displayWelcomeMessage()+newline, null );
+		    doc.insertString(doc.getLength(), disp.displayPrompt(1)+newline, null );
+		}
+		catch(Exception e) { System.out.println(e); }
+		
 		LoggerUI.info("UI Created");
 	}
 
@@ -77,25 +91,28 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String input = inputScreen.getText();
+		try
+		{
+		    doc.insertString(doc.getLength(), disp.displayPrompt(), keyWord );
+		    doc.insertString(doc.getLength(), input+newline, keyWord);
 
-		displayScreen.append(disp.displayPrompt());
-		displayScreen.append(input + newline);
-		
-		if (input.equalsIgnoreCase("exit")) {
-			LoggerUI.info("Exit Dynamiz");
-			System.exit(0);
+		    if (input.equalsIgnoreCase("exit")) {
+				LoggerUI.info("Exit Dynamiz");
+				System.exit(0);
+			}
+
+			Feedback feedback = cont.executeCommand(input);
+			String returnResult = disp.displayFeedback(feedback);
+			assert (returnResult != null);
+			
+			doc.insertString(doc.getLength(), divider + newline, null );
+		    doc.insertString(doc.getLength(), returnResult+newline, null);
+		    doc.insertString(doc.getLength(), divider+newline, null);
+
 		}
-
-		Feedback feedback = cont.executeCommand(input);
-		String returnResult = disp.displayFeedback(feedback);
-		assert (returnResult != null);
+		catch(Exception e) { System.out.println(e); }
 		
-		displayScreen.append("------------------------------------------------------------------------------------" + newline);
-		displayScreen.append(returnResult+newline);
-		
-		displayScreen.append("Execution complete."+ newline);
-		displayScreen.append("------------------------------------------------------------------------------------" + newline);
-		
+				
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 
