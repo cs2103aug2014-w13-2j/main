@@ -15,77 +15,114 @@ import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
+ * Defines the UI for Dynamiz using Java Swing
  * 
  * @author XYLau
  *
  */
-public class UI extends JPanel implements ActionListener {
+public class UI extends JPanel implements ActionListener, UIInter {
+	// Screen components
 	protected JTextField inputScreen;
 	protected JTextPane displayScreen;
-	private final static String newline = "\n";
+
+	// Establish relations between UI & Display + Controller
 	public static DisplayFormatter disp = new DisplayFormatter();
 	public static Controller cont = new Controller();
-	public static Font font = new Font("Arial", Font.PLAIN, 12);
-	public StyledDocument doc;
+
+	// Formatting Constants
+	private StyledDocument doc;
+	private static Font font = new Font("Arial", Font.PLAIN, 12);
 	private String divider = "------------------------------------------------------------------------------------";
-	private SimpleAttributeSet keyWord;
+	private final static String newline = "\n";
+	private SimpleAttributeSet Highlight;
+	private SimpleAttributeSet PriorityNone;
+	private SimpleAttributeSet PriorityLow;
+	private SimpleAttributeSet PriorityMedium;
+	private SimpleAttributeSet PriorityHigh;
+	private SimpleAttributeSet PriorityUrgent;
+	
+	
+	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
-	
 	public UI() {
 		super(new GridBagLayout());
 
-		// Initialise Logger to alert above INFO level (Severe & Warning)
+		// Logger: Set Level (Logger alert above Info level = Severe & Warning)
 		LoggerUI.setLevel(Level.INFO);
 
+		// Create Command Display - Screen
 		displayScreen = new JTextPane();
 		displayScreen.setEditable(false);
 
-		doc = displayScreen.getStyledDocument();
-
-		keyWord = new SimpleAttributeSet();
-		StyleConstants.setForeground(keyWord, Color.BLUE);
-		StyleConstants.setBold(keyWord, true);
-
+		// Create Command Display - Scroll
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
-		
-		// Set displayScreen to fixed size for viewing 
-		scrollPane.getViewport().setPreferredSize(new Dimension(1000,500));
-		
-		inputScreen = new JTextField(100);
+
+		// Define size of Command Display - Screen
+		scrollPane.getViewport().setPreferredSize(new Dimension(1000, 500));
+
+		// / Create Command Input
+		inputScreen = new JTextField(500);
 		inputScreen.addActionListener(this);
-		inputScreen.setForeground(Color.BLUE); 
-		
-		// Add Components to this panel.
+		inputScreen.setForeground(Color.BLUE);
+
+		// Add Command Display - Scroll and Command Input into Panel
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = GridBagConstraints.REMAINDER;
-
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		add(scrollPane, c);
-
 		c.fill = GridBagConstraints.HORIZONTAL;
 		add(inputScreen, c);
 
-		// Welcome message
-		try
-		{
-		    doc.insertString(0, disp.displayWelcomeMessage()+newline, null );
-		    doc.insertString(doc.getLength(), disp.displayPrompt(1)+newline, null );
-		}
-		catch(Exception e) { System.out.println(e); }
+		// Styling for Command Display - Screen
+		doc = displayScreen.getStyledDocument();
 		
+		style();
+		
+		// Display: Welcome message
+		try {
+			doc.insertString(0, disp.displayWelcomeMessage() + newline, null);
+			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
+					null);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		// Logging: Creation
 		LoggerUI.info("UI Created");
 	}
 
-	public void run() {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Screen();
-			}
-		});
+	/**
+	 * Defines the stylesheet for displaying (Hightlights & Priority)
+	 */
+	private void style() {
+		Highlight = new SimpleAttributeSet();
+		StyleConstants.setForeground(Highlight, Color.BLACK);
+		StyleConstants.setBold(Highlight, true);
+		
+		PriorityNone = new SimpleAttributeSet();
+		StyleConstants.setForeground(PriorityNone, Color.BLUE);
+		StyleConstants.setBold(PriorityNone, true);
+		
+		PriorityLow = new SimpleAttributeSet();
+		StyleConstants.setForeground(PriorityLow, Color.GREEN);
+		StyleConstants.setBold(PriorityLow, true);
+		
+		PriorityMedium = new SimpleAttributeSet();
+		StyleConstants.setForeground(PriorityMedium, Color.YELLOW);
+		StyleConstants.setBold(PriorityMedium, true);
+		
+		PriorityHigh = new SimpleAttributeSet();
+		StyleConstants.setForeground(PriorityHigh, Color.ORANGE);
+		StyleConstants.setBold(PriorityHigh, true);
+		
+		PriorityUrgent = new SimpleAttributeSet();
+		StyleConstants.setForeground(PriorityUrgent, Color.RED);
+		StyleConstants.setBold(PriorityUrgent, true);
 	}
+
 
 	/**
 	 * Event Handler for each event, where event refers to the entry of a single
@@ -93,40 +130,37 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String input = inputScreen.getText();
-		try
-		{
-			// Command Prompt Display 
-		    doc.insertString(doc.getLength(), disp.displayPrompt(), keyWord );
-		    doc.insertString(doc.getLength(), input+newline, keyWord);
+		try {
+			// Command Prompt Display
+			doc.insertString(doc.getLength(), disp.displayPrompt(), Highlight);
+			doc.insertString(doc.getLength(), input + newline, Highlight);
 
-		    if (input.equalsIgnoreCase("exit")) {
+			// Command: Exit
+			if (input.equalsIgnoreCase("exit")) {
 				LoggerUI.info("Exit Dynamiz");
 				System.exit(0);
 			}
 
-		    // Command Feedback
+			// Command Feedback
 			Feedback feedback = cont.executeCommand(input);
 			String returnResult = disp.displayFeedback(feedback);
 			assert (returnResult != null);
-			
-			// Feedback Display
-			doc.insertString(doc.getLength(), divider + newline, null );
-		    doc.insertString(doc.getLength(), returnResult+newline, null);
-		    doc.insertString(doc.getLength(), divider+newline, null);
 
+			// Feedback Display
+			doc.insertString(doc.getLength(), divider + newline, null);
+			doc.insertString(doc.getLength(), returnResult + newline, null);
+			doc.insertString(doc.getLength(), divider + newline, null);
+
+		} catch (Exception e) {
+			System.out.println(e);
 		}
-		catch(Exception e) { System.out.println(e); }
-		
-				
+
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
-
-		// Make sure the new text is visible, even if there
-		// was a selection in the text area.
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
 	}
 
-	//-------------------------------------------------------------------------------------------------
+	// -------------------------------------------------------------------------------------------------
 
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
@@ -139,11 +173,8 @@ public class UI extends JPanel implements ActionListener {
 
 		// Add contents to the window.
 		frame.add(new UI());
-
 		displayScreen(frame);
-
 	}
-
 
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
@@ -154,15 +185,23 @@ public class UI extends JPanel implements ActionListener {
 			}
 		});
 	}
+
 	/**
-	 * Displays the screen
+	 * Displays the Frame
 	 * 
 	 * @param frame
 	 */
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
+	}
 
+	public void run() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Screen();
+			}
+		});
 	}
 
 }
