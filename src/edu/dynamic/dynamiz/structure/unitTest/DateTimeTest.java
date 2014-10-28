@@ -20,6 +20,10 @@ public class DateTimeTest {
 	assertEquals("Day of month is 29", 29, dt.getDayOfMonth());
 	assertEquals("Month is 2", 2, dt.getMonth());
 	assertEquals("Year is 2012", 2012, dt.getYear());
+	dt = new MyDateTime(29, 2, 2012, 12, 0);
+	MyDate dt2 = new MyDate(29, 2, 2012);
+	assertTrue(dt.equals(dt2));
+	assertTrue(dt2.equals(dt));
     }
     
     @Test
@@ -49,8 +53,8 @@ public class DateTimeTest {
     public void testToString(){
 	MyDateTime dt = new MyDateTime();
 	assertEquals("1/1/1970 0:00", dt.toString());
-	dt = new MyDateTime(2, 3, 1992, 3, 10);
-	assertEquals("2/3/1992 3:10", dt.toString());
+	dt = new MyDateTime(2, 3, 1992, 13, 10);
+	assertEquals("2/3/1992 13:10", dt.toString());
     }
     
     @Test

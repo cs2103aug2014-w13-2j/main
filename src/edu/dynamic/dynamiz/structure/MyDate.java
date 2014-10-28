@@ -174,11 +174,6 @@ public class MyDate implements Comparable<MyDate>{
      * 		if this comes earlier than date2.
      */
     public int compareTo(MyDate date2){
-	Class<?> thisClass = this.getClass();
-	Class<?> date2Class = date2.getClass();
-	if(!thisClass.equals(date2Class)){
-	    return -date2.compareTo(this);
-	}
 	if(year!=date2.getYear()){
 	    return year-date2.getYear();
 	} else if(month!=date2.getMonth()){

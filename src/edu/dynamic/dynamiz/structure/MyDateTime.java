@@ -123,7 +123,7 @@ public class MyDateTime extends MyDate {
      */
     public void setDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	if(!isValidDate(date, month, year) || !isValidTime(hour, minute)){
-	    throw new IllegalArgumentException();
+	    throw new IllegalArgumentException("Invalid date/time.");
 	}
 	setDate(date, month, year);
 	setTime(hour, minute);
@@ -161,27 +161,4 @@ public class MyDateTime extends MyDate {
 	return output.toString();
     }
 
-    @Override
-    public int compareTo(MyDate date2){
-	if(!(date2 instanceof MyDateTime)){
-	    return compareTo(new MyDateTime(date2));
-	} else{
-	    return compareTo((MyDateTime)date2);
-	}
-    }
-    
-    /**
-     * Performs the same compareTo method between 2 DateTime objects.
-     */
-    private int compareTo(MyDateTime date2){
-	int result = super.compareTo(date2);
-	if(result==0){
-	    if(hour!=date2.getHour()){
-		return hour-date2.getHour();
-	    } else{
-		return minute-date2.getMinute();
-	    }
-	}
-	return result;
-    }
 }
