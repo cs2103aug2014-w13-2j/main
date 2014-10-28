@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import edu.dynamic.dynamiz.controller.DataFileReadWrite;
 import edu.dynamic.dynamiz.controller.WriteToFileThread;
@@ -309,11 +310,10 @@ public class Storage {
 	}
 	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();	//To hold the resulting list
 	
-	//Hash table is used for quick access in search.
-	//Probability of collision for small value set is low so efficiency is OK.
-	HashSet<Integer> priorityList = new HashSet<Integer>();
-	HashSet<MyDate> startList = new HashSet<MyDate>();
-	HashSet<MyDate> endList = new HashSet<MyDate>();
+	//Use BST for log(N) search time.
+	TreeSet<Integer> priorityList = new TreeSet<Integer>();
+	TreeSet<MyDate> startList = new TreeSet<MyDate>();
+	TreeSet<MyDate> endList = new TreeSet<MyDate>();
 	
 	//Fills the hash tables with distinct values(if applicable).
 	if(priority!=null){
