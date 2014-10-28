@@ -20,7 +20,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
  * @author XYLau
  *
  */
-public class UI extends JPanel implements ActionListener, UIInterface {
+public class UI extends JPanel implements ActionListener {
 	// Screen components
 	protected JTextField inputScreen;
 	protected JTextPane displayScreen;
@@ -60,10 +60,10 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(1000, 500));
+		scrollPane.getViewport().setPreferredSize(new Dimension(500, 250));
 
 		// / Create Command Input
-		inputScreen = new JTextField(500);
+		inputScreen = new JTextField();
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE);
 
@@ -96,7 +96,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 	}
 
 	/**
-	 * Defines the stylesheet for displaying (Hightlights & Priority)
+	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
 		Highlight = new SimpleAttributeSet();
@@ -164,8 +164,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 	// -------------------------------------------------------------------------------------------------
 
 	/**
-	 * Create the GUI and show it. For thread safety, this method should be
-	 * invoked from the event dispatch thread.
+	 * Creates the GUI and displays it
 	 */
 	public static void Screen() {
 		// Create and set up the window.
@@ -176,7 +175,16 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 		frame.add(new UI());
 		displayScreen(frame);
 	}
+	/**
+	 * Displays the Frame
+	 * @param frame
+	 */
+	private static void displayScreen(JFrame frame) {
+		frame.pack();
+		frame.setVisible(true);
+	}
 
+	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
@@ -187,16 +195,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 		});
 	}
 
-	/**
-	 * Displays the Frame
-	 * 
-	 * @param frame
-	 */
-	private static void displayScreen(JFrame frame) {
-		frame.pack();
-		frame.setVisible(true);
-	}
 
+	
 	public void run() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
