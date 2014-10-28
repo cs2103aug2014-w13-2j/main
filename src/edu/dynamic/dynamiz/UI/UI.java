@@ -20,7 +20,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
  * @author XYLau
  *
  */
-public class UI extends JPanel implements ActionListener, UIInter {
+public class UI extends JPanel implements ActionListener, UIInterface {
 	// Screen components
 	protected JTextField inputScreen;
 	protected JTextPane displayScreen;
@@ -31,7 +31,7 @@ public class UI extends JPanel implements ActionListener, UIInter {
 
 	// Formatting Constants
 	private StyledDocument doc;
-	private static Font font = new Font("Arial", Font.PLAIN, 12);
+	private static Font font = new Font("Arial", Font.PLAIN, 15);
 	private String divider = "------------------------------------------------------------------------------------";
 	private final static String newline = "\n";
 	private SimpleAttributeSet Highlight;
@@ -54,6 +54,7 @@ public class UI extends JPanel implements ActionListener, UIInter {
 		// Create Command Display - Screen
 		displayScreen = new JTextPane();
 		displayScreen.setEditable(false);
+		displayScreen.setFont(font);
 
 		// Create Command Display - Scroll
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
