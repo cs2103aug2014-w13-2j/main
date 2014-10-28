@@ -91,6 +91,18 @@ public class Parser {
 		
 		return parsedList;
 	}
+	
+	public List<String> parseOrderingList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String ordering: unparsedList) {
+			OptionType type = OptionType.fromString(ordering);
+			if (type != null) {
+				parsedList.add(type.name());
+			}
+		}
+		
+		return parsedList;
+	}
 
 	/**
 	 * Parse the input with the given regular expression based on the OptionType given.
@@ -134,8 +146,11 @@ public class Parser {
 					}
 					break;
 				case ORDER_BY :
-					option = new Option(type, valueList);
-					input.replace(matcher.start(), matcher.end(), "");
+					List<String> orderingList = parseOrderingList(valueList);
+					if (!orderingList.isEmpty()) {
+						option = new Option(type, orderingList);
+						input.replace(matcher.start(), matcher.end(), "");
+					}
 					break;
 				default: throw new IllegalArgumentException("Invalid OptionType is given");
 			}
