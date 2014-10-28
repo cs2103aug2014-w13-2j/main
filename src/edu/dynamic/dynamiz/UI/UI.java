@@ -40,8 +40,7 @@ public class UI extends JPanel implements ActionListener {
 	private SimpleAttributeSet PriorityMedium;
 	private SimpleAttributeSet PriorityHigh;
 	private SimpleAttributeSet PriorityUrgent;
-	
-	
+
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
@@ -60,7 +59,7 @@ public class UI extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(500, 250));
+		scrollPane.getViewport().setPreferredSize(new Dimension(750, 500));
 
 		// / Create Command Input
 		inputScreen = new JTextField();
@@ -79,9 +78,9 @@ public class UI extends JPanel implements ActionListener {
 
 		// Styling for Command Display - Screen
 		doc = displayScreen.getStyledDocument();
-		
+
 		style();
-		
+
 		// Display: Welcome message
 		try {
 			doc.insertString(0, disp.displayWelcomeMessage() + newline, null);
@@ -102,28 +101,27 @@ public class UI extends JPanel implements ActionListener {
 		Highlight = new SimpleAttributeSet();
 		StyleConstants.setForeground(Highlight, Color.BLACK);
 		StyleConstants.setBold(Highlight, true);
-		
+
 		PriorityNone = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityNone, Color.BLUE);
 		StyleConstants.setBold(PriorityNone, true);
-		
+
 		PriorityLow = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityLow, Color.GREEN);
 		StyleConstants.setBold(PriorityLow, true);
-		
+
 		PriorityMedium = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityMedium, Color.YELLOW);
 		StyleConstants.setBold(PriorityMedium, true);
-		
+
 		PriorityHigh = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityHigh, Color.ORANGE);
 		StyleConstants.setBold(PriorityHigh, true);
-		
+
 		PriorityUrgent = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityUrgent, Color.RED);
 		StyleConstants.setBold(PriorityUrgent, true);
 	}
-
 
 	/**
 	 * Event Handler for each event, where event refers to the entry of a single
@@ -131,6 +129,9 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String input = inputScreen.getText();
+		// Logging: Command Entered
+		LoggerUI.info("Command Entered");
+
 		try {
 			// Command Prompt Display
 			doc.insertString(doc.getLength(), disp.displayPrompt(), Highlight);
@@ -152,7 +153,11 @@ public class UI extends JPanel implements ActionListener {
 			doc.insertString(doc.getLength(), returnResult + newline, null);
 			doc.insertString(doc.getLength(), divider + newline, null);
 
+			// Logging: Return Command Feedback
+			LoggerUI.info("Return Command Feedback");
 		} catch (Exception e) {
+			// Logging: Exception from actionPerformed
+			LoggerUI.warning("Exception @ actionPerformed()");
 			System.out.println(e);
 		}
 
@@ -175,16 +180,20 @@ public class UI extends JPanel implements ActionListener {
 		frame.add(new UI());
 		displayScreen(frame);
 	}
+
 	/**
 	 * Displays the Frame
+	 * 
 	 * @param frame
 	 */
 	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
+		// Logging: Frame = visible
+		LoggerUI.info("displayScreen visible");
+	
 	}
 
-	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
@@ -195,8 +204,6 @@ public class UI extends JPanel implements ActionListener {
 		});
 	}
 
-
-	
 	public void run() {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
