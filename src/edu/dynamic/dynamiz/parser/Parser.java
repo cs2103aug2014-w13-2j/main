@@ -23,7 +23,7 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
  *
  */
 public class Parser {
-	private static final String REGEX_DATE = "\\b(\\d{1,2})\\D*(\\d{1,2})\\D*(\\d{2}|\\d{4})\\b";
+	private static final String REGEX_DATE = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
 	
 	private static Parser parser = null;
 	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
