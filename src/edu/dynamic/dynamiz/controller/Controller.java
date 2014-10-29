@@ -58,7 +58,7 @@ public class Controller {
 	Storage.getInstance();
 	logger.setLevel(Level.INFO);
 	try{
-	    logger.addHandler(new FileHandler(LOGFILENAME));
+	    logger.addHandler(new FileHandler(LOGFILENAME, true));
     	} catch(IOException e){
     	    logger.severe("Unable to open file for logging.");
     	}
