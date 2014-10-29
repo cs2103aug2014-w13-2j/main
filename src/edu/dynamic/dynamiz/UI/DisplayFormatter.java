@@ -260,9 +260,9 @@ public class DisplayFormatter implements DisplayerInterface {
 			break;		
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 
-			s =ef.getCommandType()+" unsuccessful!"+"\n";
-			s = TagFormat.format(s, TagFormat.ERORR);		
-			s+=" "+ef.getMessage();		
+			//s = ef.getCommandType()+" unsuccessful!"+"\n";
+			//s = TagFormat.format(s, TagFormat.ERORR);		
+			s=ef.getMessage();		
 			break;			
 		case SUCCESS_FEEDBACK_TAG:
 			
