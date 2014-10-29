@@ -16,9 +16,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
  * Defines the UI for Dynamiz using Java Swing
- * 
  * @author XYLau
- *
  */
 public class UI extends JPanel implements ActionListener {
 	// Screen components
@@ -31,9 +29,10 @@ public class UI extends JPanel implements ActionListener {
 
 	// Formatting Constants
 	private StyledDocument doc;
-	private static Font font = new Font("Arial", Font.PLAIN, 15);
+	private static Font font = new Font("Arial", Font.PLAIN, 18);
 	private String divider = "------------------------------------------------------------------------------------";
 	private final static String newline = "\n";
+	private SimpleAttributeSet Header;
 	private SimpleAttributeSet Highlight;
 	private SimpleAttributeSet PriorityNone;
 	private SimpleAttributeSet PriorityLow;
@@ -65,6 +64,7 @@ public class UI extends JPanel implements ActionListener {
 		inputScreen = new JTextField();
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE);
+		inputScreen.setFont(font);
 
 		// Add Command Display - Scroll and Command Input into Panel
 		GridBagConstraints c = new GridBagConstraints();
@@ -98,13 +98,17 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
+		Header = new SimpleAttributeSet();
+		StyleConstants.setForeground(Header, Color.BLACK);
+		StyleConstants.setBold(Header, true);
+
 		Highlight = new SimpleAttributeSet();
 		StyleConstants.setForeground(Highlight, Color.BLACK);
 		StyleConstants.setBold(Highlight, true);
 
 		PriorityNone = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityNone, Color.BLUE);
-		StyleConstants.setBold(PriorityNone, true);
+		StyleConstants.setBold(PriorityNone, true);                                                                                                                                                                                                                      
 
 		PriorityLow = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityLow, Color.GREEN);
@@ -134,6 +138,7 @@ public class UI extends JPanel implements ActionListener {
 
 		try {
 			// Command Prompt Display
+			doc.insertString(doc.getLength(), divider + newline, null);
 			doc.insertString(doc.getLength(), disp.displayPrompt(), Highlight);
 			doc.insertString(doc.getLength(), input + newline, Highlight);
 
@@ -142,7 +147,12 @@ public class UI extends JPanel implements ActionListener {
 				LoggerUI.info("Exit Dynamiz");
 				System.exit(0);
 			}
-
+			
+			// Command: Clear (Flush screen)
+			if (input.equalsIgnoreCase("clear")){
+				LoggerUI.info("Exit Dynamiz");
+				
+			}
 			// Command Feedback
 			Feedback feedback = cont.executeCommand(input);
 			String returnResult = disp.displayFeedback(feedback);
@@ -151,7 +161,6 @@ public class UI extends JPanel implements ActionListener {
 			// Feedback Display
 			doc.insertString(doc.getLength(), divider + newline, null);
 			doc.insertString(doc.getLength(), returnResult + newline, null);
-			doc.insertString(doc.getLength(), divider + newline, null);
 
 			// Logging: Return Command Feedback
 			LoggerUI.info("Return Command Feedback");
