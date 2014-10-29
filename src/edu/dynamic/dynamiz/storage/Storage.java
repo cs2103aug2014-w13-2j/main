@@ -481,9 +481,7 @@ public class Storage {
      * @return The ToDoItem object that was removed from the list by this operation.
      * @throws IllegalArgumentException if no item with the given ID is found.
      */
-    public ToDoItem removeItem(String id){
-	assert id!=null && !id.isEmpty();
-	
+    public ToDoItem removeItem(int id){	
 	ToDoItem temp = searchTree.remove(id);
 	if(temp==null){
 	    throw new IllegalArgumentException("No such ID.");
@@ -508,7 +506,7 @@ public class Storage {
      * @return The ToDoItem that is marked as completed.
      * @throws IllegalArgumentException if there is no item with the given ID.
      */
-    public ToDoItem completeItem(String id){
+    public ToDoItem completeItem(int id){
 	ToDoItem item = removeItem(id);
 	if(item!=null){
 	    if(completedList==null){
