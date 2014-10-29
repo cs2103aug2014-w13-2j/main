@@ -2,6 +2,7 @@ package edu.dynamic.dynamiz.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -155,12 +156,26 @@ public class UI extends JPanel implements ActionListener {
 			}
 			// Command Feedback
 			Feedback feedback = cont.executeCommand(input);
-			String returnResult = disp.displayFeedback(feedback);
+			ArrayList<StrIntPair> returnResult = disp.displayFeedback(feedback);
 			assert (returnResult != null);
 
 			// Feedback Display
 			doc.insertString(doc.getLength(), divider + newline, null);
-			doc.insertString(doc.getLength(), returnResult + newline, null);
+			// previously: doc.insertString(doc.getLength(), returnResult + newline, null);
+			
+			// Display feedback
+			for (int i=0;i<returnResult.size();i++){
+				switch(returnResult.get(i).getInt()){
+				case 10: doc.insertString(doc.getLength(), returnResult.get(i).getString(), null);break;
+				case 0: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityNone);break;
+				case 1: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityLow);break;
+				case 2: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityMedium);break;
+				case 4: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityHigh);break;
+				case 8: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityUrgent);break;
+				
+				default: break;
+				}
+			}
 
 			// Logging: Return Command Feedback
 			LoggerUI.info("Return Command Feedback");
