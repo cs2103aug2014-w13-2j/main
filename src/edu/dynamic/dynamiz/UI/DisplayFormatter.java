@@ -378,7 +378,7 @@ public class DisplayFormatter implements DisplayerInterface {
 class TagFormat{
 	//HTML Tag
 	//PRIORITY_TAG
-	private static boolean TAG = false;
+	private static boolean addHTMLTAG = false;
 	public static final String SUCCESS = "";
 	public static final String HELP = "";
 	public static final String ERORR = "";
@@ -409,7 +409,7 @@ class TagFormat{
 	private static final String FORMAT_HTML_TAG = "<div clas = %s >%s</div>";
 	
 	public static String format(String content, String tag){		
-		if(TAG) return String.format(FORMAT_HTML_TAG, tag, content);
+		if(addHTMLTAG) return String.format(FORMAT_HTML_TAG, tag, content);
 		return content;
 	}
 	
@@ -447,7 +447,7 @@ class TagFormat{
 			
 		}
 		s = String.format(FORMAT_HTML_TAG, s,content);
-		if(TAG)return s;
+		if(addHTMLTAG == true) return s;
 		return content;
 	}
 	
