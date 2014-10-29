@@ -40,7 +40,7 @@ public class CommandDelete extends Command implements Undoable {
     /**
      * Executes this command based on the parameters passed in the constructor.
      */
-    public void execute() {
+    public void execute() throws IllegalArgumentException {
 	deletedItem = storage.removeItem(id);
     }
     
@@ -60,7 +60,7 @@ public class CommandDelete extends Command implements Undoable {
      * Re-executes this command.
      * Must only be called after calling this command's undo() method.
      */
-    public void redo(){
+    public void redo() throws IllegalArgumentException {
 	execute();
     }
     
