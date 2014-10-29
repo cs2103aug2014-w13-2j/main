@@ -200,7 +200,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     public void setStatus(String status) throws IllegalArgumentException{
 	assert status!=null && !status.isEmpty();
 	if(!status.equals(DEFAULT_STATUS) && !status.equals(STATUS_INPROGRESS) && !status.equals(STATUS_COMPLETED)){
-	    throw new IllegalArgumentException();
+	    throw new IllegalArgumentException("Invalid status.");
 	}
 	this.status = status;
     }
