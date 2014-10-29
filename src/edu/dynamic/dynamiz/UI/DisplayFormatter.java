@@ -327,17 +327,38 @@ public class DisplayFormatter implements DisplayerInterface {
 		
 	}
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
+		String strFor1 = "|  %-4s|      %-20s|";
+		String strForPri = "%-10s|";
+		String strForTimeSta="%-15s|%-15s|%-10s|\n";
 		assert item!=null;
 		assert contentList!=null;
 		String ID = item.getId();
 		String des = item.getDescription();
+		int pri = item.getPriority();
+		String prioS = TagFormat.formatPri(pri);
+		String starT = "";
+		String endT = "";
+		String stas = item.getStatus();
+		
 		if(des.length()>=18){
 			des = des.substring(0, 18);
 			des = des + "...";
 		}
-		int pri = item.getPriority();
-		String prioS = TagFormat.formatPri(pri);
-		String stas = item.getStatus();
+		if(item instanceof TaskItem){
+			TaskItem t = (TaskItem)item;
+			starT = "---";
+			endT = t.getDeadlineString();
+		}
+		else if (item instanceof EventItem){
+			EventItem t = (EventItem)item;
+			starT = t.getStartDateString();
+			//starT = TagFormat.format(starT, TagFormat.START_TIME);
+			endT = t.getEndDateString();	
+			
+		}
+		contentList.add(new StrIntPair(String.format(strFor1, ID,des)));
+		contentList.add(new StrIntPair(String.format(strForPri, prioS),pri));
+		contentList.add(new StrIntPair(String.format(strForTimeSta,starT,endT,stas)));
 	}
 	
 	
