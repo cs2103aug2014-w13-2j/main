@@ -316,11 +316,13 @@ public class DisplayFormatter implements DisplayerInterface {
 			}
 			}
 			else{
+				displayContentList.add(new StrIntPair(displayDividingLine()));
 				displayContentList.add(new StrIntPair(displayTitleLine()));
-				
+				displayContentList.add(new StrIntPair(displayDividingLine()));
 				for (int i = 0;i <list.length;i++){
 					formatTaskLine(displayContentList,list[i]);
 				}
+				displayContentList.add(new StrIntPair(displayDividingLine()));
 			}
 		}
 		
