@@ -45,7 +45,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	public String displayTitleLine() {
-		String s=String.format("%-20s%15s   %12s  %8s  %8s   ", "Task","Status","Priority","Start Time","End Time");	
+		String s=String.format("|%-4s|%-20s|%-10s|%-15s|%-15s|%-10s","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
@@ -272,7 +272,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			
 			sMsg = sMsg+"\n";	
 			
-			StringBuilder a = new StringBuilder();
+			StringBuilder a = new StringBuilder(displayTitleLine());
 			getFeedbackContent(a,sf);
 			
 			
@@ -306,10 +306,17 @@ public class DisplayFormatter implements DisplayerInterface {
 			
 		}
 		else{ 
+			if(list.length < 5){
 			for( int i = 0 ; i< list.length; i++){
 			a.append(formatTask(list[i]));
 			a.append("\n");
-		}			
+			}
+			}
+			else{
+				for (int i = 0;i <list.length;i++){
+					a.append(list[i].toFileString()).append("\n");
+				}
+			}
 		}
 		
 		
