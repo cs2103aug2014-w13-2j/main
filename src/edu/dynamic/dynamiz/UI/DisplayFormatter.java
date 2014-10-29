@@ -327,7 +327,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		
 	}
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
-		String strFor1 = "|  %-4s|      %-20s|";
+		String strFor1 = "|  %-4s|      %-20s |";
 		String strForPri = "%-10s";
 		String strForTimeSta="|%-15s|%-15s|%-10s|\n";
 		assert item!=null;
@@ -341,7 +341,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String stas = item.getStatus();
 		
 		if(des.length()>=18){
-			des = des.substring(0, 17);
+			des = des.substring(0, 18);
 			des = des + "...";
 		}
 		if(item instanceof TaskItem){
