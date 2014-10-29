@@ -346,7 +346,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
-			starT = "---";
+			starT = "";
 			endT = t.getDeadlineString();
 		}
 		else if (item instanceof EventItem){
