@@ -15,7 +15,7 @@ package edu.dynamic.dynamiz.structure;
  * boolean equals(Object obj)	//Checks if this equals to the given object.
  * String getDescription()	//Gets the description of this item.
  * String getFeedbackString()	//Gets the feedback string format of this item.
- * StringgetId()	//Gets the ID of this item.
+ * int getId()	//Gets the ID of this item.
  * int getPriority()	//Gets the priority level of this item.
  * String getStatus()	//Gets the status of this item.
  * void setDescription(String description)	//Changes the description of this item.
@@ -35,9 +35,6 @@ public class ToDoItem implements Comparable<ToDoItem>{
     public static final String STATUS_INPROGRESS = "in progress";
     public static final String STATUS_COMPLETED = "completed";
     
-    //Number of ToDoItems with the same alphabetical prefix
-    private static final int MAX_IDNUM = 99;
-    
     //Print formats
     private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
 	    						"Status: %4$s";
@@ -46,12 +43,11 @@ public class ToDoItem implements Comparable<ToDoItem>{
     
     //ID is of the form idLetter followed by idNUm.
     //Highest idNum possible is 99, after which idLetter will advance to the next alphabet.
-    private static char idLetter = 'A';
-    private static int idNum = 1;
+    private static int curId = 1;
     
     //Main data members
-    protected String id, description, status;
-    protected int priority;
+    protected String description, status;
+    protected int priority, id;
     
     //Constructors
     /**
@@ -71,7 +67,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
 	this(getNextId(), description, priority, DEFAULT_STATUS);
     }
     
-    protected ToDoItem(String id, String description, int priority, String status){
+    protected ToDoItem(int id, String description, int priority, String status){
 	setId(id);
 	setDescription(description);
 	setPriority(priority);
@@ -96,7 +92,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
      * 		smaller than item.id.
      */
     public int compareTo(ToDoItem item){
-	return id.compareTo(item.getId());
+	return id-item.getId();
     }
     
     @Override
@@ -108,7 +104,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     public boolean equals(Object obj){
 	if(obj instanceof ToDoItem){
 	    ToDoItem temp = (ToDoItem)obj;
-	    return id.equals(temp.getId());
+	    return id==temp.getId();
 	}
 	return false;
     }
@@ -134,19 +130,13 @@ public class ToDoItem implements Comparable<ToDoItem>{
      * Gets the ID of this item.
      * @return The ID string of this object.
      */
-    public String getId(){
+    public int getId(){
 	return id;
     }
     
     //Gets the next id to assign to a new ToDoItem.
-    private static String getNextId(){
-	StringBuilder newId = new StringBuilder(Character.toString(idLetter));
-	newId = newId.append(Integer.toString(idNum));
-	if(idNum==MAX_IDNUM){
-	    idLetter++;
-	}
-	idNum = (idNum+1)%MAX_IDNUM;
-	return newId.toString();
+    private static int getNextId(){
+	return curId++;
     }
     
     /**
@@ -175,8 +165,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     }
     
     //Changes the ID of this item.
-    private void setId(String id){
-	assert id!=null && !id.isEmpty();
+    private void setId(int id){
 	this.id = id;
     }
     
