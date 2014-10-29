@@ -32,6 +32,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
  * ToDoItem markItem(int id)	//Marks the ToDoItem with the given id as completed
  * ToDoItem unmarkItem(int id)	//Marks the ToDoItem with the given id as not completed.
+ * void markItem(ToDoItem item)	//Marks the given ToDoItem as completed.
  * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
  * 
  * @author zixian
@@ -511,12 +512,22 @@ public class Storage {
      */
     public ToDoItem markItem(int id)throws IllegalArgumentException {
 	ToDoItem item = searchTree.get(id);
-	if(item!=null){
-	    item.setStatus(ToDoItem.STATUS_COMPLETED);
-	    Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
-	    writeToFile.run();
+	if(item==null){
+	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
 	}
+	markItem(item);
 	return item;
+    }
+    
+    /**
+     * Marks the given ToDoItem as completed.
+     * @param item The ToDoItem to marks as completed.
+     */
+    public void markItem(ToDoItem item){
+	assert item!=null;
+	item.setStatus(ToDoItem.STATUS_COMPLETED);
+	Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+	writeToFile.run();
     }
     
     /**

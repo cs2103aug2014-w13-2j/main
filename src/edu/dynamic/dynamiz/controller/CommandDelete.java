@@ -24,7 +24,7 @@ public class CommandDelete extends Command implements Undoable {
     private static final String COMMAND_TYPE = "delete";
     
     //Main data members
-    private String id;	//The id of the ToDoItem to remove.
+    private int id;	//The id of the ToDoItem to remove.
     private ToDoItem deletedItem;	//The ToDoItem that is deleted by this command.
     
     /**
@@ -32,9 +32,8 @@ public class CommandDelete extends Command implements Undoable {
      * @param id The ID of the ToDoItem to remove.
      * @param storage The storage object from which the ToDoItem is to be removed.
      */
-    public CommandDelete(String id){
-	assert id!=null && !id.isEmpty();
-	this.id = id.trim();
+    public CommandDelete(int id){
+	this.id = id;
     }
     
     @Override

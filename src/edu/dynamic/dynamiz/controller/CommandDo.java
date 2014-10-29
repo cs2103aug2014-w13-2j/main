@@ -22,15 +22,14 @@ public class CommandDo extends Command implements Undoable{
     private static final String COMMAND_TYPE = "do";
     
     //Main data members
-    private String id;
+    private int id;
     private ToDoItem feedbackItem;
     
     /**
      * Creates a new instance of this command.
      * @param id The ID of the item to mark as completed.
      */
-    public CommandDo(String id){
-	assert id!=null && !id.isEmpty();
+    public CommandDo(int id){
 	this.id = id;
     }
     
@@ -38,8 +37,8 @@ public class CommandDo extends Command implements Undoable{
     /**
      * Executes this command.
      */
-    public void execute() {
-	feedbackItem = storage.completeItem(id);
+    public void execute() throws IllegalArgumentException {
+	feedbackItem = storage.markItem(id);
     }
     
     @Override
@@ -47,7 +46,7 @@ public class CommandDo extends Command implements Undoable{
      * Redo this command.
      */
     public void redo(){
-	execute();
+	storage.markItem(feedbackItem);
     }
     
     @Override
@@ -55,7 +54,7 @@ public class CommandDo extends Command implements Undoable{
      * Undo this command.
      */
     public void undo(){
-	feedbackItem = storage.undoComplete();
+	storage.unmarkItem(feedbackItem);
     }
     
     @Override
