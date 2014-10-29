@@ -12,7 +12,7 @@ public class CommandUndoTest {
     
     @Test
     public void test() {
-	Command cmd = new CommandDo("A2");
+	Command cmd = new CommandDo(2);
 	cmd.execute();
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();
@@ -24,7 +24,7 @@ public class CommandUndoTest {
 	System.out.println(undo.getAffectedItems()[0]);
 	System.out.println();
 	
-	cmd = new CommandUpdate("A2", null, 4, null, null);
+	cmd = new CommandUpdate(2, null, 4, null, null);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	for(ToDoItem i: list)

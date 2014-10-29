@@ -32,8 +32,9 @@ public class CommandUpdate extends Command implements Undoable {
     private static final int UPDATEDINDEX_NEW = 1;
        
     //Main data members
-    private String id, description = null;
+    private String description = null;
     private ToDoItem[] updatedItem;
+    private int id;
  
     private int priority = OptionType.PRIORITY_NONE;
 
@@ -49,8 +50,7 @@ public class CommandUpdate extends Command implements Undoable {
      * @param start The new start date of this item, or null if it is not to be changed.
      * @param end The new end date of this item, or null if it is not to be changed.
      */
-	public CommandUpdate(String id, String newDescription, int newPriority, MyDate newStartDate, MyDate newEndDate) {
-		assert id != null && !id.isEmpty();
+	public CommandUpdate(int id, String newDescription, int newPriority, MyDate newStartDate, MyDate newEndDate) {
 		this.id = id;
 		this.description = newDescription;
 		this.priority = newPriority;
@@ -63,7 +63,7 @@ public class CommandUpdate extends Command implements Undoable {
      * Executes this command.
      * @throws IllegalArgumentException if start and/or end represent invalid dates.
      */
-    public void execute() {
+    public void execute() throws IllegalArgumentException {
     	updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
     }
     
@@ -88,7 +88,7 @@ public class CommandUpdate extends Command implements Undoable {
      * Re-executes this command.
      * Must only be called after calling this command's undo() method.
      */
-    public void redo(){
+    public void redo() throws IllegalArgumentException {
 	storage.removeItem(updatedItem[UPDATEDINDEX_OLD].getId());
 	storage.addItem(updatedItem[UPDATEDINDEX_NEW]);
     }

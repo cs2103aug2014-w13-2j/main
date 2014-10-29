@@ -12,7 +12,7 @@ public class CommandDoTest {
     
     @Test
     public void test() {
-	CommandDo cmd = new CommandDo("A2");
+	CommandDo cmd = new CommandDo(2);
 	cmd.execute();
 	System.out.println(cmd.getAffectedItems()[0]);
 	
@@ -22,7 +22,7 @@ public class CommandDoTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalOperations(){
-	Command cmd = new CommandDo("A4");
+	Command cmd = new CommandDo(4);
 	cmd.execute();
 	assertTrue(cmd.getAffectedItems()==null);
     }

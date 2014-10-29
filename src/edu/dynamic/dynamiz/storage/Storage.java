@@ -120,9 +120,7 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, String description, int priority, MyDate start, MyDate end) throws IllegalArgumentException{
-	assert id!=null && !id.isEmpty();
-	
+    public ToDoItem[] updateItem(int id, String description, int priority, MyDate start, MyDate end) throws IllegalArgumentException{
 	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
 	
@@ -505,7 +503,6 @@ public class Storage {
     
     /**
      * Marks the item with the given ID as completed.
-     * Note: Currently does not write the completed item to file.
      * @param id The id of the item to mark as completed.
      * @return The ToDoItem that is marked as completed.
      * @throws IllegalArgumentException if there is no item with the given ID.
@@ -533,7 +530,8 @@ public class Storage {
     /**
      * Unmark the most recent item that is marked completed.
      * @param id The ID of the ToDoItem to unmark.
-     * @return The ToDoItem object that is unmarked from completed list, or null if no ToDoItem with the given ID exists.
+     * @return The ToDoItem object that is unmarked from completed list.
+     * @throws IllegalArgumentException if no item with the given ID exists.
      */
     public ToDoItem unmarkItem(int id) throws IllegalArgumentException {
 	ToDoItem temp = searchTree.get(id);
