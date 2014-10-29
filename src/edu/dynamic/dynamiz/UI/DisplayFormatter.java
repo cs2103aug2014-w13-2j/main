@@ -51,7 +51,7 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	@Override
 	public String displayDividingLine() {
-		String s = new String("--------------------------------------------------------------------------------------------------------");
+		String s = new String("================================================================================================\n");
 		return s;
 	}
 
