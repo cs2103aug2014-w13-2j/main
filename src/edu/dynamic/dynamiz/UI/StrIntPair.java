@@ -12,4 +12,10 @@ public class StrIntPair {
 		this.s = s;
 		this.intg = defaultTag;
 	}
+	public String getString(){
+		return s;
+	}
+	public int getInt(){
+		return intg;
+	}
 }
