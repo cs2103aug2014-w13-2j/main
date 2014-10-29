@@ -1,7 +1,7 @@
 package edu.dynamic.dynamiz.UI;
 
 public class StrIntPair {
-	static final int defaultTag = 10;
+	static final int defaultTag = 0;
 	private final String s;
 	private final int intg;
 	public StrIntPair(String s, int i){
