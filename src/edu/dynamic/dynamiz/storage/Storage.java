@@ -43,7 +43,7 @@ public class Storage {
     private ArrayList<ToDoItem> toDoItemList;	//Holds items without any dates
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
-    private TreeMap<String, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
+    private TreeMap<Integer, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
     private ArrayList<String> completedList;	//The list of completed items in string representation.
     private Stack<ToDoItem> completedBuffer;	//Buffered list of items marked as completed.
     private static Storage storage;	//Holds the only instance of the Storage object
@@ -53,7 +53,7 @@ public class Storage {
      */
     private Storage(){
 	mainList = DataFileReadWrite.getListFromFile(TODOLIST_FILENAME);
-	searchTree = new TreeMap<String, ToDoItem>();
+	searchTree = new TreeMap<Integer, ToDoItem>();
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
@@ -169,6 +169,21 @@ public class Storage {
     }
     
     /**
+     * Gets the ToDoItem with the given ID, or null if no such ToDoItem exists.
+     * @param id The ID of the ToDoItem to search.
+     * @return A 1-element array of the ToDoItem with the given ID, or null, if no such ToDoItem exists.
+     */
+    public ToDoItem[] searchItems(int id){
+	ToDoItem temp = searchTree.get(id);
+	if(temp==null){
+	    return null;
+	}
+	ToDoItem[] arr = new ToDoItem[1];
+	arr[0] = temp;
+	return arr;
+    }
+    
+    /**
      * Gets a list of ToDoItem objects whose description contains this keyword.
      * @param keyword The keyword to search in the objects or null if no search by keyword is needed.
      * @param priority The priority level to the item(s) to search or -1 if not needed.
@@ -245,7 +260,7 @@ public class Storage {
      */
     private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, MyDate start){
 	assert start!=null && list!=null;
-	ArrayList<ToDoItem> temp = new ArrayList<>();
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
 	for(ToDoItem i: list){
 	    if((i instanceof EventItem) && ((EventItem)i).getStartDate().equals(start)){
 		temp.add(i);

@@ -25,10 +25,20 @@ public class CommandSearch extends Command {
     
     //Main data members
     private String searchKey;
-    private int priority;
+    private int priority, id;
     private MyDate start, end;
     private ToDoItem[] searchList = null;
     private OptionType[] optList;
+    private boolean isIdSearch = false;
+    
+    /**
+     * Creates an instance of this command to search by ID.
+     * @param id The ID of the item to display.
+     */
+    public CommandSearch(int id){
+	this.id = id;
+	isIdSearch = true;
+    }
     
     /**
      * Creates an instance of this search command.
@@ -50,7 +60,11 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	searchList = storage.searchItems(searchKey, priority, start, end, optList);
+	if(isIdSearch){
+	    searchList = storage.searchItems(id);
+	} else{
+	    searchList = storage.searchItems(searchKey, priority, start, end, optList);
+	}
     }
 
     @Override
