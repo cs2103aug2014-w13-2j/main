@@ -341,7 +341,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String stas = item.getStatus();
 		
 		if(des.length()>=18){
-			des = des.substring(0, 18);
+			des = des.substring(0, 17);
 			des = des + "...";
 		}
 		if(item instanceof TaskItem){
