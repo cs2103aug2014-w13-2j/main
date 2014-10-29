@@ -33,13 +33,13 @@ public interface DisplayerInterface {
 	static final String ENTER_TIME_PERIOD_STR = "Please Enter Time Period: ";
 	static final String ENTER_TASK_INDEX_STR = "Please Enter Index: ";
 	
-	public String displayFeedback (Feedback commandFeedBack);
+	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
 
 	public String displayWelcomeMessage();
 	public String displayString(String str);
 	public String displayStringList(ArrayList<String> arr);
 	
-	public String displayTitleLine();
+	//public String displayTitleLine();
 	public String displayDividingLine();
 	
 	/**
@@ -88,7 +88,7 @@ public interface DisplayerInterface {
 	/**
 	 * @return Help page in a formatted String
 	 */
-	public String displayHelpPage();
+	public ArrayList<StrIntPair> displayHelpPage();
 	
 	
 }
