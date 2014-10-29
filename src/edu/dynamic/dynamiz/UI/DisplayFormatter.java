@@ -377,7 +377,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
 //		contentList.add(new StrIntPair("Des: "+des+"\n"));
 //		contentList.add(new StrIntPair("Priority: "));
-		contentList.add(new StrIntPair(prioS,pri));
+		contentList.add(new StrIntPair(prioS+"\n",pri));
 		contentList.add(new StrIntPair("Status: "+stas+"\n"));
 		
 		if(item instanceof TaskItem){
