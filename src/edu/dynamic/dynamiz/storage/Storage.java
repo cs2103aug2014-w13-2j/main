@@ -3,7 +3,6 @@ package edu.dynamic.dynamiz.storage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -28,15 +27,22 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getList(String[] keywords, int[] priority, MyDate[] start, MyDate end, OptionsType[] optionsList)
  * 						//Gets the filtered list of items.
  * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
+ * ToDoItem[] searchItems(int id)	//Gets the ToDoItem with the given ID.
  * ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList)	//Gets a list of items with the given parameter values.
  * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
+ * ToDoItem markItem(int id)	//Marks the ToDoItem with the given id as completed
+ * ToDoItem unmarkItem(int id)	//Marks the ToDoItem with the given id as not completed.
+ * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
  * 
  * @author zixian
  */
 public class Storage {
-    private static final String COMPLETED_FILENAME = "completed.txt";
+    //private static final String COMPLETED_FILENAME = "completed.txt";
     private static final String TODOLIST_FILENAME = "todo.txt";
     private static final String OUTPUT_FILENAME = TODOLIST_FILENAME;
+    
+    //Error messages
+    private static final String MSG_ITEMNOTFOUND = "Item not found.";
     
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
@@ -44,8 +50,6 @@ public class Storage {
     private ArrayList<EventItem> eventList;	//Holds events
     private ArrayList<TaskItem> taskList;	//Holds deadline tasks
     private TreeMap<Integer, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
-    private ArrayList<String> completedList;	//The list of completed items in string representation.
-    private Stack<ToDoItem> completedBuffer;	//Buffered list of items marked as completed.
     private static Storage storage;	//Holds the only instance of the Storage object
     
     /**
@@ -57,7 +61,6 @@ public class Storage {
 	toDoItemList = new ArrayList<ToDoItem>();
 	eventList = new ArrayList<EventItem>();
 	taskList = new ArrayList<TaskItem>();
-	completedBuffer = new Stack<ToDoItem>();
 	
 	//Adds each item in mainList to ID search tree
 	for(ToDoItem temp: mainList){
@@ -116,14 +119,14 @@ public class Storage {
      * @return The updated ToDoItem.
      * @throws IllegalArgumentException if there is no such item with the given id.
      */
-    public ToDoItem[] updateItem(String id, String description, int priority, MyDate start, MyDate end) {
+    public ToDoItem[] updateItem(String id, String description, int priority, MyDate start, MyDate end) throws IllegalArgumentException{
 	assert id!=null && !id.isEmpty();
 	
 	ToDoItem[] list = new ToDoItem[2];
 	ToDoItem target = searchTree.get(id);
 	
 	if(target==null){
-	    throw new IllegalArgumentException("No such ID");
+	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
 	}
 	
 	//Makes a copy of the current version of the object
@@ -484,7 +487,7 @@ public class Storage {
     public ToDoItem removeItem(int id){	
 	ToDoItem temp = searchTree.remove(id);
 	if(temp==null){
-	    throw new IllegalArgumentException("No such ID.");
+	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
 	}
 	mainList.remove(temp);
 	if(temp instanceof TaskItem){
@@ -506,17 +509,11 @@ public class Storage {
      * @return The ToDoItem that is marked as completed.
      * @throws IllegalArgumentException if there is no item with the given ID.
      */
-    public ToDoItem completeItem(int id){
-	ToDoItem item = removeItem(id);
+    public ToDoItem markItem(int id)throws IllegalArgumentException {
+	ToDoItem item = searchTree.get(id);
 	if(item!=null){
-	    if(completedList==null){
-		completedList = DataFileReadWrite.getTextFileContentByLine(COMPLETED_FILENAME);
-	    }
-	    completedBuffer.push(item);
-	    item = makeCopy(item);
 	    item.setStatus(ToDoItem.STATUS_COMPLETED);
-	    completedList.add(item.toFileString());
-	    Thread writeToFile = new WriteToFileThread(completedList.toArray(new String[completedList.size()]), COMPLETED_FILENAME);
+	    Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
 	    writeToFile.run();
 	}
 	return item;
@@ -524,19 +521,27 @@ public class Storage {
     
     /**
      * Unmark the most recent item that is marked completed.
-     * Should only be called after a call to completeItem() method and number of calls
-     * to this method should not exceed that of completeItem() method.
-     * @return The ToDoItem object that is unmarked from completed list.
+     * @param id The ID of the ToDoItem to unmark.
+     * @return The ToDoItem object that is unmarked from completed list, or null if no ToDoItem with the given ID exists.
      */
-    public ToDoItem undoComplete(){
-	assert completedList!=null && !completedBuffer.isEmpty();
-	ToDoItem temp = completedBuffer.pop();
-	completedList.remove(completedList.size()-1);	//The item being removed is always the last element
-							//as it is the most recently added item.
-	addItem(temp);
-	Thread writeToFile = new WriteToFileThread(completedList.toArray(new String[completedList.size()]), COMPLETED_FILENAME);
-	writeToFile.run();
+    public ToDoItem unmarkItem(int id) throws IllegalArgumentException {
+	ToDoItem temp = searchTree.get(id);
+	if(temp==null){
+	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+	}
+	unmarkItem(temp);
 	return temp;
+    }
+    
+    /**
+     * Unmark the most recent item that is marked completed.
+     * @param item The ToDoItem to unmark.
+     */
+    public void unmarkItem(ToDoItem item){
+	assert item!=null;
+	item.setStatus(ToDoItem.STATUS_PENDING);
+	Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+	writeToFile.run();
     }
     
     //Creates a duplicate copy of the given item.
