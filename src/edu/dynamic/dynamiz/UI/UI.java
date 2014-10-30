@@ -58,7 +58,7 @@ public class UI extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(1000, 550));
+		scrollPane.getViewport().setPreferredSize(new Dimension(1000, 600));
 
 		// / Create Command Input
 		inputScreen = new JTextField();
@@ -98,12 +98,13 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
+		// Why do we need colors with this??? Its not a GUI
 		Header = new SimpleAttributeSet();
-		StyleConstants.setForeground(Header, Color.BLUE);
+		StyleConstants.setForeground(Header, Color.BLACK);
 		StyleConstants.setBold(Header, true);                                                                                                                                                                                                                      
 
 		Default = new SimpleAttributeSet();
-		StyleConstants.setForeground(Default, Color.BLUE);
+		StyleConstants.setForeground(Default, Color.BLACK);
 		//StyleConstants.setBold(Default, true);                                                                                                                                                                                                                      
 
 		PriorityLow = new SimpleAttributeSet();
@@ -115,7 +116,7 @@ public class UI extends JPanel implements ActionListener {
 		StyleConstants.setBold(PriorityMedium, true);
 
 		PriorityHigh = new SimpleAttributeSet();
-		StyleConstants.setForeground(PriorityHigh, Color.PINK);
+		StyleConstants.setForeground(PriorityHigh, Color.MAGENTA);
 		StyleConstants.setBold(PriorityHigh, true);
 
 		PriorityUrgent = new SimpleAttributeSet();
@@ -135,8 +136,8 @@ public class UI extends JPanel implements ActionListener {
 		try {
 			// Command Prompt Display
 			doc.insertString(doc.getLength(), divider + newline, Default);
-			doc.insertString(doc.getLength(), disp.displayPrompt(), Default);
-			doc.insertString(doc.getLength(), input + newline, Default);
+			doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
+			doc.insertString(doc.getLength(), input + newline, Header);
 
 			// Command: Exit
 			if (input.equalsIgnoreCase("exit")) {
@@ -166,7 +167,7 @@ public class UI extends JPanel implements ActionListener {
 				case 4: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityHigh);break;
 				case 8: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityUrgent);break;
 				
-				default:doc.insertString(doc.getLength(), returnResult.get(i).getString(), Default);break;
+				default: doc.insertString(doc.getLength(), returnResult.get(i).getString(), Default);break;
 				}
 			}
 
