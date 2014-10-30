@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.joda.time.DateTime;
+
 import edu.dynamic.dynamiz.structure.TaskItem;
+
+
 
 /**
  * FileHandler is a class that reads/writes task list to/from the
@@ -56,6 +60,9 @@ public class DataFileReadWrite {
     
     //Index of date when splitting DateTime string.
     private static final int DATEINDEX = 0;
+    
+    //Number of days to keep completed items in todo.txt before archiving to completed.txt
+    private static final int PERSISTENT_DURATION = 5;
 
     //Object for reading from file.
     private static BufferedReader reader;
@@ -67,31 +74,6 @@ public class DataFileReadWrite {
     private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller.DataFileReadWrite");
     
     /**
-     * Gets a list of text on a per-line basis.
-     * @param filename The name of the text file to read from.
-     * @return A list of text lines read from the given file, an empty list if file is empty or does not exist,
-     * 		and partially-filled list if an IOException occurred during the reading.
-     */
-    public static ArrayList<String> getTextFileContentByLine(String filename){
-	assert filename!=null && !filename.isEmpty();
-	File inFile = new File(filename);
-	ArrayList<String> list = new ArrayList<String>();
-	try{
-	    reader = new BufferedReader(new FileReader(inFile));
-	    String input;
-	    while((input = reader.readLine())!=null){
-		list.add(input);
-	    }
-	    reader.close();
-	} catch(FileNotFoundException e){
-	    logger.log(Level.WARNING, "{0} does not exist.", filename);
-	} catch(IOException e){
-	    logger.log(Level.SEVERE, "IO Exception.");
-	}
-	return list;
-    }
-    
-    /**
      * Reads the task list from the from the specified filename.
      * Stops reading on encountering IOException. May return incomplete list in such case.
      * @param filename Name of file to read list from.
@@ -100,6 +82,9 @@ public class DataFileReadWrite {
     public static ArrayList<ToDoItem> getListFromFile(String filename){
 	File file = new File(filename);
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
+	DateTime currentTime = new DateTime();
+	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
+	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
 	    if(!file.exists()){
@@ -108,11 +93,23 @@ public class DataFileReadWrite {
 	    }
 	    reader = new BufferedReader(new FileReader(file));
 	    String lineInput = reader.readLine();
+	    TaskItem task;
+	    EventItem event;
 	    while(lineInput!=null){
 		if(lineInput.matches(FORMAT_TASKITEM)){
-		    tempList.add(makeTaskItem(lineInput));
+		    task = makeTaskItem(lineInput);
+		    if(task.getStatus().equals(ToDoItem.STATUS_COMPLETED) && task.getDeadline().compareTo(thresholdDate)<0){
+			//write to completed.txt
+		    } else{
+			tempList.add(task);
+		    }
 		} else if(lineInput.matches(FORMAT_EVENTITEM)){
-		    tempList.add(makeEventItem(lineInput));
+		    event = makeEventItem(lineInput);
+		    if(event.getStatus().equals(ToDoItem.STATUS_COMPLETED) && event.getEndDate().compareTo(thresholdDate)<0){
+			//write to completed.txt
+		    } else{
+			tempList.add(event);
+		    }
 		} else if(lineInput.matches(FORMAT_TODOITEM)){
 		    tempList.add(makeToDoItem(lineInput));
 		} else{
