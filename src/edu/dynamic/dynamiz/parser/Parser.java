@@ -83,9 +83,8 @@ public class Parser {
 	public List<String> parsePriorityList(List<String> unparsedList) {
 		List<String> parsedList = new ArrayList<String>();
 		for (String priority: unparsedList) {
-			// TODO: Implement checking of valid Priority String
-			if (true) {//if (OptionType.PRIORITY.isValidString(priority)) {
-				parsedList.add(priority);
+			if (OptionType.isValidPriority(priority)) {//if (OptionType.PRIORITY.isValidString(priority)) {
+				parsedList.add("" + OptionType.getPriority(priority));
 			}
 		}
 		
