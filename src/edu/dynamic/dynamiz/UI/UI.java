@@ -30,7 +30,7 @@ public class UI extends JPanel implements ActionListener {
 
 	// Formatting Constants
 	private StyledDocument doc;
-	private static Font font = new Font("courier new", Font.PLAIN, 15);
+	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
 	private SimpleAttributeSet Header;
