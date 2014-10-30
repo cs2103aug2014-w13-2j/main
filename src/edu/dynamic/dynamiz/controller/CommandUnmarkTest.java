@@ -14,7 +14,7 @@ public class CommandUnmarkTest {
     
     @Test
     public void test() {
-	Command cmd = new CommandDo(1);
+	Command cmd = new CommandMark(1);
 	cmd.execute();
 	assertEquals(1, cmd.getAffectedItems()[0].getId());
 	assertEquals(ToDoItem.STATUS_COMPLETED, cmd.getAffectedItems()[0].getStatus());

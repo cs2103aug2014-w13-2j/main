@@ -6,7 +6,7 @@ import java.util.List;
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
-import edu.dynamic.dynamiz.controller.CommandDo;
+import edu.dynamic.dynamiz.controller.CommandMark;
 import edu.dynamic.dynamiz.controller.CommandHelp;
 import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.controller.CommandRedo;
@@ -299,7 +299,7 @@ public class CommandLine {
 	}
 	
 	private Command parseDo() {
-		return new CommandDo(param);
+		return new CommandMark(param);
 	}
 	
 	private Command parseExit() {

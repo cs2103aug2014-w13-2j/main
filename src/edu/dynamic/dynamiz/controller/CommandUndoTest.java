@@ -12,7 +12,7 @@ public class CommandUndoTest {
     
     @Test
     public void test() {
-	Command cmd = new CommandDo(2);
+	Command cmd = new CommandMark(2);
 	cmd.execute();
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();

@@ -17,7 +17,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * @author zixian
  */
-public class CommandDo extends Command implements Undoable{
+public class CommandMark extends Command implements Undoable{
     //String representation of this command's type
     private static final String COMMAND_TYPE = "do";
     
@@ -29,7 +29,7 @@ public class CommandDo extends Command implements Undoable{
      * Creates a new instance of this command.
      * @param id The ID of the item to mark as completed.
      */
-    public CommandDo(int id){
+    public CommandMark(int id){
 	this.id = id;
     }
     

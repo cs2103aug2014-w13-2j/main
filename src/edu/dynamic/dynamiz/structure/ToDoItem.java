@@ -28,12 +28,20 @@ package edu.dynamic.dynamiz.structure;
  */
 public class ToDoItem implements Comparable<ToDoItem>{
 
+    //ToDoItem defaults
     private static final int DEFAULT_PRIORITY = 0;
     protected static final String DEFAULT_STATUS = "pending";
     
+    //Allowed status values
     public static final String STATUS_PENDING = DEFAULT_STATUS;
-    public static final String STATUS_INPROGRESS = "in progress";
     public static final String STATUS_COMPLETED = "completed";
+    
+    //Allowed priority levels
+    public static final int PRIORITY_URGENT = 8;
+    public static final int PRIORITY_HIGH = 4;
+    public static final int PRIORITY_NORMAL = 2;
+    public static final int PRIORITY_LOW = 1;
+    public static final int PRIORITY_NONE = 0;
     
     //Print formats
     private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
@@ -67,6 +75,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
 	this(getNextId(), description, priority, DEFAULT_STATUS);
     }
     
+    //The main constructor responsible for creating the item.
     protected ToDoItem(int id, String description, int priority, String status){
 	setId(id);
 	setDescription(description);
@@ -188,7 +197,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
      */
     public void setStatus(String status) throws IllegalArgumentException{
 	assert status!=null && !status.isEmpty();
-	if(!status.equals(DEFAULT_STATUS) && !status.equals(STATUS_INPROGRESS) && !status.equals(STATUS_COMPLETED)){
+	if(!status.equals(DEFAULT_STATUS) && !status.equals(STATUS_COMPLETED)){
 	    throw new IllegalArgumentException("Invalid status.");
 	}
 	this.status = status;
