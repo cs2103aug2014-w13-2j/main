@@ -26,7 +26,6 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * 
  * Public Methods:
  * static ArrayList<ToDoItem> getListFromFile(String filename)	Gets a list of ToDoItem from the specified filename
- * static ArrayList<String> getTextFileContentByLine(String filename)	//Gets a list of content from text file on per-line basis.
  * static void writeListToFile(String[] list, String filename)	//Writes the given list of strings to file.
  * 
  * Private Methods:
