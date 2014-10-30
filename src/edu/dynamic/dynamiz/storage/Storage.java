@@ -38,7 +38,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * @author zixian
  */
 public class Storage {
-    //private static final String COMPLETED_FILENAME = "completed.txt";
     private static final String TODOLIST_FILENAME = "todo.txt";
     private static final String OUTPUT_FILENAME = TODOLIST_FILENAME;
     

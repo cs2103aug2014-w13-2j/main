@@ -1,8 +1,8 @@
 bin/
 output.txt
-todo.txt
+todo*.txt
 backup_todo.txt
 reset_todo.sh
 log.txt
 log.txt.*
-completed.txt
+completed*.txt

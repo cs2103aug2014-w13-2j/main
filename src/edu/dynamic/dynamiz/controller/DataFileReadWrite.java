@@ -3,9 +3,10 @@ package edu.dynamic.dynamiz.controller;
 import edu.dynamic.dynamiz.structure.*;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -46,6 +47,9 @@ public class DataFileReadWrite {
     private static final String FORMAT_TASKITEM = ".+; [0-9]+; .+; --/--/---- --:--; "+FORMAT_DATE;
     private static final String FORMAT_TODOITEM = ".+; [0-9]+; .+; --/--/---- --:--; --/--/---- --:--";
     
+    //File names for todo list and completed.list
+    private static final String FILENAME_COMPLETED = "completed.txt";
+    
     //Delimiters for data processing purposes.
     private static final String DATETIME_DELIM = " ";
     private static final String FILESTRING_DELIM = "; ";
@@ -81,17 +85,23 @@ public class DataFileReadWrite {
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
 	File file = new File(filename);
+	File completedFile = new File(FILENAME_COMPLETED);
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	DateTime currentTime = new DateTime();
 	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
+	
 	
 	try{
 	    if(!file.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
 	    }
+	    if(!completedFile.exists()){
+		logger.log(Level.INFO, "{0} does not exist, creating file...", FILENAME_COMPLETED);
+	    }
 	    reader = new BufferedReader(new FileReader(file));
+	    writer = new PrintWriter(new BufferedWriter(new FileWriter(completedFile, true)));
 	    String lineInput = reader.readLine();
 	    TaskItem task;
 	    EventItem event;
@@ -99,14 +109,14 @@ public class DataFileReadWrite {
 		if(lineInput.matches(FORMAT_TASKITEM)){
 		    task = makeTaskItem(lineInput);
 		    if(task.getStatus().equals(ToDoItem.STATUS_COMPLETED) && task.getDeadline().compareTo(thresholdDate)<0){
-			//write to completed.txt
+			writer.println(lineInput);
 		    } else{
 			tempList.add(task);
 		    }
 		} else if(lineInput.matches(FORMAT_EVENTITEM)){
 		    event = makeEventItem(lineInput);
 		    if(event.getStatus().equals(ToDoItem.STATUS_COMPLETED) && event.getEndDate().compareTo(thresholdDate)<0){
-			//write to completed.txt
+			writer.println(lineInput);
 		    } else{
 			tempList.add(event);
 		    }
@@ -118,6 +128,7 @@ public class DataFileReadWrite {
 		lineInput = reader.readLine();
 	    }
 	    reader.close();
+	    writer.close();
 	} catch(IOException e){
 	    logger.log(Level.SEVERE, "IO Exception.");
 	}
