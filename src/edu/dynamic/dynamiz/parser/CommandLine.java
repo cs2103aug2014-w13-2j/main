@@ -97,6 +97,7 @@ public class CommandLine {
 		return true;
 	}
 
+	
 	private Command parseAdd() {
 		Options commandOptions = extractOptions(this.options, CommandType.ADD);
 		ToDoItem commandItem = null;
@@ -156,6 +157,7 @@ public class CommandLine {
 		}
 		
 		return new CommandAdd(commandItem);
+		
 	}
 
 	private Command parseDelete() {
@@ -288,8 +290,12 @@ public class CommandLine {
 	}
 
 	private Command parseHelp() {
-		// TODO: Implement command Help
-		return new CommandHelp();
+		CommandType type = CommandType.fromString(param);
+		if (type != null) {
+			return new CommandHelp(type);
+		} else {
+			return new CommandHelp();
+		}
 	}
 	
 	private Command parseDo() {

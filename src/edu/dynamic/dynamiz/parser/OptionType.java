@@ -51,6 +51,7 @@ public enum OptionType {
 	private static final String RIGHT_END_FORMAT = "(%1$s)(.*)$";
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
+	private static final Map<String, Integer> PRIORITY_TABLE = new HashMap<String, Integer>();
 	
 	private static String allAliasesRegex = "";
 	
@@ -60,6 +61,7 @@ public enum OptionType {
 	public static int PRIORITY_LOW = 1;
 	public static int PRIORITY_NONE = 0;
 	public static int PRIORITY_UNCHANGED = -1;	
+	public static int PRIORITY_INVALID = -2;
 	
 	private static final char OPTION_SIGNAL_CHARACTER = '-';
 	static {
@@ -76,6 +78,27 @@ public enum OptionType {
 		
 		// Remove the last | character
 		allAliasesRegex = allAliases.substring(0, allAliases.length() - 1);
+		
+		// Initialise priority table
+		PRIORITY_TABLE.put("u", PRIORITY_URGENT);
+		PRIORITY_TABLE.put("urg", PRIORITY_URGENT);
+		PRIORITY_TABLE.put("urgent", PRIORITY_URGENT);
+		
+		PRIORITY_TABLE.put("h", PRIORITY_HIGH);
+		PRIORITY_TABLE.put("hig", PRIORITY_HIGH);
+		PRIORITY_TABLE.put("high", PRIORITY_HIGH);
+		
+		PRIORITY_TABLE.put("m", PRIORITY_MEDIUM);
+		PRIORITY_TABLE.put("med", PRIORITY_MEDIUM);
+		PRIORITY_TABLE.put("medium", PRIORITY_MEDIUM);
+		
+		PRIORITY_TABLE.put("l", PRIORITY_LOW);
+		PRIORITY_TABLE.put("low", PRIORITY_LOW);
+		
+		PRIORITY_TABLE.put("n", PRIORITY_NONE);
+		PRIORITY_TABLE.put("none", PRIORITY_NONE);
+		
+		PRIORITY_TABLE.put("unchanged", PRIORITY_UNCHANGED);
 	}
 	
 	/**
@@ -112,6 +135,21 @@ public enum OptionType {
 		}
 		
 		return opt.getOptionType();
+	}
+	
+	/**
+	 * Retrieve PRIORITY
+	 */
+	public static boolean isValidPriority(String priority) {
+		return PRIORITY_TABLE.containsKey(priority.toLowerCase());
+	}
+	
+	public static int getPriority(String priority) {
+		if (isValidPriority(priority)) {
+			return PRIORITY_TABLE.get(priority.toLowerCase()); 
+		}
+		
+		return PRIORITY_INVALID;
 	}
 	
 	/**
