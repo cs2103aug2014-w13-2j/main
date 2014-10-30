@@ -229,7 +229,7 @@ public class Storage {
 	assert list!=null && keyword!=null && !keyword.isEmpty();
 	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
 	for(ToDoItem i: list){
-	    if(i.getDescription().contains(keyword)){
+	    if(i.getDescription().toLowerCase().contains(keyword.toLowerCase())){
 		temp.add(i);
 	    }
 	}
