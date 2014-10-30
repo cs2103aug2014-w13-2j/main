@@ -24,7 +24,7 @@ public class ParserTest {
 		cmdLine = parser.parseCommandLine("delete A1");
 		assertEquals("A1", cmdLine.getParam());
 
-		cmdLine = parser.parseCommandLine("add A2 from 27/9/2014 18:00");
+		cmdLine = parser.parseCommandLine("add A2 on 27/9/2014 from yesterday 18:00 to 23:00");
 		assertEquals("A2", cmdLine.getParam());
 
 		//cmdLine = parser.parseCommandLine("Search study from today");
@@ -32,6 +32,8 @@ public class ParserTest {
 
 		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
+		
+		cmdLine = parser.parseCommandLine("update A3 priority 3 on tomorrow from 18:00 to 23:00");
 		System.out.println(cmdLine);
     }
     
@@ -59,13 +61,14 @@ public class ParserTest {
     public void testParsingDate() {
     	Parser parser = Parser.getInstance();
     	
-    	MyDate date = parser.parseDate("17.10.2014");
+    	MyDate date = parser.parseDate("17/10/2014");
     	assertEquals("17/10/2014", date.toString());
     	
     	date = parser.parseDate("end of October 4pm");
     	assertEquals("31/10/2014 16:00", date.toString());
     	
-    	date = parser.parseDate("next Thursday");
+    	date = parser.parseDate("yesterday 18:00");
+    	System.out.println(date.toString());
     	
     }
     

@@ -13,6 +13,7 @@ import edu.dynamic.dynamiz.controller.CommandRedo;
 import edu.dynamic.dynamiz.controller.CommandSearch;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.controller.CommandUndo;
+import edu.dynamic.dynamiz.controller.CommandUnmark;
 import edu.dynamic.dynamiz.controller.CommandUpdate;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.EventItem;
@@ -85,8 +86,11 @@ public class CommandLine {
 			case HELP:
 				this.command = parseHelp();
 				break;
-			case DO:
-				this.command = parseDo();
+			case MARK:
+				this.command = parseMark();
+				break;
+			case UNMARK:
+				this.command = parseUnmark();
 				break;
 			case EXIT:
 				this.command = parseExit();
@@ -161,8 +165,9 @@ public class CommandLine {
 	}
 
 	private Command parseDelete() {
-		// TODO: Implement ability to delete tasks having the same option
-		return new CommandDelete(param);
+		int id = Integer.parseInt(param);
+		
+		return new CommandDelete(id);
 	}
 
 	private Command parseList() {
@@ -171,6 +176,8 @@ public class CommandLine {
 		// Parse Start and End Date
 		List<MyDate> commandStartDateList = new ArrayList<MyDate>();
 		List<MyDate> commandEndDateList = new ArrayList<MyDate>();
+		List<MyDate> commandOnDateList = new ArrayList<MyDate>();
+		
 		List<Integer> commandPriorityList = new ArrayList<Integer>();
 		List<OptionType> commandOrderList = new ArrayList<OptionType>();
 		
@@ -189,6 +196,17 @@ public class CommandLine {
 		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
 			commandOrderList = extractOptionTypeList(commandOptions);
 		}
+		
+		if (commandOptions.hasOption(OptionType.ON_TIME)) {
+			commandOnDateList = extractDateList(commandOptions, OptionType.ON_TIME);
+			if (!commandOnDateList.isEmpty()) {
+				for (MyDate date: commandOnDateList) {
+					commandStartDateList.add(date);
+					commandEndDateList.add(date);
+				}
+			}
+		}
+		
 		
 		int[] priorities = null;
 		MyDate[] startDates = null;
@@ -263,6 +281,8 @@ public class CommandLine {
 	private Command parseUpdate() {
 		// check param. If have more than just item ID, update the description
 		String itemID = Util.getFirstWord(this.param);
+		int id = Integer.parseInt(itemID);
+		
 		String extraDescription = Util.stripFirstWord(this.param);
 
 		Options commandOptions = extractOptions(this.options, CommandType.UPDATE);
@@ -285,7 +305,7 @@ public class CommandLine {
 		}
 		
 
-		return new CommandUpdate(itemID, extraDescription, commandPriority,
+		return new CommandUpdate(id, extraDescription, commandPriority,
 				commandStartDate, commandEndDate);
 	}
 
@@ -298,8 +318,14 @@ public class CommandLine {
 		}
 	}
 	
-	private Command parseDo() {
-		return new CommandMark(param);
+	private Command parseMark() {
+		int id = Integer.parseInt(param);
+		return new CommandMark(id);
+	}
+	
+	private Command parseUnmark() {
+		int id = Integer.parseInt(param);
+		return new CommandUnmark(id);
 	}
 	
 	private Command parseExit() {

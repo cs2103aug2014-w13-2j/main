@@ -40,7 +40,6 @@ public enum CommandType {
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
-			// TODO Auto-generated method stub
 			return Arrays.asList(optionsArray);
 		}
 	}, UPDATE("upd", "modify", "mod", "edit", "change") {
@@ -51,7 +50,6 @@ public enum CommandType {
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
-			// TODO Auto-generated method stub
 			return Arrays.asList(optionsArray);
 		}
 	}, LIST("display", "show") {
@@ -97,12 +95,18 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, DO("done", "mark") {
+	}, MARK("done", "do", "tick") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
-			// TODO Auto-generated method stub
+			return Arrays.asList(optionsArray);
+		}
+	}, UNMARK("undone", "untick") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
 	}, EXIT() {
