@@ -19,11 +19,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 public class WriteToFileThread extends Thread {
     //Tracks the threads that were previously executed and to be terminated by the incoming thread.
-    private static LinkedList<WriteToFileThread> todoListThreads = new LinkedList<WriteToFileThread>();
-    private static LinkedList<WriteToFileThread> completedListThreads = new LinkedList<WriteToFileThread>();
+    private static LinkedList<WriteToFileThread> runningThreads = new LinkedList<WriteToFileThread>();
     
     //Main data members
-    private boolean isCompletedList = false;	//Indicates if this thread is writing the list of completed items to file
     private String[] list;	//The list of items to write to file
     private String filename;	//The name of the file to write to
     
@@ -38,7 +36,6 @@ public class WriteToFileThread extends Thread {
 	assert list!=null && filename!=null && !filename.isEmpty();
 	this.list = list;
 	this.filename = filename;
-	this.isCompletedList = true;
     }
     
     /**
@@ -63,11 +60,7 @@ public class WriteToFileThread extends Thread {
      */
     public void run(){
 	try{
-	    if(isCompletedList){
-		stopRunningThreadsInList(completedListThreads);
-	    } else{
-		stopRunningThreadsInList(todoListThreads);
-	    }
+	    stopRunningThreads();
 	    DataFileReadWrite.writeListToFile(list, filename);
 	} catch(InterruptedException e){
 	    Thread.currentThread().interrupt();
@@ -76,20 +69,20 @@ public class WriteToFileThread extends Thread {
     }
     
     //Stops all running threads in the given thread list and adds this thread to the given list.
-    private void stopRunningThreadsInList(LinkedList<WriteToFileThread> list) throws InterruptedException {
+    private void stopRunningThreads() throws InterruptedException {
 	synchronized(list){
 	    WriteToFileThread thread;
-	    Iterator<WriteToFileThread> itr = list.iterator();
+	    Iterator<WriteToFileThread> itr = runningThreads.iterator();
 	    while(itr.hasNext()){
 		thread = itr.next();
 		if(!thread.isAlive()){
-		    list.remove(thread);
+		    runningThreads.remove(thread);
 		} else{
 		    thread.interrupt();
 		    thread.join();
 		}
 	    }
 	}
-	list.add(this);
+	runningThreads.add(this);
     }
 }

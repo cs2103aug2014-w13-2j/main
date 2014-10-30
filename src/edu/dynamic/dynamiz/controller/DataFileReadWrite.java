@@ -80,6 +80,8 @@ public class DataFileReadWrite {
     /**
      * Reads the task list from the from the specified filename.
      * Stops reading on encountering IOException. May return incomplete list in such case.
+     * If the ToDoItem is marked as completed and its end date is older than the threshold date,
+     * it will be written to completed.txt and not included in the list for managing.
      * @param filename Name of file to read list from.
      * @return An ArrayList of ToDoItem objects.
      */
@@ -91,7 +93,6 @@ public class DataFileReadWrite {
 	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
-	
 	try{
 	    if(!file.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
@@ -100,12 +101,16 @@ public class DataFileReadWrite {
 	    if(!completedFile.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", FILENAME_COMPLETED);
 	    }
+	    
+	    //Opens todo.txt for reading and completed.txt for writing.
 	    reader = new BufferedReader(new FileReader(file));
 	    writer = new PrintWriter(new BufferedWriter(new FileWriter(completedFile, true)));
-	    String lineInput = reader.readLine();
+	    
+	    //Process input
+	    String lineInput;
 	    TaskItem task;
 	    EventItem event;
-	    while(lineInput!=null){
+	    while((lineInput = reader.readLine())!=null){
 		if(lineInput.matches(FORMAT_TASKITEM)){
 		    task = makeTaskItem(lineInput);
 		    if(task.getStatus().equals(ToDoItem.STATUS_COMPLETED) && task.getDeadline().compareTo(thresholdDate)<0){
@@ -125,10 +130,11 @@ public class DataFileReadWrite {
 		} else{
 		    throw new IOException();
 		}    
-		lineInput = reader.readLine();
 	    }
 	    reader.close();
 	    writer.close();
+	    Thread writeToFileThread = new WriteToFileThread(tempList.toArray(new ToDoItem[tempList.size()]), filename);
+	    writeToFileThread.start();
 	} catch(IOException e){
 	    logger.log(Level.SEVERE, "IO Exception.");
 	}
