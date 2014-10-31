@@ -10,11 +10,15 @@ import java.util.Map.Entry;
 
 /**
  * List of Options
+ * This is a container of {@link Option}. Multiple {@link Option} of the same {@link OptionType} will be 
+ * grouped together.
+ * <p>
+ * Provide utility methods to check for ambiguity if one {@link OptionType} has more than one occurence.
  * 
  * @author nhan
  *
  */
-public class Options implements Iterable<Option> {
+public class Options {
 
 	private Map<OptionType, List<Option>> optionTable;
 
@@ -22,21 +26,36 @@ public class Options implements Iterable<Option> {
 		optionTable = new HashMap<OptionType, List<Option>>();
 	}
 	
+	/**
+	 * Add an option to the Options collection.
+	 * 
+	 * @param opt {@link Option} to add to Options
+	 * @return true of the Option input is succesfully added. False otherwise.
+	 */
 	public boolean add(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
 		
-		List<Option> options = null;
+		List<Option> optionList = null;
+		
 		if (optionTable.containsKey(optType)) {
-			options = optionTable.get(optType);
+			optionList = optionTable.get(optType);
 		} else {
-			options = new ArrayList<Option>();
+			optionList = new ArrayList<Option>();
 		}
-		options.add(opt);
-		optionTable.put(optType, options);
+		optionList.add(opt);
+		optionTable.put(optType, optionList);
 		
 		return true;
 	}
 	
+	/**
+	 * Add a list of {@link Option}. The {@link OptionType} of the list will have to be the same for all 
+	 * the elements. Otherwise, the operation will return false and nothing will be added to Options collection.
+	 * 
+	 * @param optList the list of {@link Option} to be added
+	 * @return true if the list of {@link Option} is of the same {@link OptionType} and succesfully added to the
+	 * collection. False otherwise. 
+	 */
 	public boolean add(List<Option> optList) {
 		assert(optList != null);
 		
@@ -133,19 +152,20 @@ public class Options implements Iterable<Option> {
 		return optionTable.get(optType);
 	}
 
+	/**
+	 * Retrieve the number of different {@link OptionType} of {@link Option} present in the collection
+	 * @return the number of different {@link OptionType}
+	 */
 	public int getNumOfOptions() {
 		return optionTable.size();
 	}
 	
-	public boolean hasAmbiguity() {
-		for (List<Option> c: optionTable.values()) {
-			if (c.size() > 1) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+	/**
+	 * Check if the collection contains cases of ambiguity. This is done by checking that for at least one
+	 * {@link OptionType} of {@link Option}, there is more more than one {@link Option} present in the collection
+	 *
+	 * @return true if there is a case of ambiguity described above. False otherwise.
+	 */
 	public List<OptionType> getAmbiguousOptionTypes() {
 		List<OptionType> list = new ArrayList<OptionType>();
 		for (Entry<OptionType, List<Option>> e: optionTable.entrySet()) {
@@ -163,11 +183,6 @@ public class Options implements Iterable<Option> {
 	 */
 	public boolean isEmpty() {
 		return optionTable.isEmpty();
-	}
-	@Override
-	public Iterator<Option> iterator() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	@Override
