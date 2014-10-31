@@ -159,6 +159,8 @@ public class Parser {
 	 * - Group 1: matching keyword of OptionType
 	 * - Group 2: argument associating matching option type
 	 * 
+	 * Only the last matching token will be extracted.
+	 * 
 	 * @param input The unparsed input
 	 * @param type OptionType to match the Option in return
 	 * @return an Option that is correctly parse or a null if there is no matching.
@@ -168,42 +170,51 @@ public class Parser {
 		String regEx = type.getParsingRegex();
 		Pattern pattern = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(input.toString());
-
-		while (matcher.find()) {
-			String argument = matcher.group(2);
-			String[] values = argument.split("" + Option.DEFAULT_DELIMITER);
-
-			// Sanitise values
-			List<String> valueList = Util.removeEmptyStringsInArray(values);
-			
-			switch (type) {
-				case START_TIME : // Fall through
-				case END_TIME :   // Fall through
-				case ON_TIME : 
-					List<String> dateList = parseDateList(valueList);
-					if (!dateList.isEmpty()) {
-						option = new Option(type, dateList);
-						input.replace(matcher.start(), matcher.end(), "");
-					}
-					break;
-				case PRIORITY :
-					List<String> priorityList = parsePriorityList(valueList);
-					if (!priorityList.isEmpty()) {
-						option = new Option(type, priorityList);
-						input.replace(matcher.start(), matcher.end(), "");
-					}
-					break;
-				case ORDER_BY :
-					List<String> orderingList = parseOrderingList(valueList);
-					if (!orderingList.isEmpty()) {
-						option = new Option(type, orderingList);
-						input.replace(matcher.start(), matcher.end(), "");
-					}
-					break;
-				default: throw new IllegalArgumentException("Invalid OptionType is given");
-			}
-		}
+		StringBuffer output = new StringBuffer();
 		
+		int lastMatchStart = 0;
+		int lastMatchEnd = 0;
+		String argument = "";
+		
+		while (matcher.find()) {
+			// Loop until the last match
+			argument = matcher.group(2);
+			lastMatchStart = matcher.start();
+			lastMatchEnd = matcher.end();
+ 		}
+		
+		String[] values = argument.split("" + Option.DEFAULT_DELIMITER);
+
+		// Sanitise values
+		List<String> valueList = Util.removeEmptyStringsInArray(values);
+
+		switch (type) {
+			case START_TIME: // Fall through
+			case END_TIME: // Fall through
+			case ON_TIME:
+				List<String> dateList = parseDateList(valueList);
+				if (!dateList.isEmpty()) {
+					option = new Option(type, dateList);
+					input.replace(lastMatchStart, lastMatchEnd, "");
+				}
+				break;
+			case PRIORITY:
+				List<String> priorityList = parsePriorityList(valueList);
+				if (!priorityList.isEmpty()) {
+					option = new Option(type, priorityList);
+					input.replace(lastMatchStart, lastMatchEnd, "");
+				}
+				break;
+			case ORDER_BY:
+				List<String> orderingList = parseOrderingList(valueList);
+				if (!orderingList.isEmpty()) {
+					option = new Option(type, orderingList);
+					input.replace(lastMatchStart, lastMatchEnd, "");
+				}
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid OptionType is given");
+		}
 		return option;
 	}
 
@@ -252,6 +263,7 @@ public class Parser {
 		
 		StringBuffer inputCmdBuffer = new StringBuffer(inputCmd);
 	
+		// Parsing only applicable options
 		for (OptionType optType: cmdType.getApplicableOptions()) {
 			Option option = parseOptionAndExtract(inputCmdBuffer, optType);
 			if (option != null) {
