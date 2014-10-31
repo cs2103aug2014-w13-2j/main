@@ -157,6 +157,13 @@ public class Options implements Iterable<Option> {
 		return list;
 	}
 	
+	/**
+	 * Check if the Options contains no Option. 
+	 * @return True if the Options is empty, i.e. containing no Option
+	 */
+	public boolean isEmpty() {
+		return optionTable.isEmpty();
+	}
 	@Override
 	public Iterator<Option> iterator() {
 		// TODO Auto-generated method stub
