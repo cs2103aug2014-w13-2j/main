@@ -82,7 +82,7 @@ public class CommandHelp extends Command {
 			break;
 		case DELETE: helpFile = new File(HELPFILE_DELETE);
 			break;
-		case DO: helpFile = new File(HELPFILE_DO);
+		case MARK: helpFile = new File(HELPFILE_DO);
 			break;
 		case LIST: helpFile = new File(HELPFILE_LIST);
 			break;
