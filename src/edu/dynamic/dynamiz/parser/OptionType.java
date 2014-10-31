@@ -23,12 +23,12 @@ public enum OptionType {
 		public String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
 		}
-	}, START_TIME("-s", "starttime", "from") {
+	}, START_TIME("-s", "starttime", "from", "startdate") {
 		@Override
 		public String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
 		}
-	}, END_TIME("-d", "deadline", "endtime", "to", "by") {
+	}, END_TIME("-d", "-e", "deadline", "endtime", "endtime", "to", "by") {
 		@Override
 		String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
