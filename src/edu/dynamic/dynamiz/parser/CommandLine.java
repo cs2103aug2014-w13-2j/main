@@ -165,9 +165,13 @@ public class CommandLine {
 	}
 
 	private Command parseDelete() {
-		int id = Integer.parseInt(param);
-		
-		return new CommandDelete(id);
+		// TODO: Need a better resolution
+		try {
+			int id = Integer.parseInt(param);
+			return new CommandDelete(id);
+		} catch (NumberFormatException e) {
+			return new CommandDelete(-1);
+		}
 	}
 
 	private Command parseList() {
@@ -239,6 +243,11 @@ public class CommandLine {
 	private Command parseSearch() {
 		// TODO: Implement ability to search with keywords and options
 		Options commandOptions = extractOptions(this.options, CommandType.SEARCH);
+		
+		if (commandOptions.isEmpty() && Util.isInteger(param)) {
+			int id = Integer.parseInt(param);
+			return new CommandSearch(id);
+		}
 		
 		// Parse Start and End Date
 		MyDate commandStartDate = null;
