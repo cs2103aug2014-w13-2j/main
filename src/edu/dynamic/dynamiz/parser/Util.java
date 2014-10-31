@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+
 /**
  * Util class to store some utilities function in String manipulation
  * 
@@ -14,7 +17,8 @@ import java.util.List;
 public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
-	public static final String ESCAPE_CHARACTER = ";";
+	private static final String ESCAPE_CHARACTER = ";";
+	
 	
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
@@ -166,5 +170,24 @@ public final class Util {
 	 */
 	public static String escapeString(String input) {
 		return input.replaceAll(ESCAPE_CHARACTER, "");
+	}
+	
+	/**
+	 * A simple dispatcher to convert a date string representation into respective {@link MyDate} object
+	 * If the string matches {@link MyDateTime.REGEX_DATETIME} then a MyDateTime object will be returned.
+	 * If the string matches {@link MyDate.REGEX_DATE} then a MyDate object will be returned.
+	 * A null object will be returned of neither of the above matches.
+	 * 
+	 * @param dateStr a string representation of the date
+	 * @return corresponding MyDate object if applicable. Otherwise return null
+	 */
+	public static MyDate convertStringToMyDate(String dateStr) {
+		if (dateStr.matches(MyDateTime.REGEX_DATETIME)) {
+			return MyDateTime.makeDateTime(dateStr);
+		} else if (dateStr.matches(MyDateTime.REGEX_DATE)) {
+			return MyDate.makeDate(dateStr);
+		} else {
+			return null;
+		}
 	}
 }
