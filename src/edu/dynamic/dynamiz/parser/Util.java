@@ -14,6 +14,7 @@ import java.util.List;
 public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
+	public static final String ESCAPE_CHARACTER = ";";
 	
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
@@ -154,5 +155,16 @@ public final class Util {
 	 */
 	public static boolean isInteger(String str) {
 		return str.matches("-?\\d+");
+	}
+	
+	/**
+	 * This will remove the escape character from the given input string
+	 * Helping in parsing of ambiguous cases
+	 * 
+	 * @param input the given input to escape from
+	 * @return the escaped string.
+	 */
+	public static String escapeString(String input) {
+		return input.replaceAll(ESCAPE_CHARACTER, "");
 	}
 }
