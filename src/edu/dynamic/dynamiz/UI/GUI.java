@@ -9,37 +9,40 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 /**
- * Originally Planned JavaFX UI for Dynamiz. 
- * TODO: Delete this file. - XY 27/10/14
- * @author "XYLau"
+ * Originally Planned JavaFX UI for Dynamiz. Due to compactibility issues, the
+ * team has decided to stick to Java Swing since the JavaFX feature that was to
+ * be used in the UI requires JDK8 while the project environment runs on JRE7.
+ * 
+ * @author XYLau -unused
  *
  */
 public class GUI extends Application {
 	public static DisplayFormatter disp = new DisplayFormatter();
-	
+
 	@Override
 	public void start(Stage primaryStage) {
-		BorderPane bp = new  BorderPane();
+		BorderPane bp = new BorderPane();
 		primaryStage.setTitle("Dynamiz");
-		
+
 		// Set output area
-		TextArea ta = TextAreaBuilder.create().prefWidth(800).prefHeight(600).wrapText(true).build();
+		TextArea ta = TextAreaBuilder.create().prefWidth(800).prefHeight(600)
+				.wrapText(true).build();
 		ta.setEditable(false);
-		
+
 		bp.setTop(ta);
-		
-		ta.setText(disp.displayWelcomeMessage()+"\n");
-		ta.appendText(disp.displayPrompt(1)+"\n");
-		
+
+		ta.setText(disp.displayWelcomeMessage() + "\n");
+		ta.appendText(disp.displayPrompt(1) + "\n");
+
 		// Set input area
 		TextField tf = new TextField();
 		bp.setBottom(tf);
-		
+
 		primaryStage.setScene(new Scene(bp));
 		primaryStage.show();
-		
-		
+
 	}
 
 	public static void main(String[] args) {
