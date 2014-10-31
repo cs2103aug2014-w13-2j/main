@@ -18,20 +18,50 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
  * This is a Parser class that will parse the given input from the user into CommandLine object
  * which in turn into Command object of suitable type. It also provides the parsing of Date in explicit form
  * e.g. 13/12/2014 or implicit form, e.g. next Thurs. 
+ * <p>
+ * The Parser will divide an input mainly into three groups:
+ * 	1> Command keyword
+ *  2> Parameter
+ *  3> Options
+ *  <p>
+ * Firstly, the Parser will assume that the first word is always a Command keyword (group 1) and remove it from
+ * the input string and check it against the known Command keyword. Then, the Parser will base on the parsed Command
+ * keyword to continue parsing the correct structure corresponding to the {@link CommandType}.
+ * <p>
+ * Then, the Parser will attempt to parse the {@link OptionType} ORDER_BY and then extract if it is applicable to 
+ * the parsed {@link CommandType} 
+ * <p>
+ * Next, the Parser will attempt to parse Option token by recognising a pair of [OptionType value]. The parser will
+ * attempt to parse the value if it is suitable with the OptionType. If both match, then it is consider a valid token
+ * and hence get extracted from the input string. 
+ * <p>
+ * The remaining will be assumed to be the parameter (group 2).
+ * <p>
+ * The Parser class follows the Singleton pattern.
  * 
  * @author nhan
  *
  */
 public class Parser {
+	/** A regular expression matching explicit date format*/
 	private static final String REGEX_DATE = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
 	
+	/** An attribute for Singleton pattern*/
 	private static Parser parser = null;
+	
+	/** A logger instance for this class*/
 	private final static Logger LoggerParser = Logger.getLogger(Parser.class.getName());
 			
+	/**
+	 * Explicitly declare Constructor to be private to override the default Constructor
+	 */
 	private Parser() {
-		
 	}
 	
+	/**
+	 * Retrieve the Singleton instance of Parser class
+	 * @return
+	 */
 	public static Parser getInstance() {
 		if (parser == null) {
 			parser = new Parser();
@@ -41,10 +71,11 @@ public class Parser {
 	}
 	
 	/**
-	 * Retrieve a MyDate object of 
+	 * Retrieve a MyDate object parsed from a string. Using natty library as the main parsing 
+	 * mechanism
 	 * 
-	 * @param date
-	 * @return
+	 * @param dateStr the string that may contain a date information
+	 * @return a parsed MyDate object if applicable, otherwise null
 	 */
 	public MyDate parseDate(String dateStr) {	
 		assert dateStr != null;
@@ -67,6 +98,12 @@ public class Parser {
 		}	
 	}
 	
+	/**
+	 * Retrieve from a list of string a list of parsed dates wherever applicable
+	 * 
+	 * @param unparsedList the unparsed list of string
+	 * @return a Date parsed list of string containing the date
+	 */
 	public List<String> parseDateList(List<String> unparsedList) {
 		List<String> parsedList = new ArrayList<String>();
 		
@@ -80,10 +117,16 @@ public class Parser {
 		return parsedList;
 	}	
 
+	/**
+	 * Retrieve from a list of string a list of parsed Priority wherever applicable
+	 * 
+	 * @param unparsedList the unparsed list of string
+	 * @return a Priority-parsed list of string containing the priorities
+	 */
 	public List<String> parsePriorityList(List<String> unparsedList) {
 		List<String> parsedList = new ArrayList<String>();
 		for (String priority: unparsedList) {
-			if (OptionType.isValidPriority(priority)) {//if (OptionType.PRIORITY.isValidString(priority)) {
+			if (OptionType.isValidPriority(priority)) {
 				parsedList.add("" + OptionType.getPriority(priority));
 			}
 		}
@@ -91,6 +134,12 @@ public class Parser {
 		return parsedList;
 	}
 	
+	/**
+	 * Retrieve from a list of string a list of parsed OptionType wherever applicable
+	 * 
+	 * @param unparsedList the unparsed list of string
+	 * @return an OptionType-parsed list of string containing the OptionType for ordering
+	 */
 	public List<String> parseOrderingList(List<String> unparsedList) {
 		List<String> parsedList = new ArrayList<String>();
 		for (String ordering: unparsedList) {
@@ -170,11 +219,28 @@ public class Parser {
 		return dateStr.replaceAll(REGEX_DATE, "$2/$1/$3");
 	}
 	
+	/**
+	 * Retrieve a Command object after parsing against the given input
+	 * 
+	 * @param inputCmd the unparsed string input given
+	 * @return a parsed Command with appropriate fields
+	 */
 	public Command parse(String inputCmd) {
 		CommandLine cmdLine = parseCommandLine(inputCmd);
 		return cmdLine.getCommand();
 	}
 	
+	/**
+	 * Retrieve a CommandLine object after parsing against the given input
+	 *
+	 * The different between a CommandLine object and Command object is that
+	 * the CommandLine object will simply contain the information regardless 
+	 * of the applicability of that information to the command. Whereas, the 
+	 * Command object will check for the applicability
+	 *  
+	 * @param inputCmd the unparsed string input given
+	 * @return a parsed CommandLine with information (token) parsed
+	 */
 	public CommandLine parseCommandLine(String inputCmd) {
 		assert(inputCmd != null);
 		
@@ -196,10 +262,5 @@ public class Parser {
 		String param = Util.escapeString(inputCmdBuffer.toString().trim());
 		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		return cmdLine;
-	}
-	
-	public static void main(String[] args) {
-		Parser parser = Parser.getInstance();
-		
 	}
 }
