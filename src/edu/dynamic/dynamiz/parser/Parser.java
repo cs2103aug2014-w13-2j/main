@@ -193,7 +193,7 @@ public class Parser {
 			}
 		}
 		
-		String param = inputCmdBuffer.toString().trim();
+		String param = Util.escapeString(inputCmdBuffer.toString().trim());
 		CommandLine cmdLine = new CommandLine(cmdType, options, param);
 		return cmdLine;
 	}
