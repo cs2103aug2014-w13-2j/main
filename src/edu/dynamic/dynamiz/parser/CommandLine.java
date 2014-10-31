@@ -311,11 +311,7 @@ public class CommandLine {
 
 	private Command parseHelp() {
 		CommandType type = CommandType.fromString(param);
-		if (type != null) {
-			return new CommandHelp(type);
-		} else {
-			return new CommandHelp();
-		}
+		return new CommandHelp(type);
 	}
 	
 	private Command parseMark() {
