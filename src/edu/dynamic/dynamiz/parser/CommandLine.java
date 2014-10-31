@@ -2,6 +2,7 @@ package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
@@ -41,7 +42,16 @@ public class CommandLine {
 	private Options options;
 	private String param;
 	private Command command;
-
+	
+	private final int INVALID_ID = -1;
+	
+	/** A logger instance for this class*/
+	private final static Logger LoggerCommandLine = Logger.getLogger(CommandLine.class.getName());
+	
+	private final static String INVALID_ID_MSG = "Not a valid id given: %1$s";
+	private final static String INVALID_COMMANDTYPE_MSG = "Not a valid alias to known CommandType: %1$s";
+	private final static String INVALID_OPTIONTYPE_MSG = "Not a valid alias of known OptionType: %1$s";
+	
 	public CommandLine() {
 		this.commandType = null;
 		this.options = null;
@@ -96,67 +106,65 @@ public class CommandLine {
 				this.command = parseExit();
 				break;
 			default:
+				return false;
 		}
 
 		return true;
 	}
 
-	
+	/**
+	 * Parsing CommandLine object into respective {@link CommandAdd} object
+	 * @return a parsed {@link CommandAdd} object
+	 */
 	private Command parseAdd() {
-		Options commandOptions = extractOptions(this.options, CommandType.ADD);
 		ToDoItem commandItem = null;
 
 		// Handling date
-		boolean hasStart = commandOptions.hasOption(OptionType.START_TIME);
-		boolean hasEnd = commandOptions.hasOption(OptionType.END_TIME);
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
 		boolean hasBoth = hasStart && hasEnd;
 
-		try {
-			MyDate startDate = null;
-			MyDate endDate = null;
-			
-			if (hasStart) {
-				startDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));
-			}
-			
-			if (hasEnd) {
-				endDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.END_TIME));
-			}
-			
-			if (commandOptions.hasOption(OptionType.ON_TIME)) {
-				MyDate onDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.ON_TIME));
-				int dd = onDate.getDayOfMonth();
-				int mm = onDate.getMonth();
-				int yy = onDate.getYear();
-				
-				if (startDate != null) {
-					startDate.setDate(dd, mm, yy);
-				} else {
-					startDate = onDate;
-				}
-				
-				if (endDate != null) {
-					endDate.setDate(dd, mm, yy);
-				} else {
-					endDate = onDate;
-				}
-			}
-			
-			if (hasBoth) {
-				// TODO: Handle ambiguity here
-				commandItem = new EventItem(this.param, startDate, endDate);
-			} else if (hasEnd) {
-				commandItem = new TaskItem(this.param, endDate);
-			} else {
-				commandItem = new ToDoItem(this.param);
-			}
-		} catch (IllegalArgumentException e) {
-			// TODO: Implement Exception handling here
+		MyDate startDate = null;
+		MyDate endDate = null;
+
+		if (hasStart) {
+			startDate = Util.convertStringToMyDate(getFirstOptionValue(options,	OptionType.START_TIME));
 		}
 
+		if (hasEnd) {
+			endDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
+		}
+
+		if (options.hasOption(OptionType.ON_TIME)) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (startDate != null) {
+				startDate.setDate(dd, mm, yy);
+			} else {
+				startDate = onDate;
+			}
+
+			if (endDate != null) {
+				endDate.setDate(dd, mm, yy);
+			} else {
+				endDate = onDate;
+			}
+		}
+
+		if (hasBoth) {
+			commandItem = new EventItem(this.param, startDate, endDate);
+		} else if (hasEnd) {
+			commandItem = new TaskItem(this.param, endDate);
+		} else {
+			commandItem = new ToDoItem(this.param);
+		}
+		
 		// Handling Priority (if applicable)
-		if (commandOptions.hasOption(OptionType.PRIORITY)) {
-			int priority = Integer.parseInt(getFirstOptionValue(commandOptions, OptionType.PRIORITY));
+		if (options.hasOption(OptionType.PRIORITY)) {
+			int priority = Integer.parseInt(getFirstOptionValue(options, OptionType.PRIORITY));
 			commandItem.setPriority(priority);
 		}
 		
@@ -164,19 +172,25 @@ public class CommandLine {
 		
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandDelete} object
+	 * @return a parsed {@link CommandDelete} object
+	 */
 	private Command parseDelete() {
-		// TODO: Need a better resolution
 		try {
 			int id = Integer.parseInt(param);
 			return new CommandDelete(id);
 		} catch (NumberFormatException e) {
-			return new CommandDelete(-1);
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
+			return new CommandDelete(INVALID_ID);
 		}
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandList} object
+	 * @return a parsed {@link CommandList} object
+	 */
 	private Command parseList() {
-		Options commandOptions = extractOptions(this.options, CommandType.LIST);
-		
 		// Parse Start and End Date
 		List<MyDate> commandStartDateList = new ArrayList<MyDate>();
 		List<MyDate> commandEndDateList = new ArrayList<MyDate>();
@@ -185,24 +199,24 @@ public class CommandLine {
 		List<Integer> commandPriorityList = new ArrayList<Integer>();
 		List<OptionType> commandOrderList = new ArrayList<OptionType>();
 		
-		if (commandOptions.hasOption(OptionType.START_TIME)) {
-			commandStartDateList = extractDateList(commandOptions, OptionType.START_TIME);
+		if (options.hasOption(OptionType.START_TIME)) {
+			commandStartDateList = extractDateList(options, OptionType.START_TIME);
 		}
 		
-		if (commandOptions.hasOption(OptionType.END_TIME)) {
-			commandEndDateList = extractDateList(commandOptions, OptionType.END_TIME);
+		if (options.hasOption(OptionType.END_TIME)) {
+			commandEndDateList = extractDateList(options, OptionType.END_TIME);
 		}
 		
-		if (commandOptions.hasOption(OptionType.PRIORITY)) {
-			commandPriorityList = extractPriorityList(commandOptions);
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriorityList = extractPriorityList(options);
 		}
 		
-		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
-			commandOrderList = extractOptionTypeList(commandOptions);
+		if (options.hasOption(OptionType.ORDER_BY)) {
+			commandOrderList = extractOptionTypeList(options);
 		}
 		
-		if (commandOptions.hasOption(OptionType.ON_TIME)) {
-			commandOnDateList = extractDateList(commandOptions, OptionType.ON_TIME);
+		if (options.hasOption(OptionType.ON_TIME)) {
+			commandOnDateList = extractDateList(options, OptionType.ON_TIME);
 			if (!commandOnDateList.isEmpty()) {
 				for (MyDate date: commandOnDateList) {
 					commandStartDateList.add(date);
@@ -239,14 +253,18 @@ public class CommandLine {
 		return new CommandList(priorities, startDates, endDates, orderings);
 	}
 
-
+	/**
+	 * Parsing CommandLine object into respective {@link CommandSearch} object
+	 * @return a parsed {@link CommandSearch} object
+	 */
 	private Command parseSearch() {
-		// TODO: Implement ability to search with keywords and options
-		Options commandOptions = extractOptions(this.options, CommandType.SEARCH);
-		
-		if (commandOptions.isEmpty() && Util.isInteger(param)) {
-			int id = Integer.parseInt(param);
-			return new CommandSearch(id);
+		if (options.isEmpty()) {
+			try {
+				int id = Integer.parseInt(param);
+				return new CommandSearch(id);
+			} catch (NumberFormatException e) {
+				return new CommandSearch(param, OptionType.PRIORITY_UNCHANGED, null, null, null);
+			}
 		}
 		
 		// Parse Start and End Date
@@ -256,88 +274,141 @@ public class CommandLine {
 		
 		List<OptionType> commandOrderList= new ArrayList<OptionType>();
 		
-		if (commandOptions.hasOption(OptionType.START_TIME)) {
-			commandStartDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));
+		if (options.hasOption(OptionType.START_TIME)) {
+			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.START_TIME));
 		}
 		
-		if (commandOptions.hasOption(OptionType.END_TIME)) {
-			commandEndDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.END_TIME));
+		if (options.hasOption(OptionType.END_TIME)) {
+			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
 		}
 		
-		if (commandOptions.hasOption(OptionType.PRIORITY)) {
-			commandPriority = Integer.parseInt(getFirstOptionValue(commandOptions, OptionType.PRIORITY));
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriority = Integer.parseInt(getFirstOptionValue(options, OptionType.PRIORITY));
 		}
 		
-		if (commandOptions.hasOption(OptionType.ORDER_BY)) {
-			List<String> commandOrderStrList = getFirstOptionValues(commandOptions, OptionType.ORDER_BY);
-			for (String s: commandOrderStrList) {
-				commandOrderList.add(OptionType.fromString(s));
-			}
+		if (options.hasOption(OptionType.ORDER_BY)) {
+			commandOrderList = extractOptionTypeList(options);
 		}
 		
 		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate,
 									commandOrderList.toArray(new OptionType[commandOrderList.size()]));
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUndo} object
+	 * @return a parsed {@link CommandUndo} object
+	 */
 	private Command parseUndo() {
 		return new CommandUndo();
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandRedo} object
+	 * @return a parsed {@link CommandRedo} object
+	 */
 	private Command parseRedo() {
 		return new CommandRedo();
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUpdate} object
+	 * @return a parsed {@link CommandUpdate} object
+	 */
 	private Command parseUpdate() {
 		// check param. If have more than just item ID, update the description
 		String itemID = Util.getFirstWord(this.param);
-		int id = Integer.parseInt(itemID);
+		int id;
+		try {
+			id = Integer.parseInt(itemID);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, itemID));
+			id = INVALID_ID;
+		}
 		
 		String extraDescription = Util.stripFirstWord(this.param);
 
-		Options commandOptions = extractOptions(this.options, CommandType.UPDATE);
-
-		// Parse Start and End Date
 		MyDate commandStartDate = null;
 		MyDate commandEndDate = null;
 		
-		if (commandOptions.hasOption(OptionType.START_TIME)) {
-			commandStartDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.START_TIME));
-		}
-		
-		if (commandOptions.hasOption(OptionType.END_TIME)) {
-			commandEndDate = parser.parseDate(getFirstOptionValue(commandOptions, OptionType.END_TIME));
-		}
-		// Parse Priority
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
-		if (commandOptions.hasOption(OptionType.PRIORITY)) {
-			commandPriority = Integer.parseInt(getFirstOptionValue(commandOptions, OptionType.PRIORITY));
+
+		if (options.hasOption(OptionType.START_TIME)) {
+			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.START_TIME));
 		}
 		
+		if (options.hasOption(OptionType.END_TIME)) {
+			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
+		}
+		
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriority = Integer.parseInt(getFirstOptionValue(options, OptionType.PRIORITY));
+		}
 
 		return new CommandUpdate(id, extraDescription, commandPriority,
 				commandStartDate, commandEndDate);
 	}
 
+	/**
+	 * Parsing CommandLine object into respective {@link CommandHelp} object
+	 * @return a parsed {@link CommandHelp} object
+	 */
 	private Command parseHelp() {
-		CommandType type = CommandType.fromString(param);
-		return new CommandHelp(type);
+		try {
+			if (!param.isEmpty()) {
+				CommandType type = CommandType.fromString(param);
+				return new CommandHelp(type);
+			} else {
+				return new CommandHelp(null);
+			}
+		} catch (IllegalArgumentException e) {
+			LoggerCommandLine.warning(String.format(INVALID_COMMANDTYPE_MSG, param));
+			return new CommandHelp(null);
+		}
 	}
 	
+	/**
+	 * Parsing CommandLine object into respective {@link CommandMark} object
+	 * @return a parsed {@link CommandMark} object
+	 */
 	private Command parseMark() {
-		int id = Integer.parseInt(param);
-		return new CommandMark(id);
+		try {
+			int id = Integer.parseInt(param);
+			return new CommandMark(id);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
+			return new CommandMark(INVALID_ID);
+		}
 	}
 	
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUnmark} object
+	 * @return a parsed {@link CommandUnmark} object
+	 */
 	private Command parseUnmark() {
-		int id = Integer.parseInt(param);
-		return new CommandUnmark(id);
+		try {
+			int id = Integer.parseInt(param);
+			return new CommandUnmark(id);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
+			return new CommandUnmark(INVALID_ID);
+		}
 	}
 	
+	/**
+	 * It is redundant to try and parse Exit command into an object
+	 */
 	private Command parseExit() {
 		return null;
 	}
 	
-	
+	/**
+	 * Retrieve the first valid value of the last {@link Option} present in the collection of the given 
+	 * {@link Options}
+	 * 
+	 * @param commandOptions The collection of {@link Option}
+	 * @param optionType The {@link OptionType} of the {@link Option} that is being retrieved
+	 * @return the first valid value of the matching {@link Option} 
+	 */
 	private String getFirstOptionValue(Options commandOptions, OptionType optionType) {
 		List<Option> optionList = commandOptions.getOptions(optionType);
 		Option option = optionList.get(optionList.size() - 1);
@@ -346,37 +417,31 @@ public class CommandLine {
 		return optionStr;
 	}
 	
+	/**
+	 * Retrieve a list of values of the first valid {@link Option} of the given {@link OptionType}
+	 * 
+	 * @param commandOptions The collection of {@link Option} to look for
+	 * @param optionType The {@link OptionType} of the {@link Option} that is being retrieved
+	 * @return the value list of the matching {@link Option}
+	 */
 	private List<String> getFirstOptionValues(Options commandOptions, OptionType optionType) {
 		Option option = commandOptions.getOptions(optionType).get(0);
 		return option.getValues();
 	}
 
 	/**
-	 * Get the list of applicable options from all the options given
+	 * Retrieve a list of {@link MyDate} object from the given list of value
 	 * 
-	 * @param options
-	 *            The unchecked collection of Option
-	 * @return the checked collection of Option
+	 * @param options The collection of {@link Option} to extract from
+	 * @param dateType The {@link OptionType} of the {@link Option} that is being retrieved
+	 * @return a list of {@link MyDate} and/or {@link MyDateTime} objects extracted from the given collection.
 	 */
-	public Options extractOptions(Options options, CommandType commandType) {
-		Options opts = new Options();
-
-		for (OptionType optType : commandType.getApplicableOptions()) {
-			if (options.hasOption(optType)) {
-				List<Option> optList = options.getOptions(optType);
-				opts.add(optList);
-			}
-		}
-
-		return opts;
-	}
-	
 	public List<MyDate> extractDateList(Options options, OptionType dateType) {
 		List<String> values = options.getOptions(dateType).get(0).getValues();
 		List<MyDate> dateList = new ArrayList<MyDate>();
 		
 		for (String value: values) {
-			MyDate date = parser.parseDate(value);
+			MyDate date = Util.convertStringToMyDate(value);
 			if (date != null) {
 				dateList.add(date);
 			}
@@ -385,6 +450,12 @@ public class CommandLine {
 		return dateList;
 	}
 	
+	/**
+	 * Retrieve a list of {@link OptionType.PRIORITY} integer values from the collection
+	 * 
+	 * @param options The collection of {@link Option} to extract from
+	 * @return a list of {@link OptionType.PRIORITY} integer values extracted from the given collection.
+	 */
 	public List<Integer> extractPriorityList(Options options) {
 		List<String> values = options.getOptions(OptionType.PRIORITY).get(0).getValues();
 		List<Integer> priorityList = new ArrayList<Integer>();
@@ -397,49 +468,27 @@ public class CommandLine {
 		return priorityList;
 	}
 	
+	/**
+	 * Retrieve a list of {@link OptionType} values from the collection
+	 * 
+	 * @param options The collection of {@link Option} to extract from
+	 * @return a list of matching {@link OptionType} values extracted from the given collection. 
+	 */
 	public List<OptionType> extractOptionTypeList(Options options) {
 		List<String> values = options.getOptions(OptionType.ORDER_BY).get(0).getValues();
 		List<OptionType> typeList = new ArrayList<OptionType>();
 		
 		for (String value: values) {
-			typeList.add(OptionType.fromString(value));
+			try {
+				OptionType type = OptionType.fromString(value);
+			} catch (IllegalArgumentException e){
+				LoggerCommandLine.warning(String.format(INVALID_OPTIONTYPE_MSG, value));
+			}
 		}
 		
 		return typeList;
 	}
 	
-	// TODO: Need tested for refactor
-	public List<Object> extractValueList(Options options, OptionType type) {
-		List<String> values = options.getOptions(type).get(0).getValues();
-		List<Object> valueList = new ArrayList<Object>();
-		
-		for (String value: values) {
-			switch (type) {
-				case START_TIME : // Fall through
-				case END_TIME :
-					MyDate date = parser.parseDate(value);
-					if (date != null) {
-						valueList.add(date);
-					}
-					break;
-				case PRIORITY :
-					Integer priority = Integer.parseInt(value);
-					if (priority != null) {
-						valueList.add(priority);
-					}
-					break;
-				case ORDER_BY :
-					OptionType optType = OptionType.fromString(value);
-					if (optType != null) {
-						valueList.add(optType);
-					}
-					break;
-				default: throw new IllegalArgumentException();
-			}
-		}
-		
-		return valueList;
-	}
 	/*
 	 * ========================================================================
 	 * Getters & Setters
