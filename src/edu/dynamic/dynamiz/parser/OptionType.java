@@ -180,12 +180,12 @@ public enum OptionType {
 		for (String alias: this.aliases) {
 			if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER) {
 				String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
-				regEx.append(String.format("(?<!%1$s)(?=%1$s)%2$s\\b|", wordRegex, alias));  
+				regEx.append(String.format("(?<!%1$s)%2$s\\b|", wordRegex, alias));
 			} else {
 				regEx.append("\\b" + alias + "\\b" + "|");
 			}
 		}
-		aliasesRegex = regEx.substring(0, regEx.length() - 1);
+		aliasesRegex = String.format("%1$s", regEx.substring(0, regEx.length() - 1));
 	}
 	
 	public String getAliasesRegex() {
