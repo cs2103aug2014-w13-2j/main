@@ -137,4 +137,22 @@ public final class Util {
 		
 		return str;
 	}
+	
+	/**
+	 * Check if a given string has a number format
+	 * @param str the string to check for format
+ 	 * @return true if the string has a number format and false otherwise
+	 */
+	public static boolean isNumber(String str) {
+		return str.matches("-?\\d+(\\.\\d+)?");
+	}
+	
+	/**
+	 * Check if a given string has an integer format
+	 * @param str the string to check for format 
+	 * @return true if the string has an integer format and false otherwise
+	 */
+	public static boolean isInteger(String str) {
+		return str.matches("-?\\d+");
+	}
 }
