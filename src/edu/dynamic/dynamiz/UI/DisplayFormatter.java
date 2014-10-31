@@ -334,7 +334,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String strForTimeSta="|%-18s|%-18s|%-10s|\n";
 		assert item!=null;
 		assert contentList!=null;
-		String ID = item.getId();
+		String ID = "" + item.getId();
 		String des = item.getDescription();
 		int pri = item.getPriority();
 		String prioS = TagFormat.formatPri(pri);
@@ -370,7 +370,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
 					"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
 
-		String ID = item.getId();
+		String ID = "" + item.getId();
 		String des = item.getDescription();
 		int pri = item.getPriority();
 		String prioS = TagFormat.formatPri(pri);
