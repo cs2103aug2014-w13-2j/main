@@ -32,8 +32,8 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
  * the parsed {@link CommandType} 
  * <p>
  * Next, the Parser will attempt to parse Option token by recognising a pair of [OptionType value]. The parser will
- * attempt to parse the value if it is suitable with the OptionType. If both match, then it is consider a valid token
- * and hence get extracted from the input string. 
+ * attempt to parse the value if it is suitable with the OptionType. If both match, then it is considered as a valid 
+ * token and hence get extracted from the input string. 
  * <p>
  * The remaining will be assumed to be the parameter (group 2).
  * <p>
