@@ -1,5 +1,29 @@
-If you are new to command-line interface programs (even for the more sophisticated users), mistakes are unavoidable once in a while, when some wrong information is given in the command input. It will be troublesome to have to remember the full details of the task/event that was wrongly edited, perform a delete, followed by an add operation. Fortunately, the undo command lets you go one command back in time, from which you can make an attempt to correct the command that caused the mistake. This command is simply:
+COMMAND NAME
+		UNDO	
 
-	undo
-
-It is worth noting that undo can be performed multiple times to go back by several commands in time. This introduces the possibility of entering too many undo commands. The redo command lets you move forward in time by 1 command. The format is the same as undo command. Note that if you use a new command after using the undo command, all commands that were previously executed after this undo state will be deleted and you will not be able to redo any of these deleted commands.
+SYNOPSIS
+	UNDO
+		
+DESCRIPTION
+	Command UNDO allows you to undo the previous entered Command and revert
+	the effect of the previous Command.
+	
+	The followings are the Command that are supported with UNDO Command:
+		- ADD
+		- DELETE
+		- MARK
+		- UPDATE
+			
+	The UNDO-able Command's when entered into Dynamiz are kept in a stack in 
+	memory. This allows Dynamiz to keep track of the ordering of the Command
+	entered. So the Command UNDO will undo the most recent UNDO-able Command.
+	
+	Since, the UNDO'able Command's are kept in a stack in memory, restarting 
+	of the session will reset the stack. Therefore, you will not be able to
+	UNDO the command once the session is closed.
+	 
+	If you make a mistake in UNDO an UNDO-able Command, you can revoke an
+	REDO Command to restore the effect of the UNDO-able Command. 
+	For details of REDO Command, enter "help redo".
+	
+		
