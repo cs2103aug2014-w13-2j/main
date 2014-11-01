@@ -1,5 +1,37 @@
-There are times when something no longer needs to be done, maybe due to cancellation but definitely not completed. It will be more logical to strike it off rather than to mark it as completed(which is not true!). The ‘delete’ command lets you do it by specifying the ID of the task/event to remove(this information can be obtained using the list command). The command looks like this:
+COMMAND NAME
+		DELETE		
 
-	delete <id>
-
-Upon execution, Dynamiz displays the full information of the task/event being removed for your verification. If the wrong item has been removed, you can always perform an undo operation to rectify the mistake.
+SYNOPSIS
+	DELETE	[parameter] 
+	
+DESCRIPTION
+	Command DELETE allows the deletion of existing items in Dynamiz.
+	
+	[parameter]: The ID of the item to be deleted.
+	
+	Deletion of an item is straight forward. The deleted will be removed from
+	the database. The deleted item will still be kept in memory for the current 
+	session in case there is an invoke of UNDO Command. However, the deleted
+	item will be lost once Dynamiz is closed and there is no way to retrieve it.
+		
+	Here's how you use the command (as illustrated by examples):
+	
+	---------------------------------------------------------------------------	
+	- Delete an item having ID number of 31:
+	Command: delete 31
+	
+	[parameter]: "31".
+	The item having ID number of 31 will be removed from the database.
+	In case, there is no item having ID number of 31. An error feedback will be 
+	output to acknowledge you about the invalid ID number entered.
+	---------------------------------------------------------------------------
+	
+	Once your tasks have been deleted to Dynamiz, feedback messages will be output
+	onto the Output Screen for you to double check on the information of the item
+	you have deleted.
+	
+	If you make a mistake in deleting undesirable item, you can revoke an
+	UNDO Command to revert the deletion of the item. For details of UNDO Command, 
+	enter "help undo".
+	
+		
