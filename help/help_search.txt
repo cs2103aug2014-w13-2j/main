@@ -1,7 +1,86 @@
-Many a times, several tasks/events have descriptions which contain certain keywords that can also act as informal categorization. Sometimes you may have a long list of things to get done but just want to do things that belong to a certain “category”. The search command helps you filter out items that contain a certain keyword (and hence are more likely to be related to the same context). The search command is defined as:
+COMMAND NAME
+		SEARCH	
 
-	search <keyword>
+SYNOPSIS
+	SEARCH [parameter] [Option arguments]... [ORDER_BY argument]
+	
+DESCRIPTION
+	Command SEARCH allows searching for items in Dynamiz. Search can be
+	conducted for (Description) and (OptionType)
+	
+	[parameter]: The search keywords for (Description) of the items. 
+	Dynamiz will conduct a case-insensitive search, thus, the following
+	search keywords are equivalent "hello", "HELLO", "HeLlO".
+	
+	[Option arguments]: Specify the applicable [Option arguments] for the 
+	item being filtered against. Non-applicable [Option arguments] will be 
+	not be considered in the filtering. [Option arguments] can be added
+	in any order in the command.
+	
+	Applicable (OptionType)'s for Command SEARCH are:
+		START_TIME, END_TIME, ON_TIME, PRIORITY
+	
+	[ORDER_BY argument]: (Optional) Specify the sorting order of the listed
+	items. This [ORDER_BY argument] requires be specified last in the command.
+	If there is no [ORDER_BY argument] specified, a default sorting order of
+	[<status>, PRIORITY, END_TIME, START_TIME]
+		
+	Searching logically performs an Intersection of the items inside the 
+	database that match all of the searching criteria. Hence, Dynamiz will 
+	guarantee to return an empty search list if for one (OptionType), multiple 
+	values are given. 	
+	Here's how you can use the command:
+	---------------------------------------------------------------------------	
+	- Search all task items that contain the keyword "anniversary":
+	Command: search anniversary
+	
+	[parameter]: "anniversary"
+	All task items that have "anniversary" as part of their description will
+	be returned.
+	
+	No [Option arguments] is given. 
+	
+	No [ORDER_BY argument] is specified so the default sorting order of the 
+	listed items will be applied.	
+	---------------------------------------------------------------------------
+	- Search all task items that contain keyword "report" and due 21 Oct 2014:
+	Command: search report due 21 Oct 2014
+	
+	[parameter]: "report"
 
-This gives you a list of tasks/events whose descriptions contain the given keyword.
-As an example, suppose the task added by the add command example is the only item in the list, the command search Programming returns the Programming Assignment task that was previously added.
-
+	[Option arguments]: 
+		END_TIME	: "21 Oct 2014"
+		
+	All task items that have "report" as part of their description and an 
+	END_TIME of 21/10/2014 will be returned. Items fail to match all of 
+	the criteria will not be listed.
+	
+	No [ORDER_BY argument] is specified so the default sorting is applied.
+	---------------------------------------------------------------------------
+	- Search all task items that have Priority LOW and end timing of today, 
+	ordered by start timing:
+	Command: search priority low endtime today orderby starttime
+	
+	No [parameter] is specified, so logically all items in the database will
+	match this criterion.
+	
+	[Option arguments]:
+		PRIORITY		: "low"
+		END_TIME		: "today"
+		
+	[ORDER_BY argument]:  START_TIME
+		
+	All task items that have both the PRIORITY of LOW and END_TIME as today 
+	will be listed. For example, if today is 2/11/2014, then all task items 
+	END_TIME of 2/11/2014 and PRIORITY LOW will be listed. The listed items
+	will be sorted by START_TIME information.
+	---------------------------------------------------------------------------
+	
+	Once your SEARCH command is entered, a list of matching items will be output
+	through the Output Screen. 
+	
+	In case the output list has fewer than 4 items, the listed items will be 
+	listed in individual form. 
+	In case the output list has no fewer than 4, the listed items will be listed as a 
+	constant width formatted list. 
+	In case the output list has no item. A "Empty list" message will be output.  	
