@@ -28,7 +28,7 @@ public enum OptionType {
 		public String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
 		}
-	}, END_TIME("-d", "-e", "deadline", "endtime", "endtime", "to", "by") {
+	}, END_TIME("-d", "-e", "deadline", "endtime", "enddate", "to", "by") {
 		@Override
 		String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, getAliasesRegex(), allAliasesRegex);
@@ -96,6 +96,7 @@ public enum OptionType {
 		PRIORITY_TABLE.put("low", PRIORITY_LOW);
 		
 		PRIORITY_TABLE.put("n", PRIORITY_NONE);
+		PRIORITY_TABLE.put("non", PRIORITY_NONE);
 		PRIORITY_TABLE.put("none", PRIORITY_NONE);
 		
 		PRIORITY_TABLE.put("unchanged", PRIORITY_UNCHANGED);
