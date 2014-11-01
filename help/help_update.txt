@@ -1,1 +1,10 @@
-This is the help page for "update" command.
+It is not uncommon to have deadlines or events being postponed or pushed forward, or something more urgent has appeared that something else becomes less urgent. If the relevant information does not get updated, then the information stored by any GTD program becomes less useful and maybe redundant. The update command lets you do just that. This command supports ALL options that are supported by add command.
+
+However, do note that if there are conflicting options or values, Dynamiz will make a best effort attempt to figure out what your intended change is, which is reflected in the verification output after the operation. If the change is not what you intended, you can undo this command and try another command or use a series of simpler, less arbitrary update commands to achieve the same intended outcome. The command format is:
+
+	update <id> <new_description> priority <new_priority_level> <option> <option_value>
+
+where option can be either ‘from’, ‘to’, and ‘by’.
+
+Suppose the example for the add command adds a new task with ID A1. An example of an update command will be: update A1 by 30/10/2014
+This changes the deadline for Programming Assignment (refer to the section on add command) to 30th October 2014.

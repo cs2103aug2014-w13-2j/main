@@ -1,1 +1,7 @@
-This is the help page for "search" command.
+Many a times, several tasks/events have descriptions which contain certain keywords that can also act as informal categorization. Sometimes you may have a long list of things to get done but just want to do things that belong to a certain “category”. The search command helps you filter out items that contain a certain keyword (and hence are more likely to be related to the same context). The search command is defined as:
+
+	search <keyword>
+
+This gives you a list of tasks/events whose descriptions contain the given keyword.
+As an example, suppose the task added by the add command example is the only item in the list, the command search Programming returns the Programming Assignment task that was previously added.
+

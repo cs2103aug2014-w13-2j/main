@@ -1,1 +1,5 @@
-This is the help page for "undo" command.
+If you are new to command-line interface programs (even for the more sophisticated users), mistakes are unavoidable once in a while, when some wrong information is given in the command input. It will be troublesome to have to remember the full details of the task/event that was wrongly edited, perform a delete, followed by an add operation. Fortunately, the undo command lets you go one command back in time, from which you can make an attempt to correct the command that caused the mistake. This command is simply:
+
+	undo
+
+It is worth noting that undo can be performed multiple times to go back by several commands in time. This introduces the possibility of entering too many undo commands. The redo command lets you move forward in time by 1 command. The format is the same as undo command. Note that if you use a new command after using the undo command, all commands that were previously executed after this undo state will be deleted and you will not be able to redo any of these deleted commands.
