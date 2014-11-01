@@ -115,7 +115,7 @@ public enum OptionType {
 		}
 
 		// Normalising input
-		OptionType opt = ALIAS_TABLE.get(value.toLowerCase());
+		OptionType opt = ALIAS_TABLE.get(value.toLowerCase().trim());
 
 		if (opt == null) {
 			throw new IllegalArgumentException("Not an alias: " + value);
