@@ -1,5 +1,86 @@
-Now that you have added a few tasks/events that you need to take care of, you will want to pick something from this list whenever you want to get something done. This can be done with a simple list command. The format is as follows:
+COMMAND NAME
+		LIST	
 
-	list
-
-This will show you all the tasks/events that have yet to be completed. From this list, if some of them have been completed, are no longer relevant, or needs updating, the relevant actions can be carried out based on the information in this listing.
+SYNOPSIS
+	LIST [Option arguments]... [ORDER_BY argument]
+	
+DESCRIPTION
+	Command LIST allows listing and filtering of items in Dynamiz.
+	
+	[Option arguments]: Specify the applicable [Option arguments] for the 
+	item being filtered against. Non-applicable [Option arguments] will be 
+	not be considered in the filtering. [Option arguments] can be added
+	in any order in the command.
+	
+	Applicable (OptionType)'s for Command LIST are:
+		START_TIME, END_TIME, ON_TIME, PRIORITY
+	
+	[ORDER_BY argument]: (Optional) Specify the sorting order of the listed
+	items. This [ORDER_BY argument] requires be specified last in the command.
+	If there is no [ORDER_BY argument] specified, a default sorting order of
+	[<status>, PRIORITY, END_TIME, START_TIME]
+		
+	Listing logically performs a Union of the items inside the database that
+	match at least one of the filtering criterion. 	
+	Here's how you can use the command:
+	---------------------------------------------------------------------------	
+	- List all the existing items in the database:
+	Command: list
+	
+	No [Option arguments] is given so logically, all the items in the database
+	match this filtering criterion. 
+	
+	No [ORDER_BY argument] is specified so the default sorting order of the 
+	listed items will be applied.	
+	---------------------------------------------------------------------------
+	- List tasks that have either a start timing of today or tomorrow:
+	Command: list starttime today, tomorrow
+	
+	[Option arguments]: 
+		START_TIME	: "today, tomorrow"
+		
+	All task items that have the START_TIME information stated as today or
+	tomorrow will be listed. For example, if today is 2/11/2014, then all task 
+	items that have the START_TIME of 2/11/2014 and 3/11/2014 will be listed.
+	This will logically list Event items that match because only Event items 
+	have START_TIME information.
+	
+	No [ORDER_BY argument] is specified so the default sorting is applied.
+	---------------------------------------------------------------------------
+	- List tasks that have either start timing and end timing of today:
+	Command: list on today
+	
+	[Option arguments]:
+		ON_TIME		: "today"
+		
+	All task items that have either the START_TIME information of today or
+	the END_TIME information as today will be listed. For example, if today is 
+	2/11/2014, then all task items that have START_TIME of 2/11/2014 and/or
+	END_TIME of 2/11/2014 will be listed. 
+	
+	The ON_TIME (OptionType) allows the indication of START_TIME and END_TIME. 
+	Hence, this is equivalent to the Command "list from today to today".
+	
+	No [ORDER_BY argument] is specified so the default sorting is applied.
+	---------------------------------------------------------------------------
+	- List all tasks having priority High regardless of timing and sort by 
+	deadline (the earliest come first):
+	Command: list priority high orderby deadline
+	
+	[Option arguments]:
+		PRIORITY	: "urgent"
+		
+	[ORDER_BY argument]: END_TIME
+	
+	All task items that have PRIORITY HIGH will be listed. The list will be
+	sorted by deadline since [ORDER_BY argument] is specified. 
+	---------------------------------------------------------------------------
+	
+	Once your LIST command is entered, a list of matching items will be output
+	through the Output Screen. 
+	
+	In case the output list has fewer than 4 items, the listed items will be 
+	listed in individual form. 
+	In case the output list has no fewer than 4, the listed items will be listed as a 
+	constant width formatted list. 
+	In case the output list has no item. A "Empty list" message will be output.  	
