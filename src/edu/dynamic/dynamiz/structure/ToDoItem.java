@@ -101,6 +101,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
      * 		smaller than item.id.
      */
     public int compareTo(ToDoItem item){
+	assert item!=null;
 	if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
 	    return -1;
 	} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
@@ -120,6 +121,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
      * @return A boolean value given by (obj instanceof ToDoItem)? this.id.equals(((ToDoItem)obj).id): false;
      */
     public boolean equals(Object obj){
+	assert obj!=null;
 	if(obj instanceof ToDoItem){
 	    ToDoItem temp = (ToDoItem)obj;
 	    return id==temp.getId();
