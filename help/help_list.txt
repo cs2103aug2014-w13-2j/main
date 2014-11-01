@@ -1,1 +1,5 @@
-This is the help page for "list" command.
+Now that you have added a few tasks/events that you need to take care of, you will want to pick something from this list whenever you want to get something done. This can be done with a simple list command. The format is as follows:
+
+	list
+
+This will show you all the tasks/events that have yet to be completed. From this list, if some of them have been completed, are no longer relevant, or needs updating, the relevant actions can be carried out based on the information in this listing.

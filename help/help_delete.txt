@@ -1,1 +1,5 @@
-This is the help page for "delete" command.
+There are times when something no longer needs to be done, maybe due to cancellation but definitely not completed. It will be more logical to strike it off rather than to mark it as completed(which is not true!). The ‘delete’ command lets you do it by specifying the ID of the task/event to remove(this information can be obtained using the list command). The command looks like this:
+
+	delete <id>
+
+Upon execution, Dynamiz displays the full information of the task/event being removed for your verification. If the wrong item has been removed, you can always perform an undo operation to rectify the mistake.

@@ -1,1 +1,34 @@
-This is the help page for "add" command.
+The main command keyword is ‘add’. The syntax is as follows:
+
+	add <event/task_description> <option> <option_value>
+
+This command can have more than one option or no option at all. The syntax differs in the supported options for adding different types of items into Dynamiz. The optional priority option is available to all ‘add’ commands.
+
+	a) Event Tasks
+To add an event, the supported options are ‘from’, ‘to’, and ‘on’. So your input will be something like:
+
+	add <event_description>  priority <priority_level> from <start date> to <end_date>
+
+OR
+
+	add <event_description> priority <priority_level> on <date>
+
+Note that the options ‘from’ and ‘to’ need not be used together.
+
+	b) Deadline Tasks
+To add a deadline task, the support option is ‘by’, and your input will generally be like:
+
+	add <task_description> priority <priority_level> by <deadline>
+
+	c) Floating Tasks
+If the task’s or event’s relevant dates have yet to be confirmed, just the description and the priority level(optional) will suffice, with the resulting command being:
+
+	add <description> priority <priority_level>
+
+	d) Code Example
+Any details to be given to this task/event in the future can be done using the update functionality, which is explain later in this guide.
+
+An example of an add command is: add Programming Assignment by 31/10/2014
+This adds a new task called Programming Assignment, whose deadline is 31st October 2014.
+
+On executing any of these commands, Dynamiz shows you the details of the task/event being added for your verification. If any of the information is wrong, you can either undo the previous command or perform an update to correct the information.
