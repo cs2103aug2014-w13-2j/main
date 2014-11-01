@@ -38,6 +38,9 @@ public class MyDate implements Comparable<MyDate>{
     protected static final String FORMAT_DATE = "%1$d/%2$d/%3$d";
     public static final String REGEX_DATE = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}";
     
+    //Error message
+    private static final String MSG_INVALIDDATE = "Invalid date.";
+    
     //The main data members of this class.
     private int year, month, date;
     
@@ -65,9 +68,6 @@ public class MyDate implements Comparable<MyDate>{
      * 		on the actual calendar.
      */
     public MyDate(int date, int month, int year) throws IllegalArgumentException{
-	if(!isValidDate(date, month, year)){
-	    throw new IllegalArgumentException();
-	}
 	setDate(date, month, year);
     }
     
@@ -170,12 +170,13 @@ public class MyDate implements Comparable<MyDate>{
      * @throws IllegalArgumentException if any of the parameters cause the new date value to be incorrect
      * 		in the actual calendar.
      */
-    public void setDate(int date, int month, int year){
-	if(isValidDate(date, month, year)){
-	    setDayOfMonth(date);
-	    setMonth(month);
-	    setYear(year);
+    public void setDate(int date, int month, int year) throws IllegalArgumentException {
+	if(!isValidDate(date, month, year)){
+	    throw new IllegalArgumentException(MSG_INVALIDDATE);   
 	}
+	setDayOfMonth(date);
+	setMonth(month);
+	setYear(year);
     }
 
     /**
