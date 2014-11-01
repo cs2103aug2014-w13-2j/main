@@ -18,7 +18,7 @@ import java.util.Map;
  *
  */
 public enum OptionType {
-	PRIORITY("-p", "priority") {
+	PRIORITY("-p") {
 		@Override
 		public String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
