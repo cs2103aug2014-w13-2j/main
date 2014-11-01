@@ -54,7 +54,10 @@ COMMAND INPUT STRUCTURE
 		[Option arguments]:
 	An [Option arguments] consists of a pair of (OptionType) and (values) in 
 	which the values are applicable to its OptionType. Each value in (values) is
-	separated by a comma character.
+	separated by a comma character. 
+	
+	[Option arguments] can be given in any order except for ORDER_BY which 
+	requires it to be the last.
 
 	(OptionType) | (aliases) ...									<(values)>			
 	: (Description)
@@ -79,7 +82,7 @@ COMMAND INPUT STRUCTURE
 		HIGH	| h | hi		: Specify High priority to an item.
 		MEDIUM	| m | med		: Specify Medium priority to an item.
 		LOW		| l				: Specify Low priority to an item.
-		NONE	| n | non		: Speicify None priority to an item. (Default)
+		NONE	| n | non		: Specify None priority to an item. (Default)
 
 	<Timing expr>:
 		Any explicit forms of date time expression. E.g.: 13/10/2014 14:00.
