@@ -2,15 +2,29 @@ package edu.dynamic.dynamiz.structure;
 
 /**
  * Defines the feedback object returned after each operation.
+ * 
+ * Constructor
+ * Feedback(String commandType, String command)	//Creates a new instance of this feedback.
+ * 
+ * Public Methods
+ * String getCommandType()	//Gets the command type of the command that this feedback is used for.
+ * String getOriginalComamnd()	//Gets the input command that this feedback is used for.
+ * String getClassName()	//gets the String representation of this feedback's class.
+ * 
  * @author zixian
  */
 public abstract class Feedback {
+    //The String representation of this feedback's class.
     public static final String CLASSNAME = "Feedback"; 
     
     //Main data members
     private String commandType, originalCommand;
     
-    //Constructor
+    /**
+     * Creates a new instance of this feedback.
+     * @param commandType The type of command this feedback is used for.
+     * @param command the input command that this feedback is used for.
+     */
     public Feedback(String commandType, String command){
 	this.commandType = commandType;
 	this.originalCommand = command;
@@ -34,6 +48,7 @@ public abstract class Feedback {
     
     /**
      * Returns the name of this object's class.
+     * @return The String representation of this feedback's class.
      */
     public String getClassName(){
 	return CLASSNAME;
