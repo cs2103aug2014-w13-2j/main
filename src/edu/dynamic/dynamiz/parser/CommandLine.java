@@ -262,15 +262,6 @@ public class CommandLine {
 	 * @return a parsed {@link CommandSearch} object
 	 */
 	private Command parseSearch() {
-		if (options.isEmpty()) {
-			try {
-				int id = Integer.parseInt(param);
-				return new CommandSearch(id);
-			} catch (NumberFormatException e) {
-				return new CommandSearch(param, OptionType.PRIORITY_UNCHANGED, null, null, null);
-			}
-		}
-		
 		// Parse Start and End Date
 		MyDate commandStartDate = null;
 		MyDate commandEndDate = null;
