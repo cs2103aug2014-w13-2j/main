@@ -26,7 +26,7 @@ public class CommandSearch extends Command {
     
     //Main data members
     private String searchKey;
-    private int priority, id;
+    private int priority;
     private MyDate start, end;
     private ToDoItem[] searchList = null;
     private OptionType[] optList;
@@ -52,11 +52,7 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	if(isIdSearch){
-	    searchList = storage.searchItems(id);
-	} else{
-	    searchList = storage.searchItems(searchKey, priority, start, end, optList);
-	}
+	   searchList = storage.searchItems(searchKey, priority, start, end, optList);
     }
 
     @Override
