@@ -223,4 +223,31 @@ public class EventItem extends ToDoItem {
 	return String.format(FORMAT_FILESTRING, description, priority, status,
 				getDateString(startDate), getDateString(endDate));
     }
+    
+    @Override
+    public int compareTo(ToDoItem item){
+	assert item!=null;
+	int result;
+	if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
+	    return -1;
+	} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
+	    return 1;
+	} else if(item instanceof TaskItem){
+	    if((result = startDate.compareTo(((TaskItem)item).getDeadline()))!=0){
+		return result;
+	    }
+	} else if(item instanceof EventItem){
+	    if((result = startDate.compareTo(((EventItem)item).getStartDate()))!=0){
+		return result;
+	    } else if((result = endDate.compareTo(((EventItem)item).getEndDate()))!=0){
+		return result;
+	    }
+	} else{
+	    return -1;
+	}
+	if(priority!=item.getPriority()){
+	    return item.getPriority()-priority;
+	}
+	return id-item.getId();
+    }
 }
