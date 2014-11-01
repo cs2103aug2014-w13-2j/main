@@ -28,7 +28,7 @@ public enum OptionType {
 		public String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
 		}
-	}, END_TIME("-d", "-e", "deadline", "endtime", "enddate", "to", "by") {
+	}, END_TIME("-d", "-e", "deadline", "endtime", "enddate", "to", "by", "due") {
 		@Override
 		String getParsingRegex() {
 			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);

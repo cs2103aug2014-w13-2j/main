@@ -56,8 +56,7 @@ COMMAND INPUT STRUCTURE
 	which the values are applicable to its OptionType. Each value in (values) is
 	separated by a comma character. 
 	
-	[Option arguments] can be given in any order except for ORDER_BY which 
-	requires it to be the last.
+	[Option arguments] can be given in any order except for ORDER_BY which requires it to be the last.
 
 	(OptionType) | (aliases) ...									<(values)>			
 	: (Description)
@@ -68,7 +67,8 @@ COMMAND INPUT STRUCTURE
 	START_TIME	| -s | starttime | startdate | from					<Timing expr>
 	: Specify the start timing. Applicable for Event item only.
 
-	END_TIME	| -d | -e | deadline | endtime | enddate | to | by	<Timing expr>
+	END_TIME	| -d | -e | deadline | endtime 
+				| enddate | to | by	|due 							<Timing expr>
 	: Specify the end timing. Applicable for Event item and Task item.
 
 	ON_TIME		| on												<Timing expr>
@@ -82,7 +82,7 @@ COMMAND INPUT STRUCTURE
 		HIGH	| h | hi		: Specify High priority to an item.
 		MEDIUM	| m | med		: Specify Medium priority to an item.
 		LOW		| l				: Specify Low priority to an item.
-		NONE	| n | non		: Specify None priority to an item. (Default)
+		NONE	| n | non		: Speicify None priority to an item. (Default)
 
 	<Timing expr>:
 		Any explicit forms of date time expression. E.g.: 13/10/2014 14:00.
