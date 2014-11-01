@@ -1,10 +1,83 @@
-It is not uncommon to have deadlines or events being postponed or pushed forward, or something more urgent has appeared that something else becomes less urgent. If the relevant information does not get updated, then the information stored by any GTD program becomes less useful and maybe redundant. The update command lets you do just that. This command supports ALL options that are supported by add command.
+COMMAND NAME
+		UPDATE	
 
-However, do note that if there are conflicting options or values, Dynamiz will make a best effort attempt to figure out what your intended change is, which is reflected in the verification output after the operation. If the change is not what you intended, you can undo this command and try another command or use a series of simpler, less arbitrary update commands to achieve the same intended outcome. The command format is:
+SYNOPSIS
+	UPDATE [parameter] [Option arguments]... 
+	
+DESCRIPTION
+	Command UPDATE allows updating an existing item in Dynamiz. 
+	
+	[parameter]: The parameter can be divided into two parts. The first 
+	part (required) is the ID number of the item to be updated. The second part 
+	(optional) is the update in the description of the item. The description
+	will be overwritten.
+	
+	[Option arguments]: Specify the [Option arguments] of the 
+	item being updated. Non-applicable [Option arguments] will be 
+	deemed as part of the description updated. [Option arguments] can be added
+	in any order in the command.
+	
+	Applicable (OptionType)'s for Command SEARCH are:
+		START_TIME, END_TIME, ON_TIME, PRIORITY
+	
+	Updating an existing item will modify the information of that item with 
+	the new information. The command will overwrite the (OptionType) where 
+	applicable. This allows the possibility of transforming task item of 
+	one type to another (e.g., from a floating task to event task). 	
+	Here's how you can use the command:
+	---------------------------------------------------------------------------	
+	- Update the description of an item ID 12 with reserving the remaining 
+	information:
+	Command: update 12 A new description
+	
+	[parameter]: "12 A new description"
+	The first part of [parameter] will specify the ID number of the item to
+	be updated so item having ID number 12 will be updated with the second 
+	part of [parameter]. Hence, item having ID number 12 will have a new
+	description of "A new description"
+	
+	No [Option arguments] is given so all the other information is preserved. 
+	---------------------------------------------------------------------------
+	- Update item ID 13 with a new deadline 12 Nov 2014 5pm:
+	Command: update 13 due 12 Nov 2014 5pm
+	
+	[parameter]: "13"
 
-	update <id> <new_description> priority <new_priority_level> <option> <option_value>
-
-where option can be either ‘from’, ‘to’, and ‘by’.
-
-Suppose the example for the add command adds a new task with ID A1. An example of an update command will be: update A1 by 30/10/2014
-This changes the deadline for Programming Assignment (refer to the section on add command) to 30th October 2014.
+	[Option arguments]: 
+		END_TIME	: "12 Nov 2014 5pm"
+		
+	The first part of [parameter] specifies "13" hence the item having ID number
+	13 will be updated. The second part of [parameter] is empty, hence there will 
+	be no change in the description. A new END_TIME information is given so
+	the item having ID number 13 will have its END_TIME information updated, 
+	regardless of what the previous value it holds. 
+	---------------------------------------------------------------------------
+	- Update item ID 14 with a new description, a new start timing, and a new
+	priority: 
+	Command: update 14 Meeting with The President at MBS from 13/11/2014 17:00
+	priority low
+	
+	[parameter]: "14 Meeting with The President at MBS"
+	
+	[Option arguments]:
+		START_TIME	: "13/11/2014 17:00"
+		PRIORITY	: "low" 
+	
+	The first part of [parameter] specifies "14" hence the item having ID number
+	14 will be updated. The second part of the [parameter] specifies "Meeting
+	with The President at MBS", hence, the existing description will be over-
+	written with this.
+	
+	A new PRIORITY is specified so the PRIORITY information of item ID 14 will 
+	be assigned as LOW. A new START_TIME is specified as well so the START_TIME
+	information of this item will be assigned as 13/11/2014 17:00.
+	---------------------------------------------------------------------------
+	
+	Once your UPDATE command is entered and the item is present in the database,
+	the previous information of the updated item will be given along with the 
+	updated information to the Output Screen for you to double check.
+	
+	If you make a mistake in typing information to the item, you can revoke an
+	UNDO Command to remove the item. For details of UNDO Command, enter "help 
+	undo".
+		
