@@ -51,6 +51,29 @@ public class ParserTest {
     }
     
     @Test
+    public void testEscapingInput() {
+    	Parser parser = Parser.getInstance();
+    	CommandLine cmdLine;
+    	
+    	// TODO: Add assertEquals for Option parsed as well
+    	// With normal OptionType
+    	cmdLine = parser.parseCommandLine("add ;from Fri ;to Sat ;on 12 Dec from yesterday to today");
+    	assertEquals("from Fri to Sat on 12 Dec", cmdLine.getParam());
+    	
+    	// With ORDER_BY OptionType
+    	cmdLine = parser.parseCommandLine("search ;orderby -s from yesterday orderby -s");
+    	assertEquals("orderby -s", cmdLine.getParam());
+    	
+    	// With both normal OptionType and ORDER_BY
+    	cmdLine = parser.parseCommandLine("s ;orderby -s ;from today 2am ;priority high from tomorrow -p u orderby -s");
+    	assertEquals("orderby -s from today 2am priority high", cmdLine.getParam());
+    	
+    	// Escape aliases with preceding '-' character
+    	cmdLine = parser.parseCommandLine("s ;-s tomorrow -s today");
+    	assertEquals("-s tomorrow", cmdLine.getParam());
+    }
+    
+    @Test
     public void testAliases() {
     	Parser parser = Parser.getInstance();
     	
@@ -62,7 +85,7 @@ public class ParserTest {
     		assertEquals(CommandType.ADD, cmdLine.getCommandType());
     	}
     	
-    	String[] delCommands = {"delete A1", "DEL A1", "reMoVe A1"};
+    	String[] delCommands = {"delete 1", "DEL 1", "reMoVe 1"};
 
     	for (String c: delCommands) {
     		cmdLine = parser.parseCommandLine(c);
