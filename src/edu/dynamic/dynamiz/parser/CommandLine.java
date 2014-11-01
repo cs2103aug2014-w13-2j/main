@@ -490,6 +490,7 @@ public class CommandLine {
 		for (String value: values) {
 			try {
 				OptionType type = OptionType.fromString(value);
+				typeList.add(type);
 			} catch (IllegalArgumentException e){
 				LoggerCommandLine.warning(String.format(INVALID_OPTIONTYPE_MSG, value));
 			}
