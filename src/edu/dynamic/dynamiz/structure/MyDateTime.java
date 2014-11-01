@@ -33,6 +33,10 @@ public class MyDateTime extends MyDate {
     private static final String FORMAT_TIME = "%1$d:%2$02d";
     public static final String REGEX_DATETIME = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4} [0-9]{1,2}:[0-9]{1,2}";
     
+    //Error message
+    private static final String MSG_INVALIDDATETIME = "Invalid date/time.";
+    private static final String MSG_INVALIDTIME = "Invalid time.";
+    
     //The main additional data members
     private int hour, minute;
     
@@ -153,10 +157,11 @@ public class MyDateTime extends MyDate {
      * @param the year.
      * @param hour The hour of the day in 24-hour clock.
      * @param minute The minute.
+     * @throws IllegalArgumentException if the date and time is invalid on the calendar and/or 24-hour clock.
      */
     public void setDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	if(!isValidDate(date, month, year) || !isValidTime(hour, minute)){
-	    throw new IllegalArgumentException("Invalid date/time.");
+	    throw new IllegalArgumentException(MSG_INVALIDDATETIME);
 	}
 	setDate(date, month, year);
 	setTime(hour, minute);
@@ -178,7 +183,7 @@ public class MyDateTime extends MyDate {
      */
     public void setTime(int hour, int minute) throws IllegalArgumentException{
 	if(!isValidTime(hour, minute)){
-	    throw new IllegalArgumentException();
+	    throw new IllegalArgumentException(MSG_INVALIDTIME);
 	}
 	setHour(hour);
 	setMinute(minute);
