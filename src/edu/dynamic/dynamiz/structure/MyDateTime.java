@@ -3,9 +3,25 @@ package edu.dynamic.dynamiz.structure;
 import java.util.Calendar;
 import java.util.Date;
 
-
 /**
  * Defines an object containing both date and time. Time is defined using 24-hour clock.
+ * 
+ * Constructor
+ * MyDateTime()	//Creates a new instance of MyDateTime using the default date and time values.
+ * MyDateTime(int date, int month, int year)	//Creates a new date instance.
+ * MyDateTime(int date, int month, int year, int hour, int minute)	//Creates a new date and time instance.
+ * MyDateTime(MyDate date)	//Downcasting constructor for MyDate objects.
+ * MyDateTime(Date date)	//Creates a MyDateTime instance from the given Date object for storage purpose.
+ * 
+ * Public Methods
+ * int getHour()	//Gets the hour field of this date time object.
+ * int getMinute()	//Gets the minute field of this date time object.
+ * static boolean isValidTime(int hour, int minute)	//Checks if the given time is valid.
+ * static MyDateTime makeDateTime(String dateString)	//Creates a new MydateTime object from the given date and time string.
+ * void setDateTime(int date, int month, int year, int hour, int minute)	//Sets the new value of date and time.
+ * void setTime(int hour, int minute)	//Sets the time of this date time object.
+ * String toString()	//Gets the String rerpesentation of this date time object.
+ * 
  * @author zixian
  */
 public class MyDateTime extends MyDate {
@@ -29,6 +45,7 @@ public class MyDateTime extends MyDate {
     
     /**
      * Downcast constructor for Date object and copy constructor for DateTime object.
+     * @param date The MyDate object to be downcasted.
      */
     public MyDateTime(MyDate date){
 	this(date.getDayOfMonth(), date.getMonth(), date.getYear());
@@ -40,6 +57,10 @@ public class MyDateTime extends MyDate {
     
     /**
      * Creates a new DateTime object with the specified date, using the default time.
+     * @param date The day of the month.
+     * @param The month of the year.
+     * @param year The year.
+     * @throws IllegalArgumentException if the given date is invalid on the calendar.
      */
     public MyDateTime(int date, int month, int year) throws IllegalArgumentException{
 	this(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
@@ -47,6 +68,11 @@ public class MyDateTime extends MyDate {
     
     /**
      * Creates a new DateTime object with the specified date and time details.
+     * @param date The day of the month.
+     * @param month The month of the year.
+     * @param year The year.
+     * @param hour The hour of the day in 24-hour clock.
+     * @param minute The minute.
      * @throws IllegalArgumentException if the date and time is invalid on the calendar of 24-hour clock.
      */
     public MyDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
@@ -54,7 +80,7 @@ public class MyDateTime extends MyDate {
     }
     
     /**
-     * Create a new DateTime object with the given java.util.Date
+     * Creates a new DateTime object with the given java.util.Date
      * @param date the given Date to be converted into MyDateTime
      */
     public MyDateTime(Date date) {
@@ -110,6 +136,8 @@ public class MyDateTime extends MyDate {
 
     /**
      * Checks if the given time is valid.
+     * @param hour The hour of the day.
+     * @param minute The minute.
      * @return True if the given time is in the range [00:00, 23:59] and false otherwise.
      */
     public static boolean isValidTime(int hour, int minute){
@@ -120,6 +148,11 @@ public class MyDateTime extends MyDate {
     
     /**
      * Sets this to the given date and time.
+     * @param date The day of the month.
+     * @param month The month of the year.
+     * @param the year.
+     * @param hour The hour of the day in 24-hour clock.
+     * @param minute The minute.
      */
     public void setDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
 	if(!isValidDate(date, month, year) || !isValidTime(hour, minute)){
@@ -139,6 +172,8 @@ public class MyDateTime extends MyDate {
     
     /**
      * Sets the time of this DateTime object.
+     * @param hour The hour of the day in 24-hour clock.
+     * @param minute The minute of the hour.
      * @throws IllegalArgumentException if the parameters result in an invalid time.
      */
     public void setTime(int hour, int minute) throws IllegalArgumentException{
@@ -160,5 +195,4 @@ public class MyDateTime extends MyDate {
 	output.append(String.format(FORMAT_TIME, hour, minute));
 	return output.toString();
     }
-
 }
