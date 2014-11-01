@@ -88,4 +88,18 @@ public class TaskItemTest {
 	task2.setPriority(5);
 	assertFalse(task.getPriority()==task2.getPriority());
     }
+    
+    @Test
+    public void testCompareTo(){
+	ToDoItem task1 = new TaskItem("A", 4, new MyDate(5, 11, 2014));
+	ToDoItem task2 = new ToDoItem("B", 4);
+	assertEquals(-1, task1.compareTo(task2));
+	task2 = new TaskItem("B", 4, new MyDate(4, 11, 2014));
+	assertEquals(1, task1.compareTo(task2));
+	assertEquals(-1, task2.compareTo(task1));
+	task2 = new EventItem("B", 4, new MyDate(4, 11, 2014), new MyDate(6, 11, 2014));
+	assertEquals(1, task1.compareTo(task2));
+	task2 = new EventItem("B", 2, new MyDate(5, 11, 2014), new MyDate(6, 11, 2014));
+	assertTrue(task1.compareTo(task2)<0);
+    }
 }

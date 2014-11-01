@@ -69,4 +69,16 @@ public class EventItemTest {
 	System.out.println();
     }
     
+    @Test
+    public void testCompareTo(){
+	ToDoItem event1 = new EventItem("A", 4, new MyDate(4, 11, 2014), new MyDate(5, 11, 2014));
+	ToDoItem event2 = new EventItem("B", 4, new MyDate(5, 11, 2014), new MyDate(5, 11, 2014));
+	assertEquals(-1, event1.compareTo(event2));
+	event2 = new ToDoItem("B", 4);
+	assertEquals(-1, event1.compareTo(event2));
+	event2 = new TaskItem("B", 8, new MyDate(4, 11, 2014));
+	assertTrue(event1.compareTo(event2)>0);
+	event2 = new EventItem("B", 4, new MyDate(4, 11, 2014), new MyDate(6, 11, 2014));
+	assertTrue(event1.compareTo(event2)<0);
+    }
 }

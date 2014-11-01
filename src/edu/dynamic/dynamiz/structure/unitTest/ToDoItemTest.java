@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 public class ToDoItemTest {
@@ -29,7 +33,6 @@ public class ToDoItemTest {
     @Test
     public void testToString(){
 	ToDoItem item = new ToDoItem("Do CS2103T", 1);
-	//System.out.println(item.getId());	"A3"
 	assertEquals("3 Do CS2103T 1 pending --/--/---- --:-- --/--/---- --:--", item.toString());
     }
     
@@ -37,5 +40,17 @@ public class ToDoItemTest {
     public void testToFileString(){
 	ToDoItem item = new ToDoItem("Do CS2103T", 2);
 	assertEquals("Do CS2103T; 2; pending; --/--/---- --:--; --/--/---- --:--", item.toFileString());
+    }
+    
+    @Test
+    public void testCompareTo(){
+	ToDoItem item1 = new ToDoItem("A", 4);
+	ToDoItem item2 = new ToDoItem("B", 4);
+	item1.setStatus(ToDoItem.STATUS_COMPLETED);
+	assertEquals(1, item1.compareTo(item2));
+	item2 = new EventItem("B", 3, new MyDate(1, 11, 2014), new MyDateTime(2, 1, 2014, 15, 0));
+	assertEquals(1, item1.compareTo(item2));
+	item2 = new TaskItem("B", 3, new MyDateTime(3, 11, 2014));
+	assertEquals(1, item1.compareTo(item2));
     }
 }

@@ -101,6 +101,15 @@ public class ToDoItem implements Comparable<ToDoItem>{
      * 		smaller than item.id.
      */
     public int compareTo(ToDoItem item){
+	if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
+	    return -1;
+	} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
+	    return 1;
+	} else if(!item.getClass().getName().equals(this.getClass().getName())){
+	    return 1;
+	} else if(priority!=item.getPriority()){
+	    return item.getPriority()-priority;
+	}
 	return id-item.getId();
     }
     
