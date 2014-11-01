@@ -1,107 +1,103 @@
-1. System Requirements
+NAME 
+		Dynamiz - a Command Line Interface Getting-Thing-Done programme written 
+		in Java
 
-Currently, Dynamiz only requires Java Runtime Environment (JRE) 7 to run. In the future, Dynamiz might require Third Party code libraries such as JavaFX to enhance the visual aspects of Dynamiz.
+VERSION 
+		v0.4
 
-2. Launch! 
-To start off, please fire up Dynamiz from the Desktop or the Start Menu.
-Using Dynamiz can be a very simple thing to do: Enter a command, hit the ‘Enter’ button and you are done!
+GRAPHICAL USER INTERFACE
 
-Dynamiz displays the details of the action done as a result of the given command. You can use this to verify if Dynamiz carries out your desired action and undo the previous command if the result is not what you expected. More details on the command syntax for the various actions will be explained later.
+--------------------------------------------------------------------------------
+|______________________________________________________________________________|
+|	Output Screen															   |
+|																			   |
+|																			   |
+|																		       |
+|																			   |
+|																		       |
+|																			   |
+|______________________________________________________________________________|
+| Command Input Panel														   |
+|______________________________________________________________________________|
+--------------------------------------------------------------------------------
 
-3. General Command Format
-The general expression presented in this guide is of the form:
+		The Output Screen is where the feedback from Dynamiz will be displayed.
+		The Command Input Panel is where you will type the command.
+	
+COMMAND INPUT STRUCTURE 
+	SYNOPSIS 
+		[Command] [parameter] [Option arguments]...
 
-	<command_name> <main_parameter> <option> <option_value>
+		[Command]: 
+	(CommandType) | (aliases) ...				: (Description)
+	ADD			  | a | put						: Adding an item to Dynamiz.
+	DELETE		  | d | del | remove			: Delete an item from Dynamiz.
+	UPDATE		  | u | upd | modify
+				  | mod | edit | change			: Update an item in Dynamiz.
+	LIST		  | l | ls | display | show		: Listing items from Dynamiz.
+	UNDO		  | un | ud						: Undo the previous command.
+	REDO		  | re | rd						: Redo the previous command.
+	HELP		  | h	| man					: Open Help doc for Dynamiz.
+	MARK		  | m | done | do | tick		: Mark an item as completed.
+	UNMARK		  | um | undone | untick		: Unmark completed item.
+	SHOW		  | sh | view					: Inspect an item in details.
+	EXIT		  | e | quit | bye | ! | close	: Exit the programme.
+	
+		[parameter]:
+	A string parameter to add to a [Command]. 
+	Applicable [Command]: ADD, DELETE, UPDATE, HELP, MARK, UNMARK, SHOW
+	
+	The parameter will aid the given [Command] in performing its function. 
+	Details on the behaviour each parameter for each [Command] listed can be 
+	found in the respective Help file
+	
+		[Option arguments]:
+	An [Option arguments] consists of a pair of (OptionType) and (values) in 
+	which the values are applicable to its OptionType. Each value in (values) is
+	separated by a comma character.
 
-The texts enclosed by angular brackets describe the information detail to be provided, without the angular brackets. For some commands, more than 1 option can be used in conjunction with the command, while some commands do not take in any options. Specifics of each command type will be explained in the next few sections. Note that if the option value is a date or a date and time, the value formats are dd/mm/yyyy and dd/mm/yyyy hh:mm respectively.
+	(OptionType) | (aliases) ...									<(values)>			
+	: (Description)
 
-4. Add Items
-The main command keyword is ‘add’. The syntax is as follows:
+	PRIORITY	| -p												<Priority expr> 
+	: Specify the priority of an item.
 
-	add <event/task_description> <option> <option_value>
+	START_TIME	| -s | starttime | startdate | from					<Timing expr>
+	: Specify the start timing. Applicable for Event item only.
 
-This command can have more than one option or no option at all. The syntax differs in the supported options for adding different types of items into Dynamiz. The optional priority option is available to all ‘add’ commands.
+	END_TIME	| -d | -e | deadline | endtime | enddate | to | by	<Timing expr>
+	: Specify the end timing. Applicable for Event item and Task item.
 
-	a) Event Tasks
-To add an event, the supported options are ‘from’, ‘to’, and ‘on’. So your input will be something like:
+	ON_TIME		| on												<Timing expr>
+	: Specify implicitly the start timing and end timing.
 
-	add <event_description>  priority <priority_level> from <start date> to <end_date>
+	ORDER_BY	| -o | orderby | sortby								<OptionType>
+	: Specify the ordering of sorting by using OptionType as criteria.
+	
+	<Priority expr>:
+		URGENT	| u | urg		: Specify Urgent priority to an item.
+		HIGH	| h | hi		: Specify High priority to an item.
+		MEDIUM	| m | med		: Specify Medium priority to an item.
+		LOW		| l				: Specify Low priority to an item.
+		NONE	| n | non		: Speicify None priority to an item. (Default)
 
-OR
+	<Timing expr>:
+		Any explicit forms of date time expression. E.g.: 13/10/2014 14:00.
+		And any implicit forms of date time expression. E.g.: Next Friday, the day
+		after tomorrow.
 
-	add <event_description> priority <priority_level> on <date>
+	<OptionType>:
+		Any valid of the OptionType keywords and their aliases as stated above.
+		E.g.: by, endtime.
 
-Note that the options ‘from’ and ‘to’ need not be used together.
 
-	b) Deadline Tasks
-To add a deadline task, the support option is ‘by’, and your input will generally be like:
+For a more detailed description of each Command, enter "help" and the respective
+Command. For example:
+ - help add
+ - help list
+ - help update
 
-	add <task_description> priority <priority_level> by <deadline>
-
-	c) Floating Tasks
-If the task’s or event’s relevant dates have yet to be confirmed, just the description and the priority level(optional) will suffice, with the resulting command being:
-
-	add <description> priority <priority_level>
-
-	d) Code Example
-Any details to be given to this task/event in the future can be done using the update functionality, which is explain later in this guide.
-
-An example of an add command is: add Programming Assignment by 31/10/2014
-This adds a new task called Programming Assignment, whose deadline is 31st October 2014.
-
-On executing any of these commands, Dynamiz shows you the details of the task/event being added for your verification. If any of the information is wrong, you can either undo the previous command or perform an update to correct the information.
-
-5. List Items
-Now that you have added a few tasks/events that you need to take care of, you will want to pick something from this list whenever you want to get something done. This can be done with a simple list command. The format is as follows:
-
-	list
-
-This will show you all the tasks/events that have yet to be completed. From this list, if some of them have been completed, are no longer relevant, or needs updating, the relevant actions can be carried out based on the information in this listing.
-
-6. Delete Tasks
-There are times when something no longer needs to be done, maybe due to cancellation but definitely not completed. It will be more logical to strike it off rather than to mark it as completed(which is not true!). The ‘delete’ command lets you do it by specifying the ID of the task/event to remove(this information can be obtained using the list command). The command looks like this:
-
-	delete <id>
-
-Upon execution, Dynamiz displays the full information of the task/event being removed for your verification. If the wrong item has been removed, you can always perform an undo operation to rectify the mistake.
-
-7. Update Tasks
-It is not uncommon to have deadlines or events being postponed or pushed forward, or something more urgent has appeared that something else becomes less urgent. If the relevant information does not get updated, then the information stored by any GTD program becomes less useful and maybe redundant. The update command lets you do just that. This command supports ALL options that are supported by add command.
-
-However, do note that if there are conflicting options or values, Dynamiz will make a best effort attempt to figure out what your intended change is, which is reflected in the verification output after the operation. If the change is not what you intended, you can undo this command and try another command or use a series of simpler, less arbitrary update commands to achieve the same intended outcome. The command format is:
-
-	update <id> <new_description> priority <new_priority_level> <option> <option_value>
-
-where option can be either ‘from’, ‘to’, and ‘by’.
-
-Suppose the example for the add command adds a new task with ID A1. An example of an update command will be: update A1 by 30/10/2014
-This changes the deadline for Programming Assignment (refer to the section on add command) to 30th October 2014.
-
-8. Search Items
-Many a times, several tasks/events have descriptions which contain certain keywords that can also act as informal categorization. Sometimes you may have a long list of things to get done but just want to do things that belong to a certain “category”. The search command helps you filter out items that contain a certain keyword (and hence are more likely to be related to the same context). The search command is defined as:
-
-	search <keyword>
-
-This gives you a list of tasks/events whose descriptions contain the given keyword.
-As an example, suppose the task added by the add command example is the only item in the list, the command search Programming returns the Programming Assignment task that was previously added.
-
-9. Undo & Redo
-If you are new to command-line interface programs (even for the more sophisticated users), mistakes are unavoidable once in a while, when some wrong information is given in the command input. It will be troublesome to have to remember the full details of the task/event that was wrongly edited, perform a delete, followed by an add operation. Fortunately, the undo command lets you go one command back in time, from which you can make an attempt to correct the command that caused the mistake. This command is simply:
-
-	undo
-
-It is worth noting that undo can be performed multiple times to go back by several commands in time. This introduces the possibility of entering too many undo commands. The redo command lets you move forward in time by 1 command. The format is the same as undo command. Note that if you use a new command after using the undo command, all commands that were previously executed after this undo state will be deleted and you will not be able to redo any of these deleted commands.
-
-10. Help Page
-In this age, who brings around the user manual anyway? However, we understand that most users will tend to forget the commands and how to use the commands from time to time. Dynamiz provides a help command, which acts as a portable, summarised user manual in the program, albeit not as friendly as this user guide.
-
-To list all possible commands, enter: help.
-
-From this list of commands, if you need to recall the syntax for using a certain command, let’s say add, you can check it out by entering: help add. The various command formats and their respective usage will be displayed. The format for this command is:
-
-	help <command_name>
-
-11. Exiting Dynamiz
-To close the program, simply enter exit and hit the ‘Enter’ button.
-We hope that this user guide has helped you to make your experience with Dynamiz more enjoyable. Thank you for choosing Dynamiz.
-
+FILE STRUCTURE
+	The main database of items will be saved in a text file named "todo.txt" 
+	The file storing the archived completed items will be named "completed.txt"
+	The content of help pages are stored in their respective "help_*.txt"
