@@ -12,6 +12,7 @@ import edu.dynamic.dynamiz.controller.CommandHelp;
 import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.controller.CommandRedo;
 import edu.dynamic.dynamiz.controller.CommandSearch;
+import edu.dynamic.dynamiz.controller.CommandShow;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.controller.CommandUndo;
 import edu.dynamic.dynamiz.controller.CommandUnmark;
@@ -101,6 +102,9 @@ public class CommandLine {
 				break;
 			case UNMARK:
 				this.command = parseUnmark();
+				break;
+			case SHOW:
+				this.command = parseShow();
 				break;
 			case EXIT:
 				this.command = parseExit();
@@ -391,6 +395,20 @@ public class CommandLine {
 		} catch (NumberFormatException e) {
 			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
 			return new CommandUnmark(INVALID_ID);
+		}
+	}
+	
+	/**
+	 * Parsing CommandLine object into respective {@link CommandShow} object
+	 * @return a parsed {@link CommandShow} object
+	 */
+	private Command parseShow() {
+		try {
+			int id = Integer.parseInt(param);
+			return new CommandShow(id);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
+			return new CommandShow(INVALID_ID);
 		}
 	}
 	

@@ -109,6 +109,13 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
+	},  SHOW("sh") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
 	}, EXIT() {
 		private final OptionType[] optionsArray = {};
 		
