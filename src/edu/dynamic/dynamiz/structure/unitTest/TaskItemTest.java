@@ -12,6 +12,10 @@ import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.TaskItem;
 
+/**
+ * Defines the JUnit Test Case for TaskItem class.
+ * @author zixian
+ */
 public class TaskItemTest {
     
     @Test
@@ -28,7 +32,7 @@ public class TaskItemTest {
     @Test
     public void testToString() {
 	TaskItem task = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
-	assertEquals("A1 CS2106 homework 4 pending --/--/---- --:-- 26/9/2014 23:59", task.toString());
+	assertEquals("CS2106 homework; 4; pending; --/--/---- --:--; 26/9/2014 23:59", task.toFileString());
     }
     
     @Test
@@ -61,7 +65,7 @@ public class TaskItemTest {
 	assertTrue("deadline is DateTime type", task.getDeadline() instanceof MyDateTime);
 	
 	task.setDeadlineTime(22, 60);
-	assertEquals("A3 CS2106 homework 0 pending --/--/---- --:-- 26/9/2014 23:59", task.toString());
+	assertEquals("CS2106 homework; 0; pending; --/--/---- --:--; 26/9/2014 23:59", task.toFileString());
     }
     
     @Test
@@ -69,8 +73,8 @@ public class TaskItemTest {
 	TaskItem task = new TaskItem("CS2106 homework", new MyDate(26, 9, 2014));
 	assertEquals("initial status is 'pending'", TaskItem.STATUS_PENDING, task.getStatus());
 	
-	task.setStatus(TaskItem.STATUS_INPROGRESS);
-	assertEquals("new status is 'in progress'", TaskItem.STATUS_INPROGRESS, task.getStatus());
+	task.setStatus(TaskItem.STATUS_COMPLETED);
+	assertEquals("new status is 'completed'", TaskItem.STATUS_COMPLETED, task.getStatus());
 	System.out.println(task.getFeedbackString());
     }
     
