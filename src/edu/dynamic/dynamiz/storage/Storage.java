@@ -174,10 +174,10 @@ public class Storage {
      * @param id The ID of the ToDoItem to search.
      * @return A 1-element array of the ToDoItem with the given ID, or null, if no such ToDoItem exists.
      */
-    public ToDoItem[] searchItems(int id){
+    public ToDoItem[] searchItems(int id) throws IllegalArgumentException {
 	ToDoItem temp = searchTree.get(id);
 	if(temp==null){
-	    return null;
+	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
 	}
 	ToDoItem[] arr = new ToDoItem[1];
 	arr[0] = temp;

@@ -9,6 +9,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * filtered by the specified options, in the given storage.
  * 
  * Constructor
+ * CommandSearch(int id)	//Deprecated. Creates a new instance of this command to search by ID.
  * CommandSearch(String keyword, int priority, Date start, Date end)	//Creates an instance of this command object.
  * 
  * Public Methods
@@ -32,6 +33,7 @@ public class CommandSearch extends Command {
     private boolean isIdSearch = false;
     
     /**
+     * Deprecated. Please use CommandShow instead.
      * Creates an instance of this command to search by ID.
      * @param id The ID of the item to display.
      */
