@@ -1,34 +1,77 @@
-The main command keyword is ‘add’. The syntax is as follows:
+COMMAND NAME
+		ADD
 
-	add <event/task_description> <option> <option_value>
-
-This command can have more than one option or no option at all. The syntax differs in the supported options for adding different types of items into Dynamiz. The optional priority option is available to all ‘add’ commands.
-
-	a) Event Tasks
-To add an event, the supported options are ‘from’, ‘to’, and ‘on’. So your input will be something like:
-
-	add <event_description>  priority <priority_level> from <start date> to <end_date>
-
-OR
-
-	add <event_description> priority <priority_level> on <date>
-
-Note that the options ‘from’ and ‘to’ need not be used together.
-
-	b) Deadline Tasks
-To add a deadline task, the support option is ‘by’, and your input will generally be like:
-
-	add <task_description> priority <priority_level> by <deadline>
-
-	c) Floating Tasks
-If the task’s or event’s relevant dates have yet to be confirmed, just the description and the priority level(optional) will suffice, with the resulting command being:
-
-	add <description> priority <priority_level>
-
-	d) Code Example
-Any details to be given to this task/event in the future can be done using the update functionality, which is explain later in this guide.
-
-An example of an add command is: add Programming Assignment by 31/10/2014
-This adds a new task called Programming Assignment, whose deadline is 31st October 2014.
-
-On executing any of these commands, Dynamiz shows you the details of the task/event being added for your verification. If any of the information is wrong, you can either undo the previous command or perform an update to correct the information.
+SYNOPSIS
+	ADD	[parameter] [Option arguments]...
+	
+DESCRIPTION
+	Command ADD allows the addition of a new item to Dynamiz.
+	
+	[parameter]: The description of the item.
+	
+	[Option arguments]: Specify the applicable [Option arguments] for the 
+	item being added. Non-applicable [Option arguments] will be deemed as 
+	part of the [parameter] and appended to the description.
+	
+	Applicable (OptionType)'s for Command ADD are:
+		START_TIME, END_TIME, ON_TIME, PRIORITY
+		
+	[Option arguments] are useful way to add more information to an item.
+	Here's how you use them (as illustrated by examples):
+	
+	---------------------------------------------------------------------------	
+	- Add a floating task without start timing and end timing:
+	Command: add Enjoy this Dynamiz
+	
+	[parameter]: "Enjoy this Dynamiz".
+	No start timinng and end timing is specified to make it a floating task.
+	Default priority NONE will be used as no priority is specified.
+	
+	---------------------------------------------------------------------------
+	- Add a deadline task:
+	Command: add Finish lab report by tomorrow 9am
+	
+	[parameter]		: "Finish lab report".
+	[Option arguments]: 
+		END_TIME	: "tomorrow 9am"
+		
+	A Task item will be added with the information of the deadline to be set
+	to "tomorrow 9am". For example, if today is 2/11/2014, then the deadline
+	will be set to 3/11/2014 09:00.
+	
+	---------------------------------------------------------------------------
+	- Add an event task:
+	Command: add World Peace Conference on 21 Dec from 17:00 to 22:00
+	
+	[parameter]		: "World Peace Conference"
+	[Option arguments]:
+		START_TIME	: "17:00"
+		END_TIME	: "22:00"
+		ON_TIME		: "21 Dec"
+		
+	An Event item will be added with the information that it will start from
+	"21 Dec 17:00" to "21 Dec 22:00". As seen here, the ON_TIME (OptionType)
+	allows Dynamiz to take the date for START_TIME and END_TIME be the date
+	given by ON_TIME. This is equivalent to "from 21 Dec 17:00 to 21 Dec 22:00"
+	
+	---------------------------------------------------------------------------
+	- Add a priority to a task:
+	Command: add Solve world hunger priority urgent by 31 Dec 2015
+	
+	[parameter]		: "Solve world hunger"
+	[Option arguments]:
+		PRIORITY	: "urgent"
+		END_TIME	: "31 Dec 2015"
+		
+	A Task item will be added with a priority level of URGENT and a deadline
+	of "31 Dec 2015". 
+	---------------------------------------------------------------------------
+	
+	Once your tasks have been added to Dynamiz, feedback messages will be output
+	onto the Output Screen for you to double check on the information.
+	
+	If you make a mistake in typing information to the item, you can revoke an
+	UNDO Command to remove the item. For details of UNDO Command, enter "help 
+	undo".
+	
+		
