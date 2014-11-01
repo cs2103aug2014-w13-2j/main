@@ -116,7 +116,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, EXIT("e", "quit", "bye", "!") {
+	}, EXIT("e", "quit", "bye", "!", "close") {
 		private final OptionType[] optionsArray = {};
 		
 		@Override
