@@ -23,7 +23,7 @@ import edu.dynamic.dynamiz.parser.OptionType;
  *
  */
 public enum CommandType {
-	ADD("put") { 
+	ADD("a", "put") { 
 		private final OptionType[] optionsArray = {OptionType.START_TIME, 
 												   OptionType.END_TIME, 
 												   OptionType.PRIORITY,
@@ -35,14 +35,14 @@ public enum CommandType {
 			return Arrays.asList(optionsArray);
 		}
 		
-	}, DELETE("del", "remove") {
+	}, DELETE("d", "del", "remove") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, UPDATE("upd", "modify", "mod", "edit", "change") {
+	}, UPDATE("u", "upd", "modify", "mod", "edit", "change") {
 		private final OptionType[] optionsArray = {OptionType.START_TIME, 
 												   OptionType.END_TIME, 
 												   OptionType.PRIORITY,
@@ -52,7 +52,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, LIST("display", "show") {
+	}, LIST("l", "ls", "display", "show") {
 		private final OptionType[] optionsArray = {OptionType.ORDER_BY,
 												   OptionType.START_TIME,
 												   OptionType.END_TIME,
@@ -63,7 +63,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, SEARCH("find") {
+	}, SEARCH("s", "find") {
 		private final OptionType[] optionsArray = {OptionType.ORDER_BY, 
 												   OptionType.START_TIME, 
 												   OptionType.END_TIME, 
@@ -74,35 +74,35 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, UNDO("un") {
+	}, UNDO("un", "ud") {
 		private final OptionType[] optionsArray = {};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, REDO("re") {
+	}, REDO("re", "rd") {
 		private final OptionType[] optionsArray = {};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, HELP("man") {
+	}, HELP("h", "man") {
 		private final OptionType[] optionsArray = {};
 		
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, MARK("done", "do", "tick") {
+	}, MARK("m", "done", "do", "tick") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, UNMARK("undone", "untick") {
+	}, UNMARK("um", "undone", "untick") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
@@ -116,7 +116,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, EXIT() {
+	}, EXIT("e", "quit", "bye", "!") {
 		private final OptionType[] optionsArray = {};
 		
 		@Override
