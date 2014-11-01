@@ -24,6 +24,7 @@ package edu.dynamic.dynamiz.structure;
  * @author zixian
  */
 public class EventItem extends ToDoItem {
+    //The String formatting used in this class.
     private static final String FORMAT_EMPTYTIME = " --:--";
     private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
 	    						"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
@@ -34,7 +35,6 @@ public class EventItem extends ToDoItem {
     //Main data members
     private MyDate startDate, endDate;
     
-    /* Constructors */
     /**
      * Creates a new instance of this event.
      * @param description The event's description.
@@ -137,6 +137,7 @@ public class EventItem extends ToDoItem {
      * Null time is --:--
      */
     private String getDateString(MyDate date){
+	assert date!=null;
 	if(date instanceof MyDateTime){
 	    return date.toString();
 	} else{
@@ -225,6 +226,13 @@ public class EventItem extends ToDoItem {
     }
     
     @Override
+    /**
+     * Compares this item with the given item.
+     * @param item The ToDoItem to compare with.
+     * @return Negative number if this item has 'pending' status while item has 'completed' status,
+     * 		item is neither TaskItem nor EventItem or this has earlier deadline, this item has higher priority,
+     * 		, this item has smaller ID number in decreasing order of precedence, 0 if both items have same 
+     * 		field values, and positive number otherwise.*/
     public int compareTo(ToDoItem item){
 	assert item!=null;
 	int result;
