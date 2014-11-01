@@ -33,16 +33,6 @@ public class CommandSearch extends Command {
     private boolean isIdSearch = false;
     
     /**
-     * Deprecated. Please use CommandShow instead.
-     * Creates an instance of this command to search by ID.
-     * @param id The ID of the item to display.
-     */
-    public CommandSearch(int id){
-	this.id = id;
-	isIdSearch = true;
-    }
-    
-    /**
      * Creates an instance of this search command.
      * @param keyword The keyword to search by, or null if search by keyword is not required.
      * @param priority The priority level of the item(s) to search, or -1 if not required.
