@@ -264,6 +264,7 @@ public final class Util {
 		} else if (dateStr.matches(MyDateTime.REGEX_DATE)) {
 			return MyDate.makeDate(dateStr);
 		} else {
+			assert false;
 			return null;
 		}
 	}
