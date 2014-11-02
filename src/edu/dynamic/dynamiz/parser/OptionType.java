@@ -191,7 +191,7 @@ public enum OptionType {
 				regEx.append(String.format("\\b%1$s\\b|", alias));
 			}
 		}
-		aliasesRegex = String.format("%1$s", regEx.substring(0, regEx.length() - 1));
+		aliasesRegex = regEx.substring(0, regEx.length() - 1);
 	}
 	
 	public String getAliasesRegex() {

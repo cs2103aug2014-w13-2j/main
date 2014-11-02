@@ -1,9 +1,7 @@
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -71,7 +69,7 @@ public class CommandLine {
 		this.param = param;
 
 		if (!initialiseCommand()) {
-			System.out.println("Something is not right");
+			LoggerCommandLine.severe("Command is not initialised!");
 		}
 	}
 
@@ -316,7 +314,7 @@ public class CommandLine {
 			id = Integer.parseInt(itemID);
 		} catch (NumberFormatException e) {
 			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, itemID));
-			id = INVALID_ID;
+			throw new IllegalArgumentException(String.format(INVALID_ID_MSG, itemID));
 		}
 		
 		String extraDescription = Util.stripFirstWord(this.param);
@@ -416,18 +414,6 @@ public class CommandLine {
 	}
 	
 	/**
-	 * Retrieve a list of values of the first valid {@link Option} of the given {@link OptionType}
-	 * 
-	 * @param commandOptions The collection of {@link Option} to look for
-	 * @param optionType The {@link OptionType} of the {@link Option} that is being retrieved
-	 * @return the value list of the matching {@link Option}
-	 */
-	private List<String> getFirstOptionValues(Options commandOptions, OptionType optionType) {
-		Option option = commandOptions.getOptions(optionType).get(0);
-		return option.getValues();
-	}
-
-	/**
 	 * Retrieve a list of {@link MyDate} object from the given list of value
 	 * 
 	 * @param options The collection of {@link Option} to extract from
@@ -482,6 +468,7 @@ public class CommandLine {
 				typeList.add(type);
 			} catch (IllegalArgumentException e) {
 				LoggerCommandLine.warning(String.format(INVALID_OPTIONTYPE_MSG, value));
+				throw new IllegalArgumentException(String.format(INVALID_OPTIONTYPE_MSG, value));
 			}
 		}
 		
@@ -505,10 +492,11 @@ public class CommandLine {
 				idSet.add(Integer.parseInt(id));
 			} else {
 				List<Integer> idList = Util.getNumberListFromRange(id);
-				if (idList != null) {
+				if (idList != null && !idList.isEmpty()) {
 					idSet.addAll(idList);
 				} else {
 					LoggerCommandLine.warning(String.format(INVALID_ID_MSG, id));
+					throw new IllegalArgumentException(String.format(INVALID_ID_MSG, id));
 				}
 			}
 		}

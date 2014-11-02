@@ -21,6 +21,8 @@ public final class Util {
 	private static final String DEFAULT_DELIMITER = "\\s+";
 	private static final String ESCAPE_CHARACTER = ";";
 	private static final String POSITIVE_NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
+	
+	private static final String INVALID_NUMBER_RANGE_MSG = "Not a valid number range: %1$s";
 	private static final int START_NUMBER_GROUP = 1;
 	private static final int END_NUMBER_GROUP = 3;
 	
@@ -201,6 +203,10 @@ public final class Util {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
 			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
 			
+			if (startNum > endNum) {
+				throw new IllegalArgumentException(String.format(INVALID_NUMBER_RANGE_MSG, range));
+			}
+			
 			List<Integer> numList = new ArrayList<Integer>();
 			for (int i = startNum; i <= endNum; i++) {
 				numList.add(i);
@@ -258,6 +264,7 @@ public final class Util {
 		} else if (dateStr.matches(MyDateTime.REGEX_DATE)) {
 			return MyDate.makeDate(dateStr);
 		} else {
+			assert false;
 			return null;
 		}
 	}
