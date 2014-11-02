@@ -8,7 +8,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Defines the command to mark an event/task as completed.
  * 
  * Constructor
- * CommandDo(String id)		//Creates a new instance of this command
+ * CommandDo(int[] id)		//Creates a new instance of this command
  * 
  * Public Methods
  * ToDoItem[] getAffectedItems()	//Gets a list of item that is marked as completed
@@ -41,8 +41,10 @@ public class CommandMark extends Command implements Undoable{
     
     @Override
     /**
-     * Executes this command.
-     * @throws IllegalArgumentException if none of the ID in the given array exists in the storage.
+     * Executes this command. The list will not contain items of invalid ID nor items that are marked
+     * as completed prior to this command's execution.
+     * @throws IllegalArgumentException if none of the specified items can be marked as completed,
+     * 		either due to invalid ID or the item has been previously marked as completed.
      */
     public void execute() throws IllegalArgumentException {
 	int size = id.length, errors = 0;
@@ -70,6 +72,7 @@ public class CommandMark extends Command implements Undoable{
     @Override
     /**
      * Redo this command.
+     * Should only be used after the undo() method.
      */
     public void redo(){
 	assert feedbackItems!=null;
@@ -81,6 +84,7 @@ public class CommandMark extends Command implements Undoable{
     @Override
     /**
      * Undo this command.
+     * Should only be used after the execute() method.
      */
     public void undo(){
 	assert feedbackItems!=null;
@@ -100,9 +104,9 @@ public class CommandMark extends Command implements Undoable{
     
     @Override
     /**
-     * Gets the ToDoItem that is marked as completed.
+     * Gets the ToDoItem object(s) that is/are marked as completed.
      * Must only be called after calling this command's execute() method.
-     * @return An array of 1 ToDoItem object that is marked as completed.
+     * @return An array of ToDoItem object(s) that is/are marked as completed.
      */
     public ToDoItem[] getAffectedItems() {
 	assert feedbackItems!=null;
