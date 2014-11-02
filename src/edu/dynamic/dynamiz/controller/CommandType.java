@@ -116,6 +116,13 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
+	}, FLUSH("f", "c", "clear") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
 	}, EXIT("e", "quit", "bye", "!", "close") {
 		private final OptionType[] optionsArray = {};
 		
