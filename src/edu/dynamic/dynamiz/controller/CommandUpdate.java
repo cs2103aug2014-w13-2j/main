@@ -94,6 +94,10 @@ public class CommandUpdate extends Command implements Undoable {
     }
     
     @Override
+    /**
+     * Gets the String representation of this command's type.
+     * @return The String representation of this command's type.
+     */
     public String getCommandName() {
 	return COMMAND_TYPE;
     }
@@ -108,7 +112,6 @@ public class CommandUpdate extends Command implements Undoable {
      */
     public ToDoItem[] getAffectedItems() {
 	assert updatedItem!=null;
-	
 	return updatedItem;
     }
 }
