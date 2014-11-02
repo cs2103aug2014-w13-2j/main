@@ -17,6 +17,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
  * Defines the UI for Dynamiz using Java Swing
+ * 
  * @author XYLau
  */
 public class UI extends JPanel implements ActionListener {
@@ -101,11 +102,11 @@ public class UI extends JPanel implements ActionListener {
 		// Why do we need colors with this??? Its not a GUI
 		Header = new SimpleAttributeSet();
 		StyleConstants.setForeground(Header, Color.BLACK);
-		StyleConstants.setBold(Header, true);                                                                                                                                                                                                                      
+		StyleConstants.setBold(Header, true);
 
 		Default = new SimpleAttributeSet();
 		StyleConstants.setForeground(Default, Color.BLACK);
-		//StyleConstants.setBold(Default, true);                                                                                                                                                                                                                      
+		// StyleConstants.setBold(Default, true);
 
 		PriorityLow = new SimpleAttributeSet();
 		StyleConstants.setForeground(PriorityLow, Color.GREEN);
@@ -139,17 +140,13 @@ public class UI extends JPanel implements ActionListener {
 			doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
 			doc.insertString(doc.getLength(), input + newline, Header);
 
+			
 			// Command: Exit
-			if (input.equalsIgnoreCase("exit")) {
+			if (CommandType.fromString(input)==CommandType.EXIT){
 				LoggerUI.info("Exit Dynamiz");
 				System.exit(0);
 			}
-			
-			// Command: Clear (Flush screen)
-			if (input.equalsIgnoreCase("clear")){
-				LoggerUI.info("Exit Dynamiz");
-				
-			}
+
 			// Command Feedback
 			Feedback feedback = cont.executeCommand(input);
 			ArrayList<StrIntPair> returnResult = disp.displayFeedback(feedback);
@@ -173,7 +170,8 @@ public class UI extends JPanel implements ActionListener {
 
 			// Logging: Return Command Feedback
 			LoggerUI.info("Return Command Feedback");
-		} catch (Exception e) {
+			
+			} catch (Exception e) {
 			// Logging: Exception from actionPerformed
 			LoggerUI.warning("Exception @ actionPerformed()");
 			System.out.println(e);
@@ -209,7 +207,7 @@ public class UI extends JPanel implements ActionListener {
 		frame.setVisible(true);
 		// Logging: Frame = visible
 		LoggerUI.info("displayScreen visible");
-	
+
 	}
 
 	public static void main(String[] args) {
