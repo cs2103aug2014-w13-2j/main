@@ -92,7 +92,7 @@ public final class Util {
 			return null;
 		}
 		
-		String[] words = str.split(regEx);
+		String[] words = str.trim().split(regEx);
 		return words[0];
 	}
 	
