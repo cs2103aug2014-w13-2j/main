@@ -201,10 +201,6 @@ public final class Util {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
 			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
 			
-			if (startNum > endNum) {
-				throw new IllegalArgumentException("Invalid number range value: " + rangeMat.group());
-			}
-			
 			List<Integer> numList = new ArrayList<Integer>();
 			for (int i = startNum; i <= endNum; i++) {
 				numList.add(i);
