@@ -45,6 +45,7 @@ public class CommandDelete extends Command implements Undoable {
     @Override
     /**
      * Executes this command.
+     * @throws IllegalArgumentException if none of the ID in the given array exists in the storage.
      */
     public void execute() throws IllegalArgumentException {
 	int size = id.length;

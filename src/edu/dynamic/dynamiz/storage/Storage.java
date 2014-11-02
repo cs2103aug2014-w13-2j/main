@@ -503,13 +503,16 @@ public class Storage {
     /**
      * Marks the item with the given ID as completed.
      * @param id The id of the item to mark as completed.
-     * @return The ToDoItem that is marked as completed.
+     * @return The ToDoItem that is marked as completed or null if the item has already been marked as completed.
      * @throws IllegalArgumentException if there is no item with the given ID.
      */
     public ToDoItem markItem(int id)throws IllegalArgumentException {
 	ToDoItem item = searchTree.get(id);
 	if(item==null){
 	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+	}
+	if(item.getStatus().equals(ToDoItem.STATUS_COMPLETED)){
+	    return null;
 	}
 	markItem(item);
 	return item;
