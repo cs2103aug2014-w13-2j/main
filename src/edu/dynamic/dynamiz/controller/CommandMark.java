@@ -1,5 +1,7 @@
 package edu.dynamic.dynamiz.controller;
 
+import java.util.ArrayList;
+
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -21,24 +23,44 @@ public class CommandMark extends Command implements Undoable{
     //String representation of this command's type
     private static final String COMMAND_TYPE = "do";
     
+    //Error message.
+    private static final String MSG_NOMATCHINGID = "No matching ID.";
+    
     //Main data members
-    private int id;
-    private ToDoItem feedbackItem;
+    private int[] id;
+    private ToDoItem[] feedbackItems;
     
     /**
      * Creates a new instance of this command.
-     * @param id The ID of the item to mark as completed.
+     * @param id The list of ID of the items to mark as completed.
      */
-    public CommandMark(int id){
+    public CommandMark(int[] id){
 	this.id = id;
     }
     
     @Override
     /**
      * Executes this command.
+     * @throws IllegalArgumentException if none of the ID in the given array exists in the storage.
      */
     public void execute() throws IllegalArgumentException {
-	feedbackItem = storage.markItem(id);
+	int size = id.length;
+	ToDoItem item;
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>(size);
+	for(int i=0; i<size; i++){
+	    try{
+		item = storage.markItem(id[i]);
+		if(item!=null){
+		    temp.add(item);
+		}
+	    } catch(IllegalArgumentException e){
+		
+	    }
+	}
+	if(temp.isEmpty()){
+	    throw new IllegalArgumentException(MSG_NOMATCHINGID);
+	}
+	feedbackItems = temp.toArray(new ToDoItem[temp.size()]);
     }
     
     @Override
@@ -46,7 +68,10 @@ public class CommandMark extends Command implements Undoable{
      * Redo this command.
      */
     public void redo(){
-	storage.markItem(feedbackItem);
+	assert feedbackItems!=null;
+	for(ToDoItem i: feedbackItems){
+	    storage.markItem(i);
+	}
     }
     
     @Override
@@ -54,7 +79,10 @@ public class CommandMark extends Command implements Undoable{
      * Undo this command.
      */
     public void undo(){
-	storage.unmarkItem(feedbackItem);
+	assert feedbackItems!=null;
+	for(ToDoItem i: feedbackItems){
+	    storage.unmarkItem(i);
+	}
     }
     
     @Override
@@ -70,16 +98,10 @@ public class CommandMark extends Command implements Undoable{
     /**
      * Gets the ToDoItem that is marked as completed.
      * Must only be called after calling this command's execute() method.
-     * @return An array of 1 ToDoItem object that is marked as completed and null if the ToDoItem object
-     * 		with the given id does not exist in storage.
+     * @return An array of 1 ToDoItem object that is marked as completed.
      */
     public ToDoItem[] getAffectedItems() {
-	if(feedbackItem==null){
-	    return null;
-	}
-	ToDoItem[] list = new ToDoItem[1];
-	list[0] = feedbackItem;
-	return list;
-    }
-    
+	assert feedbackItems!=null;
+	return feedbackItems;
+    } 
 }
