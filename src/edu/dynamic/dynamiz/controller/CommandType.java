@@ -143,9 +143,6 @@ public enum CommandType {
 		// Normalising input
 		CommandType opt = ALIAS_TABLE.get(value.toLowerCase().trim());
 		
-		if (opt == null) {
-			throw new IllegalArgumentException("Not a known alias for CommandType");
-		}
 		return opt;
 	}
 	
