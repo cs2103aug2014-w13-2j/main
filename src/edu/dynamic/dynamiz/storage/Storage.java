@@ -532,13 +532,17 @@ public class Storage {
     /**
      * Unmark the most recent item that is marked completed.
      * @param id The ID of the ToDoItem to unmark.
-     * @return The ToDoItem object that is unmarked from completed list.
+     * @return The ToDoItem object that is unmarked from completed list or null if this item's status is
+     * 		already not 'completed'.
      * @throws IllegalArgumentException if no item with the given ID exists.
      */
     public ToDoItem unmarkItem(int id) throws IllegalArgumentException {
 	ToDoItem temp = searchTree.get(id);
 	if(temp==null){
 	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+	}
+	if(temp.getStatus().equals(ToDoItem.STATUS_PENDING)){
+	    return null;
 	}
 	unmarkItem(temp);
 	return temp;
