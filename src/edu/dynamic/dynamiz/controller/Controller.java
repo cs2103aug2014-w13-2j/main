@@ -101,7 +101,7 @@ public class Controller {
 	    return new ErrorFeedback(command.getCommandName(), input, String.format(MSG_EMPTYSTACK, command.getCommandName()));
 	} catch(IllegalArgumentException e){	//Thrown by parser and storage operations
 	    if(command==null){
-		return new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
+		return new ErrorFeedback(COMMAND_UNKNOWN, input, e.getMessage());
 	    }
 	    return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
 	} catch(Exception e){
