@@ -7,3 +7,4 @@ reset_todo.sh
 log.txt
 log.txt.*
 completed*.txt
+check_changes.sh

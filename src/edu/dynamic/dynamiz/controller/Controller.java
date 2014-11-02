@@ -68,7 +68,6 @@ public class Controller {
      * Executes the given input command.
      * @param input The user's input command string.
      * @return A Feedback object describing the success or failure of executing the input command.
-     * Note: Implementation to be updated.
      */
     public Feedback executeCommand(String input){
 	logger.info("Executing \""+input+"\"");

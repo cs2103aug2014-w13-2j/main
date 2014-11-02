@@ -482,7 +482,7 @@ public class Storage {
      * @return The ToDoItem object that was removed from the list by this operation.
      * @throws IllegalArgumentException if no item with the given ID is found.
      */
-    public ToDoItem removeItem(int id){	
+    public ToDoItem removeItem(int id) throws IllegalArgumentException {	
 	ToDoItem temp = searchTree.remove(id);
 	if(temp==null){
 	    throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
