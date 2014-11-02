@@ -144,7 +144,7 @@ public class UI extends JPanel implements ActionListener {
 			}
 
 			// Command: Flush
-			if (input.equalsIgnoreCase("flush")) {
+			if (CommandType.fromString(input)== CommandType.FLUSH) {
 				// clear document screen
 				doc.remove(0, doc.getLength());
 
