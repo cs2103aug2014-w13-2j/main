@@ -7,10 +7,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
 
 import edu.dynamic.dynamiz.UI.DisplayerInterface;
 import edu.dynamic.dynamiz.controller.*;
@@ -57,11 +61,21 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.setEditable(false);
 		displayScreen.setFont(font);
 
+		// Set tab size
+		TabStop[] tabs = new TabStop[1];
+		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
+		TabSet tabset = new TabSet(tabs);
+		
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+				StyleConstants.TabSet, tabset);
+		displayScreen.setParagraphAttributes(aset, false);
+
 		// Create Command Display - Scroll
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(1000, 600));
+		scrollPane.getViewport().setPreferredSize(new Dimension(870, 600));
 
 		// / Create Command Input
 		inputScreen = new JTextField();
@@ -144,7 +158,7 @@ public class UI extends JPanel implements ActionListener {
 			}
 
 			// Command: Flush
-			if (CommandType.fromString(input)== CommandType.FLUSH) {
+			if (CommandType.fromString(input) == CommandType.FLUSH) {
 				// clear document screen
 				doc.remove(0, doc.getLength());
 
@@ -218,7 +232,7 @@ public class UI extends JPanel implements ActionListener {
 		doc.insertString(doc.getLength(), divider + newline, Default);
 		doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
 		doc.insertString(doc.getLength(), input + newline, Header);
-	
+
 	}
 
 	// -------------------------------------------------------------------------------------------------
