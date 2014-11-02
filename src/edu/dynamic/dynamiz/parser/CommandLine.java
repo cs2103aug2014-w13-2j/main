@@ -1,9 +1,14 @@
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
+import jdk.nashorn.internal.ir.LiteralNode.ArrayLiteralNode.ArrayUnit;
 import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandAdd;
 import edu.dynamic.dynamiz.controller.CommandDelete;
@@ -181,13 +186,8 @@ public class CommandLine {
 	 * @return a parsed {@link CommandDelete} object
 	 */
 	private Command parseDelete() {
-		try {
-			int id = Integer.parseInt(param);
-			return new CommandDelete(id);
-		} catch (NumberFormatException e) {
-			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
-			return new CommandDelete(INVALID_ID);
-		}
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandDelete(ids);
 	}
 
 	/**
@@ -366,13 +366,8 @@ public class CommandLine {
 	 * @return a parsed {@link CommandMark} object
 	 */
 	private Command parseMark() {
-		try {
-			int id = Integer.parseInt(param);
-			return new CommandMark(id);
-		} catch (NumberFormatException e) {
-			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
-			return new CommandMark(INVALID_ID);
-		}
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandMark(ids);
 	}
 	
 	/**
@@ -380,13 +375,8 @@ public class CommandLine {
 	 * @return a parsed {@link CommandUnmark} object
 	 */
 	private Command parseUnmark() {
-		try {
-			int id = Integer.parseInt(param);
-			return new CommandUnmark(id);
-		} catch (NumberFormatException e) {
-			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
-			return new CommandUnmark(INVALID_ID);
-		}
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandUnmark(ids);
 	}
 	
 	/**
@@ -491,12 +481,51 @@ public class CommandLine {
 			try {
 				OptionType type = OptionType.fromString(value);
 				typeList.add(type);
-			} catch (IllegalArgumentException e){
+			} catch (IllegalArgumentException e) {
 				LoggerCommandLine.warning(String.format(INVALID_OPTIONTYPE_MSG, value));
 			}
 		}
 		
 		return typeList;
+	}
+
+	/** 
+	 * Retrieve a List<Integer> from the given string
+	 * 
+	 * @param idStr The string in which the number list is extracted from
+	 * @return a List<Integer> containing the values in the given string
+	 */
+	public List<Integer> extractIdList(String idStr) {
+		String[] idArray = idStr.split(Option.DEFAULT_DELIMITER);
+		List<String> idStrList = Util.removeEmptyStringsInArray(idArray);
+		
+		Set<Integer> idSet = new HashSet<Integer>();
+		
+		for (String id: idStrList) {
+			if (Util.isInteger(id)) {
+				idSet.add(Integer.parseInt(id));
+			} else {
+				List<Integer> idList = Util.getNumberListFromRange(id);
+				if (idList != null) {
+					idSet.addAll(idList);
+				} else {
+					LoggerCommandLine.warning(String.format(INVALID_ID_MSG, id));
+				}
+			}
+		}
+		
+		return new ArrayList<Integer>(idSet);
+	}
+	
+	/**
+	 * Retrieve an Integer[] array from the given string
+	 * 
+	 * @param idStr The string in which the number array is extracted from
+	 * @return an Integer[] containing the values in the given string.
+	 */
+	public Integer[] extractIdArray(String idStr) {
+		List<Integer> idList = extractIdList(idStr);
+		return idList.toArray(new Integer[idList.size()]);
 	}
 	
 	/*

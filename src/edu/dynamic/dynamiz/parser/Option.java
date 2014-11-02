@@ -32,7 +32,7 @@ public class Option{
 	 */
 	
 	/** constant that specifies the default character for delimiter of argument values */
-	public static final char DEFAULT_DELIMITER = ',';
+	public static final String DEFAULT_DELIMITER = ",";
 	
 	/*=========================================================================
 	 * Class attributes

@@ -3,6 +3,8 @@ package edu.dynamic.dynamiz.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
@@ -18,7 +20,9 @@ public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
 	private static final String ESCAPE_CHARACTER = ";";
-	
+	private static final String POSITIVE_NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
+	private static final int START_NUMBER_GROUP = 1;
+	private static final int END_NUMBER_GROUP = 3;
 	
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
@@ -149,7 +153,7 @@ public final class Util {
  	 * @return true if the string has a number format and false otherwise
 	 */
 	public static boolean isNumber(String str) {
-		return str.matches("-?\\d+(\\.\\d+)?");
+		return str.trim().matches("-?\\d+(\\.\\d+)?");
 	}
 	
 	/**
@@ -158,7 +162,58 @@ public final class Util {
 	 * @return true if the string has an integer format and false otherwise
 	 */
 	public static boolean isInteger(String str) {
-		return str.matches("-?\\d+");
+		return str.trim().matches("-?\\d+");
+	}
+	
+	/**
+	 * Check if a given string contains a valid positive integer number range
+	 * A valid positive integer number range consists of NUMBER_FROM - NUMBER_TO
+	 * where NUMBER_FROM <= NUMBER_TO
+	 * 
+	 * @param range the string to check the number range format from
+	 * @return true if the given string satisfies the number range format. False otherwise.
+	 */
+	public static boolean isValidNumberRange(String range) {
+		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(range.trim());
+		if (rangeMat.matches()) {
+			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
+			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
+			
+			return (startNum <= endNum);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Retrieve a List<Integer> of a given string containing a valid positive integer number
+	 * range
+	 * 
+	 * @param range the string to get the number list from
+	 * @return a List<Integer> of the number from the range inclusively. Empty if the 
+	 * string matches format but not valid. Null otherwise.
+	 */
+	public static List<Integer> getNumberListFromRange(String range) {
+		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(range.trim());
+		if (rangeMat.matches()) {
+			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
+			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
+			
+			if (startNum > endNum) {
+				throw new IllegalArgumentException("Invalid number range value: " + rangeMat.group());
+			}
+			
+			List<Integer> numList = new ArrayList<Integer>();
+			for (int i = startNum; i <= endNum; i++) {
+				numList.add(i);
+			}
+			
+			return numList;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -170,6 +225,26 @@ public final class Util {
 	 */
 	public static String escapeString(String input) {
 		return input.replaceAll(ESCAPE_CHARACTER, "");
+	}
+	
+	/**
+	 * Convert a List<Integer> into the primitive type array
+	 * 
+	 * @param intList the List<Integer> to convert to
+	 * @return a converted array of int primitive type
+	 */
+	public static int[] toIntArray(List<Integer> intList) {
+		assert intList != null;
+		if (intList == null) {
+			return null;
+		}
+		
+		int[] ints = new int[intList.size()];
+		for (int i = 0; i < intList.size(); i++) {
+			ints[i] = intList.get(i);
+		}
+		
+		return ints;
 	}
 	
 	/**
