@@ -66,7 +66,7 @@ public class CommandDelete extends Command implements Undoable {
     @Override
     /**
      * Undoes this command's execute method.
-     * Can only be called after calling this command's execute method.
+     * Can only be called after calling this command's execute() method.
      */
     public void undo() {
 	assert deletedItems!=null;
@@ -102,7 +102,6 @@ public class CommandDelete extends Command implements Undoable {
      */
     public ToDoItem[] getAffectedItems() {
 	assert deletedItems!=null;
-	
 	return deletedItems;
     }
 

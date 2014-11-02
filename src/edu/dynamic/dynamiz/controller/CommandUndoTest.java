@@ -8,34 +8,39 @@ import org.junit.Test;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * Defines the JUnit Test Case for CommandUndo.
+ * The todo file must be re-initialized before every run here.
+ * Change the value 8 to another ID in the file with status that is not
+ * 'completed' as not doing so results in exceptions during testing.
+ * @author zixian
+ */
 public class CommandUndoTest {
     
     @Test
     public void test() {
-	Command cmd = new CommandMark(2);
+	int[] arr = new int[1];
+	arr[0] = 8;
+	Command cmd = new CommandMark(arr);
 	cmd.execute();
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();
 	undoStack.push((Undoable)cmd);
-	System.out.println(cmd.getAffectedItems()[0]);
+	assertEquals(8, cmd.getAffectedItems()[0].getId());
+	assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
 	CommandUndo undo = new CommandUndo();
 	undo.setStacks(undoStack, redoStack);
 	undo.execute();
-	System.out.println(undo.getAffectedItems()[0]);
-	System.out.println();
+	assertEquals(8, cmd.getAffectedItems()[0].getId());
+	assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_PENDING));
 	
-	cmd = new CommandUpdate(2, null, 4, null, null);
+	cmd = new CommandUpdate(2, null, 2, null, null);
 	cmd.execute();
-	ToDoItem[] list = cmd.getAffectedItems();
-	for(ToDoItem i: list)
-	    System.out.println(i);
-	System.out.println();
+	assertEquals(2, cmd.getAffectedItems()[0].getId());
+	assertEquals(2, cmd.getAffectedItems()[1].getPriority());
 	undoStack.push((Undoable)cmd);
 	undo.execute();
-	list = undo.getAffectedItems();
-	for(ToDoItem i: list)
-	    System.out.println(i);
-	System.out.println();
+	assertEquals(4, cmd.getAffectedItems()[1].getPriority());
 	
     }
     

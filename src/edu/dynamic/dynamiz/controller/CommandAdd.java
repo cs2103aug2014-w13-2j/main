@@ -56,7 +56,7 @@ public class CommandAdd extends Command implements Undoable {
     @Override
     /**
      * Undoes this command's execute method.
-     * Can only be called after calling this command's execute method.
+     * Can only be called after calling this command's execute() method.
      */
     public void undo() {
 	storage.removeItem(addedItem.getId());
@@ -86,7 +86,6 @@ public class CommandAdd extends Command implements Undoable {
      * @return A list of ToDoItem added by this command.
      */
     public ToDoItem[] getAffectedItems(){
-	//Checks the assertion that addedItem is not null
 	assert addedItem!=null;
 	
 	ToDoItem[] list = new ToDoItem[1];
