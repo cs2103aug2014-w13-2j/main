@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -31,6 +32,7 @@ public class UI extends JPanel implements ActionListener {
 
 	// Formatting Constants
 	private StyledDocument doc;
+	private StyledDocument newdoc;
 	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
@@ -99,7 +101,6 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
-		// Why do we need colors with this??? Its not a GUI
 		Header = new SimpleAttributeSet();
 		StyleConstants.setForeground(Header, Color.BLACK);
 		StyleConstants.setBold(Header, true);
@@ -135,43 +136,73 @@ public class UI extends JPanel implements ActionListener {
 		LoggerUI.info("Command Entered");
 
 		try {
-			// Command Prompt Display
-			doc.insertString(doc.getLength(), divider + newline, Default);
-			doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
-			doc.insertString(doc.getLength(), input + newline, Header);
 
-			
 			// Command: Exit
-			if (CommandType.fromString(input)==CommandType.EXIT){
+			if (CommandType.fromString(input) == CommandType.EXIT) {
 				LoggerUI.info("Exit Dynamiz");
 				System.exit(0);
 			}
 
-			// Command Feedback
-			Feedback feedback = cont.executeCommand(input);
-			ArrayList<StrIntPair> returnResult = disp.displayFeedback(feedback);
-			assert (returnResult != null);
+			// Command: Flush
+			if (input.equalsIgnoreCase("flush")) {
+				// clear document screen
+				doc.remove(0, doc.getLength());
 
-			// Feedback Display
-			doc.insertString(doc.getLength(), divider + newline, Default);
-			// previously: doc.insertString(doc.getLength(), returnResult + newline, null);
-			
-			// Display feedback
-			for (int i=0;i<returnResult.size();i++){
-				switch(returnResult.get(i).getInt()){
-				case 1: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityLow);break;
-				case 2: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityMedium);break;
-				case 4: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityHigh);break;
-				case 8: doc.insertString(doc.getLength(), returnResult.get(i).getString(), PriorityUrgent);break;
-				
-				default: doc.insertString(doc.getLength(), returnResult.get(i).getString(), Default);break;
+				commandPromptDisplay(input);
+
+				// Feedback
+				doc.insertString(doc.getLength(), divider + newline, Default);
+				doc.insertString(doc.getLength(),
+						"Cleared screen successfully!" + newline, Default);
+
+				LoggerUI.info("Flush Screen");
+			} else {
+
+				commandPromptDisplay(input);
+
+				// Command Feedback
+				Feedback feedback = cont.executeCommand(input);
+				ArrayList<StrIntPair> returnResult = disp
+						.displayFeedback(feedback);
+				assert (returnResult != null);
+
+				// Feedback Display
+				doc.insertString(doc.getLength(), divider + newline, Default);
+				// previously: doc.insertString(doc.getLength(), returnResult +
+				// newline, null);
+
+				// Display feedback
+				for (int i = 0; i < returnResult.size(); i++) {
+					switch (returnResult.get(i).getInt()) {
+					case 1:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), PriorityLow);
+						break;
+					case 2:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), PriorityMedium);
+						break;
+					case 4:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), PriorityHigh);
+						break;
+					case 8:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), PriorityUrgent);
+						break;
+
+					default:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), Default);
+						break;
+					}
 				}
-			}
 
-			// Logging: Return Command Feedback
-			LoggerUI.info("Return Command Feedback");
-			
-			} catch (Exception e) {
+				// Logging: Return Command Feedback
+				LoggerUI.info("Return Command Feedback");
+
+			}
+		} catch (Exception e) {
 			// Logging: Exception from actionPerformed
 			LoggerUI.warning("Exception @ actionPerformed()");
 			System.out.println(e);
@@ -180,6 +211,14 @@ public class UI extends JPanel implements ActionListener {
 		// Additional Feature: Retained Last-Entered Command
 		inputScreen.selectAll();
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
+	}
+
+	private void commandPromptDisplay(String input) throws BadLocationException {
+		// Command Prompt Display
+		doc.insertString(doc.getLength(), divider + newline, Default);
+		doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
+		doc.insertString(doc.getLength(), input + newline, Header);
+	
 	}
 
 	// -------------------------------------------------------------------------------------------------
