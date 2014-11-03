@@ -129,7 +129,8 @@ public class CommandLine {
 		boolean hasStart = options.hasOption(OptionType.START_TIME);
 		boolean hasEnd = options.hasOption(OptionType.END_TIME);
 		boolean hasBoth = hasStart && hasEnd;
-
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+		
 		MyDate startDate = null;
 		MyDate endDate = null;
 
@@ -141,7 +142,7 @@ public class CommandLine {
 			endDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
 		}
 
-		if (options.hasOption(OptionType.ON_TIME)) {
+		if (hasOn) {
 			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.ON_TIME));
 			int dd = onDate.getDayOfMonth();
 			int mm = onDate.getMonth();
@@ -160,7 +161,7 @@ public class CommandLine {
 			}
 		}
 
-		if (hasBoth) {
+		if (hasBoth || hasOn) {
 			commandItem = new EventItem(this.param, startDate, endDate);
 		} else if (hasEnd) {
 			commandItem = new TaskItem(this.param, endDate);
