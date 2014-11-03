@@ -40,12 +40,12 @@ public class UI extends JPanel implements ActionListener {
 	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
-	private SimpleAttributeSet Header;
+	private SimpleAttributeSet BoldBlack;
 	private SimpleAttributeSet Default;
-	private SimpleAttributeSet PriorityLow;
-	private SimpleAttributeSet PriorityMedium;
-	private SimpleAttributeSet PriorityHigh;
-	private SimpleAttributeSet PriorityUrgent;
+	private SimpleAttributeSet BoldGreen;
+	private SimpleAttributeSet BoldOrange;
+	private SimpleAttributeSet BoldMagenta;
+	private SimpleAttributeSet BoldRed;
 
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
@@ -60,6 +60,9 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen = new JTextPane();
 		displayScreen.setEditable(false);
 		displayScreen.setFont(font);
+		displayScreen.setBackground(Color.BLACK);
+		displayScreen.setForeground(Color.WHITE);
+		
 
 		// Set tab size
 		TabStop[] tabs = new TabStop[1];
@@ -100,9 +103,9 @@ public class UI extends JPanel implements ActionListener {
 
 		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + newline, Header);
+			doc.insertString(0, disp.displayWelcomeMessage() + newline, BoldBlack);
 			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
-					Header);
+					BoldBlack);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -115,29 +118,29 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
-		Header = new SimpleAttributeSet();
-		StyleConstants.setForeground(Header, Color.BLACK);
-		StyleConstants.setBold(Header, true);
+		BoldBlack = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldBlack, Color.WHITE);
+		StyleConstants.setBold(BoldBlack, true);
 
 		Default = new SimpleAttributeSet();
-		StyleConstants.setForeground(Default, Color.BLACK);
+		StyleConstants.setForeground(Default, Color.WHITE);
 		// StyleConstants.setBold(Default, true);
 
-		PriorityLow = new SimpleAttributeSet();
-		StyleConstants.setForeground(PriorityLow, Color.GREEN);
-		StyleConstants.setBold(PriorityLow, true);
+		BoldGreen = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldGreen, Color.GREEN);
+		StyleConstants.setBold(BoldGreen, true);
 
-		PriorityMedium = new SimpleAttributeSet();
-		StyleConstants.setForeground(PriorityMedium, Color.ORANGE);
-		StyleConstants.setBold(PriorityMedium, true);
+		BoldOrange = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldOrange, Color.ORANGE);
+		StyleConstants.setBold(BoldOrange, true);
 
-		PriorityHigh = new SimpleAttributeSet();
-		StyleConstants.setForeground(PriorityHigh, Color.MAGENTA);
-		StyleConstants.setBold(PriorityHigh, true);
+		BoldMagenta = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldMagenta, Color.MAGENTA);
+		StyleConstants.setBold(BoldMagenta, true);
 
-		PriorityUrgent = new SimpleAttributeSet();
-		StyleConstants.setForeground(PriorityUrgent, Color.RED);
-		StyleConstants.setBold(PriorityUrgent, true);
+		BoldRed = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldRed, Color.RED);
+		StyleConstants.setBold(BoldRed, true);
 	}
 
 	/**
@@ -190,19 +193,19 @@ public class UI extends JPanel implements ActionListener {
 					switch (returnResult.get(i).getInt()) {
 					case 1:
 						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), PriorityLow);
+								.getString(), BoldGreen);
 						break;
 					case 2:
 						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), PriorityMedium);
+								.getString(), BoldOrange);
 						break;
 					case 4:
 						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), PriorityHigh);
+								.getString(), BoldMagenta);
 						break;
 					case 8:
 						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), PriorityUrgent);
+								.getString(), BoldRed);
 						break;
 
 					default:
@@ -230,8 +233,8 @@ public class UI extends JPanel implements ActionListener {
 	private void commandPromptDisplay(String input) throws BadLocationException {
 		// Command Prompt Display
 		doc.insertString(doc.getLength(), divider + newline, Default);
-		doc.insertString(doc.getLength(), disp.displayPrompt(), Header);
-		doc.insertString(doc.getLength(), input + newline, Header);
+		doc.insertString(doc.getLength(), disp.displayPrompt(), BoldBlack);
+		doc.insertString(doc.getLength(), input + newline, BoldBlack);
 
 	}
 
