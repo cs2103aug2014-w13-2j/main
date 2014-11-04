@@ -1,5 +1,9 @@
 package edu.dynamic.dynamiz.UI;
 
+/**
+ * @author Hu Wenyan
+ *
+ */
 public class StrIntPair {
 	static final int defaultTag = 0;
 	private final String s;

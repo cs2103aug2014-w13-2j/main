@@ -310,7 +310,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			
 		}
 		else{ 
-			if(list.length < 5){
+			if(list.length < 4){
 			for( int i = 0 ; i< list.length; i++){
 			formatTaskChunk(displayContentList,list[i]);
 			displayContentList.add(new StrIntPair("\n"));
