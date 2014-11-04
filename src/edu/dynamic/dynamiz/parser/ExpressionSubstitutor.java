@@ -6,10 +6,28 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This is a singleton class to substitute abbreviations of commonly used expressions
+ * to full length expressions. The reasons to implement this in a separate class 
+ * instead of merging with Util are:
+ * 	- This serves a different purpose than the general purpose Util class
+ *  - This is open for extension in which the user is able to define their own abbreviation
+ *  - Organising purposes.
+ *  
+ *  
+ * @author nhan
+ *
+ */
 public class ExpressionSubstitutor {
 	private static ExpressionSubstitutor substitutor;
 	private HashMap<String, String> dictionary;
-	
+
+	/**
+	 * Singleton construction.
+	 * For the current implementation, the expressions are hard-coded.
+	 * User-defined abbr will be retrieved from files.
+	 * These are considered as default values.
+	 */
 	private ExpressionSubstitutor() {
 		// TODO: Initialise substitution dictionaries
 		dictionary = new HashMap<String, String>();
@@ -31,6 +49,10 @@ public class ExpressionSubstitutor {
 		dictionary.put("lst", "last");
 	}
 	
+	/**
+	 * Retrieve an instance of ExpressionSubstitutor to utilise its functionality
+	 * @return
+	 */
 	public static ExpressionSubstitutor getInstance() {
 		if (substitutor == null) {
 			substitutor = new ExpressionSubstitutor();
@@ -39,6 +61,13 @@ public class ExpressionSubstitutor {
 		return substitutor;
 	}
 	
+	/**
+	 * Retrieve a new String after substituted with the values existing in the 
+	 * look-up table
+	 * 
+	 * @param input The string in which abbrs are to be found and substituted (if any)
+	 * @return a new string whereby abbrs are substituted.
+	 */
 	public String subCommonDateAbbreviation(String input) {
 		assert input != null;
 		
@@ -53,6 +82,14 @@ public class ExpressionSubstitutor {
 		return input;
 	}
 	
+	/**
+	 * Retrieve a List<String> after substituted with the values existing in the
+	 * look-up table
+	 * 
+	 * @param inputList the List<String> input in which abbrs are to be found and
+	 * substituted (if any)
+	 * @return a new List<String> whereby arrbs are substituted.
+	 */
 	public List<String> subCommonDateAbbrList(List<String> inputList) {
 		assert inputList != null;
 		List<String> outputList = new ArrayList<String>();
@@ -64,13 +101,14 @@ public class ExpressionSubstitutor {
 		return outputList;
 	}
 	
-	public String makeWordRegEx(String input) {
+	/**
+	 * Retrieve a RegEx expression of a plain input.
+	 * 
+	 * @param input the word to be transformed into RegEx to be used by this class
+	 * @return a new RegEx that allows the ability to ignore escaped words.
+	 */
+	private String makeWordRegEx(String input) {
 		return Util.addEscapeCapacityToRegex(String.format("\\b(%1$s)\\b", input));
 	}
 	
-	public static void main(String[] args) {
-		String s = "TD td Td tD";
-		ExpressionSubstitutor sub = ExpressionSubstitutor.getInstance();
-		System.out.println(sub.subCommonDateAbbreviation(s));
-	}
 }
