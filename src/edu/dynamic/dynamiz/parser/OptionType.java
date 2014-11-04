@@ -21,35 +21,40 @@ public enum OptionType {
 	PRIORITY("-p") {
 		@Override
 		public String getParsingRegex() {
-			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
 		}
 	}, START_TIME("-s", "starttime", "from", "startdate") {
 		@Override
 		public String getParsingRegex() {
-			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
 		}
 	}, END_TIME("-d", "-e", "deadline", "endtime", "enddate", "to", "by", "due") {
 		@Override
 		String getParsingRegex() {
-			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
 		}
 	}, ON_TIME("on") {
 		@Override
 		String getParsingRegex() {
-			return String.format(SANDWICH_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex(), allAliasesRegex);
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
 		}
 	}, ORDER_BY("-o", "orderby", "sortby") {
 		@Override
 		String getParsingRegex() {
-			return String.format(RIGHT_END_FORMAT, OPTION_ESCAPE_CHARACTER, getAliasesRegex());
+			String format = Util.addEscapeCapacityToRegex(RIGHT_END_FORMAT);
+			return String.format(format, getAliasesRegex());
 		}
 	};
 	
 	
-	private static final String SANDWICH_FORMAT = "(?<!%1$s)(%2$s)" + // Lookahead for targeted option keyword.
+	private static final String SANDWICH_FORMAT = "(%1$s)" + // Lookahead for targeted option keyword.
 			  									  "(.*?)" +       // Arguments sandwiched between 2 keywords or 1 keywords and end of line
-			  									  "(?=%3$s|$)"; // Another keyword or end of line to mark the end
-	private static final String RIGHT_END_FORMAT = "(?<!%1$s)(%2$s)(.*)$";
+			  									  "(?=%2$s|$)"; // Another keyword or end of line to mark the end
+	private static final String RIGHT_END_FORMAT = "(%1$s)(.*)$";
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	private static final Map<String, Integer> PRIORITY_TABLE = new HashMap<String, Integer>();
