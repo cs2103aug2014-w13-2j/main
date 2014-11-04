@@ -230,6 +230,17 @@ public final class Util {
 	}
 	
 	/**
+	 * This will encode the given Regex string the capacity to ignore the 
+	 * escaped word, i.e. word preceded by the {@link ESCAPE_CHARACTER}.
+	 * 
+	 * @param inputRegex the Regex string to be added the capacity
+	 * @return the new Regex that include the capacity to ignore the escaped word.
+	 */
+	public static String addEscapeCapacityToRegex(String inputRegex) {
+		return String.format("(?<!%1$s)%2$s", ESCAPE_CHARACTER, inputRegex);
+	}
+	
+	/**
 	 * Convert a List<Integer> into the primitive type array
 	 * 
 	 * @param intList the List<Integer> to convert to
