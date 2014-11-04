@@ -77,7 +77,7 @@ public class UI extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(900, 600));
+		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
 
 		// / Create Command Input
 		inputScreen = new JTextField();
