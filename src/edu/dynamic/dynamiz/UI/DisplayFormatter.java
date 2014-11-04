@@ -256,12 +256,14 @@ public class DisplayFormatter implements DisplayerInterface {
 		switch(t){		
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
-			s = hf.getHelpContent();		
+			s = hf.getHelpContent();
+			s+="\n";
 			displayContentList.add(new StrIntPair(s));
 			break;		
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 	
 			s=ef.getMessage();
+			s+="\n";
 			displayContentList.add(new StrIntPair(s));
 			break;			
 		case SUCCESS_FEEDBACK_TAG:
