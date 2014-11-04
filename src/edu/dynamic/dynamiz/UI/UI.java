@@ -37,7 +37,7 @@ public class UI extends JPanel implements ActionListener {
 	// Formatting Constants
 	private StyledDocument doc;
 	private StyledDocument newdoc;
-	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 15);
+	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 18);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
 	private SimpleAttributeSet BoldBlack;
@@ -62,13 +62,12 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.setFont(font);
 		displayScreen.setBackground(Color.BLACK);
 		displayScreen.setForeground(Color.WHITE);
-		
 
 		// Set tab size
 		TabStop[] tabs = new TabStop[1];
 		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
 		TabSet tabset = new TabSet(tabs);
-		
+
 		StyleContext sc = StyleContext.getDefaultStyleContext();
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
 				StyleConstants.TabSet, tabset);
@@ -78,7 +77,7 @@ public class UI extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
 
 		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(870, 600));
+		scrollPane.getViewport().setPreferredSize(new Dimension(900, 600));
 
 		// / Create Command Input
 		inputScreen = new JTextField();
@@ -103,7 +102,8 @@ public class UI extends JPanel implements ActionListener {
 
 		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + newline, BoldBlack);
+			doc.insertString(0, disp.displayWelcomeMessage() + newline,
+					BoldBlack);
 			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
 					BoldBlack);
 		} catch (Exception e) {
@@ -118,13 +118,12 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
+		Default = new SimpleAttributeSet();
+		StyleConstants.setForeground(Default, Color.WHITE);
+
 		BoldBlack = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldBlack, Color.WHITE);
 		StyleConstants.setBold(BoldBlack, true);
-
-		Default = new SimpleAttributeSet();
-		StyleConstants.setForeground(Default, Color.WHITE);
-		// StyleConstants.setBold(Default, true);
 
 		BoldGreen = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldGreen, Color.GREEN);
@@ -162,16 +161,17 @@ public class UI extends JPanel implements ActionListener {
 
 			// Command: Flush
 			if (CommandType.fromString(input) == CommandType.FLUSH) {
+
 				// clear document screen
 				doc.remove(0, doc.getLength());
-
 				commandPromptDisplay(input);
 
 				// Feedback
 				doc.insertString(doc.getLength(), divider + newline, Default);
 				doc.insertString(doc.getLength(),
 						"Cleared screen successfully!" + newline, Default);
-
+				
+				// Logger: Flush screen
 				LoggerUI.info("Flush Screen");
 			} else {
 
