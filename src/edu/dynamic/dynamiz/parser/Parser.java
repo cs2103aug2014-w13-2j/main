@@ -168,6 +168,7 @@ public class Parser {
 	public Option parseOptionAndExtract(StringBuffer input, OptionType type) {
 		Option option = null;
 		String regEx = type.getParsingRegex();
+		
 		Pattern pattern = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(input.toString());
 		StringBuffer output = new StringBuffer();
@@ -187,6 +188,10 @@ public class Parser {
 
 		// Sanitise values
 		List<String> valueList = Util.removeEmptyStringsInArray(values);
+		
+		// Substitute abbr expression
+		ExpressionSubstitutor substitutor = ExpressionSubstitutor.getInstance();
+		valueList = substitutor.subCommonDateAbbrList(valueList);
 
 		switch (type) {
 			case START_TIME: // Fall through

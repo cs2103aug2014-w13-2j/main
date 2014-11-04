@@ -1,6 +1,10 @@
 package edu.dynamic.dynamiz.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ExpressionSubstitutor {
 	private static ExpressionSubstitutor substitutor;
@@ -38,12 +42,26 @@ public class ExpressionSubstitutor {
 	public String subCommonDateAbbreviation(String input) {
 		assert input != null;
 		
-		input = input.toLowerCase();
+		Pattern pat = null;
+		Matcher mat = null;
 		for (String abbr: dictionary.keySet()) {
-			input = input.replaceAll(makeWordRegEx(abbr), dictionary.get(abbr));
+			pat = Pattern.compile(makeWordRegEx(abbr), Pattern.CASE_INSENSITIVE);
+			mat = pat.matcher(input);
+			input = mat.replaceAll(dictionary.get(abbr));
 		}
 		
 		return input;
+	}
+	
+	public List<String> subCommonDateAbbrList(List<String> inputList) {
+		assert inputList != null;
+		List<String> outputList = new ArrayList<String>();
+		
+		for (String s: inputList) {
+			outputList.add(subCommonDateAbbreviation(s));
+		}
+		
+		return outputList;
 	}
 	
 	public String makeWordRegEx(String input) {

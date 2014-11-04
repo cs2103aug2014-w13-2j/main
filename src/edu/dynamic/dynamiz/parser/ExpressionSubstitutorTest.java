@@ -13,8 +13,8 @@ public class ExpressionSubstitutorTest {
 		ExpressionSubstitutor substitutor = ExpressionSubstitutor.getInstance();
 		
 		// Test on common case
-		String input = "td is a good day. tmr will be better. but yst was the best";
-		assertEquals("today is a good day. tomorrow will be better. but yesterday was the best", 
+		String input = "td is a good day. tmr will be better. But yst was the best";
+		assertEquals("today is a good day. tomorrow will be better. But yesterday was the best", 
 						substitutor.subCommonDateAbbreviation(input));
 		
 		// Test on corner case where abbr is embedded
@@ -32,7 +32,7 @@ public class ExpressionSubstitutorTest {
 		
 		// Test other abbr.
 		input = "nxt Friday";
-		assertEquals("next friday", substitutor.subCommonDateAbbreviation(input));
+		assertEquals("next Friday", substitutor.subCommonDateAbbreviation(input));
 		
 		input = "LST friday";
 		assertEquals("last friday", substitutor.subCommonDateAbbreviation(input));
