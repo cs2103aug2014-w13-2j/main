@@ -27,6 +27,7 @@ public class CommandSearch extends Command {
     private String searchKey;
     private int priority;
     private MyDate start, end;
+    private String status;
     private ToDoItem[] searchList = null;
     private OptionType[] optList;
     
@@ -36,12 +37,15 @@ public class CommandSearch extends Command {
      * @param priority The priority level of the item(s) to search, or -1 if not required.
      * @param start The start date of the item(s) to search, or null if not required.
      * @param end The end date of the item(s)to search, or null if not required.
+     * @param status The status of the item to search for or null if not required.
+     * @param optList The list of options in descending order of precedence, to sort the result by, or null if not required.
      */
-    public CommandSearch(String searchKey, int priority, MyDate start, MyDate end, OptionType[] optList){
+    public CommandSearch(String searchKey, int priority, MyDate start, MyDate end, String status, OptionType[] optList){
 	this.searchKey = searchKey;
 	this.priority = priority;
 	this.start = start;
 	this.end = end;
+	this.status = status;
 	this.optList = optList;
     }
     
@@ -50,7 +54,7 @@ public class CommandSearch extends Command {
      * Executes this command.
      */
     public void execute() {
-	   searchList = storage.searchItems(searchKey, priority, start, end, optList);
+	   searchList = storage.searchItems(searchKey, priority, start, end, status, optList);
     }
 
     @Override

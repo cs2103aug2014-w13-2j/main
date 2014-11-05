@@ -48,6 +48,7 @@ public class DataFileReadWrite {
     
     //File names for todo list and completed.list
     private static final String FILENAME_COMPLETED = "completed.txt";
+    private static final String FILE_DIR = "dynamiz";
     
     //Delimiters for data processing purposes.
     private static final String DATETIME_DELIM = " ";
@@ -85,14 +86,19 @@ public class DataFileReadWrite {
      * @return An ArrayList of ToDoItem objects.
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
-	File file = new File(filename);
-	File completedFile = new File(FILENAME_COMPLETED);
+	File dir = new File(FILE_DIR);
+	File file, completedFile;
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	DateTime currentTime = new DateTime();
 	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
+	    if(!dir.exists()){
+		dir.mkdir();
+	    }
+	    file = new File(dir, filename);
+	    completedFile = new File("dynamiz", FILENAME_COMPLETED);
 	    if(!file.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
