@@ -8,7 +8,6 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.structure.MyDate;
 
@@ -19,10 +18,10 @@ import edu.dynamic.dynamiz.structure.MyDate;
  */
 
 public class ParserTest {
-    
+	private static Parser parser = Parser.getInstance();
+	
     @Test
     public void test() {
-		Parser parser = Parser.getInstance();
 		CommandLine cmdLine = parser.parseCommandLine("add task");
 		assertEquals("task", cmdLine.getParam());
 
@@ -46,7 +45,6 @@ public class ParserTest {
     
     @Test
     public void testMultipleOption() {
-    	Parser parser = Parser.getInstance();
     	CommandLine cmdLine;
     	
     	cmdLine = parser.parseCommandLine("add a task from today from yesterday from tomorrow");
@@ -57,8 +55,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testEscapingInput() {
-    	Parser parser = Parser.getInstance();
+    public void testEscapingInputNormal() {
     	CommandLine cmdLine;
     	
     	// TODO: Add assertEquals for Option parsed as well
@@ -80,9 +77,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testAliases() {
-    	Parser parser = Parser.getInstance();
-    	
+    public void testAliasesNormal() {
     	CommandLine cmdLine = null;
     	String[] addCommands = {"add sth", "AdD sth", "PUT sth", "put sth", "pUt sth"};
     	
@@ -99,10 +94,13 @@ public class ParserTest {
     	}
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testAliasesErroneous() {
+    	CommandLine cmdLine = parser.parseCommandLine("sadfasdf");
+    }
+    
     @Test
     public void testParsingDate() {
-    	Parser parser = Parser.getInstance();
-    	
     	MyDate date = parser.parseMyDate("17/10/2014");
     	assertEquals("17/10/2014", date.toString());
     	
@@ -118,8 +116,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testParseDateListFromRange() {
-    	Parser parser = Parser.getInstance();
+    public void testParseDateListFromRangeNormal() {
     	DateTime today = new DateTime();
     	int yy = today.getYear();
     	
@@ -158,5 +155,17 @@ public class ParserTest {
     	expected.add(new MyDate(2, 1, yy + 1));
    
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeValidExpressionButInvalidRange() {
+    	String dateRange = "30 Dec - 3 Jan";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidExpression() {
+    	String dateRange = "-30 Dec";
+    	parser.parseDateListFromRange(dateRange);
     }
 }
