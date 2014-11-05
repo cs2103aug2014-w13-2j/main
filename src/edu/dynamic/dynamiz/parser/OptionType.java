@@ -54,7 +54,7 @@ public enum OptionType {
 		@Override
 		String getParsingRegex() {
 			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
-			return String.format(format, getAliasesRegex());
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
 		}
 	};
 	
@@ -79,7 +79,7 @@ public enum OptionType {
 	public static final int PRIORITY_INVALID = -2;
 	
 	public static final String STATUS_PENDING = "pending";
-	public static final String STATUS_COMPLETE = "complete";
+	public static final String STATUS_COMPLETED = "completed";
 	public static final String STATUS_INVALID = "invalid";
 	
 	public static final String OPTION_SIGNAL_CHARACTER = "-";
@@ -129,9 +129,9 @@ public enum OptionType {
 		STATUS_TABLE.put("pend", STATUS_PENDING);
 		STATUS_TABLE.put("p", STATUS_PENDING);
 		
-		STATUS_TABLE.put("complete", STATUS_COMPLETE);
-		STATUS_TABLE.put("comp", STATUS_COMPLETE);
-		STATUS_TABLE.put("c", STATUS_COMPLETE);
+		STATUS_TABLE.put("complete", STATUS_COMPLETED);
+		STATUS_TABLE.put("comp", STATUS_COMPLETED);
+		STATUS_TABLE.put("c", STATUS_COMPLETED);
 		
 		
 	}
