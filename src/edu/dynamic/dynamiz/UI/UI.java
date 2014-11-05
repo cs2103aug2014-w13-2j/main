@@ -273,8 +273,8 @@ public class UI extends JPanel implements ActionListener {
 	private void commandPromptDisplay(String input) throws BadLocationException {
 		// Command Prompt Display
 		doc.insertString(doc.getLength(), divider + newline, Default);
-		doc.insertString(doc.getLength(), disp.displayPrompt(), BoldBlack);
-		doc.insertString(doc.getLength(), input + newline, BoldBlack);
+		doc.insertString(doc.getLength(), disp.displayPrompt(), BoldYellow);
+		doc.insertString(doc.getLength(), input + newline, BoldYellow);
 
 	}
 
