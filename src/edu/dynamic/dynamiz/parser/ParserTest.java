@@ -31,9 +31,6 @@ public class ParserTest {
 		cmdLine = parser.parseCommandLine("add 2 on 27/9/2014 from yesterday 18:00 to 23:00");
 		assertEquals("2", cmdLine.getParam());
 
-		//cmdLine = parser.parseCommandLine("Search study from today");
-		//assertEquals("study", cmdLine.getParam());
-
 		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
 		
@@ -109,19 +106,14 @@ public class ParserTest {
     	
     	date = parser.parseMyDate("yesterday 18:00");
     }
-    
-    @Test
-    public void testParseAndExtractOption() {
-    	
-    }
-    
+
     @Test
     public void testParseDateListFromRangeNormal() {
     	DateTime today = new DateTime();
     	int yy = today.getYear();
     	
     	// Common case
-    	String dateRange = "12 Nov - 15 Nov";
+    	String dateRange = "12 Nov -> 15 Nov";
     	
     	List<MyDate> expected = new ArrayList<MyDate>();
     	expected.add(new MyDate(12,11,yy));
@@ -132,7 +124,7 @@ public class ParserTest {
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
     	// Corner case: Month crossing
-    	dateRange = "29 Nov - 3 Dec";
+    	dateRange = "29 Nov-> 3 Dec";
     	
     	expected.clear();
     	expected.add(new MyDate(29, 11, yy));
@@ -144,7 +136,7 @@ public class ParserTest {
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
     	// Corner case: Year crossing
-    	dateRange = "30 Dec 2014- 2 January 2015";
+    	dateRange = "30 Dec 2014 ->2 January 2015";
     	
     	expected.clear();
     	
@@ -155,17 +147,24 @@ public class ParserTest {
     	expected.add(new MyDate(2, 1, yy + 1));
    
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeValidExpressionButInvalidRange() {
-    	String dateRange = "30 Dec - 3 Jan";
+    	String dateRange = "30 Dec -> 3 Jan";
     	parser.parseDateListFromRange(dateRange);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeInvalidExpression() {
-    	String dateRange = "-30 Dec";
+    	String dateRange = "->30 Dec";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidSyntax() {
+    	String dateRange = "tomorrow -> today -> yesterday";
     	parser.parseDateListFromRange(dateRange);
     }
 }
