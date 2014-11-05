@@ -19,6 +19,10 @@ public class DisplayFormatter implements DisplayerInterface {
 //	private static final int ERROR_FEEDBACK_TAG = 2;
 //	private static final int SUCCESS_FEEDBACK_TAG = 3;
 //	private static final int HELP_FEEDBACK_TAG = 4;
+	final String STATU_PEND ="pending";
+	final String STATU_COMPLETE ="complete";
+	final int STATU_PEND_TAG = 10;
+	final int STATU_COMPLETE_TAG = 11;
 	
 	static final String UPDATE_COMMAND = "update";
 
@@ -368,6 +372,11 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
+		final String STATU_PEND ="pending";
+		final String STATU_COMPLETE ="complete";
+		final int STATU_PEND_TAG = 10;
+		final int STATU_COMPLETE_TAG = 11;
+		
 		assert item!=null;
 		assert contentList!=null;
 		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
@@ -378,12 +387,15 @@ public class DisplayFormatter implements DisplayerInterface {
 		int pri = item.getPriority();
 		String prioS = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
+		int stasTag;
+		if(stas.equals(STATU_PEND)) stasTag =STATU_PEND_TAG;
+		else stasTag = STATU_COMPLETE_TAG;
 		//stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
 		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
 //		contentList.add(new StrIntPair("Des: "+des+"\n"));
 //		contentList.add(new StrIntPair("Priority: "));
 		contentList.add(new StrIntPair(prioS+"\n",pri));
-		contentList.add(new StrIntPair("Status: "+stas+"\n"));
+		contentList.add(new StrIntPair("Status: "+stas+"\n",stasTag));
 		
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
