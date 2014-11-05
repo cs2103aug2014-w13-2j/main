@@ -159,6 +159,23 @@ public class Parser {
 	}
 	
 	/**
+	 * Retrieve from a list of string a list of parsed Status wherever applicable
+	 * 
+	 * @param unparsedList the unparsed list of string
+	 * @return a Status-parsed list of string containing the statuses
+	 */
+	public List<String> parseStatusList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String status: unparsedList) {
+			if (OptionType.isValidStatus(status)) {
+				parsedList.add(OptionType.getStatus(status));
+			}
+		}
+		
+		return parsedList;
+	}
+	
+	/**
 	 * Retrieve from a list of string a list of parsed OptionType wherever applicable
 	 * 
 	 * @param unparsedList the unparsed list of string
@@ -264,6 +281,13 @@ public class Parser {
 				List<String> priorityList = parsePriorityList(valueList);
 				if (!priorityList.isEmpty()) {
 					option = new Option(type, priorityList);
+					input.replace(lastMatchStart, lastMatchEnd, "");
+				}
+				break;
+			case STATUS:
+				List<String> statusList = parseStatusList(valueList);
+				if (!statusList.isEmpty()) {
+					option = new Option(type, statusList);
 					input.replace(lastMatchStart, lastMatchEnd, "");
 				}
 				break;
