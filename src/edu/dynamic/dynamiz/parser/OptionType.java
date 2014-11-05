@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.fortuna.ical4j.model.property.StatusFactory;
-
 /**
  * OptionType enum class is a class to hold the various options applicable to many commands.
  * Using OptionType allows the users to specify the PRIORITY, START_TIME, END_TIME, or
