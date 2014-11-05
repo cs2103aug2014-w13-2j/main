@@ -8,4 +8,4 @@ Displayer Color Guide
 10		Blue (Status:Completed)
 11		Cyan (Status:Pending)
 --------------------------------
-12		(Changes)
+12		Yellow (Changes)
