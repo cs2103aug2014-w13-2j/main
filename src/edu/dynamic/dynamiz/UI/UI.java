@@ -37,7 +37,7 @@ public class UI extends JPanel implements ActionListener {
 	// Formatting Constants
 	private StyledDocument doc;
 	private StyledDocument newdoc;
-	private static Font font = new Font(Font.MONOSPACED, Font.BOLD, 18);
+	private static Font font = new Font("Consolas", Font.PLAIN, 18);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
 	private SimpleAttributeSet BoldBlack;
@@ -48,6 +48,8 @@ public class UI extends JPanel implements ActionListener {
 	private SimpleAttributeSet BoldRed;
 	private SimpleAttributeSet BoldBlue;
 	private SimpleAttributeSet BoldCyan;
+	private SimpleAttributeSet BoldYellow;
+	
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
@@ -124,31 +126,36 @@ public class UI extends JPanel implements ActionListener {
 
 		BoldBlack = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldBlack, Color.WHITE);
-		StyleConstants.setBold(BoldBlack, true);
+//		StyleConstants.setBold(BoldBlack, true);
 
 		BoldGreen = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldGreen, Color.GREEN);
-		StyleConstants.setBold(BoldGreen, true);
+//		StyleConstants.setBold(BoldGreen, true);
 
 		BoldOrange = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldOrange, Color.ORANGE);
-		StyleConstants.setBold(BoldOrange, true);
+//		StyleConstants.setBold(BoldOrange, true);
 
 		BoldMagenta = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldMagenta, Color.MAGENTA);
-		StyleConstants.setBold(BoldMagenta, true);
+//		StyleConstants.setBold(BoldMagenta, true);
 
 		BoldRed = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldRed, Color.RED);
-		StyleConstants.setBold(BoldRed, true);
+//		StyleConstants.setBold(BoldRed, true);
 
 		BoldBlue = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldBlue, Color.BLUE);
-		StyleConstants.setBold(BoldBlue, true);
+//		StyleConstants.setBold(BoldBlue, true);
 
 		BoldCyan = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldCyan, Color.CYAN);
-		StyleConstants.setBold(BoldCyan, true);
+//		StyleConstants.setBold(BoldCyan, true);
+
+		BoldYellow = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldYellow, Color.YELLOW);
+//		StyleConstants.setBold(BoldYellow, true);
+		
 	}
 
 	/**
