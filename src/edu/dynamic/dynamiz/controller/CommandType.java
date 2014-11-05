@@ -68,6 +68,7 @@ public enum CommandType {
 												   OptionType.START_TIME, 
 												   OptionType.END_TIME, 
 												   OptionType.PRIORITY,
+												   OptionType.STATUS,
 												   OptionType.ON_TIME};
 		
 		@Override
