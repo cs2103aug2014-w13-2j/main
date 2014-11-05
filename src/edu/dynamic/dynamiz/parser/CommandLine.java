@@ -264,6 +264,7 @@ public class CommandLine {
 		MyDate commandStartDate = null;
 		MyDate commandEndDate = null;
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
+		String commandStatus = null;
 		
 		List<OptionType> commandOrderList= new ArrayList<OptionType>();
 		
@@ -283,8 +284,12 @@ public class CommandLine {
 			commandOrderList = extractOptionTypeList(options);
 		}
 		
-		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate,
-									commandOrderList.toArray(new OptionType[commandOrderList.size()]));
+		if (options.hasOption(OptionType.STATUS)) {
+			commandStatus = getFirstOptionValue(options, OptionType.STATUS);
+		}
+		
+		return new CommandSearch(param, commandPriority, commandStartDate, commandEndDate, 
+									commandStatus, commandOrderList.toArray(new OptionType[commandOrderList.size()]));
 	}
 
 	/**
