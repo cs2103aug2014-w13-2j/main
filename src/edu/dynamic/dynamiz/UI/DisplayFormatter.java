@@ -25,7 +25,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	final int STATU_COMPLETE_TAG = 11;
 	
 	static final String UPDATE_COMMAND = "update";
-
+	static final String SHOW_COMMAND = "show";
 	
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
@@ -281,10 +281,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			
 			//displayContentList.add(new StrIntPair(displayTitleLine()));
 			
-			getFeedbackContent(displayContentList,sf);
-			
-			
-			
+			getFeedbackContent(displayContentList,sf);		
 			
 			break;
 		default:
@@ -305,24 +302,31 @@ public class DisplayFormatter implements DisplayerInterface {
 			displayContentList.add(new StrIntPair("The list is empty!\n"));
 			return;
 		}
-		
-		if(sf.getCommandType().equals(UPDATE_COMMAND)){
+		if(sf.getCommandType().equals(SHOW_COMMAND)){
+			assert(1==list.length);
+			displayContentList.add(new StrIntPair(displayDividingLine()));
+			formatTaskChunk(displayContentList,list[0]);
+			return;
+		}
+		else if(sf.getCommandType().equals(UPDATE_COMMAND)){
 			assert(2==list.length);
+			formatTaskLine(displayContentList, list[0]);
+			formatTaskLine(displayContentList, list[1]);
+			displayContentList.add(new StrIntPair(displayDividingLine()));
 			displayContentList.add(new StrIntPair("Item affected:\n"));
 			formatTaskChunk(displayContentList,list[0]);
-			
+			displayContentList.add(new StrIntPair(displayDividingLine()));
 			displayContentList.add(new StrIntPair("Updated Item:\n"));
-			formatTaskChunk(displayContentList,list[1]);
-			
+			formatTaskChunk(displayContentList,list[1]);		
 		}
 		else{ 
-			if(list.length < 4){
-			for( int i = 0 ; i< list.length; i++){
-			formatTaskChunk(displayContentList,list[i]);
-			displayContentList.add(new StrIntPair("\n"));
-			}
-			}
-			else{
+//			if(list.length < 4){
+//			for( int i = 0 ; i< list.length; i++){
+//			formatTaskChunk(displayContentList,list[i]);
+//			displayContentList.add(new StrIntPair("\n"));
+//			}
+//			}
+//			else{
 				displayContentList.add(new StrIntPair(displayDividingLine()));
 				displayContentList.add(new StrIntPair(displayTitleLine()));
 				displayContentList.add(new StrIntPair(displayDividingLine()));
@@ -331,9 +335,7 @@ public class DisplayFormatter implements DisplayerInterface {
 				}
 				displayContentList.add(new StrIntPair(displayDividingLine()));
 			}
-		}
-		
-		
+		//}	
 	}
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
 		String strFor1 = "|  %-4s| %-26s|";
