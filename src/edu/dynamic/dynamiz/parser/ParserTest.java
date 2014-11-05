@@ -2,6 +2,10 @@ package edu.dynamic.dynamiz.parser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.controller.Command;
@@ -97,17 +101,60 @@ public class ParserTest {
     public void testParsingDate() {
     	Parser parser = Parser.getInstance();
     	
-    	MyDate date = parser.parseDate("17/10/2014");
+    	MyDate date = parser.parseMyDate("17/10/2014");
     	assertEquals("17/10/2014", date.toString());
     	
-    	date = parser.parseDate("end of October 4pm");
+    	date = parser.parseMyDate("end of October 4pm");
     	assertEquals("31/10/2014 16:00", date.toString());
     	
-    	date = parser.parseDate("yesterday 18:00");
+    	date = parser.parseMyDate("yesterday 18:00");
     }
     
     @Test
     public void testParseAndExtractOption() {
     	
+    }
+    
+    @Test
+    public void testParseDateListFromRange() {
+    	Parser parser = Parser.getInstance();
+    	DateTime today = new DateTime();
+    	int yy = today.getYear();
+    	
+    	// Common case
+    	String dateRange = "12 Nov - 15 Nov";
+    	
+    	List<MyDate> expected = new ArrayList<MyDate>();
+    	expected.add(new MyDate(12,11,yy));
+    	expected.add(new MyDate(13,11,yy));
+    	expected.add(new MyDate(14,11,yy));
+    	expected.add(new MyDate(15,11,yy));
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Month crossing
+    	dateRange = "29 Nov - 3 Dec";
+    	
+    	expected.clear();
+    	expected.add(new MyDate(29, 11, yy));
+    	expected.add(new MyDate(30, 11, yy));
+    	expected.add(new MyDate(1,12,yy));
+    	expected.add(new MyDate(2,12,yy));
+    	expected.add(new MyDate(3,12,yy));
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Year crossing
+    	dateRange = "30 Dec 2014- 2 January 2015";
+    	
+    	expected.clear();
+    	
+    	yy = 2014;
+    	expected.add(new MyDate(30, 12, yy));
+    	expected.add(new MyDate(31, 12, yy));
+    	expected.add(new MyDate(1, 1, yy + 1));
+    	expected.add(new MyDate(2, 1, yy + 1));
+   
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     }
 }

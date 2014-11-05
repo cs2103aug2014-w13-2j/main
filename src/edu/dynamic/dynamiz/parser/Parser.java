@@ -7,6 +7,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import com.joestelmach.natty.DateGroup;
 
 import edu.dynamic.dynamiz.controller.Command;
@@ -44,7 +47,9 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
  */
 public class Parser {
 	/** A regular expression matching explicit date format*/
-	private static final String REGEX_DATE = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
+	private static final String EXPLICIT_DATE_REGEX = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
+	private static final String DATE_RANGE_REGEX = "([^-]*)-([^-]*)";
+	private static final String INVALID_DATE_RANGE_MSG = "Invalid date range: %1$s";
 	
 	/** An attribute for Singleton pattern*/
 	private static Parser parser = null;
@@ -77,7 +82,7 @@ public class Parser {
 	 * @param dateStr the string that may contain a date information
 	 * @return a parsed MyDate object if applicable, otherwise null
 	 */
-	public MyDate parseDate(String dateStr) {	
+	public MyDate parseMyDate(String dateStr) {	
 		assert dateStr != null;
 		
 		String dateStrUS = changeDateFormatUKToUS(dateStr);
@@ -87,11 +92,30 @@ public class Parser {
 		if (!groups.isEmpty()) {
 			DateGroup group = groups.get(0);
 			Date date = group.getDates().get(0);
+			
 			if (group.isTimeInferred()) {
 				return new MyDate(date);
 			} else {
 				return new MyDateTime(date);
 			}
+		} else {
+			LoggerParser.warning("Unrecognised date string: " + dateStr);
+			return null;
+		}	
+	}
+	
+	public DateTime parseJodaDate(String dateStr) {
+		assert dateStr != null;
+		
+		String dateStrUS = changeDateFormatUKToUS(dateStr);
+		
+		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = nattyParser.parse(dateStrUS);
+		if (!groups.isEmpty()) {
+			DateGroup group = groups.get(0);
+			Date date = group.getDates().get(0);
+			
+			return new DateTime(date);
 		} else {
 			LoggerParser.warning("Unrecognised date string: " + dateStr);
 			return null;
@@ -108,7 +132,7 @@ public class Parser {
 		List<String> parsedList = new ArrayList<String>();
 		
 		for (String dateStr: unparsedList) {
-			MyDate date = parseDate(dateStr);
+			MyDate date = parseMyDate(dateStr);
 			if (date != null) {
 				parsedList.add(date.toString());
 			}
@@ -150,6 +174,39 @@ public class Parser {
 		}
 		
 		return parsedList;
+	}
+	
+	/**
+	 * Retrieve a List<MyDate> from a list of valid string date range
+	 * 
+	 * @param dateRange the string date range given
+	 * @return The List<MyDate> generated from the valid date range. Null otherwise
+	 */
+	public List<MyDate> parseDateListFromRange(String dateRange) {
+		Pattern rangePat = Pattern.compile(DATE_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(dateRange.trim());
+		
+		List<MyDate> dates = new ArrayList<MyDate>();
+		
+		if (rangeMat.matches()) {
+			DateTime startDate = parseJodaDate(rangeMat.group(1));
+			DateTime endDate = parseJodaDate(rangeMat.group(2));
+			
+			int days = Days.daysBetween(startDate, endDate).getDays();
+			
+			if (days < 0) {
+				throw new IllegalArgumentException(String.format(INVALID_DATE_RANGE_MSG, dateRange));
+			}
+			
+			for (int i = 0; i <= days; i++) {
+				DateTime date = startDate.plusDays(i);
+				dates.add(Util.convertJodaToMyDate(date));
+			}
+			
+			return dates;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -232,7 +289,7 @@ public class Parser {
 	public String changeDateFormatUKToUS(String dateStr) {
 		assert(dateStr != null);
 		
-		return dateStr.replaceAll(REGEX_DATE, "$2/$1/$3");
+		return dateStr.replaceAll(EXPLICIT_DATE_REGEX, "$2/$1/$3");
 	}
 	
 	/**
