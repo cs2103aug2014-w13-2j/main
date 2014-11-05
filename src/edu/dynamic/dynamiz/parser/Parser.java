@@ -107,6 +107,13 @@ public class Parser {
 		}	
 	}
 	
+	/**
+	 * Retrieve a {@link org.joda.time.DateTime object parsed from a string. 
+	 * Using natty library as the main parsing mechanism
+	 * 
+	 * @param dateStr the string that may contain a date information
+	 * @return a parsed {@link org.joda.time.DateTime object if applicable, otherwise null
+	 */
 	public DateTime parseJodaDate(String dateStr) {
 		assert dateStr != null;
 		
@@ -255,7 +262,6 @@ public class Parser {
 		
 		Pattern pattern = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(input.toString());
-		StringBuffer output = new StringBuffer();
 		
 		int lastMatchStart = 0;
 		int lastMatchEnd = 0;
