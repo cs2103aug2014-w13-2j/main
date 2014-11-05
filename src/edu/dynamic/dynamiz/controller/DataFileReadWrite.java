@@ -95,10 +95,10 @@ public class DataFileReadWrite {
 	
 	try{
 	    if(!dir.exists()){
-		dir.mkdir();
+		dir.mkdirs();
 	    }
 	    file = new File(dir, filename);
-	    completedFile = new File("dynamiz", FILENAME_COMPLETED);
+	    completedFile = new File(dir, FILENAME_COMPLETED);
 	    if(!file.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();

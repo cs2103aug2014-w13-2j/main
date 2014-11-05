@@ -38,11 +38,12 @@ public class CommandHelp extends Command {
     private static final String HELPFILE_MAIN = "help/help.txt";
     private static final String HELPFILE_ADD = "help/help_add.txt";
     private static final String HELPFILE_DELETE = "help/help_delete.txt";
-    private static final String HELPFILE_DO = "help/help_do.txt";
+    private static final String HELPFILE_DO = "help/help_mark.txt";
     private static final String HELPFILE_LIST = "help/help_list.txt";
     private static final String HELPFILE_REDO = "help/help_redo.txt";
     private static final String HELPFILE_SEARCH = "help/help_search.txt";
     private static final String HELPFILE_UNDO = "help/help_undo.txt";
+    private static final String HELPFILE_UNMARK = "help/help_unmark.txt";
     private static final String HELPFILE_UPDATE = "help/help_update.txt";
     
     //Logger to log errors
@@ -93,6 +94,8 @@ public class CommandHelp extends Command {
 		case UNDO: helpFile = new File(HELPFILE_UNDO);
 			break;
 		case UPDATE: helpFile = new File(HELPFILE_UPDATE);
+			break;
+		case UNMARK: helpFile = new File(HELPFILE_UNMARK);
 			break;
 		default: helpFile = new File(HELPFILE_MAIN);
 	    }
