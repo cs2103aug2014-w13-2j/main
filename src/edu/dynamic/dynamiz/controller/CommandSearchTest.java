@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
@@ -15,14 +14,13 @@ public class CommandSearchTest {
     
     @Test
     public void test() {
-	CommandSearch cmd = new CommandSearch("CS", -1, null, new MyDate(31, 10, 2014), null);
+	Command cmd = new CommandSearch("CS", -1, null, null, ToDoItem.STATUS_PENDING, null);
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
-	System.out.println(list.length);
-	for(ToDoItem item: list){
-	    System.out.println(item);
+	assertTrue(list!=null);
+	for(ToDoItem i: list){
+	    assertEquals(ToDoItem.STATUS_PENDING, i.getStatus());
 	}
-	System.out.println();
     }
     
 }
