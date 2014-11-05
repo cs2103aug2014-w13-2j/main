@@ -46,7 +46,8 @@ public class UI extends JPanel implements ActionListener {
 	private SimpleAttributeSet BoldOrange;
 	private SimpleAttributeSet BoldMagenta;
 	private SimpleAttributeSet BoldRed;
-
+	private SimpleAttributeSet BoldBlue;
+	private SimpleAttributeSet BoldCyan;
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
@@ -140,6 +141,14 @@ public class UI extends JPanel implements ActionListener {
 		BoldRed = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldRed, Color.RED);
 		StyleConstants.setBold(BoldRed, true);
+		
+		BoldBlue = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldBlue, Color.BLUE);
+		StyleConstants.setBold(BoldBlue, true);
+
+		BoldCyan = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldCyan, Color.CYAN);
+		StyleConstants.setBold(BoldCyan, true);
 	}
 
 	/**
@@ -191,6 +200,8 @@ public class UI extends JPanel implements ActionListener {
 				// Display feedback
 				for (int i = 0; i < returnResult.size(); i++) {
 					switch (returnResult.get(i).getInt()) {
+					// Display Color (Priority)
+					// ----------------------------------------------------------
 					case 1:
 						doc.insertString(doc.getLength(), returnResult.get(i)
 								.getString(), BoldGreen);
@@ -207,7 +218,17 @@ public class UI extends JPanel implements ActionListener {
 						doc.insertString(doc.getLength(), returnResult.get(i)
 								.getString(), BoldRed);
 						break;
-
+					// Display Color (Status)
+					// ----------------------------------------------------------
+					case 10:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), BoldBlue);
+						break;
+					case 11:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), BoldCyan);
+						break;
+					
 					default:
 						doc.insertString(doc.getLength(), returnResult.get(i)
 								.getString(), Default);
