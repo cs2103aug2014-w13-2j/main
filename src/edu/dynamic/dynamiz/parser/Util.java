@@ -24,15 +24,12 @@ public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
 	private static final String ESCAPE_CHARACTER = ";";
-	private static final String POSITIVE_NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
-	private static final String DATE_RANGE_REGEX = "([^-]+)(-)([^-]+)";
+	
+	private static final String NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
 	
 	private static final String INVALID_NUMBER_RANGE_MSG = "Not a valid number range: %1$s";
 	private static final int START_NUMBER_GROUP = 1;
 	private static final int END_NUMBER_GROUP = 3;
-	
-	private static final int START_DATE_GROUP = 1;
-	private static final int END_DATE_GROUP = 3;
 	
 	public static List<String> removeEmptyStringsInList(List<String> list) {
 		List<String> newList = new ArrayList<String>();
@@ -184,7 +181,7 @@ public final class Util {
 	 * @return true if the given string satisfies the number range format. False otherwise.
 	 */
 	public static boolean isValidNumberRange(String range) {
-		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
 		Matcher rangeMat = rangePat.matcher(range.trim());
 		if (rangeMat.matches()) {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
@@ -205,7 +202,7 @@ public final class Util {
 	 * string matches format but not valid. Null otherwise.
 	 */
 	public static List<Integer> getNumberListFromRange(String range) {
-		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
 		Matcher rangeMat = rangePat.matcher(range.trim());
 		if (rangeMat.matches()) {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
