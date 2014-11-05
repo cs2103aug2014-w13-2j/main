@@ -1,0 +1,11 @@
+Displayer Color Guide
+--------------------------------
+1		Green (Priority:Low)
+2		Orange (Priority:Medium)
+4		Magenta (Priority:High)
+8		Red (Priority:Urgent)
+--------------------------------
+10		Blue (Status:Completed)
+11		Cyan (Status:Pending)
+--------------------------------
+12		Yellow (Changes)

@@ -22,9 +22,9 @@ import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
  * Defines the UI for Dynamiz using Java Swing
- * 
- * @author XYLau
+ * @author A0114573J
  */
+
 public class UI extends JPanel implements ActionListener {
 	// Screen components
 	protected JTextField inputScreen;
@@ -46,7 +46,8 @@ public class UI extends JPanel implements ActionListener {
 	private SimpleAttributeSet BoldOrange;
 	private SimpleAttributeSet BoldMagenta;
 	private SimpleAttributeSet BoldRed;
-
+	private SimpleAttributeSet BoldBlue;
+	private SimpleAttributeSet BoldCyan;
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
@@ -140,6 +141,14 @@ public class UI extends JPanel implements ActionListener {
 		BoldRed = new SimpleAttributeSet();
 		StyleConstants.setForeground(BoldRed, Color.RED);
 		StyleConstants.setBold(BoldRed, true);
+
+		BoldBlue = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldBlue, Color.BLUE);
+		StyleConstants.setBold(BoldBlue, true);
+
+		BoldCyan = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldCyan, Color.CYAN);
+		StyleConstants.setBold(BoldCyan, true);
 	}
 
 	/**
@@ -170,7 +179,7 @@ public class UI extends JPanel implements ActionListener {
 				doc.insertString(doc.getLength(), divider + newline, Default);
 				doc.insertString(doc.getLength(),
 						"Cleared screen successfully!" + newline, Default);
-				
+
 				// Logger: Flush screen
 				LoggerUI.info("Flush Screen");
 			} else {
@@ -185,12 +194,26 @@ public class UI extends JPanel implements ActionListener {
 
 				// Feedback Display
 				doc.insertString(doc.getLength(), divider + newline, Default);
-				// previously: doc.insertString(doc.getLength(), returnResult +
-				// newline, null);
-
-				// Display feedback
+				
+				/*
+				 * Display feedback
+				 * 
+				 * Displayer Color Guide 
+				 * -------------------------------- 
+				 * 1	Green (Priority:Low) 
+				 * 2 	Orange (Priority:Medium) 
+				 * 4 	Magenta(Priority:High) 
+				 * 8 	Red (Priority:Urgent)
+				 * -------------------------------- 
+				 * 10 	Blue (Status:Completed)
+				 * 11 	Cyan (Status:Pending) 
+				 * -------------------------------- 
+				 * 12	Yellow (Changes)
+				 */
 				for (int i = 0; i < returnResult.size(); i++) {
 					switch (returnResult.get(i).getInt()) {
+					// Display Color (Priority)
+					// ----------------------------------------------------------
 					case 1:
 						doc.insertString(doc.getLength(), returnResult.get(i)
 								.getString(), BoldGreen);
@@ -206,6 +229,16 @@ public class UI extends JPanel implements ActionListener {
 					case 8:
 						doc.insertString(doc.getLength(), returnResult.get(i)
 								.getString(), BoldRed);
+						break;
+					// Display Color (Status)
+					// ----------------------------------------------------------
+					case 10:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), BoldBlue);
+						break;
+					case 11:
+						doc.insertString(doc.getLength(), returnResult.get(i)
+								.getString(), BoldCyan);
 						break;
 
 					default:
