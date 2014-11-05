@@ -17,7 +17,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectItems()	//Gets the list of items with the keyword in their description.
  * String getCommandName()	//Gets the string representation of this command's type.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandSearch extends Command {
     //The string representation of this command's type.

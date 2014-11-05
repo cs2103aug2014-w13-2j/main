@@ -10,6 +10,10 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * JUnit test case for Controller.
+ * @author A0110781N
+ */
 public class ControllerTest {
     
     @Test

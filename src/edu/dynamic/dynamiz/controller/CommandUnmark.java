@@ -18,7 +18,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void redo()		//Re-executes this command.
  * void undo()		//Undo this command.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandUnmark extends Command implements Undoable {
     //String representation of this command's type

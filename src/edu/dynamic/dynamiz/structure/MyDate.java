@@ -26,7 +26,7 @@ import java.util.Date;
  * protected void setYear(int year)	//Sets the year
  * String toString()	//Gets the String representation of this date.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class MyDate implements Comparable<MyDate>{
     //Default date values.

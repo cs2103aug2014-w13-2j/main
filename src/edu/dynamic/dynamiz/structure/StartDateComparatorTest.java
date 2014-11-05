@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * JUnit test class to test correctness of StartDateComparator.
- * @author zixian
+ * @author A0110781N
  */
 public class StartDateComparatorTest {
     

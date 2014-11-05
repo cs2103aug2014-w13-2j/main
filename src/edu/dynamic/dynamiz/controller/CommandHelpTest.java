@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * JUnit test class for CommandHelp.
- * @author zixian
+ * @author A0110781N
  */
 public class CommandHelpTest {
     

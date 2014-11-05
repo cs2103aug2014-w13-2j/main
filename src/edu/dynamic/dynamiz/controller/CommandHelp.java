@@ -21,7 +21,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getContent()	//Gets the contents of the help page.
  * void execute()	//Executes this command.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandHelp extends Command {
     //String representation of this command's type

@@ -11,7 +11,7 @@ import java.util.Comparator;
  * Public Methods
  * int compare(ToDoItem item1, ToDoItem item2)	//Compares item 1 and item2
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class EndDateComparator implements Comparator<ToDoItem>{
     

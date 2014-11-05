@@ -35,7 +35,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void markItem(ToDoItem item)	//Marks the given ToDoItem as completed.
  * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class Storage {
     private static final String TODOLIST_FILENAME = "todo.txt";

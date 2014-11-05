@@ -22,7 +22,7 @@ import java.util.Date;
  * void setTime(int hour, int minute)	//Sets the time of this date time object.
  * String toString()	//Gets the String rerpesentation of this date time object.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class MyDateTime extends MyDate {
     //The default time values

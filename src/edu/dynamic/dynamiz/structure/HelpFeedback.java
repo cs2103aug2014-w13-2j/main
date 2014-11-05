@@ -10,7 +10,7 @@ package edu.dynamic.dynamiz.structure;
  * String getHelpContent()	//Gets the help page content.
  * String getClassName()	//Gets the String representation of this feedback's class.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class HelpFeedback extends Feedback {
     public static final String CLASSNAME = "HelpFeedback";

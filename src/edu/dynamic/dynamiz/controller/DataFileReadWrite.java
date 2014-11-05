@@ -33,7 +33,7 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * static TaskItem makeTaskItem(String data)	Creates a TaskItem from the data read from file.
  * static ToDoItem makeToDoItem(String data)	Creates a ToDoItem form the data read from file.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class DataFileReadWrite {
     /*

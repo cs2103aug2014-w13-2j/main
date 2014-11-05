@@ -19,7 +19,7 @@ package edu.dynamic.dynamiz.structure;
  * String toFileString()	//Gets the String representation of this task used in file I/O.
  * String toString()	//Gets the String representation of this task.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class TaskItem extends ToDoItem {
     //String formatting used in this class
