@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.sun.org.apache.xerces.internal.impl.xs.SubstitutionGroupHandler;
-
 public class ExpressionSubstitutorTest {
 
 	@Test
