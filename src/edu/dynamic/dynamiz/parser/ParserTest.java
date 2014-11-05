@@ -115,11 +115,11 @@ public class ParserTest {
     	// Common case
     	String dateRange = "12 Nov -> 15 Nov";
     	
-    	List<MyDate> expected = new ArrayList<MyDate>();
-    	expected.add(new MyDate(12,11,yy));
-    	expected.add(new MyDate(13,11,yy));
-    	expected.add(new MyDate(14,11,yy));
-    	expected.add(new MyDate(15,11,yy));
+    	List<String> expected = new ArrayList<String>();
+    	expected.add(new MyDate(12,11,yy).toString());
+    	expected.add(new MyDate(13,11,yy).toString());
+    	expected.add(new MyDate(14,11,yy).toString());
+    	expected.add(new MyDate(15,11,yy).toString());
     	
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
@@ -127,11 +127,11 @@ public class ParserTest {
     	dateRange = "29 Nov-> 3 Dec";
     	
     	expected.clear();
-    	expected.add(new MyDate(29, 11, yy));
-    	expected.add(new MyDate(30, 11, yy));
-    	expected.add(new MyDate(1,12,yy));
-    	expected.add(new MyDate(2,12,yy));
-    	expected.add(new MyDate(3,12,yy));
+    	expected.add(new MyDate(29, 11, yy).toString());
+    	expected.add(new MyDate(30, 11, yy).toString());
+    	expected.add(new MyDate(1,12,yy).toString());
+    	expected.add(new MyDate(2,12,yy).toString());
+    	expected.add(new MyDate(3,12,yy).toString());
     	
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
@@ -141,13 +141,12 @@ public class ParserTest {
     	expected.clear();
     	
     	yy = 2014;
-    	expected.add(new MyDate(30, 12, yy));
-    	expected.add(new MyDate(31, 12, yy));
-    	expected.add(new MyDate(1, 1, yy + 1));
-    	expected.add(new MyDate(2, 1, yy + 1));
+    	expected.add(new MyDate(30, 12, yy).toString());
+    	expected.add(new MyDate(31, 12, yy).toString());
+    	expected.add(new MyDate(1, 1, yy + 1).toString());
+    	expected.add(new MyDate(2, 1, yy + 1).toString());
    
-    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
-    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));	
     }
     
     @Test(expected = IllegalArgumentException.class)

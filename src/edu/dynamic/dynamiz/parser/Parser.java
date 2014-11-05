@@ -135,14 +135,54 @@ public class Parser {
 		List<String> parsedList = new ArrayList<String>();
 		
 		for (String dateStr: unparsedList) {
-			MyDate date = parseMyDate(dateStr);
-			if (date != null) {
-				parsedList.add(date.toString());
+			List<String> datesRange = parseDateListFromRange(dateStr);
+			if (datesRange == null) {
+				MyDate date = parseMyDate(dateStr);
+				if (date != null) {
+					parsedList.add(date.toString());
+				}
+			} else {
+				parsedList = datesRange;
 			}
 		}
 		
 		return parsedList;
-	}	
+	}
+	
+	
+	/**
+	 * Retrieve a List<String> of MyDate representation from a list of valid string date range
+	 * 
+	 * @param dateRange the string date range given
+	 * @return The List<String> of MyDate representation generated from the valid date range. Null otherwise
+	 */
+	public List<String> parseDateListFromRange(String dateRange) {
+		Pattern rangePat = Pattern.compile(DATE_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(dateRange.trim());
+		
+		List<String> dates = new ArrayList<String>();
+		
+		if (rangeMat.matches()) {
+			DateTime startDate = parseJodaDate(rangeMat.group(1));
+			DateTime endDate = parseJodaDate(rangeMat.group(2));
+			
+			int days = Days.daysBetween(startDate, endDate).getDays();
+			
+			if (days < 0) {
+				throw new IllegalArgumentException(String.format(INVALID_DATE_RANGE_MSG, dateRange));
+			}
+			
+			for (int i = 0; i <= days; i++) {
+				DateTime date = startDate.plusDays(i);
+				dates.add(Util.convertJodaToMyDate(date).toString());
+			}
+			
+			return dates;
+		} else {
+			return null;
+		}
+	}
+
 
 	/**
 	 * Retrieve from a list of string a list of parsed Priority wherever applicable
@@ -194,39 +234,6 @@ public class Parser {
 		}
 		
 		return parsedList;
-	}
-	
-	/**
-	 * Retrieve a List<MyDate> from a list of valid string date range
-	 * 
-	 * @param dateRange the string date range given
-	 * @return The List<MyDate> generated from the valid date range. Null otherwise
-	 */
-	public List<MyDate> parseDateListFromRange(String dateRange) {
-		Pattern rangePat = Pattern.compile(DATE_RANGE_REGEX);
-		Matcher rangeMat = rangePat.matcher(dateRange.trim());
-		
-		List<MyDate> dates = new ArrayList<MyDate>();
-		
-		if (rangeMat.matches()) {
-			DateTime startDate = parseJodaDate(rangeMat.group(1));
-			DateTime endDate = parseJodaDate(rangeMat.group(2));
-			
-			int days = Days.daysBetween(startDate, endDate).getDays();
-			
-			if (days < 0) {
-				throw new IllegalArgumentException(String.format(INVALID_DATE_RANGE_MSG, dateRange));
-			}
-			
-			for (int i = 0; i <= days; i++) {
-				DateTime date = startDate.plusDays(i);
-				dates.add(Util.convertJodaToMyDate(date));
-			}
-			
-			return dates;
-		} else {
-			return null;
-		}
 	}
 
 	/**
