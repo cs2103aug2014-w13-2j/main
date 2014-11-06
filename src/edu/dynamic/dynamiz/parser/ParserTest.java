@@ -113,7 +113,7 @@ public class ParserTest {
     	int yy = today.getYear();
     	
     	// Common case
-    	String dateRange = "12 Nov -> 15 Nov";
+    	String dateRange = "12 Nov > 15 Nov";
     	
     	List<String> expected = new ArrayList<String>();
     	expected.add(new MyDate(12,11,yy).toString());
@@ -124,7 +124,7 @@ public class ParserTest {
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
     	// Corner case: Month crossing
-    	dateRange = "29 Nov-> 3 Dec";
+    	dateRange = "29 Nov> 3 Dec";
     	
     	expected.clear();
     	expected.add(new MyDate(29, 11, yy).toString());
@@ -136,7 +136,7 @@ public class ParserTest {
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));
     	
     	// Corner case: Year crossing
-    	dateRange = "30 Dec 2014 ->2 January 2015";
+    	dateRange = "30 Dec 2014 >2 January 2015";
     	
     	expected.clear();
     	
@@ -151,19 +151,19 @@ public class ParserTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeValidExpressionButInvalidRange() {
-    	String dateRange = "30 Dec -> 3 Jan";
+    	String dateRange = "30 Dec > 3 Jan";
     	parser.parseDateListFromRange(dateRange);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeInvalidExpression() {
-    	String dateRange = "->30 Dec";
+    	String dateRange = ">30 Dec";
     	parser.parseDateListFromRange(dateRange);
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeInvalidSyntax() {
-    	String dateRange = "tomorrow -> today -> yesterday";
+    	String dateRange = "tomorrow > today > yesterday";
     	parser.parseDateListFromRange(dateRange);
     }
 }

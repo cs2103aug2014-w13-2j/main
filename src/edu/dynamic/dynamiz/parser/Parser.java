@@ -49,7 +49,7 @@ public class Parser {
 	/** A regular expression matching explicit date format*/
 	private static final String EXPLICIT_DATE_REGEX = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
 	
-	private static final String DATE_RANGE_INDICATOR = "->";
+	private static final String DATE_RANGE_INDICATOR = ">";
 	private static final String DATE_RANGE_REGEX = String.format("(.*)%1$s(.*)", DATE_RANGE_INDICATOR);
 	
 	private static final String INVALID_DATE_RANGE_MSG = "Invalid date range: %1$s";
