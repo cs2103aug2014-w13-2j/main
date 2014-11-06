@@ -17,7 +17,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void execute()	//Executes this command
  * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Assigns the appropriate stacks to this command for execution
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandUndo extends Command {
     //String representation of this command's type

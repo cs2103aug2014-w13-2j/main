@@ -35,7 +35,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void markItem(ToDoItem item)	//Marks the given ToDoItem as completed.
  * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class Storage {
     private static final String TODOLIST_FILENAME = "todo.txt";
@@ -189,12 +189,13 @@ public class Storage {
      * @param keyword The keyword to search in the objects or null if no search by keyword is needed.
      * @param priority The priority level to the item(s) to search or -1 if not needed.
      * @param start the start date of the item(s) to search or null if search by start date is not needed.
-     * @param end The end date of the item(s) t search or null if search by end date is not needed.
+     * @param end The end date of the item(s) to search or null if search by end date is not needed.
+     * @param status the status of the item(s)to search or null if search by status is not needed.
      * @param optList The list of options(in descending precedence) to sort search results by.
      * @return An array of ToDoItem objects containing all of the given values or null
      * 		if the list is empty.
      */
-    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList){
+    public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, String status, OptionType[] optList){
 	ArrayList<ToDoItem> temp = mainList;;
 	if(keyword!=null && !keyword.isEmpty()){
 	    temp = searchByKeyword(temp, keyword);
@@ -207,6 +208,9 @@ public class Storage {
 	}
 	if(end!=null){
 	    temp = searchByEndDate(temp, end);
+	}
+	if(status!=null && !status.isEmpty()){
+	    temp = searchByStatus(temp, status);
 	}
 	if(temp.isEmpty()){
 	    return null;
@@ -281,6 +285,23 @@ public class Storage {
 	for(ToDoItem i: list){
 	    if(((i instanceof EventItem) && ((EventItem)i).getEndDate().equals(end)) ||
 		    ((i instanceof TaskItem) && ((TaskItem)i).getDeadline().equals(end))){
+		temp.add(i);
+	    }
+	}
+	return temp;
+    }
+    
+    /**
+     * Gets a list of ToDoItem with the given status.
+     * @param list The list to perform search on.
+     * @param status The status to search for.
+     * @return An ArrayList of ToDoItem from the given list with the given status.
+     */
+    private ArrayList<ToDoItem> searchByStatus(ArrayList<ToDoItem> list, String status){
+	assert list!=null && status!=null && !status.isEmpty();
+	ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+	for(ToDoItem i: list){
+	    if(i.getStatus().equalsIgnoreCase(status)){
 		temp.add(i);
 	    }
 	}

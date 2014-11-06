@@ -11,7 +11,7 @@ package edu.dynamic.dynamiz.structure;
  * String getOriginalComamnd()	//Gets the input command that this feedback is used for.
  * String getClassName()	//gets the String representation of this feedback's class.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public abstract class Feedback {
     //The String representation of this feedback's class.

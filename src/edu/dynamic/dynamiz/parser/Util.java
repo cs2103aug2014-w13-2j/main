@@ -9,6 +9,10 @@ import java.util.regex.Pattern;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 /**
  * Util class to store some utilities function in String manipulation
  * 
@@ -20,7 +24,8 @@ public final class Util {
 	/** This is the default delimiter to split the string, i.e. Whitespace*/
 	private static final String DEFAULT_DELIMITER = "\\s+";
 	private static final String ESCAPE_CHARACTER = ";";
-	private static final String POSITIVE_NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
+	
+	private static final String NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
 	
 	private static final String INVALID_NUMBER_RANGE_MSG = "Not a valid number range: %1$s";
 	private static final int START_NUMBER_GROUP = 1;
@@ -176,7 +181,7 @@ public final class Util {
 	 * @return true if the given string satisfies the number range format. False otherwise.
 	 */
 	public static boolean isValidNumberRange(String range) {
-		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
 		Matcher rangeMat = rangePat.matcher(range.trim());
 		if (rangeMat.matches()) {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
@@ -197,7 +202,7 @@ public final class Util {
 	 * string matches format but not valid. Null otherwise.
 	 */
 	public static List<Integer> getNumberListFromRange(String range) {
-		Pattern rangePat = Pattern.compile(POSITIVE_NUMBER_RANGE_REGEX);
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
 		Matcher rangeMat = rangePat.matcher(range.trim());
 		if (rangeMat.matches()) {
 			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
@@ -278,5 +283,38 @@ public final class Util {
 			assert false;
 			return null;
 		}
+	}
+	
+	/**
+	 * A caster to cast from {@link org.joda.time.DateTime} object to {@link MyDate} 
+	 * object. {@link MyDate} will only contain the Date information without
+	 * the timing.
+	 * 
+	 * @param dt the {@link org.joda.time.DateTime} object to be casted
+	 * @return the casted {@link MyDate} object
+	 */
+	public static MyDate convertJodaToMyDate(DateTime dt) {
+		assert dt != null;
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+		String MyDateStr = formatter.print(dt);
+		
+		return MyDate.makeDate(MyDateStr);
+	}
+	
+	/**
+	 * A caster to cast from {@link org.joda.time.DateTime} object to {@link MyDateTime} 
+	 * object. {@link MyDateTime} will contain the Date and Time information
+	 * 
+	 * @param dt the {@link org.joda.time.DateTime} object to be casted
+	 * @return the casted {@link MyDateTime} object
+	 */
+	public static MyDateTime convertJodaToMyDateTime(DateTime dt) {
+		assert dt != null;
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm");
+		String MyDateTimeStr = formatter.print(dt);
+		
+		return MyDateTime.makeDateTime(MyDateTimeStr);
 	}
 }

@@ -12,7 +12,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Test unit for CommandUpdate class.
- * @author zixian
+ * @author A0110781N
  */
 public class CommandUpdateTest {
     

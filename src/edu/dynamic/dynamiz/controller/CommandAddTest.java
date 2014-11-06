@@ -10,6 +10,10 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * JUnit test case for Command Add.
+ * @author A0110781N
+ */
 public class CommandAddTest {
     
     @Test

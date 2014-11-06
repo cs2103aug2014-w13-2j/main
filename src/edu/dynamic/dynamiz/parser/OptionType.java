@@ -48,6 +48,12 @@ public enum OptionType {
 			String format = Util.addEscapeCapacityToRegex(RIGHT_END_FORMAT);
 			return String.format(format, getAliasesRegex());
 		}
+	}, STATUS("stat", "st") {
+		@Override
+		String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
 	};
 	
 	
@@ -58,16 +64,21 @@ public enum OptionType {
 	
 	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
 	private static final Map<String, Integer> PRIORITY_TABLE = new HashMap<String, Integer>();
+	private static final Map<String, String> STATUS_TABLE = new HashMap<String, String>();
 	
 	private static String allAliasesRegex = "";
 	
-	public static int PRIORITY_URGENT = 8;
-	public static int PRIORITY_HIGH = 4;
-	public static int PRIORITY_MEDIUM = 2;
-	public static int PRIORITY_LOW = 1;
-	public static int PRIORITY_NONE = 0;
-	public static int PRIORITY_UNCHANGED = -1;	
-	public static int PRIORITY_INVALID = -2;
+	public static final int PRIORITY_URGENT = 8;
+	public static final int PRIORITY_HIGH = 4;
+	public static final int PRIORITY_MEDIUM = 2;
+	public static final int PRIORITY_LOW = 1;
+	public static final int PRIORITY_NONE = 0;
+	public static final int PRIORITY_UNCHANGED = -1;	
+	public static final int PRIORITY_INVALID = -2;
+	
+	public static final String STATUS_PENDING = "pending";
+	public static final String STATUS_COMPLETED = "completed";
+	public static final String STATUS_INVALID = "invalid";
 	
 	public static final String OPTION_SIGNAL_CHARACTER = "-";
 	
@@ -110,6 +121,17 @@ public enum OptionType {
 		PRIORITY_TABLE.put("none", PRIORITY_NONE);
 		
 		PRIORITY_TABLE.put("unchanged", PRIORITY_UNCHANGED);
+		
+		// Initialise status table
+		STATUS_TABLE.put("pending", STATUS_PENDING);
+		STATUS_TABLE.put("pend", STATUS_PENDING);
+		STATUS_TABLE.put("p", STATUS_PENDING);
+		
+		STATUS_TABLE.put("complete", STATUS_COMPLETED);
+		STATUS_TABLE.put("comp", STATUS_COMPLETED);
+		STATUS_TABLE.put("c", STATUS_COMPLETED);
+		
+		
 	}
 	
 	/**
@@ -149,18 +171,55 @@ public enum OptionType {
 	}
 	
 	/**
-	 * Retrieve PRIORITY
+	 * To check if the String priority given is an alias of any of the
+	 * existing PRIORITY levels
+	 * 
+	 * @param priority the string containing the priority level
+	 * @return true if it is a valid alias. False otherwise
 	 */
 	public static boolean isValidPriority(String priority) {
 		return PRIORITY_TABLE.containsKey(priority.toLowerCase());
 	}
 	
+	/**
+	 * Retrieve the numerical value of the Priority from the given string
+	 * 
+	 * @param priority the string containing the priority level
+	 * @return the integer value of the priority given in the string.
+	 */
 	public static int getPriority(String priority) {
+		priority = priority.toLowerCase();
 		if (isValidPriority(priority)) {
-			return PRIORITY_TABLE.get(priority.toLowerCase()); 
+			return PRIORITY_TABLE.get(priority); 
 		}
 		
 		return PRIORITY_INVALID;
+	}
+	
+	/**
+	 * To check if the String status given is an alias of any of the
+	 * existing Status states
+	 * 
+	 * @param status the string containing the status state
+	 * @return true if it is a valid alias. False otherwise
+	 */
+	public static boolean isValidStatus(String status) {
+		return STATUS_TABLE.containsKey(status.toLowerCase());
+	}
+	
+	/**
+	 * Retrieve the String value of the Status from the given string
+	 * 
+	 * @param status the string containing the status state
+	 * @return the string value of the status given in the string.
+	 */
+	public static String getStatus(String status) {
+		status = status.toLowerCase();
+		if (isValidStatus(status)) {
+			return STATUS_TABLE.get(status);
+		}
+		
+		return STATUS_INVALID;
 	}
 	
 	/**

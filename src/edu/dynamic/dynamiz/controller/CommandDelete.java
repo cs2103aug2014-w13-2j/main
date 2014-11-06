@@ -19,7 +19,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 					//this command's execute method.
  * String getCommandName()	//Gets the string representation of this command's type.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandDelete extends Command implements Undoable {
     //The string representation of this command's type.

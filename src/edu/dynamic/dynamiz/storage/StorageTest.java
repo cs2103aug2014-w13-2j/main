@@ -12,7 +12,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class for Storage.
- * @author zixian
+ * @author A0110781N
  */
 public class StorageTest {
     

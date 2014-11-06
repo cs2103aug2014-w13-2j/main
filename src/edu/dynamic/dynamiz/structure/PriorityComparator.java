@@ -11,7 +11,7 @@ import java.util.Comparator;
  * Public Methods
  * int compare(ToDoItem item1, ToDoItem item2)	//Compares the 2 items
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class PriorityComparator implements Comparator<ToDoItem> {
     

@@ -16,7 +16,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list retrieved by execute() method.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class CommandList extends Command {
     //String representation of this command's type

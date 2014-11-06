@@ -21,7 +21,7 @@ package edu.dynamic.dynamiz.structure;
  * void setEndDate(MyDate end)	//Sets the end date for this event.
  * void setStartDate(MyDate start)	//Sets the start date for this event.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class EventItem extends ToDoItem {
     //The String formatting used in this class.

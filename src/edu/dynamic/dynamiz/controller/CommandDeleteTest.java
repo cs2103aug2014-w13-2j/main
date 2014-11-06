@@ -9,7 +9,7 @@ import edu.dynamic.dynamiz.parser.Parser;
 
 /**
  * Defines JUnit Test Case for CommandDelete.
- * @author zixian
+ * @author A0110781N
  */
 public class CommandDeleteTest {
     

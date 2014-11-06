@@ -29,7 +29,6 @@ public class ExpressionSubstitutor {
 	 * These are considered as default values.
 	 */
 	private ExpressionSubstitutor() {
-		// TODO: Initialise substitution dictionaries
 		dictionary = new HashMap<String, String>();
 		
 		dictionary.put("tmr", "tomorrow");

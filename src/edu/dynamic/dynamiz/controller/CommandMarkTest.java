@@ -8,7 +8,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class for CommandDo.
- * @author zixian
+ * @author A0110781N
  */
 public class CommandMarkTest {
     

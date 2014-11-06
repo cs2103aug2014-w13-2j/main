@@ -24,7 +24,7 @@ package edu.dynamic.dynamiz.structure;
  * String toFileString()	//Gets string representation of this item used in files.
  * String toString()	//Gets the string representation of this item.
  * 
- * @author zixian
+ * @author A0110781N
  */
 public class ToDoItem implements Comparable<ToDoItem>{
 

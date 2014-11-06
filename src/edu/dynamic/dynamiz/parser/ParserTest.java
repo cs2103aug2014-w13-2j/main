@@ -2,9 +2,12 @@ package edu.dynamic.dynamiz.parser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.controller.Command;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.structure.MyDate;
 
@@ -15,10 +18,10 @@ import edu.dynamic.dynamiz.structure.MyDate;
  */
 
 public class ParserTest {
-    
+	private static Parser parser = Parser.getInstance();
+	
     @Test
     public void test() {
-		Parser parser = Parser.getInstance();
 		CommandLine cmdLine = parser.parseCommandLine("add task");
 		assertEquals("task", cmdLine.getParam());
 
@@ -28,19 +31,17 @@ public class ParserTest {
 		cmdLine = parser.parseCommandLine("add 2 on 27/9/2014 from yesterday 18:00 to 23:00");
 		assertEquals("2", cmdLine.getParam());
 
-		//cmdLine = parser.parseCommandLine("Search study from today");
-		//assertEquals("study", cmdLine.getParam());
-
 		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
-		System.out.println(cmdLine);
 		
 		cmdLine = parser.parseCommandLine("update 3 priority h on tomorrow from 18:00 to 23:00");
+		
+		cmdLine = parser.parseCommandLine("search status p");
+		System.out.println(cmdLine);
     }
     
     @Test
     public void testMultipleOption() {
-    	Parser parser = Parser.getInstance();
     	CommandLine cmdLine;
     	
     	cmdLine = parser.parseCommandLine("add a task from today from yesterday from tomorrow");
@@ -51,8 +52,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testEscapingInput() {
-    	Parser parser = Parser.getInstance();
+    public void testEscapingInputNormal() {
     	CommandLine cmdLine;
     	
     	// TODO: Add assertEquals for Option parsed as well
@@ -74,9 +74,7 @@ public class ParserTest {
     }
     
     @Test
-    public void testAliases() {
-    	Parser parser = Parser.getInstance();
-    	
+    public void testAliasesNormal() {
     	CommandLine cmdLine = null;
     	String[] addCommands = {"add sth", "AdD sth", "PUT sth", "put sth", "pUt sth"};
     	
@@ -93,21 +91,79 @@ public class ParserTest {
     	}
     }
     
-    @Test
-    public void testParsingDate() {
-    	Parser parser = Parser.getInstance();
-    	
-    	MyDate date = parser.parseDate("17/10/2014");
-    	assertEquals("17/10/2014", date.toString());
-    	
-    	date = parser.parseDate("end of October 4pm");
-    	assertEquals("31/10/2014 16:00", date.toString());
-    	
-    	date = parser.parseDate("yesterday 18:00");
+    @Test(expected = NullPointerException.class)
+    public void testAliasesErroneous() {
+    	CommandLine cmdLine = parser.parseCommandLine("sadfasdf");
     }
     
     @Test
-    public void testParseAndExtractOption() {
+    public void testParsingDate() {
+    	MyDate date = parser.parseMyDate("17/10/2014");
+    	assertEquals("17/10/2014", date.toString());
     	
+    	date = parser.parseMyDate("end of October 4pm");
+    	assertEquals("31/10/2014 16:00", date.toString());
+    	
+    	date = parser.parseMyDate("yesterday 18:00");
+    }
+
+    @Test
+    public void testParseDateListFromRangeNormal() {
+    	DateTime today = new DateTime();
+    	int yy = today.getYear();
+    	
+    	// Common case
+    	String dateRange = "12 Nov -> 15 Nov";
+    	
+    	List<String> expected = new ArrayList<String>();
+    	expected.add(new MyDate(12,11,yy).toString());
+    	expected.add(new MyDate(13,11,yy).toString());
+    	expected.add(new MyDate(14,11,yy).toString());
+    	expected.add(new MyDate(15,11,yy).toString());
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Month crossing
+    	dateRange = "29 Nov-> 3 Dec";
+    	
+    	expected.clear();
+    	expected.add(new MyDate(29, 11, yy).toString());
+    	expected.add(new MyDate(30, 11, yy).toString());
+    	expected.add(new MyDate(1,12,yy).toString());
+    	expected.add(new MyDate(2,12,yy).toString());
+    	expected.add(new MyDate(3,12,yy).toString());
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Year crossing
+    	dateRange = "30 Dec 2014 ->2 January 2015";
+    	
+    	expected.clear();
+    	
+    	yy = 2014;
+    	expected.add(new MyDate(30, 12, yy).toString());
+    	expected.add(new MyDate(31, 12, yy).toString());
+    	expected.add(new MyDate(1, 1, yy + 1).toString());
+    	expected.add(new MyDate(2, 1, yy + 1).toString());
+   
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));	
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeValidExpressionButInvalidRange() {
+    	String dateRange = "30 Dec -> 3 Jan";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidExpression() {
+    	String dateRange = "->30 Dec";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidSyntax() {
+    	String dateRange = "tomorrow -> today -> yesterday";
+    	parser.parseDateListFromRange(dateRange);
     }
 }
