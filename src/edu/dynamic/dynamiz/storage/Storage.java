@@ -139,11 +139,15 @@ public class Storage {
 	    target.setPriority(priority);
 	}
 	
-	if(start!=null && end!=null && start.compareTo(end)<0){
-	    throw new IllegalArgumentException(MSG_INVALIDDATES);
-	}
-	
-	if(start!=null && !(target instanceof EventItem)){
+	if(start!=null && end!=null){
+	    if(start.compareTo(end)>0){
+		throw new IllegalArgumentException(MSG_INVALIDDATES);
+	    } else{
+		target = new EventItem(target, start, end);
+		removeItem(target.getId());
+		addItem(target);
+	    }
+	} else if(start!=null && !(target instanceof EventItem)){
 	    if(target instanceof TaskItem){
 		if(((TaskItem)target).getDeadline().compareTo(start)<0){
 		    throw new IllegalArgumentException(MSG_INVALIDDATES);
@@ -159,9 +163,7 @@ public class Storage {
 		throw new IllegalArgumentException(MSG_INVALIDDATES);
 	    }
 	    ((EventItem)target).setStartDate(start);
-	}
-	
-	if(end!=null){
+	} else if(end!=null){
 	    if(target instanceof EventItem){
 		if(((EventItem)target).getStartDate().compareTo(end)>0){
 		    throw new IllegalArgumentException(MSG_INVALIDDATES);
