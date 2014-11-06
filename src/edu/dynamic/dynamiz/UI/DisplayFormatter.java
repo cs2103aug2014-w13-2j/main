@@ -49,13 +49,14 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	public String displayTitleLine() {
-		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s|\n","ID", "Description","Priority","Start Time","End Time","Status");	
+		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
 	@Override
 	public String displayDividingLine() {
-		String s = new String("================================================================================================\n");
+		//String s = new String("================================================================================================\n");
+		String s = new String("------------------------------------------------------------------------------------------------\n");
 		return s;
 	}
 	public String displayParaLine() {
@@ -342,7 +343,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String strForID = "| %-2s | %-26s|";
 		String strForPri = " %-9s";
 		String strForTime = "| %-17s| %-17s|";
-		String strForStat =	" %-9s";
+		String strForStat =	" %-9s  ";
 		String strForEndLine = "|\n";
 		assert item!=null;
 		assert contentList!=null;
