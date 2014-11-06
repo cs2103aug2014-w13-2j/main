@@ -37,10 +37,11 @@ public class UI extends JPanel implements ActionListener {
 	// Formatting Constants
 	private StyledDocument doc;
 	private StyledDocument newdoc;
-	private static Font font = new Font("Consolas", Font.PLAIN, 18);
+	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
+//	private static Font font = new Font("Consolas", Font.PLAIN, 18);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
-	private SimpleAttributeSet BoldBlack;
+	private SimpleAttributeSet BoldWhite;
 	private SimpleAttributeSet Default;
 	private SimpleAttributeSet BoldGreen;
 	private SimpleAttributeSet BoldOrange;
@@ -106,9 +107,9 @@ public class UI extends JPanel implements ActionListener {
 		// Display: Welcome message
 		try {
 			doc.insertString(0, disp.displayWelcomeMessage() + newline,
-					BoldBlack);
+					BoldWhite);
 			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
-					BoldBlack);
+					BoldWhite);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -124,8 +125,8 @@ public class UI extends JPanel implements ActionListener {
 		Default = new SimpleAttributeSet();
 		StyleConstants.setForeground(Default, Color.WHITE);
 
-		BoldBlack = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldBlack, Color.WHITE);
+		BoldWhite = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldWhite, Color.WHITE);
 //		StyleConstants.setBold(BoldBlack, true);
 
 		BoldGreen = new SimpleAttributeSet();
