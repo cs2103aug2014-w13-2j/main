@@ -419,7 +419,8 @@ public class DisplayFormatter implements DisplayerInterface {
 			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
 			
 		}
-		contentList.add(new StrIntPair("Status: "+stas+"\n",stasTag));
+		contentList.add(new StrIntPair("Status: "));
+		contentList.add(new StrIntPair(stas+"\n",stasTag));
 		
 	}
 	
