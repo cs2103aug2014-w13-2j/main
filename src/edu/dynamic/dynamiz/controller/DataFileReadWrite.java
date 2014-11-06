@@ -86,7 +86,7 @@ public class DataFileReadWrite {
      * @return An ArrayList of ToDoItem objects.
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
-	File file, completedFile;
+	File file, completedFile, dir;
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	DateTime currentTime = new DateTime();
 	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
@@ -154,7 +154,8 @@ public class DataFileReadWrite {
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();
 	    }
-	    outFile = new File(dir, filename);
+	    //outFile = new File(dir, filename);
+	    outFile = new File(filename);
 	    if(!outFile.exists() || !outFile.isFile()){
 		outFile.createNewFile();
 	    }
