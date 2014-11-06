@@ -140,7 +140,7 @@ public class Storage {
 	}
 	
 	if(start!=null && end!=null){
-	    if(start.compareTo(end)>0){
+	    if(start.compareIncludingTime(end)>0){
 		throw new IllegalArgumentException(MSG_INVALIDDATES);
 	    } else{
 		target = new EventItem(target, start, end);
@@ -149,7 +149,7 @@ public class Storage {
 	    }
 	} else if(start!=null && !(target instanceof EventItem)){
 	    if(target instanceof TaskItem){
-		if(((TaskItem)target).getDeadline().compareTo(start)<0){
+		if(((TaskItem)target).getDeadline().compareIncludingTime(start)<0){
 		    throw new IllegalArgumentException(MSG_INVALIDDATES);
 		}
 		target = new EventItem((TaskItem)target, start);
@@ -159,13 +159,13 @@ public class Storage {
 	    removeItem(target.getId());
 	    addItem(target);
 	} else if(start!=null){
-	    if(((EventItem)target).getEndDate().compareTo(start)<0){
+	    if(((EventItem)target).getEndDate().compareIncludingTime(start)<0){
 		throw new IllegalArgumentException(MSG_INVALIDDATES);
 	    }
 	    ((EventItem)target).setStartDate(start);
 	} else if(end!=null){
 	    if(target instanceof EventItem){
-		if(((EventItem)target).getStartDate().compareTo(end)>0){
+		if(((EventItem)target).getStartDate().compareIncludingTime(end)>0){
 		    throw new IllegalArgumentException(MSG_INVALIDDATES);
 		}
 		((EventItem)target).setEndDate(end);
