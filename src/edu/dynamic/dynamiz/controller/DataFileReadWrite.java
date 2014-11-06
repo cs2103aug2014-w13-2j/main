@@ -149,9 +149,15 @@ public class DataFileReadWrite {
      * @param filename The name of the file to write to.
      */
     public static synchronized void writeListToFile(String[] list, String filename){
-	File outFile = new File(filename);
+	File dir = new File(FILE_DIR), outFile;
 	try{
-	    outFile.createNewFile();
+	    if(!dir.exists() || !dir.isDirectory()){
+		dir.mkdirs();
+	    }
+	    outFile = new File(dir, filename);
+	    if(!outFile.exists() || !outFile.isFile()){
+		outFile.createNewFile();
+	    }
 	    Thread currentThread = Thread.currentThread();
 	    writer = new PrintWriter(outFile);
 	    for(String str: list){
