@@ -9,6 +9,10 @@ import org.junit.Test;
 import edu.dynamic.dynamiz.UI.DisplayFormatter;
 import edu.dynamic.dynamiz.structure.*;
 
+/**
+ * @author A0119397R
+ *
+ */
 public class testDisplayer {
 	DisplayFormatter dp = new DisplayFormatter();
 	
