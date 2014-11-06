@@ -93,13 +93,17 @@ public class DataFileReadWrite {
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
-	    file = new File(filename);
-	    completedFile = new File(FILENAME_COMPLETED);
-	    if(!file.exists()){
+	    dir = new File(FILE_DIR);
+	    if(!dir.exists() || !dir.isDirectory()){
+		dir.mkdirs();
+	    }
+	    file = new File(dir, filename);
+	    completedFile = new File(dir, FILENAME_COMPLETED);
+	    if(!file.exists() || !file.isFile()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
 	    }
-	    if(!completedFile.exists()){
+	    if(!completedFile.exists() || !completedFile.isFile()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", FILENAME_COMPLETED);
 	    }
 	    
@@ -154,8 +158,7 @@ public class DataFileReadWrite {
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();
 	    }
-	    //outFile = new File(dir, filename);
-	    outFile = new File(filename);
+	    outFile = new File(dir, filename);
 	    if(!outFile.exists() || !outFile.isFile()){
 		outFile.createNewFile();
 	    }

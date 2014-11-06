@@ -251,6 +251,7 @@ public class MyDate implements Comparable<MyDate>{
     /**
      * Checks if the 2 dates represent the same date on the calendar.
      * @param obj The MyDate object to check for equality.
+     * @author A0110781N
      */
     public boolean equals(Object obj){
 	assert obj!=null;
