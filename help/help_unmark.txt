@@ -1,0 +1,39 @@
+COMMAND NAME
+		UNMARK	
+
+SYNOPSIS
+	UNMARK	[parameter] 
+	
+DESCRIPTION
+	Command UNMARK allows marking a Completed item as Pending in Dynamiz.
+	
+	[parameter]: The ID of the item to be marked as Pending.
+	
+	Unmarking of an item is straight forward. The pending items will have their 
+	statuses changed from Completed to Pending.
+
+	Here's how you use the command (as illustrated by examples):
+	
+	---------------------------------------------------------------------------	
+	- Unmark a completed item having ID number of 31:
+	Command: unmark 31
+	
+	[parameter]: "31".
+	The item having ID number of 31 will be unmarked from Completed to Pending. 
+	The item status will be changed from "Completed" to "Pending"
+	In case, there is no item having ID number of 31. An error feedback will be 
+	output to acknowledge you about the invalid ID number entered.
+	---------------------------------------------------------------------------
+	
+	Once your tasks have been unmarked to Dynamiz, feedback messages will be output
+	onto the Output Screen for you to double check on the information of the item
+	you have deleted.
+	
+	If you make a mistake in deleting undesirable item, you can revoke an
+	UNDO Command to revert the deletion of the item. For details of UNDO Command, 
+	enter "help undo".
+	
+	Equivalently, you can invoke an UNMARK Command to achieve the same effect, 
+	although, internally there is a subtle difference.
+	
+		
