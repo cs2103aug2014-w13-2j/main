@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
@@ -33,18 +35,18 @@ public class CommandHelp extends Command {
     
     //Defines help content line delimiter
     private static final char LINE_TERMINATOR = '\n';
-    
+   
     //Defines the help page files
-    private static final String HELPFILE_MAIN = "help/help.txt";
-    private static final String HELPFILE_ADD = "help/help_add.txt";
-    private static final String HELPFILE_DELETE = "help/help_delete.txt";
-    private static final String HELPFILE_DO = "help/help_mark.txt";
-    private static final String HELPFILE_LIST = "help/help_list.txt";
-    private static final String HELPFILE_REDO = "help/help_redo.txt";
-    private static final String HELPFILE_SEARCH = "help/help_search.txt";
-    private static final String HELPFILE_UNDO = "help/help_undo.txt";
-    private static final String HELPFILE_UNMARK = "help/help_unmark.txt";
-    private static final String HELPFILE_UPDATE = "help/help_update.txt";
+    private static final String HELPFILE_MAIN = "help.txt";
+    private static final String HELPFILE_ADD = "help_add.txt";
+    private static final String HELPFILE_DELETE = "help_delete.txt";
+    private static final String HELPFILE_DO = "help_mark.txt";
+    private static final String HELPFILE_LIST = "help_list.txt";
+    private static final String HELPFILE_REDO = "help_redo.txt";
+    private static final String HELPFILE_SEARCH = "help_search.txt";
+    private static final String HELPFILE_UNDO = "help_undo.txt";
+    private static final String HELPFILE_UNMARK = "help_unmark.txt";
+    private static final String HELPFILE_UPDATE = "help_update.txt";
     
     //Logger to log errors
     private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller");
@@ -74,35 +76,36 @@ public class CommandHelp extends Command {
      * Executes this command.
      */
     public void execute() {
-	File helpFile;
+	String helpFile;
 	if(command==null){
-	    helpFile = new File(HELPFILE_MAIN);
+	    helpFile = HELPFILE_MAIN;
 	} else{
 	    switch(command){
-		case ADD: helpFile = new File(HELPFILE_ADD);
+		case ADD: helpFile = HELPFILE_ADD;
 			break;
-		case DELETE: helpFile = new File(HELPFILE_DELETE);
+		case DELETE: helpFile = HELPFILE_DELETE;
 			break;
-		case MARK: helpFile = new File(HELPFILE_DO);
+		case MARK: helpFile = HELPFILE_DO;
 			break;
-		case LIST: helpFile = new File(HELPFILE_LIST);
+		case LIST: helpFile = HELPFILE_LIST;
 			break;
-		case REDO: helpFile = new File(HELPFILE_REDO);
+		case REDO: helpFile = HELPFILE_REDO;
 			break;
-		case SEARCH: helpFile = new File(HELPFILE_SEARCH);
+		case SEARCH: helpFile = HELPFILE_SEARCH;
 			break;
-		case UNDO: helpFile = new File(HELPFILE_UNDO);
+		case UNDO: helpFile = HELPFILE_UNDO;
 			break;
-		case UPDATE: helpFile = new File(HELPFILE_UPDATE);
+		case UPDATE: helpFile = HELPFILE_UPDATE;
 			break;
-		case UNMARK: helpFile = new File(HELPFILE_UNMARK);
+		case UNMARK: helpFile = HELPFILE_UNMARK;
 			break;
-		default: helpFile = new File(HELPFILE_MAIN);
+		default: helpFile = HELPFILE_MAIN;
 	    }
 	}
 	
 	try{
-	    BufferedReader reader = new BufferedReader(new FileReader(helpFile));
+		InputStream in = this.getClass().getResourceAsStream("/" + helpFile);
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 	    StringBuilder str = new StringBuilder();
 	    String input;
 	    while((input = reader.readLine())!=null){
