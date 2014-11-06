@@ -86,7 +86,6 @@ public class DataFileReadWrite {
      * @return An ArrayList of ToDoItem objects.
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
-	File dir = new File(FILE_DIR);
 	File file, completedFile;
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	DateTime currentTime = new DateTime();
@@ -94,11 +93,8 @@ public class DataFileReadWrite {
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
-	    if(!dir.exists()){
-		dir.mkdirs();
-	    }
-	    file = new File(dir, filename);
-	    completedFile = new File(dir, FILENAME_COMPLETED);
+	    file = new File(filename);
+	    completedFile = new File(FILENAME_COMPLETED);
 	    if(!file.exists()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
