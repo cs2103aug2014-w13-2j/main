@@ -49,7 +49,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	public String displayTitleLine() {
-		String s=String.format("| %-5s| %-26s| %-9s| %-17s| %-17s| %-9s|\n","ID", "Description","Priority","Start Time","End Time","Status");	
+		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s|\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
@@ -340,7 +340,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		//}	
 	}
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
-		String strFor1 = "| %-4s | %-26s|";
+		String strFor1 = "| %-2s | %-26s|";
 		String strForPri = " %-9s";
 		String strForTimeSta="| %-17s| %-17s| %-9s|\n";
 		assert item!=null;
