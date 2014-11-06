@@ -35,7 +35,7 @@ public enum CommandType {
 			return Arrays.asList(optionsArray);
 		}
 		
-	}, DELETE("d", "del", "remove") {
+	}, DELETE("d", "del", "remove", "rm") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
