@@ -49,7 +49,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	public String displayTitleLine() {
-		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s |\n","ID", "Description","Priority","Start Time","End Time","Status");	
+		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s|\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
