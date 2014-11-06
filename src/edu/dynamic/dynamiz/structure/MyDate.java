@@ -231,7 +231,7 @@ public class MyDate implements Comparable<MyDate>{
      * @return same result as compareTo() will
      * @author nhan
      */
-    public int compare(MyDate other) {
+    public int compareIncludingTime(MyDate other) {
     	assert other != null;
     	
     	int comp1 = this.compareTo(other);

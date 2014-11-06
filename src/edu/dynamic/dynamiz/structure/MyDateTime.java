@@ -210,7 +210,7 @@ public class MyDateTime extends MyDate {
      * @return same result as compareTo() will
      * @author nhan
      */
-    public int compare(MyDate other) {
+    public int compareIncludingTime(MyDate other) {
     	assert (other != null);
     	
     	int comp1 = super.compareTo(other);

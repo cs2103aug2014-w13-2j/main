@@ -21,26 +21,26 @@ public class MyDateTimeTest {
 		MyDate dt3 = new MyDateTime(1,1,2000,11,00);
 		
 		
-		assertTrue(dt1.compare(d1) > 0);
-		assertTrue(dt1.compare(d2) < 0);
-		assertTrue(dt1.compare(dt2) < 0);
+		assertTrue(dt1.compareIncludingTime(d1) > 0);
+		assertTrue(dt1.compareIncludingTime(d2) < 0);
+		assertTrue(dt1.compareIncludingTime(dt2) < 0);
 		
-		assertTrue(d1.compare(d2) < 0);
-		assertTrue(d1.compare(dt1) < 0);
-		assertTrue(d1.compare(dt2) < 0);
+		assertTrue(d1.compareIncludingTime(d2) < 0);
+		assertTrue(d1.compareIncludingTime(dt1) < 0);
+		assertTrue(d1.compareIncludingTime(dt2) < 0);
 		
-		assertTrue(d2.compare(d1) > 0);
-		assertTrue(d2.compare(dt1) > 0);
-		assertTrue(d2.compare(dt2) < 0);
+		assertTrue(d2.compareIncludingTime(d1) > 0);
+		assertTrue(d2.compareIncludingTime(dt1) > 0);
+		assertTrue(d2.compareIncludingTime(dt2) < 0);
 		
-		assertTrue(dt2.compare(d1) > 0);
-		assertTrue(dt2.compare(d2) > 0);
-		assertTrue(dt2.compare(dt1) > 0);
+		assertTrue(dt2.compareIncludingTime(d1) > 0);
+		assertTrue(dt2.compareIncludingTime(d2) > 0);
+		assertTrue(dt2.compareIncludingTime(dt1) > 0);
 		
-		assertTrue(dt1.compare(dt1) == 0);
-		assertTrue(d1.compare(d1) == 0);
+		assertTrue(dt1.compareIncludingTime(dt1) == 0);
+		assertTrue(d1.compareIncludingTime(d1) == 0);
 		
-		assertTrue(dt1.compare(dt3) > 0);
+		assertTrue(dt1.compareIncludingTime(dt3) > 0);
 	}
 
 }
