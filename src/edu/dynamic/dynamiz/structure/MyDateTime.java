@@ -200,4 +200,35 @@ public class MyDateTime extends MyDate {
 	output.append(String.format(FORMAT_TIME, hour, minute));
 	return output.toString();
     }
+    
+    
+    /**
+     * Comparing the date. If the dates differ at the date level then return
+     * the result. Otherwise, compare the time level.
+     * 
+     * @param other The date to be compared with. It can be MyDate or MyDateTime instance
+     * @return same result as compareTo() will
+     * @author nhan
+     */
+    public int compareIncludingTime(MyDate other) {
+    	assert (other != null);
+    	
+    	int comp1 = super.compareTo(other);
+    	if (comp1 != 0) {
+    		return comp1;
+    	}
+    	
+    	if (this.getClass() == other.getClass()) {
+	    	MyDateTime o = (MyDateTime) other;
+	    	int comp2 = this.getHour() - o.getHour();
+	    	if (comp2 != 0) {
+	    		return comp2;
+	    	}
+	    	
+	    	return this.getMinute() - o.getMinute();
+    	} else {
+    		return 1;
+    	}
+    	
+    }
 }

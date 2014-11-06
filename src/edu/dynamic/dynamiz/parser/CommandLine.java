@@ -159,7 +159,7 @@ public class CommandLine {
 		}
 
 		if (hasBoth || hasOn) {
-			if (startDate.compareTo(endDate) <= 0) {
+			if (startDate.compareIncludingTime(endDate) <= 0) {
 				commandItem = new EventItem(this.param, startDate, endDate);
 			} else {
 				throw new IllegalArgumentException(String.format(INVALID_DATE_INTERVAL_MSG, 

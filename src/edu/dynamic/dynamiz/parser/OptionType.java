@@ -127,6 +127,7 @@ public enum OptionType {
 		STATUS_TABLE.put("pend", STATUS_PENDING);
 		STATUS_TABLE.put("p", STATUS_PENDING);
 		
+		STATUS_TABLE.put("completed", STATUS_COMPLETED);
 		STATUS_TABLE.put("complete", STATUS_COMPLETED);
 		STATUS_TABLE.put("comp", STATUS_COMPLETED);
 		STATUS_TABLE.put("c", STATUS_COMPLETED);
