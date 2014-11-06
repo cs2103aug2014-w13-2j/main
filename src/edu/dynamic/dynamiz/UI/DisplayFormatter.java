@@ -2,8 +2,6 @@ package edu.dynamic.dynamiz.UI;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Formatter;
-import java.awt.color.*;
 import java.util.logging.*;
 
 import edu.dynamic.dynamiz.structure.*;
@@ -11,22 +9,15 @@ import edu.dynamic.dynamiz.structure.*;
 /**
  * @author A0119397R
  * Acts as the information interpreter of Feedback items and formatter for UI
- */
-public class DisplayFormatter implements DisplayerInterface {
-	//	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
-	//	
-	//	private static final int FEEDBACK_TAG = 1;
-	//	private static final int ERROR_FEEDBACK_TAG = 2;
-	//	private static final int SUCCESS_FEEDBACK_TAG = 3;
-	//	private static final int HELP_FEEDBACK_TAG = 4;
-	final String STATU_PEND ="pending";
-	final String STATU_COMPLETE ="completed";
-	final int STATU_PEND_TAG = 11;
-	final int STATU_COMPLETE_TAG = 10;
+ * */
 
-	static final String UPDATE_COMMAND = "update";
-	static final String SHOW_COMMAND = "show";
-	static final String ADD_COMMAND = "add";
+public class DisplayFormatter implements DisplayerInterface {
+//	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
+//	private static final int FEEDBACK_TAG = 1;
+//	private static final int ERROR_FEEDBACK_TAG = 2;
+//	private static final int SUCCESS_FEEDBACK_TAG = 3;
+//	private static final int HELP_FEEDBACK_TAG = 4;
+	
 
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
@@ -42,20 +33,17 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;
 	}
 
-	public String displayWelcomeMessage(){
-		return WELCOME_MESSAGE;
+	public StrIntPair displayWelcomeMessage(){
+		return new StrIntPair(WELCOME_MESSAGE);
 	}
-
-
 
 	public String displayTitleLine() {
 		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
-	@Override
-	public String displayDividingLine() {
-		//String s = new String("================================================================================================\n");
+	
+	private String displayDividingLine() {
 		String s = new String("------------------------------------------------------------------------------------------------\n");
 		return s;
 	}
@@ -63,16 +51,13 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String("----------------------------------------\n");
 		return s;
 	}
-
 	@Override
-	public String displayString(String str) {	
-		return str;
+	public StrIntPair displayString(String str) {	
+		return new StrIntPair(str);
 	}
-
 	@Override
-	public String displayStringList(ArrayList<String> arr) {	
-		if(arr == null) return new String("null");
-
+	public StrIntPair displayStringList(ArrayList<String> arr) {	
+		if(arr == null) return new StrIntPair("null");
 		StringBuilder s = new StringBuilder();
 
 		for(int i=0;i<arr.size();i++){
@@ -80,10 +65,8 @@ public class DisplayFormatter implements DisplayerInterface {
 				s.append(arr.get(i).trim()).append("\n");
 		}
 
-		return s.toString();	
+		return new StrIntPair(s.toString());	
 	}
-
-
 	@Override
 	public String displayTaskItem(TaskItem task) {
 		assert task!=null;
@@ -116,7 +99,6 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
 		assert taskList!=null;
-
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< taskList.length; i++){
 			s.append(taskList[i].toString()).append("\n");
@@ -152,7 +134,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
-
 	@Override
 	public String displayEventList(EventItem[] eventList) {
 		assert eventList!=null;
@@ -163,29 +144,24 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
-
-
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
 		assert todoItem !=null;
 		String str = new String();
 		return todoItem.toString();
 	}
-
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
 		assert todoItem !=null;
 		String str = new String();
 		return todoItem.getFeedbackString();
 	}
-
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
 		assert todoItem !=null;
 		String str = new String(); 
 		return todoItem.toFileString();
 	}
-
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
 		assert todoList !=null;
@@ -196,7 +172,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
-
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
 		assert todoList !=null;
@@ -207,12 +182,11 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
-
 	public String displayPrompt() {
 		String s = new String ("Command: ");
 		return s;
-	}
-	public String displayPrompt(int promptTag) {
+	}	
+	public StrIntPair displayPrompt(int promptTag) {
 		String tag = new String();
 		switch(promptTag){
 		case ENTER_COMMAND_PROMPT:
@@ -224,7 +198,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		case ENTER_TASK_INDEX_PROMPT:
 			tag = ENTER_TASK_INDEX_STR;
 			break;
-
 		case ENTER_TIME_PROMPT:
 			tag = ENTER_TIME_PERIOD_STR;
 			break;
@@ -236,11 +209,11 @@ public class DisplayFormatter implements DisplayerInterface {
 			tag = ENTER_VALID_COMMAND_STR;
 		}		
 		//tag+="\n";		
-		return tag;
+		return new StrIntPair(tag);
 	}
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
-	}	
+	}		
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		assert commandFeedback!=null;	
@@ -260,13 +233,11 @@ public class DisplayFormatter implements DisplayerInterface {
 			displayContentList.add(new StrIntPair(s));
 			break;			
 		case SUCCESS_FEEDBACK_TAG:
-
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
 			s  = sf.getCommandType()+" successfully!";
 			s = s+"\n";	
 			displayContentList.add(new StrIntPair(s));	
 			getFeedbackContent(displayContentList,sf);		
-
 			break;
 		default:
 			s = "Invalid Instruction\n";
@@ -321,6 +292,11 @@ public class DisplayFormatter implements DisplayerInterface {
 			displayContentList.add(new StrIntPair(displayDividingLine()));
 		}
 	}
+	/**
+	 * Format task list for list display
+	 * @param contentList
+	 * @param item
+	 */
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
 		String strForID = "| %-2s | %-26s|";
 		String strForPri = " %-9s";
@@ -363,13 +339,15 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	}
 
-
+	/**Format task list for chunk display
+	 * @param contentList
+	 * @param item
+	 */
 	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
 		assert item!=null;
 		assert contentList!=null;
 		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
 				"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s ";
-
 		int ID = item.getId();
 		String des = item.getDescription();
 		int pri = item.getPriority();
@@ -380,7 +358,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		else stasTag = STATU_COMPLETE_TAG;
 		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
 		contentList.add(new StrIntPair(prioS+"\n",pri));
-
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
 			String ddl = t.getDeadlineString();
@@ -392,20 +369,17 @@ public class DisplayFormatter implements DisplayerInterface {
 			String endT = t.getEndDateString();
 			contentList.add(new StrIntPair("Start Time: "+starT+"\n"));
 			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
-
 		}
 		contentList.add(new StrIntPair("Status: "));
 		contentList.add(new StrIntPair(stas+"\n",stasTag));
-
 	}
 
+	
 	private int getFeedbackTag(Feedback f){
 		String t =f.getClassName();
-
 		if(t.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
 		if(t.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
 		if(t.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
-
 		return FEEDBACK_TAG;		
 
 	}
