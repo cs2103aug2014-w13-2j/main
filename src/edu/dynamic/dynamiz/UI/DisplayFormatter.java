@@ -388,7 +388,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		assert item!=null;
 		assert contentList!=null;
 		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
-					"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s";
+					"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s ";
 
 		int ID = item.getId();
 		String des = item.getDescription();
