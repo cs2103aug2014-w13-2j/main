@@ -30,7 +30,7 @@ import edu.dynamic.dynamiz.structure.SuccessFeedback;
  */
 public class Controller {
     //Defines the name of the log file
-    private static final String LOGFILENAME = "log.txt";
+    private static final String LOGFILENAME = "dynamiz/log.txt";
     
     //Defines command type of unsupported commands for use in Feedback constructor
     private static final String COMMAND_UNKNOWN = "unknown command";
