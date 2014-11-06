@@ -9,8 +9,8 @@ import java.util.logging.*;
 import edu.dynamic.dynamiz.structure.*;
 
 /**
- * @author Hu Wenyan
- * Implement Display functions for tasks, events and todoItems
+ * @author A0119397R
+ * Acts as the information interpreter of Feedback items and formatter for UI
  */
 public class DisplayFormatter implements DisplayerInterface {
 //	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
@@ -49,7 +49,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	
 	public String displayTitleLine() {
-		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s|\n","ID", "Description","Priority","Start Time","End Time","Status");	
+		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
 
@@ -269,7 +269,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		case SUCCESS_FEEDBACK_TAG:
 			
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
-			
 			//String sMsg = TagFormat.format(sf.getCommandType()+" successfully!",TagFormat.SUCCESS);
 			s  = sf.getCommandType()+" successfully!";
 			s = s+"\n";	
@@ -384,7 +383,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		assert item!=null;
 		assert contentList!=null;
 		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
-					"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
+					"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s";
 
 		int ID = item.getId();
 		String des = item.getDescription();
@@ -395,8 +394,8 @@ public class DisplayFormatter implements DisplayerInterface {
 		if(stas.equals(STATU_PEND)) stasTag =STATU_PEND_TAG;
 		else stasTag = STATU_COMPLETE_TAG;
 		//stas = TagFormat.format(stas, TagFormat.TASK_STATUS);
-		contentList.add(new StrIntPair("ID: "+ID+"\n\n"+"Des: "+des+"\n"+"Priority: "));
-		contentList.add(new StrIntPair(prioS+"\n\n",pri));
+		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
+		contentList.add(new StrIntPair(prioS+"\n",pri));
 		
 		
 		if(item instanceof TaskItem){
