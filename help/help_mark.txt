@@ -1,0 +1,40 @@
+COMMAND NAME
+		MARK	
+
+SYNOPSIS
+	MARK	[parameter] 
+	
+DESCRIPTION
+	Command MARK allows marking a pending item as completed in Dynamiz.
+	
+	[parameter]: The ID of the item to be marked as completed.
+	
+	Marking of an item is straight forward. The completed items will be stored 
+	in the main database for one weeks before being archived to the completed 
+	database ("completed.txt"). 	
+
+	Here's how you use the command (as illustrated by examples):
+	
+	---------------------------------------------------------------------------	
+	- Mark an item having ID number of 31 as completed:
+	Command: mark 31
+	
+	[parameter]: "31".
+	The item having ID number of 31 will be marked as completed. The item status
+	will be changed from "pending" to "completed"
+	In case, there is no item having ID number of 31. An error feedback will be 
+	output to acknowledge you about the invalid ID number entered.
+	---------------------------------------------------------------------------
+	
+	Once your tasks have been deleted to Dynamiz, feedback messages will be output
+	onto the Output Screen for you to double check on the information of the item
+	you have deleted.
+	
+	If you make a mistake in deleting undesirable item, you can revoke an
+	UNDO Command to revert the deletion of the item. For details of UNDO Command, 
+	enter "help undo".
+	
+	Equivalently, you can invoke an UNMARK Command to achieve the same effect, 
+	although, internally there is a subtle difference.
+	
+		
