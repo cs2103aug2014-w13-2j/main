@@ -38,7 +38,7 @@ public class UI extends JPanel implements ActionListener {
 	private StyledDocument doc;
 	private StyledDocument newdoc;
 	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
-//	private static Font font = new Font("Consolas", Font.PLAIN, 18);
+	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
 	private SimpleAttributeSet BoldWhite;
@@ -87,7 +87,7 @@ public class UI extends JPanel implements ActionListener {
 		inputScreen = new JTextField();
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE);
-		inputScreen.setFont(font);
+		inputScreen.setFont(fontInput);
 
 		// Add Command Display - Scroll and Command Input into Panel
 		GridBagConstraints c = new GridBagConstraints();
