@@ -222,6 +222,31 @@ public class MyDate implements Comparable<MyDate>{
 	}
     }
     
+    
+    /**
+     * Comparing the date. If the dates differ at the date level then return
+     * the result. Otherwise, compare the time level.
+     * 
+     * @param other The date to be compared with. It can be MyDate or MyDateTime instance
+     * @return same result as compareTo() will
+     * @author nhan
+     */
+    public int compare(MyDate other) {
+    	assert other != null;
+    	
+    	int comp1 = this.compareTo(other);
+    	if (comp1 != 0) {
+    		return comp1;
+    	}
+    	
+    	if (other instanceof MyDateTime) {
+    		return -1;
+    	} else {
+    		return 0;
+    	}
+    }
+    
+    
     @Override
     /**
      * Checks if the 2 dates represent the same date on the calendar.
