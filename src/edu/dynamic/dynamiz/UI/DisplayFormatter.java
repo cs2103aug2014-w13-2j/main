@@ -20,9 +20,9 @@ public class DisplayFormatter implements DisplayerInterface {
 //	private static final int SUCCESS_FEEDBACK_TAG = 3;
 //	private static final int HELP_FEEDBACK_TAG = 4;
 	final String STATU_PEND ="pending";
-	final String STATU_COMPLETE ="complete";
-	final int STATU_PEND_TAG = 10;
-	final int STATU_COMPLETE_TAG = 11;
+	final String STATU_COMPLETE ="completed";
+	final int STATU_PEND_TAG = 11;
+	final int STATU_COMPLETE_TAG = 10;
 	
 	static final String UPDATE_COMMAND = "update";
 	static final String SHOW_COMMAND = "show";
@@ -339,9 +339,11 @@ public class DisplayFormatter implements DisplayerInterface {
 		//}	
 	}
 	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
-		String strFor1 = "| %-2s | %-26s|";
+		String strForID = "| %-2s | %-26s|";
 		String strForPri = " %-9s";
-		String strForTimeSta="| %-17s| %-17s| %-9s|\n";
+		String strForTime = "| %-17s| %-17s|";
+		String strForStat =	" %-9s";
+		String strForEndLine = "|\n";
 		assert item!=null;
 		assert contentList!=null;
 		int ID = item.getId();
@@ -351,6 +353,9 @@ public class DisplayFormatter implements DisplayerInterface {
 		String starT = "";
 		String endT = "";
 		String stas = item.getStatus();
+		int stasTag;
+		if(stas.equals(STATU_PEND)) stasTag =STATU_PEND_TAG;
+		else stasTag = STATU_COMPLETE_TAG;
 		
 		if(des.length()>=23){
 			des = des.substring(0, 23);
@@ -368,17 +373,17 @@ public class DisplayFormatter implements DisplayerInterface {
 			endT = t.getEndDateString();	
 			
 		}
-		contentList.add(new StrIntPair(String.format(strFor1, ID,des)));
+		contentList.add(new StrIntPair(String.format(strForID, ID,des)));
 		contentList.add(new StrIntPair(String.format(strForPri, prioS),pri));
-		contentList.add(new StrIntPair(String.format(strForTimeSta,starT,endT,stas)));
+		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
+		contentList.add(new StrIntPair(String.format(strForStat,stas),stasTag));
+		contentList.add(new StrIntPair(strForEndLine));
+		
 	}
 	
 	
 	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
-		final String STATU_PEND ="pending";
-		final String STATU_COMPLETE ="complete";
-		final int STATU_PEND_TAG = 10;
-		final int STATU_COMPLETE_TAG = 11;
+		
 		
 		assert item!=null;
 		assert contentList!=null;
@@ -414,7 +419,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
 			
 		}
-		contentList.add(new StrIntPair("\nStatus: "+stas+"\n",stasTag));
+		contentList.add(new StrIntPair("Status: "+stas+"\n",stasTag));
 		
 	}
 	
