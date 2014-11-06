@@ -39,8 +39,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  *
  */
 public class CommandLine {
-	private Parser parser;
-
 	private CommandType commandType;
 	private Options options;
 	private String param;
@@ -54,6 +52,7 @@ public class CommandLine {
 	private final static String INVALID_ID_MSG = "Not a valid id given: %1$s";
 	private final static String INVALID_COMMANDTYPE_MSG = "Not a valid alias to known CommandType: %1$s";
 	private final static String INVALID_OPTIONTYPE_MSG = "Not a valid alias of known OptionType: %1$s";
+	private final static String INVALID_DATE_INTERVAL_MSG = "Not a valid interval of date: from %1$s to %2$s";
 	
 	public CommandLine() {
 		this.commandType = null;
@@ -62,8 +61,6 @@ public class CommandLine {
 	}
 
 	public CommandLine(CommandType cmdType, Options options, String param) {
-		this.parser = Parser.getInstance();
-
 		this.commandType = cmdType;
 		this.options = options;
 		this.param = param;
@@ -162,7 +159,12 @@ public class CommandLine {
 		}
 
 		if (hasBoth || hasOn) {
-			commandItem = new EventItem(this.param, startDate, endDate);
+			if (startDate.compareTo(endDate) <= 0) {
+				commandItem = new EventItem(this.param, startDate, endDate);
+			} else {
+				throw new IllegalArgumentException(String.format(INVALID_DATE_INTERVAL_MSG, 
+													startDate, endDate));
+			}
 		} else if (hasEnd) {
 			commandItem = new TaskItem(this.param, endDate);
 		} else {
@@ -329,7 +331,7 @@ public class CommandLine {
 		MyDate commandEndDate = null;
 		
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
-
+				
 		if (options.hasOption(OptionType.START_TIME)) {
 			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.START_TIME));
 		}
