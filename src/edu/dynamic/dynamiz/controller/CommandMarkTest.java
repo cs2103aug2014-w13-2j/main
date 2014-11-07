@@ -14,15 +14,17 @@ public class CommandMarkTest {
     
     @Test
     //Tests normal case where all ID are valid.
+    //Change the ID based on the test case file being used.
+    //Items represented by the ID must be "Pending" as this test case is for all valid ID.
     public void test() {
 	int[] arr = new int[2];
-	arr[0] = 6;
-	arr[1] = 7;
+	arr[0] = 2;
+	arr[1] = 3;
 	CommandMark cmd = new CommandMark(arr);
 	cmd.execute();
-	assertEquals(6, cmd.getAffectedItems()[0].getId());
+	assertEquals(2, cmd.getAffectedItems()[0].getId());
 	assertEquals(ToDoItem.STATUS_COMPLETED, cmd.getAffectedItems()[0].getStatus());
-	assertEquals(7, cmd.getAffectedItems()[1].getId());
+	assertEquals(3, cmd.getAffectedItems()[1].getId());
 	assertEquals(ToDoItem.STATUS_COMPLETED, cmd.getAffectedItems()[1].getStatus());
 	
 	cmd.undo();
@@ -32,6 +34,8 @@ public class CommandMarkTest {
     
     @Test
     //Tests cases where some ID are invalid.
+    //For the ID, make sure that 2 of them can be marked as completed.
+    //Else the test file will screw up, causing subsequent runs to fail.
     public void testSomeInvalidAndCompleted(){
 	int[] arr = new int[3];
 	arr[0] = -2;
@@ -39,7 +43,7 @@ public class CommandMarkTest {
 	arr[2] = 6;
 	Command cmd = new CommandMark(arr);
 	cmd.execute();
-	assertEquals(1, cmd.getAffectedItems().length);
+	assertEquals(2, cmd.getAffectedItems().length);
 	((Undoable)cmd).undo();
 	
     }

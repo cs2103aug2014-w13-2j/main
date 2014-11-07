@@ -21,7 +21,7 @@ public class CommandListTest {
 	OptionType[] optList = new OptionType[2];
 	optList[0] = OptionType.PRIORITY;
 	optList[1] = OptionType.START_TIME;
-	Command cmd = new CommandList(null, null, null, optList);
+	Command cmd = new CommandList(null, null, null, optList);	//Sort by priority, then by start time.
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	for(ToDoItem i: list)
@@ -30,7 +30,7 @@ public class CommandListTest {
 	
 	optList = new OptionType[1];
 	optList[0] = OptionType.END_TIME;
-	cmd = new CommandList(null, null, null, optList);
+	cmd = new CommandList(null, null, null, optList);	//Sort in ascending order of end time.
 	cmd.execute();
 	list = cmd.getAffectedItems();
 	for(ToDoItem i: list)
@@ -46,7 +46,7 @@ public class CommandListTest {
 	MyDate[] end = new MyDate[2];
 	end[0] = new MyDate(29, 10, 2014);
 	end[1] = new MyDate(1, 11, 2014);
-	Command cmd = new CommandList(pri, null, end, null);
+	Command cmd = new CommandList(pri, null, end, null);	//filter by priority and end date.
 	cmd.execute();
 	ToDoItem[] list = cmd.getAffectedItems();
 	for(ToDoItem i: list)
