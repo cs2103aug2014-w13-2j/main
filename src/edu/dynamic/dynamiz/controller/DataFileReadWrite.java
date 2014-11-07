@@ -9,8 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +48,7 @@ public class DataFileReadWrite {
     
     //File names for todo list and completed.list
     private static final String FILENAME_COMPLETED = "completed.txt";
-    public static final String FILE_DIR = "dynamiz";
+    private static final String FILE_DIR = "dynamiz";
     
     //Delimiters for data processing purposes.
     private static final String DATETIME_DELIM = " ";
