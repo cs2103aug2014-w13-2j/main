@@ -43,6 +43,7 @@ public class Storage {
     
     //Error messages
     private static final String MSG_ITEMNOTFOUND = "Item not found.";
+    private static final String MSG_INVALIDDATES = "Illogical start and end date relation.";
     
     //Main data members
     private ArrayList<ToDoItem> mainList;	//The main list
@@ -138,8 +139,19 @@ public class Storage {
 	    target.setPriority(priority);
 	}
 	
-	if(start!=null && !(target instanceof EventItem)){
+	if(start!=null && end!=null){
+	    if(start.compareIncludingTime(end)>0){
+		throw new IllegalArgumentException(MSG_INVALIDDATES);
+	    } else{
+		target = new EventItem(target, start, end);
+		removeItem(target.getId());
+		addItem(target);
+	    }
+	} else if(start!=null && !(target instanceof EventItem)){
 	    if(target instanceof TaskItem){
+		if(((TaskItem)target).getDeadline().compareIncludingTime(start)<0){
+		    throw new IllegalArgumentException(MSG_INVALIDDATES);
+		}
 		target = new EventItem((TaskItem)target, start);
 	    } else{
 		target = new EventItem(target, start);
@@ -147,11 +159,15 @@ public class Storage {
 	    removeItem(target.getId());
 	    addItem(target);
 	} else if(start!=null){
+	    if(((EventItem)target).getEndDate().compareIncludingTime(start)<0){
+		throw new IllegalArgumentException(MSG_INVALIDDATES);
+	    }
 	    ((EventItem)target).setStartDate(start);
-	}
-	
-	if(end!=null){
+	} else if(end!=null){
 	    if(target instanceof EventItem){
+		if(((EventItem)target).getStartDate().compareIncludingTime(end)>0){
+		    throw new IllegalArgumentException(MSG_INVALIDDATES);
+		}
 		((EventItem)target).setEndDate(end);
 	    } else if(target instanceof TaskItem){
 		((TaskItem)target).setDeadline(end);

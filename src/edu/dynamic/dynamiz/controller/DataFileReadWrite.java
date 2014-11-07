@@ -86,20 +86,24 @@ public class DataFileReadWrite {
      * @return An ArrayList of ToDoItem objects.
      */
     public static ArrayList<ToDoItem> getListFromFile(String filename){
-	File file, completedFile;
+	File file, completedFile, dir;
 	ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
 	DateTime currentTime = new DateTime();
 	DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
-	    file = new File(filename);
-	    completedFile = new File(FILENAME_COMPLETED);
-	    if(!file.exists()){
+	    dir = new File(FILE_DIR);
+	    if(!dir.exists() || !dir.isDirectory()){
+		dir.mkdirs();
+	    }
+	    file = new File(dir, filename);
+	    completedFile = new File(dir, FILENAME_COMPLETED);
+	    if(!file.exists() || !file.isFile()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
 		file.createNewFile();
 	    }
-	    if(!completedFile.exists()){
+	    if(!completedFile.exists() || !completedFile.isFile()){
 		logger.log(Level.INFO, "{0} does not exist, creating file...", FILENAME_COMPLETED);
 	    }
 	    
@@ -149,9 +153,15 @@ public class DataFileReadWrite {
      * @param filename The name of the file to write to.
      */
     public static synchronized void writeListToFile(String[] list, String filename){
-	File outFile = new File(filename);
+	File dir = new File(FILE_DIR), outFile;
 	try{
-	    outFile.createNewFile();
+	    if(!dir.exists() || !dir.isDirectory()){
+		dir.mkdirs();
+	    }
+	    outFile = new File(dir, filename);
+	    if(!outFile.exists() || !outFile.isFile()){
+		outFile.createNewFile();
+	    }
 	    Thread currentThread = Thread.currentThread();
 	    writer = new PrintWriter(outFile);
 	    for(String str: list){

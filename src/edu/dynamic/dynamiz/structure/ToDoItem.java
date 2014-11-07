@@ -30,11 +30,11 @@ public class ToDoItem implements Comparable<ToDoItem>{
 
     //ToDoItem defaults
     private static final int DEFAULT_PRIORITY = 0;
-    protected static final String DEFAULT_STATUS = "pending";
+    protected static final String DEFAULT_STATUS = "Pending";
     
     //Allowed status values
     public static final String STATUS_PENDING = DEFAULT_STATUS;
-    public static final String STATUS_COMPLETED = "completed";
+    public static final String STATUS_COMPLETED = "Completed";
     
     //Allowed priority levels
     public static final int PRIORITY_URGENT = 8;

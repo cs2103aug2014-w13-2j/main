@@ -10,8 +10,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * @author A0119397R
- * 
- *
  */
 public interface DisplayerInterface {
 	
@@ -33,14 +31,21 @@ public interface DisplayerInterface {
 	static final String ENTER_TIME_PERIOD_STR = "Please Enter Time Period: ";
 	static final String ENTER_TASK_INDEX_STR = "Please Enter Index: ";
 	
+	static final String STATU_PEND ="pending";
+	static final String STATU_COMPLETE ="completed";
+	static final int STATU_PEND_TAG = 11;
+	static final int STATU_COMPLETE_TAG = 10;
+
+	static final String UPDATE_COMMAND = "update";
+	static final String SHOW_COMMAND = "show";
+	static final String ADD_COMMAND = "add";
+	
 	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
 
-	public String displayWelcomeMessage();
-	public String displayString(String str);
-	public String displayStringList(ArrayList<String> arr);
+	public StrIntPair displayWelcomeMessage();
+	public StrIntPair displayString(String str);
+	public StrIntPair displayStringList(ArrayList<String> arr);
 	
-	//public String displayTitleLine();
-	public String displayDividingLine();
 	
 	/**
 	 * @param ArrayList<taskList> or TaskItem[]

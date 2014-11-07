@@ -18,17 +18,18 @@ public class CommandAddTest {
     
     @Test
     public void test() {
-	Parser parser = Parser.getInstance();
 	
-	CommandAdd cmd = (CommandAdd) parser.parse("Add Learn C++");
-	// CommandAdd cmd = new CommandAdd(new ToDoItem("Learn C++"));
+	Command cmd = new CommandAdd(new ToDoItem("Learn C++"));
 	cmd.execute();
-	ToDoItem[] item = cmd.getAffectedItems();
-	assertEquals("item has 1 object", 1, item.length);
-	cmd.undo();
+	assertEquals(1, cmd.getAffectedItems().length);
+	assertEquals("Learn C++", cmd.getAffectedItems()[0].getDescription());
+	//((Undoable)cmd).undo();
 	
-	cmd = (CommandAdd) parser.parse("add Learn C++ from 31/10/2014 12:00 to 11/11/2014 12:00");
+	cmd = new CommandAdd(new EventItem("Learn C++", new MyDateTime(31, 10, 2014, 12, 0), new MyDateTime(11, 11, 2014, 12, 0)));
 	cmd.execute();
+	assertEquals(new MyDateTime(31, 10, 2014, 12, 0), ((EventItem)cmd.getAffectedItems()[0]).getStartDate());
+	assertEquals(new MyDateTime(11, 11, 2014, 12, 0), ((EventItem)cmd.getAffectedItems()[0]).getEndDate());
+	//((Undoable)cmd).undo();
     }
     
     // TODO: Implement Exception for CommandAdd
