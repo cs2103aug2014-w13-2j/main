@@ -1,7 +1,7 @@
 package edu.dynamic.dynamiz.structure;
 
 /**
- * @author Hu Wenyan
+ * @author A0119397R
  * An exception class built for Dynamiz
  */
 public class DynamizException extends Exception {

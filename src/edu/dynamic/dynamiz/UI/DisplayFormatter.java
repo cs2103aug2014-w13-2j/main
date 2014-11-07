@@ -28,8 +28,8 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;
 	}
 
-	public StrIntPair displayWelcomeMessage(){
-		return new StrIntPair(WELCOME_MESSAGE);
+	public String displayWelcomeMessage(){
+		return WELCOME_MESSAGE;
 	}
 
 	public String displayTitleLine() {
