@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +50,7 @@ public class DataFileReadWrite {
     
     //File names for todo list and completed.list
     private static final String FILENAME_COMPLETED = "completed.txt";
-    private static final String FILE_DIR = "dynamiz";
+    public static final String FILE_DIR = "dynamiz";
     
     //Delimiters for data processing purposes.
     private static final String DATETIME_DELIM = " ";
@@ -93,7 +95,9 @@ public class DataFileReadWrite {
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
-	    dir = new File(FILE_DIR);
+		String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File directory = new File(path).getParentFile();
+	    dir = new File(directory, FILE_DIR);
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();
 	    }
@@ -153,7 +157,10 @@ public class DataFileReadWrite {
      * @param filename The name of the file to write to.
      */
     public static synchronized void writeListToFile(String[] list, String filename){
-	File dir = new File(FILE_DIR), outFile;
+		String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File directory = new File(path).getParentFile();
+	    File dir = new File(directory, FILE_DIR);    	
+	    File outFile;
 	try{
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();
