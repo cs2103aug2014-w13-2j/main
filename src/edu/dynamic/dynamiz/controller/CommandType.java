@@ -1,3 +1,4 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.controller;
 
 import java.util.ArrayList;
@@ -7,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.dynamic.dynamiz.parser.OptionType;
-
-//@author A0113855E
 /**
  * CommandType is the enumeration class of all the different types of commands.
  * 

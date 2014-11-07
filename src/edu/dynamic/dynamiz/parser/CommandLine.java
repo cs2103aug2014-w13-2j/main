@@ -1,3 +1,5 @@
+//@author A0113855E
+
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-//@author A0113855E
+
 /**
  * This is a class which stores the information of the parsed command line given
  * by the user.

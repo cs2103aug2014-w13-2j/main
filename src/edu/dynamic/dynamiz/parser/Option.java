@@ -1,9 +1,9 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@author A0113855E
 /**
  * A single command-line option. It keeps information of an option
  * such as 

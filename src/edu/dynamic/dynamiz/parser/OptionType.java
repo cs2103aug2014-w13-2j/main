@@ -1,3 +1,4 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//@author A0113855E
 /**
  * OptionType enum class is a class to hold the various options applicable to many commands.
  * Using OptionType allows the users to specify the PRIORITY, START_TIME, END_TIME, or

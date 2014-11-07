@@ -1,3 +1,4 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//@author A0113855E
 /**
  * This is a singleton class to substitute abbreviations of commonly used expressions
  * to full length expressions. The reasons to implement this in a separate class 

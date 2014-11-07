@@ -1,3 +1,4 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-//@author A0113855E
 /**
  * List of Options
  * This is a container of {@link Option}. Multiple {@link Option} of the same {@link OptionType} will be 

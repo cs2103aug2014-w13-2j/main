@@ -1,3 +1,4 @@
+//@author A0113855E
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-//@author A0113855E
 /**
  * Util class to store some utilities function in String, Date and Number 
  * manipulation
