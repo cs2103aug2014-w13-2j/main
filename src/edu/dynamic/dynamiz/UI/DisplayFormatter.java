@@ -9,15 +9,10 @@ import edu.dynamic.dynamiz.structure.*;
 /**
  * @author A0119397R
  * Acts as the information interpreter of Feedback items and formatter for UI
+ * 
  * */
 
 public class DisplayFormatter implements DisplayerInterface {
-//	private static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
-//	private static final int FEEDBACK_TAG = 1;
-//	private static final int ERROR_FEEDBACK_TAG = 2;
-//	private static final int SUCCESS_FEEDBACK_TAG = 3;
-//	private static final int HELP_FEEDBACK_TAG = 4;
-	
 
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
@@ -115,7 +110,6 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayEventFile(EventItem event) {
 		assert event!=null;
-		String s = new String();
 		return event.toFileString();
 	}
 	@Override
@@ -127,7 +121,6 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
 		assert eventList!=null;
-		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.size(); i++){
 			s.append(eventList.get(i).toString()).append("\n");
@@ -137,7 +130,6 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayEventList(EventItem[] eventList) {
 		assert eventList!=null;
-		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< eventList.length; i++){
 			s.append(eventList[i].toString()).append("\n");
@@ -147,25 +139,21 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
 		assert todoItem !=null;
-		String str = new String();
 		return todoItem.toString();
 	}
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
 		assert todoItem !=null;
-		String str = new String();
 		return todoItem.getFeedbackString();
 	}
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
 		assert todoItem !=null;
-		String str = new String(); 
 		return todoItem.toFileString();
 	}
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
 		assert todoList !=null;
-		String str = new String();
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.size(); i++){
 			s.append(todoList.get(i).toString()).append("\n");
@@ -174,8 +162,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
-		assert todoList !=null;
-		String str = new String();		
+		assert todoList !=null;		
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i< todoList.length; i++){
 			s.append(todoList[i].toString()).append("\n");
@@ -207,8 +194,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			break;
 		default:
 			tag = ENTER_VALID_COMMAND_STR;
-		}		
-		//tag+="\n";		
+		}				
 		return tag;
 	}
 	public String displayPrompt(String promptMessage) {
@@ -271,17 +257,6 @@ public class DisplayFormatter implements DisplayerInterface {
 			formatTaskChunk(displayContentList,list[1]);		
 		}
 
-		/*
-		 * Previously we decided to display the result task list in chunk format 
-		 * if the list size is less than 4
-		 */
-		//	if(list.length < 4){
-		//	for( int i = 0 ; i< list.length; i++){
-		//	formatTaskChunk(displayContentList,list[i]);
-		//	displayContentList.add(new StrIntPair("\n"));
-		//	}
-		//	}
-		//			
 		else{ 
 			displayContentList.add(new StrIntPair(displayDividingLine()));
 			displayContentList.add(new StrIntPair(displayTitleLine()));
