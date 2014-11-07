@@ -18,14 +18,15 @@ public class CommandUnmarkTest {
     public void test() {
 	//Tests normal use case.
 	int[] arr = new int[3];
-	arr[0] = 1;
-	arr[1] = 3;
-	arr[2] = 4;
+	arr[0] = 7;	//All 3 ID must have status "Completed" in dynamiz/todo.txt for this test case to work.
+	arr[1] = 8;
+	arr[2] = 9;
 	Command cmd = new CommandUnmark(arr);
 	cmd.execute();
-	assertEquals(1, cmd.getAffectedItems()[0].getId());
-	assertEquals(3, cmd.getAffectedItems()[1].getId());
-	assertEquals(4, cmd.getAffectedItems()[2].getId());
+	assertEquals(3, cmd.getAffectedItems().length);
+	assertEquals(7, cmd.getAffectedItems()[0].getId());
+	assertEquals(8, cmd.getAffectedItems()[1].getId());
+	assertEquals(9, cmd.getAffectedItems()[2].getId());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[2].getStatus());
@@ -35,12 +36,12 @@ public class CommandUnmarkTest {
 	assertTrue(cmd.getAffectedItems()[2].getStatus().equals(ToDoItem.STATUS_COMPLETED));
 	
 	//Test case where some of the items are already not marked as completed.
-	arr[1] = 2;
+	arr[1] = 2;	//This ID must have status "Pending".
 	cmd = new CommandUnmark(arr);
 	cmd.execute();
 	assertEquals(2, cmd.getAffectedItems().length);
-	assertEquals(1, cmd.getAffectedItems()[0].getId());
-	assertEquals(4, cmd.getAffectedItems()[1].getId());
+	assertEquals(7, cmd.getAffectedItems()[0].getId());
+	assertEquals(9, cmd.getAffectedItems()[1].getId());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
 	((Undoable)cmd).undo();
@@ -48,12 +49,12 @@ public class CommandUnmarkTest {
 	assertTrue(cmd.getAffectedItems()[1].getStatus().equals(ToDoItem.STATUS_COMPLETED));
 	
 	//Test case where some of the ID are invalid.
-	arr[1] = -1;
+	arr[1] = -1;	//Must be an invalid ID.
 	cmd = new CommandUnmark(arr);
 	cmd.execute();
 	assertEquals(2, cmd.getAffectedItems().length);
-	assertEquals(1, cmd.getAffectedItems()[0].getId());
-	assertEquals(4, cmd.getAffectedItems()[1].getId());
+	assertEquals(7, cmd.getAffectedItems()[0].getId());
+	assertEquals(9, cmd.getAffectedItems()[1].getId());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
 	assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
 	((Undoable)cmd).undo();

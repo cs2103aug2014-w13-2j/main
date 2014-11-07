@@ -19,7 +19,7 @@ public class CommandUndoTest {
     
     @Test
     public void test() {
-	//For mark command, use an ID that can be successfully marked as completed,
+	//For mark command, use an ID that can be successfully marked as "Completed" in dynamiz/todo.txt,
 	//or the test case will not work.
 	int[] arr = new int[1];
 	arr[0] = 2;

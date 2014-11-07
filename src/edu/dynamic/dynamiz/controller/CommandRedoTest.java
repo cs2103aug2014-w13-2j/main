@@ -27,7 +27,7 @@ public class CommandRedoTest {
 	cmd.execute();
 	assertEquals("Learn C++", cmd.getAffectedItems()[0].getDescription());
 	cmd = new CommandUndo();
-	((CommandUndo)cmd).setStacks(undoStack, redoStack);	//To maintain integrity of todo.txt
+	((CommandUndo)cmd).setStacks(undoStack, redoStack);	//To maintain integrity of dynamiz/todo.txt
 	cmd.execute();
     }
     

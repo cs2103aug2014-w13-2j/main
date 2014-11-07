@@ -14,7 +14,7 @@ public class CommandMarkTest {
     
     @Test
     //Tests normal case where all ID are valid.
-    //Change the ID based on the test case file being used.
+    //Change the ID based on the contents of dynamiz/todo.txt.
     //Items represented by the ID must be "Pending" as this test case is for all valid ID.
     public void test() {
 	int[] arr = new int[2];
