@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//@author A0113855E
 /**
  * This is a singleton class to substitute abbreviations of commonly used expressions
  * to full length expressions. The reasons to implement this in a separate class 
@@ -14,10 +15,8 @@ import java.util.regex.Pattern;
  *  - This is open for extension in which the user is able to define their own abbreviation
  *  - Organising purposes.
  *  
- *  
- * @author nhan
- *
  */
+
 public class ExpressionSubstitutor {
 	private static ExpressionSubstitutor substitutor;
 	private HashMap<String, String> dictionary;

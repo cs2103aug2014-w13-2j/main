@@ -1,6 +1,7 @@
 package edu.dynamic.dynamiz.parser;
 
 import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0113855E
 /**
  * This is a class which stores the information of the parsed command line given
  * by the user.
@@ -34,10 +36,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * This allows querying of a boolean hasOption(String opt), and retrieving value
  * of the option getOptionValue(String opt)
- * 
- * @author nhan
  *
  */
+
 public class CommandLine {
 	private CommandType commandType;
 	private Options options;

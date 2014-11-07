@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//@author A0113855E
 /**
  * OptionType enum class is a class to hold the various options applicable to many commands.
  * Using OptionType allows the users to specify the PRIORITY, START_TIME, END_TIME, or
@@ -13,8 +14,6 @@ import java.util.Map;
  * 
  * This enum class mainly facilitates the functionalities of Command classes as well as help in
  * Parsing of the command.
- * 
- * @author nhan
  *
  */
 public enum OptionType {

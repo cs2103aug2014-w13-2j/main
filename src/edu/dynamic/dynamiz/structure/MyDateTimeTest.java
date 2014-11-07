@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+//@author A0113855E
 /**
  * Test the correctness of comparing MyDate objects (including
  * MyDate and MyDateTime)

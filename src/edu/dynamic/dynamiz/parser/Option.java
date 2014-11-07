@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+//@author A0113855E
 /**
  * A single command-line option. It keeps information of an option
  * such as 
@@ -13,8 +14,6 @@ import java.util.List;
  *  
  * An Option requires at least a short name or a long name.
  * 
- * @author nhan
- *
  * Modelled after CLI library
  */
 

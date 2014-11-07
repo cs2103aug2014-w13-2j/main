@@ -201,14 +201,13 @@ public class MyDateTime extends MyDate {
 	return output.toString();
     }
     
-    
+    //@author A0113855E
     /**
      * Comparing the date. If the dates differ at the date level then return
      * the result. Otherwise, compare the time level.
      * 
      * @param other The date to be compared with. It can be MyDate or MyDateTime instance
      * @return same result as compareTo() will
-     * @author nhan
      */
     public int compareIncludingTime(MyDate other) {
     	assert (other != null);

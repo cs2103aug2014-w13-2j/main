@@ -14,6 +14,7 @@ import org.junit.Test;
 import edu.dynamic.dynamiz.controller.CommandType;
 import edu.dynamic.dynamiz.structure.MyDate;
 
+//@author A0113855E
 /**
  * Test program to understand the output of parser.
  * @author nhan

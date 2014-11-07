@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.dynamic.dynamiz.parser.OptionType;
 
+//@author A0113855E
 /**
  * CommandType is the enumeration class of all the different types of commands.
  * 
@@ -18,8 +19,6 @@ import edu.dynamic.dynamiz.parser.OptionType;
  * 
  * For example, applicable options for ADD type of command is OptionType.START_TIME, OptionType.END_TIME,
  * and OptionType.PRIORITY.
- * 
- * @author nhan
  *
  */
 public enum CommandType {
