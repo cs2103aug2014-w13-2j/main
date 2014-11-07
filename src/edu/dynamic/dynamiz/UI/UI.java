@@ -41,6 +41,7 @@ public class UI extends JPanel implements ActionListener {
 	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 	private String divider = "================================================================================================";
 	private final static String newline = "\n";
+	private final static String helpprompt = "Please enter 'help' for more information about the available options";
 	private SimpleAttributeSet BoldWhite;
 	private SimpleAttributeSet Default;
 	private SimpleAttributeSet BoldGreen;
@@ -106,10 +107,9 @@ public class UI extends JPanel implements ActionListener {
 
 		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + newline,
-					BoldWhite);
-			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
-					BoldWhite);
+			doc.insertString(0, disp.displayWelcomeMessage() + newline,BoldWhite);
+			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,BoldWhite);
+			doc.insertString(doc.getLength(), helpprompt + newline,BoldWhite);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
