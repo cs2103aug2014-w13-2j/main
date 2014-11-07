@@ -19,19 +19,21 @@ public class CommandUndoTest {
     
     @Test
     public void test() {
+	//For mark command, use an ID that can be successfully marked as completed,
+	//or the test case will not work.
 	int[] arr = new int[1];
-	arr[0] = 8;
+	arr[0] = 2;
 	Command cmd = new CommandMark(arr);
 	cmd.execute();
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();
 	undoStack.push((Undoable)cmd);
-	assertEquals(8, cmd.getAffectedItems()[0].getId());
+	assertEquals(2, cmd.getAffectedItems()[0].getId());
 	assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
 	CommandUndo undo = new CommandUndo();
 	undo.setStacks(undoStack, redoStack);
 	undo.execute();
-	assertEquals(8, cmd.getAffectedItems()[0].getId());
+	assertEquals(2, cmd.getAffectedItems()[0].getId());
 	assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_PENDING));
 	
 	cmd = new CommandUpdate(2, null, 2, null, null);
