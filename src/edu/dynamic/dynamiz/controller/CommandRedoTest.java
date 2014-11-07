@@ -16,15 +16,19 @@ public class CommandRedoTest {
     
     @Test
     public void test() {
-	CommandAdd cmd = new CommandAdd(new ToDoItem("Learn C++"));
+	Command cmd = new CommandAdd(new ToDoItem("Learn C++"));
 	Stack<Undoable> undoStack = new Stack<Undoable>();
 	Stack<Undoable> redoStack = new Stack<Undoable>();
 	cmd.execute();
-	cmd.undo();
+	((Undoable)cmd).undo();
 	redoStack.push((Undoable)cmd);
-	CommandRedo redo = new CommandRedo();
-	redo.setStacks(undoStack, redoStack);
-	redo.execute();
+	cmd = new CommandRedo();
+	((CommandRedo)cmd).setStacks(undoStack, redoStack);
+	cmd.execute();
+	assertEquals("Learn C++", cmd.getAffectedItems()[0].getDescription());
+	cmd = new CommandUndo();
+	((CommandUndo)cmd).setStacks(undoStack, redoStack);	//To maintain integrity of todo.txt
+	cmd.execute();
     }
     
 }
