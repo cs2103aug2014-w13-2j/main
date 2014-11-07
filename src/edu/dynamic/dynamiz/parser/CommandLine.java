@@ -414,7 +414,7 @@ public class CommandLine {
 	 * @return the first valid value of the matching {@link Option} 
 	 */
 	private String getFirstOptionValue(Options commandOptions, OptionType optionType) {
-		List<Option> optionList = commandOptions.getOptions(optionType);
+		List<Option> optionList = commandOptions.getOptionList(optionType);
 		Option option = optionList.get(optionList.size() - 1);
 		String optionStr = option.getValues().get(0);
 			
@@ -429,7 +429,7 @@ public class CommandLine {
 	 * @return a list of {@link MyDate} and/or {@link MyDateTime} objects extracted from the given collection.
 	 */
 	public List<MyDate> extractDateList(Options options, OptionType dateType) {
-		List<String> values = options.getOptions(dateType).get(0).getValues();
+		List<String> values = options.getOptionList(dateType).get(0).getValues();
 		List<MyDate> dateList = new ArrayList<MyDate>();
 		
 		for (String value: values) {
@@ -449,7 +449,7 @@ public class CommandLine {
 	 * @return a list of {@link OptionType.PRIORITY} integer values extracted from the given collection.
 	 */
 	public List<Integer> extractPriorityList(Options options) {
-		List<String> values = options.getOptions(OptionType.PRIORITY).get(0).getValues();
+		List<String> values = options.getOptionList(OptionType.PRIORITY).get(0).getValues();
 		List<Integer> priorityList = new ArrayList<Integer>();
 		
 		for (String value: values) {
@@ -467,7 +467,7 @@ public class CommandLine {
 	 * @return a list of matching {@link OptionType} values extracted from the given collection. 
 	 */
 	public List<OptionType> extractOptionTypeList(Options options) {
-		List<String> values = options.getOptions(OptionType.ORDER_BY).get(0).getValues();
+		List<String> values = options.getOptionList(OptionType.ORDER_BY).get(0).getValues();
 		List<OptionType> typeList = new ArrayList<OptionType>();
 		
 		for (String value: values) {

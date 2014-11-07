@@ -131,4 +131,27 @@ public class Option{
 		
 		return sb.toString();
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		
+		if (!(other instanceof Option)) {
+			return false;
+		}
+		
+		Option o = (Option) other;
+		if (this.getOptionType().equals(o.getOptionType())) {
+			for (String s: this.getValues()) {
+				if (!o.getValues().contains(s)) {
+					return false;
+				}
+			}		
+			return true;
+		}
+		
+		return false;		
+	}
 }

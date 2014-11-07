@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.controller.CommandType;
@@ -13,7 +16,6 @@ import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
  * Test program to understand the output of parser.
- * @author zixian
  * @author nhan
  */
 
@@ -30,32 +32,107 @@ public class ParserTest {
 
 		cmdLine = parser.parseCommandLine("add 2 on 27/9/2014 from yesterday 18:00 to 23:00");
 		assertEquals("2", cmdLine.getParam());
+		
+		List<String> values = new ArrayList<String>();
+		values.add(parser.parseMyDate("27/9/2014").toString());
+		Option opt = new Option(OptionType.ON_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("yesterday 18:00").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("23:00").toString());
+		opt = new Option(OptionType.END_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
 
 		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
 		assertEquals("", cmdLine.getParam());
 		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("tomorrow").toString());
+		values.add(parser.parseMyDate("today").toString());
+		values.add(parser.parseMyDate("yesterday").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.fromString("-s").toString());
+		values.add(OptionType.fromString("to").toString());
+		values.add(OptionType.fromString("priority").toString());			
+		opt = new Option(OptionType.ORDER_BY, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
 		cmdLine = parser.parseCommandLine("update 3 priority h on tomorrow from 18:00 to 23:00");
+		assertEquals("3", cmdLine.getParam());
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.getPriority("h") + "");
+		opt = new Option(OptionType.PRIORITY, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("tomorrow").toString());
+		opt = new Option(OptionType.ON_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("18:00").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("23:00").toString());
+		opt = new Option(OptionType.END_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
 		
 		cmdLine = parser.parseCommandLine("search status p");
-		System.out.println(cmdLine);
+		assertEquals("", cmdLine.getParam());
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.getStatus("p").toString());
+		opt = new Option(OptionType.STATUS, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
     }
     
     @Test
     public void testMultipleOption() {
     	CommandLine cmdLine;
+    	Option opt = null;
+    	List<String> values = new ArrayList<String>();
     	
     	cmdLine = parser.parseCommandLine("add a task from today from yesterday from tomorrow");
+    	MyDate date = parser.parseMyDate("tomorrow");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.START_TIME, values);
+    	
     	assertEquals("a task from today from yesterday", cmdLine.getParam());
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
     	
     	cmdLine = parser.parseCommandLine("add a task from today from yesterday to tomorrow");
+    	values = new ArrayList<String>();
+    	date = parser.parseMyDate("yesterday");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.START_TIME, values);
+    	
     	assertEquals("a task from today", cmdLine.getParam());
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
+    	
+    	values = new ArrayList<String>();
+    	date = parser.parseMyDate("tomorrow");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.END_TIME, values);
+    	
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
     }
     
     @Test
     public void testEscapingInputNormal() {
     	CommandLine cmdLine;
     	
-    	// TODO: Add assertEquals for Option parsed as well
     	// With normal OptionType
     	cmdLine = parser.parseCommandLine("add ;from Fri ;to Sat ;on 12 Dec from yesterday to today");
     	assertEquals("from Fri to Sat on 12 Dec", cmdLine.getParam());
@@ -94,17 +171,33 @@ public class ParserTest {
     @Test(expected = NullPointerException.class)
     public void testAliasesErroneous() {
     	CommandLine cmdLine = parser.parseCommandLine("sadfasdf");
+    	
+    	fail("It should throw an Exception");
     }
     
+    /**
+     * Test on natty parsing capacity
+     */
     @Test
     public void testParsingDate() {
+    	
+    	// Explicit date expressions
     	MyDate date = parser.parseMyDate("17/10/2014");
     	assertEquals("17/10/2014", date.toString());
     	
     	date = parser.parseMyDate("end of October 4pm");
     	assertEquals("31/10/2014 16:00", date.toString());
     	
+    	// Relative date expressions
+    	MutableDateTime today = new MutableDateTime();
+    	today.setDayOfMonth(today.getDayOfMonth()-1);
+    	today.setHourOfDay(18);
+    	today.setMinuteOfHour(0);
+    	
+    	DateTimeFormatter formatter = DateTimeFormat.forPattern("d/MM/yyyy HH:mm");
+    	String expected = formatter.print(today);
     	date = parser.parseMyDate("yesterday 18:00");
+    	assertEquals(expected, date.toString());
     }
 
     @Test
@@ -148,7 +241,11 @@ public class ParserTest {
    
     	assertEquals(expected, parser.parseDateListFromRange(dateRange));	
     }
-    
+   
+    /*======================================================================
+     * Parse Exception throwing
+     * =====================================================================
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testParsingDateRangeValidExpressionButInvalidRange() {
     	String dateRange = "30 Dec > 3 Jan";

@@ -14,7 +14,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Util class to store some utilities function in String manipulation
+ * Util class to store some utilities function in String, Date and Number 
+ * manipulation
  * 
  * @author nhan
  * 

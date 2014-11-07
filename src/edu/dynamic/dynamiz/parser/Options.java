@@ -3,8 +3,6 @@ package edu.dynamic.dynamiz.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,7 +11,7 @@ import java.util.Map.Entry;
  * This is a container of {@link Option}. Multiple {@link Option} of the same {@link OptionType} will be 
  * grouped together.
  * <p>
- * Provide utility methods to check for ambiguity if one {@link OptionType} has more than one occurence.
+ * Provide utility methods to check for ambiguity if one {@link OptionType} has more than one occurrence.
  * 
  * @author nhan
  *
@@ -30,7 +28,7 @@ public class Options {
 	 * Add an option to the Options collection.
 	 * 
 	 * @param opt {@link Option} to add to Options
-	 * @return true of the Option input is succesfully added. False otherwise.
+	 * @return true of the Option input is successfully added. False otherwise.
 	 */
 	public boolean add(Option opt) {
 		OptionType optType = OptionType.fromOption(opt);
@@ -53,7 +51,7 @@ public class Options {
 	 * the elements. Otherwise, the operation will return false and nothing will be added to Options collection.
 	 * 
 	 * @param optList the list of {@link Option} to be added
-	 * @return true if the list of {@link Option} is of the same {@link OptionType} and succesfully added to the
+	 * @return true if the list of {@link Option} is of the same {@link OptionType} and successfully added to the
 	 * collection. False otherwise. 
 	 */
 	public boolean add(List<Option> optList) {
@@ -136,10 +134,10 @@ public class Options {
 	 * @param optName an alias of the option to specify OptionType
 	 * @return a List of all the options of that OptionType
 	 */
-	public List<Option> getOptions(String optName) {
+	public List<Option> getOptionList(String optName) {
 		OptionType optType = OptionType.fromString(optName);
 		
-		return getOptions(optType);
+		return getOptionList(optType);
 	}
 	
 	/**
@@ -148,7 +146,7 @@ public class Options {
 	 * @param optType OptionType to retrieve
 	 * @return a List of all the options of that OptionType
 	 */
-	public List<Option> getOptions(OptionType optType) {
+	public List<Option> getOptionList(OptionType optType) {
 		return optionTable.get(optType);
 	}
 
@@ -202,8 +200,4 @@ public class Options {
 		
 		return sb.toString();
 	}
-
-
-
-
 }
