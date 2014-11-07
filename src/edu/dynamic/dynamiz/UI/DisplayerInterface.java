@@ -43,8 +43,8 @@ public interface DisplayerInterface {
 	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
 
 	public String displayWelcomeMessage();
-	public StrIntPair displayString(String str);
-	public StrIntPair displayStringList(ArrayList<String> arr);
+	public String displayString(String str);
+	public String displayStringList(ArrayList<String> arr);
 	
 	
 	/**
