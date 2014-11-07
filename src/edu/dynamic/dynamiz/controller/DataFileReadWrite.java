@@ -93,7 +93,9 @@ public class DataFileReadWrite {
 	MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
 	
 	try{
-	    dir = new File(FILE_DIR);
+		String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File directory = new File(path).getParentFile();
+	    dir = new File(directory, FILE_DIR);
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();
 	    }
@@ -153,7 +155,10 @@ public class DataFileReadWrite {
      * @param filename The name of the file to write to.
      */
     public static synchronized void writeListToFile(String[] list, String filename){
-	File dir = new File(FILE_DIR), outFile;
+		String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File directory = new File(path).getParentFile();
+	    File dir = new File(directory, FILE_DIR);    	
+	    File outFile;
 	try{
 	    if(!dir.exists() || !dir.isDirectory()){
 		dir.mkdirs();

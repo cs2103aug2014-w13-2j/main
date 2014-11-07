@@ -13,7 +13,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 public interface DisplayerInterface {
 	
-	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!";
+	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!\nPlease enter \"help\" for more information about the available commands!";
 
 	static final int FEEDBACK_TAG = 1;
 	static final int ERROR_FEEDBACK_TAG = 2;
@@ -42,9 +42,9 @@ public interface DisplayerInterface {
 	
 	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
 
-	public StrIntPair displayWelcomeMessage();
-	public StrIntPair displayString(String str);
-	public StrIntPair displayStringList(ArrayList<String> arr);
+	public String displayWelcomeMessage();
+	public String displayString(String str);
+	public String displayStringList(ArrayList<String> arr);
 	
 	
 	/**

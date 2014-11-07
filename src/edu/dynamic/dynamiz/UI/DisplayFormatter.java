@@ -28,8 +28,8 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;
 	}
 
-	public StrIntPair displayWelcomeMessage(){
-		return new StrIntPair(WELCOME_MESSAGE);
+	public String displayWelcomeMessage(){
+		return WELCOME_MESSAGE;
 	}
 
 	public String displayTitleLine() {
@@ -47,12 +47,12 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;
 	}
 	@Override
-	public StrIntPair displayString(String str) {	
-		return new StrIntPair(str);
+	public String displayString(String str) {	
+		return str;
 	}
 	@Override
-	public StrIntPair displayStringList(ArrayList<String> arr) {	
-		if(arr == null) return new StrIntPair("null");
+	public String displayStringList(ArrayList<String> arr) {	
+		if(arr == null) return "null";
 		StringBuilder s = new StringBuilder();
 
 		for(int i=0;i<arr.size();i++){
@@ -60,7 +60,7 @@ public class DisplayFormatter implements DisplayerInterface {
 				s.append(arr.get(i).trim()).append("\n");
 		}
 
-		return new StrIntPair(s.toString());	
+		return s.toString();	
 	}
 	@Override
 	public String displayTaskItem(TaskItem task) {
