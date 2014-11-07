@@ -10,7 +10,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * @author A0119397R
- * 
  */
 public interface DisplayerInterface {
 	
@@ -87,7 +86,7 @@ public interface DisplayerInterface {
 	 * @param specific String promptMessage 
 	 */
 	public String displayPrompt();
-	public StrIntPair displayPrompt(int promptTag);
+	public String displayPrompt(int promptTag);
 	public String displayPrompt(String promptMessage);
 
 	

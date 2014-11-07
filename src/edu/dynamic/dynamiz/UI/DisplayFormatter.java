@@ -186,7 +186,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String ("Command: ");
 		return s;
 	}	
-	public StrIntPair displayPrompt(int promptTag) {
+	public String displayPrompt(int promptTag) {
 		String tag = new String();
 		switch(promptTag){
 		case ENTER_COMMAND_PROMPT:
@@ -209,7 +209,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			tag = ENTER_VALID_COMMAND_STR;
 		}		
 		//tag+="\n";		
-		return new StrIntPair(tag);
+		return tag;
 	}
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
