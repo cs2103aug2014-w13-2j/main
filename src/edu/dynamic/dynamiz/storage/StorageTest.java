@@ -12,8 +12,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class for Storage.
- * @author A0110781N
  */
+//@author A0110781N
 public class StorageTest {
     
     @Test

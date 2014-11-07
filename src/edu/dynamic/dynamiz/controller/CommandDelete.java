@@ -18,9 +18,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects removed from storage by
  * 					//this command's execute method.
  * String getCommandName()	//Gets the string representation of this command's type.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandDelete extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "delete";

@@ -11,6 +11,10 @@ import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * JUnit test case for EventItem class.
+ */
+//@author A0110781N
 public class EventItemTest {
     
     @Test

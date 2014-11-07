@@ -8,8 +8,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Unit test for CommandSearch class.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandSearchTest {
     
     @Test

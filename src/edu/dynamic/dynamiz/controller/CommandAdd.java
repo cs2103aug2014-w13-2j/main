@@ -22,10 +22,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 						//from the given Options list.
  * 
  * Private Methods
- * Date makeDate(String dateString)	//Creates a Date instance from the given date string.
- * 
- * @author A0110781N
+ * Date makeDate(String dateString)	//Creates a Date instance from the given date string. 
  * */
+//@author A0110781N
 public class CommandAdd extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";

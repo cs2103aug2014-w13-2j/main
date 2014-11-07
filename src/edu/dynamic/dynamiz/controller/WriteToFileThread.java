@@ -14,9 +14,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * 
  * Public Methods
  * void run()	//Executes this thread.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class WriteToFileThread extends Thread {
     //Tracks the threads that were previously executed and to be terminated by the incoming thread.
     private static LinkedList<WriteToFileThread> runningThreads = new LinkedList<WriteToFileThread>();

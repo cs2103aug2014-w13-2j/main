@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.parser.CommandLine;
-import edu.dynamic.dynamiz.parser.Parser;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
@@ -16,6 +14,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * JUnit test case for Command Add.
  * @author A0110781N
  */
+//@author A0110781N
 public class CommandAddTest {
     
     @Test

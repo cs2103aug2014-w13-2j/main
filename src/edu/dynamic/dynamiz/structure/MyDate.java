@@ -24,10 +24,9 @@ import java.util.Date;
  * protected void setDayOfMonth(int date)	//Sets the day of the month.
  * protected void setMonth(int month)	//Sets the month of the year.
  * protected void setYear(int year)	//Sets the year
- * String toString()	//Gets the String representation of this date.
- * 
- * @author A0110781N
+ * String toString()	//Gets the String representation of this date. 
  */
+//@author A0110781N
 public class MyDate implements Comparable<MyDate>{
     //Default date values.
     protected static final int DEFAULT_DAY = 1;

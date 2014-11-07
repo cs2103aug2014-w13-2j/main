@@ -8,8 +8,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * The JUnit Test Case for COmmandShow class.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandShowTest {
     
     @Test

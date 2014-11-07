@@ -8,10 +8,9 @@ package edu.dynamic.dynamiz.structure;
  * 
  * Public Methods
  * String getMessage()	//Gets the error message of this feedback.
- * String getClassName()	//Gets the String representation of this feedback's class.
- * 
- * @author A0110781N
+ * String getClassName()	//Gets the String representation of this feedback's class. 
  */
+//@author A0110781N
 public class ErrorFeedback extends Feedback {
     //The String representation of this feedback's class.
     public static final String CLASSNAME = "ErrorFeedback";

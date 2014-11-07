@@ -10,8 +10,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test case for CommandRedo.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandRedoTest {
     
     @Test

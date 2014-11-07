@@ -16,9 +16,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectedItems()	//Gets a list of ToDoItem objects affected by the redone command
  * String getCommandName()	//Gets the string representation of this command's type
  * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Passes the undo and redo stacks for this command's execution
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandRedo extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "redo";

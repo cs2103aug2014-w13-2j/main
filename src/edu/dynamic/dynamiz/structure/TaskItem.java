@@ -17,10 +17,9 @@ package edu.dynamic.dynamiz.structure;
  * String getFeedbackString()	//Gets the String representation of this task used in feedback.
  * void setDeadline(MyDate deadline)	//Sets the deadline for this task.
  * String toFileString()	//Gets the String representation of this task used in file I/O.
- * String toString()	//Gets the String representation of this task.
- * 
- * @author A0110781N
+ * String toString()	//Gets the String representation of this task. 
  */
+//@author A0110781N
 public class TaskItem extends ToDoItem {
     //String formatting used in this class
     private static final String FORMAT_EMPTYTIME = " --:--";

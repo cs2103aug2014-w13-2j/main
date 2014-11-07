@@ -6,8 +6,8 @@ import org.junit.Test;
 
 /**
  * JUnit test class for CommandHelp.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandHelpTest {
     
     @Test

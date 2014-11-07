@@ -16,9 +16,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()		//Gets the string representation of this command's type
  * void execute()	//Executes this command
  * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Assigns the appropriate stacks to this command for execution
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandUndo extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "undo";

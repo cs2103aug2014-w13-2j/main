@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;

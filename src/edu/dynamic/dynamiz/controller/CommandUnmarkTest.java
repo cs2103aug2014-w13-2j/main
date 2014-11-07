@@ -10,9 +10,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * JUnit test Case to test correctness of CommandUnmark.
  * For all values used in the arrays, please check through the todo.txt to be used for testing to
  * ensure that the IDs used really represent the types of items to be used for testing.
- * Else, false errors will appear.
- * @author A0110781N
+ * Else, false errors will appear. 
  */
+//@author A0110781N
 public class CommandUnmarkTest {
     @Test
     public void test() {

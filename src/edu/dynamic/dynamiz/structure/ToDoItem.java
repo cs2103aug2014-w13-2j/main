@@ -23,9 +23,8 @@ package edu.dynamic.dynamiz.structure;
  * void setStatus(String status)	//Changes the status of this item.
  * String toFileString()	//Gets string representation of this item used in files.
  * String toString()	//Gets the string representation of this item.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class ToDoItem implements Comparable<ToDoItem>{
 
     //ToDoItem defaults

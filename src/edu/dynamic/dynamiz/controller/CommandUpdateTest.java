@@ -4,10 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.parser.CommandLine;
-import edu.dynamic.dynamiz.parser.Options;
-import edu.dynamic.dynamiz.parser.Parser;
-import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
@@ -15,8 +11,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * Test unit for CommandUpdate class.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandUpdateTest {
     
     @Test

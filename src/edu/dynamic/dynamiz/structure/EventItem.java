@@ -20,9 +20,8 @@ package edu.dynamic.dynamiz.structure;
  * String getStartDateString()	//Gets the string representation of this event's start date.
  * void setEndDate(MyDate end)	//Sets the end date for this event.
  * void setStartDate(MyDate start)	//Sets the start date for this event.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class EventItem extends ToDoItem {
     //The String formatting used in this class.
     private static final String FORMAT_EMPTYTIME = " --:--";

@@ -16,9 +16,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Avoids the problem of random execution sequencing of the various methods in the JUnit test case.
  * However, ControllerTest JUnit test should still be used for automated testing for boundary test cases.
  * UI is not well-developed in this dummy program as it is mainly to test underlying functionalities.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class TestProgram {
     public static void main(String[] args){
 	String input;

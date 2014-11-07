@@ -21,9 +21,8 @@ import java.util.Date;
  * void setDateTime(int date, int month, int year, int hour, int minute)	//Sets the new value of date and time.
  * void setTime(int hour, int minute)	//Sets the time of this date time object.
  * String toString()	//Gets the String rerpesentation of this date time object.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class MyDateTime extends MyDate {
     //The default time values
     private static final int DEFAULT_HOUR = 0;

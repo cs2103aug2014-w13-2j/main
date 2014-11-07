@@ -17,9 +17,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()	//Gets the String representation of this command's type.
  * void redo()		//Re-executes this command.
  * void undo()		//Undo this command.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandUnmark extends Command implements Undoable {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "unmark";

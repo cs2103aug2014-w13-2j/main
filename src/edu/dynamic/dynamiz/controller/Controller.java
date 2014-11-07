@@ -25,9 +25,8 @@ import edu.dynamic.dynamiz.structure.SuccessFeedback;
  * 
  * Public Methods
  * Feedback executeCommand(String input)	//Executes the command represented by the input string.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class Controller {
     //Defines the name of the log file
     private static final String LOGFILENAME = "dynamiz/log.txt";

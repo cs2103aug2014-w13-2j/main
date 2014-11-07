@@ -6,8 +6,8 @@ import org.junit.Test;
 
 /**
  * JUnit test class to test correctness of StartDateComparator.
- * @author A0110781N
  */
+//@author A0110781N
 public class StartDateComparatorTest {
     
     @Test

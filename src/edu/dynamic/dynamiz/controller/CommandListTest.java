@@ -1,19 +1,15 @@
 package edu.dynamic.dynamiz.controller;
 
-import static org.junit.Assert.*;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.parser.OptionType;
-import edu.dynamic.dynamiz.parser.Parser;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class to test CommandList class.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandListTest {
     
     @Test

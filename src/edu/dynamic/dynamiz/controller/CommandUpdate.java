@@ -21,9 +21,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects that are affected by this command.
  * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandUpdate extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "update";

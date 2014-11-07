@@ -4,13 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.parser.CommandLine;
-import edu.dynamic.dynamiz.parser.Parser;
-
 /**
  * Defines JUnit Test Case for CommandDelete.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandDeleteTest {
     
     @Test

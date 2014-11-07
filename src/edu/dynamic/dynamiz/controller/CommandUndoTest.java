@@ -13,8 +13,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * The todo file must be re-initialized before every run here.
  * Change the value 8 to another ID in the file with status that is not
  * 'completed' as not doing so results in exceptions during testing.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandUndoTest {
     
     @Test

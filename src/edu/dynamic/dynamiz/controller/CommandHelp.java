@@ -1,9 +1,7 @@
 package edu.dynamic.dynamiz.controller;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,10 +19,9 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Public Methods
  * String getCommandName()	//Gets the String representation of this command's type.
  * String getContent()	//Gets the contents of the help page.
- * void execute()	//Executes this command.
- * 
- * @author A0110781N
+ * void execute()	//Executes this command. 
  */
+//@author A0110781N
 public class CommandHelp extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "help";
@@ -104,7 +101,7 @@ public class CommandHelp extends Command {
 	}
 	
 	try{
-		InputStream in = this.getClass().getResourceAsStream("/" + helpFile);
+	    InputStream in = this.getClass().getResourceAsStream("/" + helpFile);
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 	    StringBuilder str = new StringBuilder();
 	    String input;

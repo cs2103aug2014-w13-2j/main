@@ -8,8 +8,8 @@ import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
  * Defines the JUnit test for MyDate class.
- * @author zixian
  */
+//@author A0110781N
 public class DateTest {
     
     @Test

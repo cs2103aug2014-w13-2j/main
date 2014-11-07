@@ -2,14 +2,13 @@ package edu.dynamic.dynamiz.controller;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class for CommandDo.
- * @author A0110781N
  */
+//@author A0110781N
 public class CommandMarkTest {
     
     @Test

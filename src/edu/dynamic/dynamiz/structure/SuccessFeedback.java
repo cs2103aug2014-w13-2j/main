@@ -9,9 +9,8 @@ package edu.dynamic.dynamiz.structure;
  * Public Methods
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects affected by the command this feedback is used for.
  * String getClassName()	//Gets the String representation of this feedback's class.
- * 
- * @author A0110781N
  */
+//@author A0110781N
 public class SuccessFeedback extends Feedback {
     public static final String CLASSNAME = "SuccessFeedback";
     

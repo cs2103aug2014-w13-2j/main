@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * The JUnit test class to test EndDateComparator class.
- * @author A0110781N
+ * The JUnit test class to test EndDateComparator class. 
  */
+//@author A0110781N
 public class EndDateComparatorTest {
     
     @Test

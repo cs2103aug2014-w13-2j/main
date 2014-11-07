@@ -1,8 +1,4 @@
 package edu.dynamic.dynamiz.structure.unitTest;
-import edu.dynamic.dynamiz.UI.*;
-import edu.dynamic.dynamiz.controller.*;
-import edu.dynamic.dynamiz.parser.*;
-import edu.dynamic.dynamiz.storage.*;
 import edu.dynamic.dynamiz.structure.*;
 import static org.junit.Assert.*;
 
@@ -14,8 +10,8 @@ import edu.dynamic.dynamiz.structure.TaskItem;
 
 /**
  * Defines the JUnit Test Case for TaskItem class.
- * @author zixian
  */
+//@author A0110781N
 public class TaskItemTest {
     
     @Test

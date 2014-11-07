@@ -10,6 +10,10 @@ import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+/**
+ * JUnit test case for ToDoItem class.
+ */
+//@author A0110781N
 public class ToDoItemTest {
     
     @Test
@@ -19,7 +23,7 @@ public class ToDoItemTest {
 	assertEquals(1, item.getId());
 	item = new ToDoItem("New task");
 	assertEquals(2, item.getId());
-	assertEquals("pending", item.getStatus());
+	assertEquals("Pending", item.getStatus());
 	assertEquals("Priority is 0", 0, item.getPriority());
 	System.out.println(item.getFeedbackString());
 	ToDoItem item2 = new ToDoItem(item);
@@ -33,13 +37,13 @@ public class ToDoItemTest {
     @Test
     public void testToString(){
 	ToDoItem item = new ToDoItem("Do CS2103T", 1);
-	assertEquals("3 Do CS2103T 1 pending --/--/---- --:-- --/--/---- --:--", item.toString());
+	assertEquals("3 Do CS2103T 1 Pending --/--/---- --:-- --/--/---- --:--", item.toString());
     }
     
     @Test
     public void testToFileString(){
 	ToDoItem item = new ToDoItem("Do CS2103T", 2);
-	assertEquals("Do CS2103T; 2; pending; --/--/---- --:--; --/--/---- --:--", item.toFileString());
+	assertEquals("Do CS2103T; 2; Pending; --/--/---- --:--; --/--/---- --:--", item.toFileString());
     }
     
     @Test
