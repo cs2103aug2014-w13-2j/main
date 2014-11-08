@@ -17,6 +17,7 @@ import edu.dynamic.dynamiz.structure.StartDateComparator;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the storage class holding the list of tasks and events.
  * 
@@ -35,7 +36,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void markItem(ToDoItem item)	//Marks the given ToDoItem as completed.
  * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
  */
-//@author A0110781N
 public class Storage {
     private static final String TODOLIST_FILENAME = "todo.txt";
     private static final String OUTPUT_FILENAME = TODOLIST_FILENAME;
@@ -138,6 +138,7 @@ public class Storage {
 	    target.setPriority(priority);
 	}
 	
+	//Checks for illogical date and time range.
 	if(start!=null && end!=null){
 	    if(start.compareIncludingTime(end)>0){
 		throw new IllegalArgumentException(MSG_INVALIDDATES);

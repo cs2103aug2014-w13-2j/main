@@ -2,7 +2,6 @@ package edu.dynamic.dynamiz.controller;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
@@ -19,6 +18,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 //@author A0110781N
 public class ControllerTest {
+    //Make a backup copy of todo.txt to put into dynamiz folder before running this unit test.
     
     @Test
     public void testAdd() throws Exception{
@@ -115,14 +115,18 @@ public class ControllerTest {
 	controller.executeCommand("undo");
 	
 	//Changes only end date
-	feedback = controller.executeCommand("update 1 to 27 september 2014 8pm");
+	feedback = controller.executeCommand("update 1 to 1 january 2015");
 	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals("update", feedback.getCommandType());
-	assertEquals(new MyDateTime(27, 9, 2014, 20, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+	if(((SuccessFeedback)feedback).getAffectedItems()[1] instanceof EventItem){
+	    assertEquals(new MyDate(1, 1, 2015), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+	} else{
+	    assertEquals(new MyDate(1, 1, 2015), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getDeadline());
+	}
 	controller.executeCommand("undo");
 	
 	//Multiple fields update
-	feedback = controller.executeCommand("update 4 Go shoppng by 6/10/2014");
+	feedback = controller.executeCommand("update 4 Go shopping by 6/10/2014");
 	assertTrue(feedback instanceof SuccessFeedback);
 	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
@@ -156,12 +160,27 @@ public class ControllerTest {
 	}
     }
     
-    @Ignore
+    @Test
     public void testDo(){
 	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("do 1");
+	//Marks 1 item as completed.
+	//Choose ID of an item whose status is not "Completed"
+	Feedback feedback = controller.executeCommand("do 2");
 	assertTrue(feedback instanceof SuccessFeedback);
+	assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
 	assertEquals(ToDoItem.STATUS_COMPLETED, ((SuccessFeedback)feedback).getAffectedItems()[0].getStatus());
+	controller.executeCommand("undo");
+	
+	//Marks multiple items by ID.
+	//Choose IDs of items that are not yet marked as "completed".
+	feedback = controller.executeCommand("mark 2, 3");
+	assertTrue(feedback instanceof SuccessFeedback);
+	ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
+	assertEquals(2, list.length);
+	assertEquals(2, list[0].getId());
+	assertEquals(ToDoItem.STATUS_COMPLETED, list[0].getStatus());
+	assertEquals(3, list[1].getId());
+	assertEquals(ToDoItem.STATUS_COMPLETED, list[1].getStatus());
 	controller.executeCommand("undo");
     }
     
