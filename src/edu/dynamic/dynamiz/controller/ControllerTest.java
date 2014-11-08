@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.MyDate;
@@ -44,97 +45,124 @@ public class ControllerTest {
 	controller.executeCommand("undo");
 	
 	//Adds another event, more on testing that the time element is added
-	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00");
+	feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 2pm");
 	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals("add", feedback.getCommandType());
-	assertEquals("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 14:00", feedback.getOriginalCommand());
+	assertEquals("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 2pm", feedback.getOriginalCommand());
 	assertEquals("CS2103T Tutorial", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
 	assertEquals(new MyDateTime(8, 10, 2014, 13, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getStartDate());
 	assertEquals(new MyDateTime(8, 10, 2014, 14, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getEndDate());
 	controller.executeCommand("undo");
 	
 	//Adds a deadline task, tests more for the deadline.
-	feedback = controller.executeCommand("add D by 25/10/2014");
+	feedback = controller.executeCommand("add D by 25 October 2014");
 	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals("add", feedback.getCommandType());
-	assertEquals("add D by 25/10/2014", feedback.getOriginalCommand());
+	assertEquals("add D by 25 October 2014", feedback.getOriginalCommand());
 	assertEquals("D", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
 	assertEquals(new MyDate(25, 10, 2014), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getDeadline());
 	controller.executeCommand("undo");
-	
-	//Erroneous test case. To be dealt with in later stages.
-	//feedback = controller.executeCommand("add");
     }
     
-    @Ignore
+    @Test
     public void testDelete(){
-	//Deletes and item
-	//feedback = controller.executeCommand("delete A2");
-	//assertEquals("delete", feedback.getCommandType());
-	//assertEquals("delete A2", feedback.getOriginalCommand());
+	//Deletes an item
+	Controller controller = new Controller();
+	Feedback feedback = controller.executeCommand("delete 2");
+	assertTrue(feedback instanceof SuccessFeedback);
+	assertEquals("delete", feedback.getCommandType());
+	assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+	controller.executeCommand("undo");
+	
+	//Deletes multiple items by ID range
+	feedback = controller.executeCommand("delete 2-4");
+	assertTrue(feedback instanceof SuccessFeedback);
+	assertEquals("delete", feedback.getCommandType());
+	assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+	assertEquals(3, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+	assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[2].getId());
+	controller.executeCommand("undo");
+	
+	//Deletes multiple items by ID
+	feedback = controller.executeCommand("delete 2, 5");
+	assertTrue(feedback instanceof SuccessFeedback);
+	assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+	assertEquals(5, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+	controller.executeCommand("undo");
+	
+	//Case where some ID are invalid/non-existent
+	feedback = controller.executeCommand("delete -1, 4");
+	assertTrue(feedback instanceof SuccessFeedback);
+	assertEquals(1, ((SuccessFeedback)feedback).getAffectedItems().length);
+	assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+	controller.executeCommand("undo");
+	
+	//Case when all ID are invalid.
+	feedback = controller.executeCommand("delete -1, 100");
+	assertTrue(feedback instanceof ErrorFeedback);
     }
     
-    @Ignore
+    @Test
     public void testUpdate(){
 	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("update A1 on 27/9/2014 17:30");
+	//Changes both start and end dates
+	Feedback feedback = controller.executeCommand("update 1 on 27/9/2014 17:30");
+	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals("update", feedback.getCommandType());
+	assertEquals(1, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+	assertEquals(new MyDateTime(27, 9, 2014, 17, 30), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getStartDate());
+	assertEquals(new MyDateTime(27, 9, 2014, 17, 30), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+	controller.executeCommand("undo");
 	
-	feedback = controller.executeCommand("update A1 to 27/9/2014 20:00");
+	//Changes only end date
+	feedback = controller.executeCommand("update 1 to 27 september 2014 8pm");
+	assertTrue(feedback instanceof SuccessFeedback);
 	assertEquals("update", feedback.getCommandType());
-	assertEquals("update A1 to 27/9/2014 20:00", feedback.getOriginalCommand());
+	assertEquals(new MyDateTime(27, 9, 2014, 20, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+	controller.executeCommand("undo");
 	
-	//Adds a deadline to ToDoItem.
-	feedback = controller.executeCommand("update A4 by 6/10/2014");
+	//Multiple fields update
+	feedback = controller.executeCommand("update 4 Go shoppng by 6/10/2014");
 	assertTrue(feedback instanceof SuccessFeedback);
-	
-	feedback= controller.executeCommand("update A4 Go shopping");
 	assertTrue(feedback instanceof SuccessFeedback);
-	
-	//Tests program's handling of invalid options.
-	feedback = controller.executeCommand("update A4 from to");
-	assertFalse(feedback instanceof SuccessFeedback);
-    }
-	
-    @Ignore
-    public void testList(){
-	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("list");
-	assertEquals("list", feedback.getCommandType());
-	ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
-	for(ToDoItem item: list){
-	    System.out.println(item);
+	assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+	assertEquals("Go shopping", ((SuccessFeedback)feedback).getAffectedItems()[1].getDescription());
+	if(((SuccessFeedback)feedback).getAffectedItems()[1] instanceof EventItem){
+	    assertEquals(new MyDate(6, 10, 2014), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+	} else{
+	    assertEquals(new MyDate(6, 10, 2014), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getDeadline());
 	}
-	System.out.println();
-	
-	//Output is wrong. Parsing of the following command not yet supported.
-	feedback = controller.executeCommand("list -s");
-	assertTrue(feedback instanceof SuccessFeedback);
-	list = ((SuccessFeedback)feedback).getAffectedItems();
-	for(ToDoItem item: list){
-	    System.out.println(item);
-	}
-	System.out.println();
+	controller.executeCommand("undo");
     }
     
-    @Ignore
+    @Test
     public void testSearch(){
 	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("search B");
+	//Search by keyword
+	Feedback feedback = controller.executeCommand("search cs210");
+	assertTrue(feedback instanceof SuccessFeedback);
 	ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
 	for(ToDoItem item: list){
-	    System.out.println(item);
+	    assertTrue(item.getDescription().toLowerCase().contains("cs210"));
 	}
-	System.out.println();
+	
+	//Search by multiple values
+	feedback = controller.executeCommand("search cs priority high orderby starttime");
+	assertTrue(feedback instanceof SuccessFeedback);
+	list = ((SuccessFeedback)feedback).getAffectedItems();
+	for(ToDoItem i: list){
+	    assertTrue(i.getDescription().toLowerCase().contains("cs"));
+	    assertEquals(ToDoItem.PRIORITY_HIGH, i.getPriority());
+	}
     }
     
     @Ignore
     public void testDo(){
 	Controller controller = new Controller();
-	Feedback feedback = controller.executeCommand("do A1");
+	Feedback feedback = controller.executeCommand("do 1");
 	assertTrue(feedback instanceof SuccessFeedback);
-	System.out.println(((SuccessFeedback)feedback).getAffectedItems()[0]);
-	System.out.println();
+	assertEquals(ToDoItem.STATUS_COMPLETED, ((SuccessFeedback)feedback).getAffectedItems()[0].getStatus());
+	controller.executeCommand("undo");
     }
     
 }
