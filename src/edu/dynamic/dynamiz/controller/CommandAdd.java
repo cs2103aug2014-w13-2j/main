@@ -29,6 +29,10 @@ public class CommandAdd extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";
     
+    //Affected list-related constants.
+    private static final int LISTSIZE = 1;
+    private static final int ITEMINDEX = 0;
+    
     //Main data members
     private ToDoItem addedItem;	//The item being added by this command.
     
@@ -87,8 +91,8 @@ public class CommandAdd extends Command implements Undoable {
     public ToDoItem[] getAffectedItems(){
 	assert addedItem!=null;
 	
-	ToDoItem[] list = new ToDoItem[1];
-	list[0] = addedItem;
+	ToDoItem[] list = new ToDoItem[LISTSIZE];
+	list[ITEMINDEX] = addedItem;
 	return list;
     }
 }
