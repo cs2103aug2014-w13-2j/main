@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.storage.Storage;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.MyDateTime;
 import edu.dynamic.dynamiz.structure.EventItem;
@@ -19,7 +20,7 @@ public class CommandAddTest {
     
     @Test
     public void test() {
-	
+	Storage.getInstance();
 	Command cmd = new CommandAdd(new ToDoItem("Learn C++"));
 	cmd.execute();
 	assertEquals(1, cmd.getAffectedItems().length);
