@@ -1,4 +1,4 @@
-// @author A0114573J
+//@author A0114573J
 package edu.dynamic.dynamiz.UI;
 
 import java.awt.*;
@@ -17,14 +17,12 @@ import javax.swing.text.StyledDocument;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 
-import edu.dynamic.dynamiz.UI.DisplayerInterface;
 import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
  * Defines the UI for Dynamiz using Java Swing
  * 
- * @author XYLau
  */
 
 public class UI extends JPanel implements ActionListener {
@@ -38,21 +36,24 @@ public class UI extends JPanel implements ActionListener {
 
 	// Formatting Constants
 	private StyledDocument doc;
-	private StyledDocument newdoc;
 	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
-	private String divider = "================================================================================================";
-	private final static String newline = "\n";
-	private final static String helpprompt = "Please enter 'help' for more information about the available options";
-	private SimpleAttributeSet BoldWhite;
-	private SimpleAttributeSet Default;
-	private SimpleAttributeSet BoldGreen;
-	private SimpleAttributeSet BoldOrange;
-	private SimpleAttributeSet BoldMagenta;
-	private SimpleAttributeSet BoldRed;
-	private SimpleAttributeSet BoldBlue;
-	private SimpleAttributeSet BoldCyan;
-	private SimpleAttributeSet BoldYellow;
+	
+	
+	private String DIVIDER = "================================================================================================";
+	private final static String NEWLINE = "\n";
+//	private final static String HELP_PROMPT = "Please enter 'help' for more information about the available options";
+	
+	// Styling Constants
+	private SimpleAttributeSet setStyleWhite;
+	private SimpleAttributeSet setStyleDefault;
+	private SimpleAttributeSet setStyleGreen;
+	private SimpleAttributeSet setStyleOrange;
+	private SimpleAttributeSet setStyleMagenta;
+	private SimpleAttributeSet setStyleRed;
+	private SimpleAttributeSet setStyleBlue;
+	private SimpleAttributeSet setStyleCyan;
+	private SimpleAttributeSet setStyleYellow;
 
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
@@ -109,11 +110,11 @@ public class UI extends JPanel implements ActionListener {
 
 		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + newline,
-					BoldWhite);
-			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
-					BoldWhite);
-			doc.insertString(doc.getLength(), helpprompt + newline, BoldWhite);
+			doc.insertString(0, disp.displayWelcomeMessage() + NEWLINE,
+					setStyleWhite);
+			doc.insertString(doc.getLength(), disp.displayPrompt(1) + NEWLINE,
+					setStyleWhite);
+	//		doc.insertString(doc.getLength(), HELP_PROMPT + NEWLINE, setStyleWhite);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -147,9 +148,9 @@ public class UI extends JPanel implements ActionListener {
 				commandPromptDisplay(input);
 
 				// Feedback
-				doc.insertString(doc.getLength(), divider + newline, Default);
+				doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
 				doc.insertString(doc.getLength(),
-						"Cleared screen successfully!" + newline, Default);
+						"Cleared screen successfully!" + NEWLINE, setStyleDefault);
 
 				// Logger: Flush screen
 				LoggerUI.info("Flush Screen");
@@ -164,54 +165,10 @@ public class UI extends JPanel implements ActionListener {
 				assert (returnResult != null);
 
 				// Feedback Display
-				doc.insertString(doc.getLength(), divider + newline, Default);
+				doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
 
-				/*
-				 * Display feedback
-				 * 
-				 * Displayer Color Guide -------------------------------- 1
-				 * Green (Priority:Low) 2 Orange (Priority:Medium) 4
-				 * Magenta(Priority:High) 8 Red (Priority:Urgent)
-				 * -------------------------------- 10 Blue (Status:Completed)
-				 * 11 Cyan (Status:Pending) -------------------------------- 12
-				 * Yellow (Changes)
-				 */
 				for (int i = 0; i < returnResult.size(); i++) {
-					switch (returnResult.get(i).getInt()) {
-					// Display Color (Priority)
-					// ----------------------------------------------------------
-					case 1:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldGreen);
-						break;
-					case 2:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldOrange);
-						break;
-					case 4:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldMagenta);
-						break;
-					case 8:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldRed);
-						break;
-					// Display Color (Status)
-					// ----------------------------------------------------------
-					case 10:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldBlue);
-						break;
-					case 11:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), BoldCyan);
-						break;
-
-					default:
-						doc.insertString(doc.getLength(), returnResult.get(i)
-								.getString(), Default);
-						break;
-					}
+					printWithStyle(returnResult, i);
 				}
 
 				// Logging: Return Command Feedback
@@ -229,11 +186,48 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
 	}
 
+	private void printWithStyle(ArrayList<StrIntPair> returnResult, int i)
+			throws BadLocationException {
+		switch (returnResult.get(i).getInt()) {
+		case 1:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleGreen);
+			break;
+		case 2:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleOrange);
+			break;
+		case 4:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleMagenta);
+			break;
+		case 8:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleRed);
+			break;
+		// Display Color (Status)
+		// ----------------------------------------------------------
+		case 10:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleBlue);
+			break;
+		case 11:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleCyan);
+			break;
+
+		default:
+			doc.insertString(doc.getLength(), returnResult.get(i)
+					.getString(), setStyleDefault);
+			break;
+		}
+	}
+
 	private void commandPromptDisplay(String input) throws BadLocationException {
 		// Command Prompt Display
-		doc.insertString(doc.getLength(), divider + newline, Default);
-		doc.insertString(doc.getLength(), disp.displayPrompt(), BoldYellow);
-		doc.insertString(doc.getLength(), input + newline, BoldYellow);
+		doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
+		doc.insertString(doc.getLength(), disp.displayPrompt(), setStyleYellow);
+		doc.insertString(doc.getLength(), input + NEWLINE, setStyleYellow);
 
 	}
 
@@ -287,31 +281,31 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
 	 */
 	private void style() {
-		Default = new SimpleAttributeSet();
-		StyleConstants.setForeground(Default, Color.WHITE);
+		setStyleDefault = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleDefault, Color.WHITE);
 
-		BoldWhite = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldWhite, Color.WHITE);
+		setStyleWhite = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleWhite, Color.WHITE);
 
-		BoldGreen = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldGreen, Color.GREEN);
+		setStyleGreen = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleGreen, Color.GREEN);
 
-		BoldOrange = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldOrange, Color.ORANGE);
+		setStyleOrange = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleOrange, Color.ORANGE);
 
-		BoldMagenta = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldMagenta, Color.MAGENTA);
+		setStyleMagenta = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleMagenta, Color.MAGENTA);
 
-		BoldRed = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldRed, Color.RED);
+		setStyleRed = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleRed, Color.RED);
 
-		BoldBlue = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldBlue, Color.BLUE);
+		setStyleBlue = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleBlue, Color.BLUE);
 
-		BoldCyan = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldCyan, Color.CYAN);
+		setStyleCyan = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleCyan, Color.CYAN);
 
-		BoldYellow = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldYellow, Color.YELLOW);
+		setStyleYellow = new SimpleAttributeSet();
+		StyleConstants.setForeground(setStyleYellow, Color.YELLOW);
 	}
 }

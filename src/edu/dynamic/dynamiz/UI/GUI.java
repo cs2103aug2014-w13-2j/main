@@ -1,4 +1,4 @@
-// @author A0114573J
+//@author A0114573J -unused
 package edu.dynamic.dynamiz.UI;
 
 import javafx.application.Application;
@@ -15,9 +15,6 @@ import javafx.stage.Stage;
  * Originally Planned JavaFX UI for Dynamiz. Due to compactibility issues, the
  * team has decided to stick to Java Swing since the JavaFX feature that was to
  * be used in the UI requires JDK8 while the project environment runs on JRE7.
- * 
- * @author XYLau -unused
- *
  */
 public class GUI extends Application {
 	public static DisplayFormatter disp = new DisplayFormatter();
