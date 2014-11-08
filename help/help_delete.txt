@@ -7,12 +7,13 @@ SYNOPSIS
 DESCRIPTION
 	Command DELETE allows the deletion of existing items in Dynamiz.
 	
-	[parameter]: The ID of the item to be deleted.
+	[parameter]: The ID of the item to be deleted. It can be a single ID,
+	a series of IDs, a range of IDs or all of the above.
 	
-	Deletion of an item is straight forward. The deleted will be removed from
-	the database. The deleted item will still be kept in memory for the current 
-	session in case there is an invoke of UNDO Command. However, the deleted
-	item will be lost once Dynamiz is closed and there is no way to retrieve it.
+	Deletion of an item is straight forward. The deleted items will be removed 
+	from the database. The deleted items will still be kept in memory for the 
+	current session in case there is an invoke of UNDO Command. However, the deleted
+	items will be lost once Dynamiz is closed and there is no way to retrieve it.
 		
 	Here's how you use the command (as illustrated by examples):
 	
@@ -24,10 +25,41 @@ DESCRIPTION
 	The item having ID number of 31 will be removed from the database.
 	In case, there is no item having ID number of 31. An error feedback will be 
 	output to acknowledge you about the invalid ID number entered.
+	---------------------------------------------------------------------------	
+	- Delete multiple items having ID numbers of 13, 16, 21 and 31:
+	Command: delete 13,16,21,31
+	
+	[parameter]: "13,16,21,31".
+	The items having ID number of 13, 16, 21 or 31 will be removed from the database.
+	In case, there is no item having and ID matching those above. Only items with 
+	matching IDs will be deleted.
+	
+	For example, in the same case, say you want to delete items with IDs 13, 16,
+	21, 31 but the items with IDs 16 and 21 are not present in the database. Hence,
+	only items with IDs 13 and 31 will be deleted. 
+	---------------------------------------------------------------------------	
+	- Delete multiple items having ID numbers ranging from 13 to 17 inclusively:
+	Command: delete 13 - 17
+	
+	[parameter]: "13 - 17".
+	The items having ID number of 13, 14, 15, 16 and 17 will be removed from the 
+	database. In case, there is no item having and ID matching those above only 
+	items with matching IDs will be deleted.
+	
+	Notice that this is equivalent to the following command: "delete 13,14,15,16,17"
+	---------------------------------------------------------------------------	
+	- Delete multiple items having ID numbers 12, 14, 16 to 20:
+	Command: delete 12,14,16-20
+	
+	[parameter]: "12,14,16-20".
+	The items having ID number of 12, 14, 16 to 20 inclusively will be removed 
+	from the database. In case, there is no item having and ID matching those 
+	above only items with matching IDs will be deleted.
+
 	---------------------------------------------------------------------------
 	
 	Once your tasks have been deleted to Dynamiz, feedback messages will be output
-	onto the Output Screen for you to double check on the information of the item
+	onto the Output Screen for you to double check on the information of the items
 	you have deleted.
 	
 	If you make a mistake in deleting undesirable item, you can revoke an

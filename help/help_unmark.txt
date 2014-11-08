@@ -24,7 +24,37 @@ DESCRIPTION
 	In case, there is no item having ID number of 31. An error feedback will be 
 	output to acknowledge you about the invalid ID number entered.
 	---------------------------------------------------------------------------
+	- Unmark multiple items having ID numbers of 13, 16, 21 and 31:
+	Command: unmark 13,16,21,31
 	
+	[parameter]: "13,16,21,31".
+	The items having ID number of 13, 16, 21 or 31 will be unmarked as Pending.
+	In case, there are items whose IDs not matching those above, only items with 
+	matching IDs will be unmarked.
+	
+	For example, in the same case, say you want to unmark items with IDs 13, 16,
+	21, 31 but the items with IDs 16 and 21 are not present in the database or 
+	having status as Pending, only items with IDs 13 and 31 will be unmarked. 
+	---------------------------------------------------------------------------	
+	- Unmark multiple items having ID numbers ranging from 13 to 17 inclusively:
+	Command: unmark 13 - 17
+	
+	[parameter]: "13 - 17".
+	The items having ID number of 13, 14, 15, 16 and 17 will be unmarked as Pending. 
+	In case, there are items whose IDs not matching those above, only items with 
+	matching IDs will be unmarked.
+	
+	Notice that this is equivalent to the following command: "unmark 13,14,15,16,17"
+	---------------------------------------------------------------------------	
+	- Unmark multiple items having ID numbers 12, 14, 16 to 20:
+	Command: mark 12,14,16-20
+	
+	[parameter]: "12,14,16-20".
+	The items having ID number of 12, 14, 16 to 20 inclusively will be marked as 
+	Completed. In case, there are items whose IDs not matching those above, only items 
+	with matching IDs will be unmarked.
+	---------------------------------------------------------------------------
+
 	Once your tasks have been unmarked to Dynamiz, feedback messages will be output
 	onto the Output Screen for you to double check on the information of the item
 	you have deleted.

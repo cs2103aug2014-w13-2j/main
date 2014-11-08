@@ -18,12 +18,12 @@ DESCRIPTION
 	in any order in the command.
 	
 	Applicable (OptionType)'s for Command SEARCH are:
-		START_TIME, END_TIME, ON_TIME, PRIORITY
+		START_TIME, END_TIME, ON_TIME, PRIORITY, STATUS
 	
 	[ORDER_BY argument]: (Optional) Specify the sorting order of the listed
 	items. This [ORDER_BY argument] requires be specified last in the command.
 	If there is no [ORDER_BY argument] specified, a default sorting order of
-	[<status>, PRIORITY, END_TIME, START_TIME]
+	[STATUS, PRIORITY, END_TIME, START_TIME]
 		
 	Searching logically performs an Intersection of the items inside the 
 	database that match all of the searching criteria. Hence, Dynamiz will 
@@ -54,6 +54,22 @@ DESCRIPTION
 	All task items that have "report" as part of their description and an 
 	END_TIME of 21/10/2014 will be returned. Items fail to match all of 
 	the criteria will not be listed.
+	
+	No [ORDER_BY argument] is specified so the default sorting is applied.
+	---------------------------------------------------------------------------
+	- Search all task items that contain keyword "report", due 21 Oct 2014
+	with status Pending :
+	Command: search report due 21 Oct 2014 status pending
+	
+	[parameter]: "report"
+
+	[Option arguments]: 
+		END_TIME	: "21 Oct 2014"
+		STATUS		: "pending"
+		
+	All task items that have "report" as part of their description, an 
+	END_TIME of 21/10/2014 with the STATUS to be Pending will be returned. 
+	Items fail to match all of the criteria will not be listed.
 	
 	No [ORDER_BY argument] is specified so the default sorting is applied.
 	---------------------------------------------------------------------------

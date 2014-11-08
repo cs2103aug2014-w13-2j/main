@@ -3,7 +3,7 @@ NAME
 		in Java
 
 VERSION 
-		v0.4
+		v0.5
 
 GRAPHICAL USER INTERFACE
 
@@ -27,13 +27,13 @@ COMMAND INPUT STRUCTURE
 		[Command]: 
 	(CommandType) | (aliases) ...				: (Description)
 	ADD			  | a | put						: Adding an item to Dynamiz.
-	DELETE		  | d | del | remove			: Delete an item from Dynamiz.
+	DELETE		  | d | del | remove | rm		: Delete an item from Dynamiz.
 	UPDATE		  | u | upd | modify
 				  | mod | edit | change			: Update an item in Dynamiz.
 	LIST		  | l | ls | display | show		: Listing items from Dynamiz.
 	UNDO		  | un | ud						: Undo the previous command.
 	REDO		  | re | rd						: Redo the previous command.
-	HELP		  | h	| man					: Open Help doc for Dynamiz.
+	HELP		  | h | man						: Open Help doc for Dynamiz.
 	MARK		  | m | done | do | tick		: Mark an item as completed.
 	UNMARK		  | um | undone | untick		: Unmark completed item.
 	SHOW		  | sh | view					: Inspect an item in details.
@@ -69,6 +69,9 @@ COMMAND INPUT STRUCTURE
 
 	ON_TIME		| on												<Timing expr>
 	: Specify implicitly the start timing and end timing.
+	
+	STATUS		| st | stat											<Status expr>
+	: Specify the status of the item.
 
 	ORDER_BY	| -o | orderby | sortby								<OptionType>
 	: Specify the ordering of sorting by using OptionType as criteria.
@@ -84,6 +87,10 @@ COMMAND INPUT STRUCTURE
 		Any explicit forms of date time expression. E.g.: 13/10/2014 14:00.
 		And any implicit forms of date time expression. E.g.: Next Friday, the day
 		after tomorrow.
+	
+	<Status expr>:
+		PENDING		| p | pend		: Specify Pending status of an item.
+		COMPLETED	| c | comp		: Specify Completed status of an item.
 
 	<OptionType>:
 		Any valid of the OptionType keywords and their aliases as stated above.
@@ -91,10 +98,11 @@ COMMAND INPUT STRUCTURE
 
 
 For a more detailed description of each Command, enter "help" and the respective
-Command. For example:
+Command (or any of its aliases). For example:
  - help add
  - help list
  - help update
+ - help del
 
 FILE STRUCTURE
 	The main database of items will be saved in a text file named "todo.txt" 

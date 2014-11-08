@@ -47,6 +47,19 @@ DESCRIPTION
 	
 	No [ORDER_BY argument] is specified so the default sorting is applied.
 	---------------------------------------------------------------------------
+	- List tasks that have a start timing ranging from 11 Nov to 20 Nov:
+	Command: list starttime 11 Nov > 20 Nov
+	
+	[Option arguments]: 
+		START_TIME	: "11 Nov > 20 Nov"
+		
+	All task items that have the START_TIME information stated as any date between
+	11 Nov to 20 Nov inclusively will be listed.
+	This will logically list Event items that match because only Event items 
+	have START_TIME information.
+	
+	No [ORDER_BY argument] is specified so the default sorting is applied.
+	---------------------------------------------------------------------------
 	- List tasks that have either start timing and end timing of today:
 	Command: list on today
 	
@@ -79,8 +92,5 @@ DESCRIPTION
 	Once your LIST command is entered, a list of matching items will be output
 	through the Output Screen. 
 	
-	In case the output list has fewer than 4 items, the listed items will be 
-	listed in individual form. 
-	In case the output list has no fewer than 4, the listed items will be listed as a 
-	constant width formatted list. 
+	The matching items will be listed in a list form.
 	In case the output list has no item. A "Empty list" message will be output.  	
