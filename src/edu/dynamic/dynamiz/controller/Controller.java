@@ -15,6 +15,7 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.HelpFeedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
 
+//@author A0110781N
 /**
  * Defines the component in Dynamiz that coordinates the front-end user interface and the back end operations.
  * Currently, list and search operations are not supported as the parser has yet to implement parsing for
@@ -26,7 +27,6 @@ import edu.dynamic.dynamiz.structure.SuccessFeedback;
  * Public Methods
  * Feedback executeCommand(String input)	//Executes the command represented by the input string.
  */
-//@author A0110781N
 public class Controller {
     //Defines the name of the log file
     private static final String LOGFILENAME = "dynamiz/log.txt";

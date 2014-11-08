@@ -2,6 +2,7 @@ package edu.dynamic.dynamiz.structure;
 
 import java.util.Comparator;
 
+//@author A0110781N
 /**
  * Defines the comparator object to order ToDoItem by start date.
  * 
@@ -11,7 +12,6 @@ import java.util.Comparator;
  * Public Methods
  * int compare(ToDoItem item1, ToDoItem item2)	//Compares which item has later start date.
  */
-//@author A0110781N
 public class StartDateComparator implements Comparator<ToDoItem> {
     
     /**

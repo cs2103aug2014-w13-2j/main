@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the redo command.
  * 
@@ -17,7 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()	//Gets the string representation of this command's type
  * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Passes the undo and redo stacks for this command's execution
  */
-//@author A0110781N
 public class CommandRedo extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "redo";

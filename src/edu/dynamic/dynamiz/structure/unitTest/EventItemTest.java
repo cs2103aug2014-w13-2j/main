@@ -2,7 +2,6 @@ package edu.dynamic.dynamiz.structure.unitTest;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.structure.MyDate;
@@ -18,18 +17,25 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public class EventItemTest {
     
     @Test
-    public void testToString() {
-	EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));
-	assertEquals("Nana's concert; 5; pending; 27/9/2014 --:--; 27/9/2014 --:--", item.toFileString());
+    public void test() {
+	EventItem item = new EventItem("Nana's concert", 8, new MyDate(27, 9, 2014));
+	assertEquals("Nana's concert", item.getDescription());
+	assertEquals(8, item.getPriority());
+	assertEquals(ToDoItem.STATUS_PENDING, item.getStatus());
+	assertEquals(new MyDate(27, 9, 2014), ((EventItem)item).getStartDate());
+	assertEquals(new MyDate(27, 9, 2014), ((EventItem)item).getEndDate());
 	
-	item = new EventItem("CS2105 midterms", new MyDateTime(4, 10, 2014, 17, 0));
-	assertEquals("CS2105 midterms; 0; pending; 4/10/2014 17:00; 4/10/2014 17:00", item.toFileString());
+	item = new EventItem("CS2105 midterms", new MyDateTime(4, 10, 2014, 17, 0), new MyDateTime(4, 10, 2014, 18, 0));
+	assertEquals("CS2105 midterms", item.getDescription());
+	assertEquals(ToDoItem.PRIORITY_NONE, item.getPriority());
+	assertEquals(new MyDateTime(4, 10, 2014, 17, 0), ((EventItem)item).getStartDate());
+	assertEquals(new MyDateTime(4, 10, 2014, 18, 0), ((EventItem)item).getEndDate());
     }
     
     @Test
     public void testToFileString(){
 	EventItem item = new EventItem("Nana's concert", 5, new MyDateTime(27, 9, 2014, 17, 30), new MyDate(27, 9, 2014));
-	assertEquals("Nana's concert; 5; pending; 27/9/2014 17:30; 27/9/2014 --:--", item.toFileString());
+	assertEquals("Nana's concert; 5; Pending; 27/9/2014 17:30; 27/9/2014 --:--", item.toFileString());
     }
     
     @Test
@@ -43,6 +49,7 @@ public class EventItemTest {
     }
     
     @Test
+    //Tests the copy constructor
     public void testCopyConstructor(){
 	EventItem event =  new EventItem("Birthday", new MyDate(31, 10, 2014));
 	EventItem event2 = new EventItem(event);
@@ -55,25 +62,19 @@ public class EventItemTest {
 	assertFalse(event.getStatus().equals(event2.getStatus()));
     }
     
-    @Ignore
-    public void testIdPool(){
-	ToDoItem item1 = new ToDoItem("Task 1");
-	EventItem item2 = new EventItem("Event 1", new MyDate(30, 9, 2014));
-	TaskItem item3 = new TaskItem("Task 2", new MyDate(30, 9, 2014));
-	System.out.println(item1.getId());
-	System.out.println(item2.getId());
-	System.out.println(item3.getId());
-    }
-    
     @Test
+    //Tests conversion from TaskItem to EventItem
     public void testConvertFromTaskItem(){
 	TaskItem task = new TaskItem("A", new MyDate(31, 12, 2014));
 	EventItem event = new EventItem(task, new MyDate(30, 12, 2014));
-	System.out.println(event);
-	System.out.println();
+	assertEquals(new MyDate(30, 12, 2014), event.getStartDate());
+	assertEquals(new MyDate(31, 12, 2014), event.getEndDate());
     }
     
     @Test
+    //Tests comparison.
+    //Natural ordering is defined by increasing order of status('pending'<'completed'),
+    //start date(equivalent to TaskItem's deadline), end date, -priority.
     public void testCompareTo(){
 	ToDoItem event1 = new EventItem("A", 4, new MyDate(4, 11, 2014), new MyDate(5, 11, 2014));
 	ToDoItem event2 = new EventItem("B", 4, new MyDate(5, 11, 2014), new MyDate(5, 11, 2014));

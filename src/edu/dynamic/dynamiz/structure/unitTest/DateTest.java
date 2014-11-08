@@ -19,6 +19,7 @@ public class DateTest {
     }
     
     @Test
+    //Tests the copy constructor
     public void testCopy(){
 	MyDate date1 = new MyDate();
 	MyDate date2 = new MyDate(date1);
@@ -57,8 +58,6 @@ public class DateTest {
 	assertEquals("Day of month is 27", 27, date.getDayOfMonth());
 	assertEquals("Month is 9", 9, date.getMonth());
 	assertEquals("Year is 2014", 2014, date.getYear());
-	
-	date.setDate(31, 2, 1992);
 	assertEquals("27/9/2014", date.toString());
     }
     
@@ -74,14 +73,14 @@ public class DateTest {
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalDate(){
-	MyDate date = new MyDate(-1, -1, -1);
-	date = new MyDate(2, 13, 1992);
-	date = new MyDate(3, 0, 1);
-	date = new MyDate(3, 1, 2014);
-	date = new MyDate(30, 2, 1995);
-	date = new MyDate(29, 2, 2013);
-	date = new MyDate(32, 12, 1996);
-	date = new MyDate(29, 2, 2100);
+	new MyDate(-1, -1, -1);
+	new MyDate(2, 13, 1992);
+	new MyDate(3, 0, 1);
+	new MyDate(3, 1, 2014);
+	new MyDate(30, 2, 1995);
+	new MyDate(29, 2, 2013);
+	new MyDate(32, 12, 1996);
+	new MyDate(29, 2, 2100);
     }
     
     @Test

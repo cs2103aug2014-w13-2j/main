@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines each event in the To-Do list.
  * Each event is defined as having start and/or end date(s).
@@ -21,7 +22,6 @@ package edu.dynamic.dynamiz.structure;
  * void setEndDate(MyDate end)	//Sets the end date for this event.
  * void setStartDate(MyDate start)	//Sets the start date for this event.
  */
-//@author A0110781N
 public class EventItem extends ToDoItem {
     //The String formatting used in this class.
     private static final String FORMAT_EMPTYTIME = " --:--";

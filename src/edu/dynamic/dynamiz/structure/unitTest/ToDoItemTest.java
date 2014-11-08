@@ -26,6 +26,8 @@ public class ToDoItemTest {
 	assertEquals("Pending", item.getStatus());
 	assertEquals("Priority is 0", 0, item.getPriority());
 	System.out.println(item.getFeedbackString());
+	
+	//Tests copy constructor
 	ToDoItem item2 = new ToDoItem(item);
 	assertFalse(item==item2);
 	assertTrue(item.equals(item2));
@@ -35,18 +37,13 @@ public class ToDoItemTest {
     }
     
     @Test
-    public void testToString(){
-	ToDoItem item = new ToDoItem("Do CS2103T", 1);
-	assertEquals("3 Do CS2103T 1 Pending --/--/---- --:-- --/--/---- --:--", item.toString());
-    }
-    
-    @Test
     public void testToFileString(){
 	ToDoItem item = new ToDoItem("Do CS2103T", 2);
 	assertEquals("Do CS2103T; 2; Pending; --/--/---- --:--; --/--/---- --:--", item.toFileString());
     }
     
     @Test
+    //Tests comparison.
     public void testCompareTo(){
 	ToDoItem item1 = new ToDoItem("A", 4);
 	ToDoItem item2 = new ToDoItem("B", 4);

@@ -17,18 +17,18 @@ public class TaskItemTest {
     @Test
     public void testToFileString() {
 	TaskItem task = new TaskItem("Return book", new MyDate(1, 10, 2014));
-	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 --:--", task.toFileString());
-	System.out.println(task.getFeedbackString());
+	assertEquals("Return book; 0; Pending; --/--/---- --:--; 1/10/2014 --:--", task.toFileString());
 	
 	task.setDeadlineTime(10, 40);
-	assertEquals("Return book; 0; pending; --/--/---- --:--; 1/10/2014 10:40", task.toFileString());
-	System.out.println(task.getFeedbackString());
+	assertEquals("Return book; 0; Pending; --/--/---- --:--; 1/10/2014 10:40", task.toFileString());
     }
     
     @Test
-    public void testToString() {
+    public void test() {
 	TaskItem task = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
-	assertEquals("CS2106 homework; 4; pending; --/--/---- --:--; 26/9/2014 23:59", task.toFileString());
+	assertEquals("CS2106 homework", task.getDescription());
+	assertEquals(ToDoItem.PRIORITY_HIGH, task.getPriority());
+	assertEquals(new MyDateTime(26, 9, 2014, 23, 59), task.getDeadline());
     }
     
     @Test
@@ -43,10 +43,10 @@ public class TaskItemTest {
     @Test
     public void testSetDeadlineDate() {
 	TaskItem task = new TaskItem("CS2106 homework", new MyDate(27, 9, 2014));
-	assertEquals("27/9/2014", task.getDeadline().toString());
+	assertEquals(new MyDate(27, 9, 2014), task.getDeadline());
 	
 	task.setDeadlineDate(new MyDate(26, 9, 2014));
-	assertEquals("26/9/2014", task.getDeadline().toString());
+	assertEquals(new MyDate(26, 9, 2014), task.getDeadline());
     }
     
     @Test
@@ -54,14 +54,13 @@ public class TaskItemTest {
 	TaskItem task = new TaskItem("CS2106 homework", new MyDate(26, 9, 2014));
 	assertTrue("deadline is Date type", !(task.getDeadline() instanceof MyDateTime));
 	
+	//This is supposed to end up with nothing done due to invalid value.
 	task.setDeadlineTime(22, 60);
 	assertTrue("deadline is Date type", !(task.getDeadline() instanceof MyDateTime));
 	
 	task.setDeadlineTime(23, 59);
 	assertTrue("deadline is DateTime type", task.getDeadline() instanceof MyDateTime);
-	
-	task.setDeadlineTime(22, 60);
-	assertEquals("CS2106 homework; 0; pending; --/--/---- --:--; 26/9/2014 23:59", task.toFileString());
+	assertEquals(new MyDateTime(26, 9, 2014, 23, 59), task.getDeadline());
     }
     
     @Test
@@ -71,10 +70,10 @@ public class TaskItemTest {
 	
 	task.setStatus(TaskItem.STATUS_COMPLETED);
 	assertEquals("new status is 'completed'", TaskItem.STATUS_COMPLETED, task.getStatus());
-	System.out.println(task.getFeedbackString());
     }
     
     @Test
+    //Tests the copy constructor
     public void testCopyConstructor(){
 	TaskItem task = new TaskItem("Homework", 2, new MyDate(13, 10, 2014));
 	TaskItem task2 = new TaskItem(task);
@@ -86,6 +85,8 @@ public class TaskItemTest {
     }
     
     @Test
+    //Tests comparison.
+    //Natural ordering is in ascending order of status('pending'<'completed'), deadline, -priority.
     public void testCompareTo(){
 	ToDoItem task1 = new TaskItem("A", 4, new MyDate(5, 11, 2014));
 	ToDoItem task2 = new ToDoItem("B", 4);

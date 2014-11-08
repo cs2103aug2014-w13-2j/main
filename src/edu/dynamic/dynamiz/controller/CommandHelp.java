@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines command to display help contents from help files.
  * 
@@ -21,7 +22,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getContent()	//Gets the contents of the help page.
  * void execute()	//Executes this command. 
  */
-//@author A0110781N
 public class CommandHelp extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "help";

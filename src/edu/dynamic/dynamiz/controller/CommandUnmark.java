@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the command that unmarks an item that was marked as completed in previous program executions
  * from completion.
@@ -18,7 +19,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void redo()		//Re-executes this command.
  * void undo()		//Undo this command.
  */
-//@author A0110781N
 public class CommandUnmark extends Command implements Undoable {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "unmark";

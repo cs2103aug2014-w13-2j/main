@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines a task.
  * A task is an item in the To-Do List with specified deadline.
@@ -19,7 +20,6 @@ package edu.dynamic.dynamiz.structure;
  * String toFileString()	//Gets the String representation of this task used in file I/O.
  * String toString()	//Gets the String representation of this task. 
  */
-//@author A0110781N
 public class TaskItem extends ToDoItem {
     //String formatting used in this class
     private static final String FORMAT_EMPTYTIME = " --:--";

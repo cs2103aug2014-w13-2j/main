@@ -17,6 +17,7 @@ import org.joda.time.DateTime;
 
 import edu.dynamic.dynamiz.structure.TaskItem;
 
+//@author A0110781N
 /**
  * FileHandler is a class that reads/writes task list to/from the
  * specified file or "todo.txt".
@@ -31,7 +32,6 @@ import edu.dynamic.dynamiz.structure.TaskItem;
  * static TaskItem makeTaskItem(String data)	Creates a TaskItem from the data read from file.
  * static ToDoItem makeToDoItem(String data)	Creates a ToDoItem form the data read from file.
  */
-//@author A0110781N
 public class DataFileReadWrite {
     /*
      * Defines regular expression format for each TaskItem object

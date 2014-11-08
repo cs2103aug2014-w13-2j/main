@@ -27,6 +27,7 @@ public class DateTimeTest {
     }
     
     @Test
+    //Tests the copy constructor.
     public void testCopy(){
 	MyDateTime dt1 = new MyDateTime();
 	MyDateTime dt2 = new MyDateTime(dt1);
@@ -58,6 +59,7 @@ public class DateTimeTest {
     }
     
     @Test
+    //Tests the isValidTime method.
     public void testIsValidTime(){
 	assertTrue("00:00 is valid time", MyDateTime.isValidTime(0, 0));
 	assertFalse("-1:20 is invalid time", MyDateTime.isValidTime(-1, 20));
@@ -76,6 +78,7 @@ public class DateTimeTest {
     
     @Test
     public void testCompareTo(){
+	//Tests comparison. Note that default comparison does not compare time.
 	MyDate date = new MyDate();
 	MyDate dt1 = new MyDateTime();
 	//boundary time value
@@ -84,7 +87,7 @@ public class DateTimeTest {
 	assertTrue("dt1<dt2", dt1.compareTo(dt2)<0);
 	assertTrue("dt2>dt1", dt2.compareTo(dt1)>0);
 	dt1.setDate(5, 5, 1995);
-	assertTrue("dt1<dt2", dt1.compareTo(dt2)<0);
+	assertTrue("dt1==dt2", dt1.compareTo(dt2)==0);
 	assertTrue("date<dt1", date.compareTo(dt1)<0);
     }
 }

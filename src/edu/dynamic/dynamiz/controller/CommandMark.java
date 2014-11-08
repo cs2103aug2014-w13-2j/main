@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the command to mark an event/task as completed.
  * 
@@ -17,7 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * void redo()		//Redo this command
  * void undo()		//Undo this command
  */
-//@author A0110781N
 public class CommandMark extends Command implements Undoable{
     //String representation of this command's type
     private static final String COMMAND_TYPE = "do";

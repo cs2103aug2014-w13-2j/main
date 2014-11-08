@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines the feedback type for help command.
  * 
@@ -10,7 +11,6 @@ package edu.dynamic.dynamiz.structure;
  * String getHelpContent()	//Gets the help page content.
  * String getClassName()	//Gets the String representation of this feedback's class.
  */
-//@author A0110781N
 public class HelpFeedback extends Feedback {
     public static final String CLASSNAME = "HelpFeedback";
     

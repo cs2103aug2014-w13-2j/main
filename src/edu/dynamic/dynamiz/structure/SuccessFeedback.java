@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines the feedback object type for successful operations, excluding the help page command.
  * 
@@ -10,7 +11,6 @@ package edu.dynamic.dynamiz.structure;
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects affected by the command this feedback is used for.
  * String getClassName()	//Gets the String representation of this feedback's class.
  */
-//@author A0110781N
 public class SuccessFeedback extends Feedback {
     public static final String CLASSNAME = "SuccessFeedback";
     

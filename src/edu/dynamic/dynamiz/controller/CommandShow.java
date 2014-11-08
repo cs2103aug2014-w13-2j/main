@@ -2,6 +2,7 @@ package edu.dynamic.dynamiz.controller;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the command that retrieves an item by ID for full display.
  * 
@@ -13,7 +14,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectedItems()	//Gets the list of the ToDoItem with the ID specified in the constructor.
  * String getCommandName()	//Gets the String representation of this command's type.
  */
-//@author A0110781N
 public class CommandShow extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "show";

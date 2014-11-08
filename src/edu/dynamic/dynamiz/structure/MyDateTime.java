@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.structure;
 import java.util.Calendar;
 import java.util.Date;
 
+//@author A0110781N
 /**
  * Defines an object containing both date and time. Time is defined using 24-hour clock.
  * 
@@ -22,7 +23,6 @@ import java.util.Date;
  * void setTime(int hour, int minute)	//Sets the time of this date time object.
  * String toString()	//Gets the String rerpesentation of this date time object.
  */
-//@author A0110781N
 public class MyDateTime extends MyDate {
     //The default time values
     private static final int DEFAULT_HOUR = 0;

@@ -4,6 +4,7 @@ import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the command that lists all the items in the storage.
  * 
@@ -16,7 +17,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * String getCommandName()	//Gets the string representation of this command's type.
  * ToDoItem[] getAffectedItems()	//Gets the list retrieved by execute() method. 
  */
-//@author A0110781N
 public class CommandList extends Command {
     //String representation of this command's type
     private static final String COMMAND_TYPE = "list";

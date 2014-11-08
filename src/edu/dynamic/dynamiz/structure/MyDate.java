@@ -3,6 +3,7 @@ package edu.dynamic.dynamiz.structure;
 import java.util.Calendar;
 import java.util.Date;
 
+//@author A0110781N
 /**
  * Defines the date in the format DD/MM/YYYY.
  * 
@@ -12,7 +13,7 @@ import java.util.Date;
  * MyDate(int date, int month, int year)	//Creates a new instance of this date.
  * MyDate(Date date)	//Creates a new MyDate instance from the given Date object.
  * 
- * Methods
+ * Public Methods
  * int compareTo(MyDate date)	//Compares this date with the given date.
  * boolean equals(Object obj)	//Checks if this date and the given date represent the same date on the calendar.
  * int getDayOfMonth()	//Gets the day of the month.
@@ -26,7 +27,6 @@ import java.util.Date;
  * protected void setYear(int year)	//Sets the year
  * String toString()	//Gets the String representation of this date. 
  */
-//@author A0110781N
 public class MyDate implements Comparable<MyDate>{
     //Default date values.
     protected static final int DEFAULT_DAY = 1;

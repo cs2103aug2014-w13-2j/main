@@ -11,13 +11,13 @@ import edu.dynamic.dynamiz.structure.HelpFeedback;
 import edu.dynamic.dynamiz.structure.SuccessFeedback;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Test program to test the program as if it were real use without GUI.
  * Avoids the problem of random execution sequencing of the various methods in the JUnit test case.
  * However, ControllerTest JUnit test should still be used for automated testing for boundary test cases.
  * UI is not well-developed in this dummy program as it is mainly to test underlying functionalities.
  */
-//@author A0110781N
 public class TestProgram {
     public static void main(String[] args){
 	String input;

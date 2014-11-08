@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines the feedback object returned after each operation.
  * 
@@ -11,7 +12,6 @@ package edu.dynamic.dynamiz.structure;
  * String getOriginalComamnd()	//Gets the input command that this feedback is used for.
  * String getClassName()	//gets the String representation of this feedback's class.
  */
-//@author A0110781N
 public abstract class Feedback {
     //The String representation of this feedback's class.
     public static final String CLASSNAME = "Feedback"; 

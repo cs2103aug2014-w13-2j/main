@@ -4,6 +4,7 @@ import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the command to search for item with the given keyword in their description, 
  * filtered by the specified options, in the given storage.
@@ -17,7 +18,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectItems()	//Gets the list of items with the keyword in their description.
  * String getCommandName()	//Gets the string representation of this command's type.
  */
-//@author A0110781N
 public class CommandSearch extends Command {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "search";

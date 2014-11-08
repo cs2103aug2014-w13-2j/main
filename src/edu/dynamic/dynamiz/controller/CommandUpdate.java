@@ -1,10 +1,10 @@
 package edu.dynamic.dynamiz.controller;
 
-
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the Command object that updates a ToDoItem with the given id using the information
  * specified in the Options.
@@ -22,7 +22,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects that are affected by this command.
  * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
  */
-//@author A0110781N
 public class CommandUpdate extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "update";

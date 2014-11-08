@@ -2,6 +2,7 @@ package edu.dynamic.dynamiz.controller;
 
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
+//@author A0110781N
 /**
  * Defines the Command object that adds a new ToDoItem object with the given information into
  * the given storage object.
@@ -24,7 +25,6 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  * Private Methods
  * Date makeDate(String dateString)	//Creates a Date instance from the given date string. 
  * */
-//@author A0110781N
 public class CommandAdd extends Command implements Undoable {
     //The string representation of this command's type.
     private static final String COMMAND_TYPE = "add";

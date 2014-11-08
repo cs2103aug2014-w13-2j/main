@@ -1,5 +1,6 @@
 package edu.dynamic.dynamiz.structure;
 
+//@author A0110781N
 /**
  * Defines each item in the To-Do list in general.
  * Natural ordering for each ToDoItem is done using lexicographical ordering of its id.
@@ -24,7 +25,6 @@ package edu.dynamic.dynamiz.structure;
  * String toFileString()	//Gets string representation of this item used in files.
  * String toString()	//Gets the string representation of this item.
  */
-//@author A0110781N
 public class ToDoItem implements Comparable<ToDoItem>{
 
     //ToDoItem defaults
