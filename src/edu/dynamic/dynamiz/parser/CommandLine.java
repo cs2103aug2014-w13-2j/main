@@ -266,21 +266,57 @@ public class CommandLine {
 	 */
 	private Command parseSearch() {
 		// Parse Start and End Date
-		MyDate commandStartDate = null;
-		MyDate commandEndDate = null;
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
 		String commandStatus = null;
 		
 		List<OptionType> commandOrderList= new ArrayList<OptionType>();
 		
-		if (options.hasOption(OptionType.START_TIME)) {
-			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.START_TIME));
+		// Handling date
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+
+		MyDate commandStartDate = null;
+		MyDate commandEndDate = null;
+
+		if (hasStart) {
+			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.START_TIME));
 		}
-		
-		if (options.hasOption(OptionType.END_TIME)) {
-			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
+
+		if (hasEnd) {
+			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.END_TIME));
 		}
-		
+
+		if (hasOn) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (commandStartDate != null) {
+				commandStartDate.setDate(dd, mm, yy);
+			} else {
+				commandStartDate = onDate;
+			}
+
+			if (commandEndDate != null) {
+				commandEndDate.setDate(dd, mm, yy);
+			} else {
+				commandEndDate = onDate;
+			}
+		}
+
+		if (hasBoth || hasOn) {
+			if (commandStartDate.compareIncludingTime(commandEndDate) > 0) {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_INTERVAL_MSG, commandStartDate, commandEndDate));
+			}
+		}
+
 		if (options.hasOption(OptionType.PRIORITY)) {
 			commandPriority = Integer.parseInt(getFirstOptionValue(options, OptionType.PRIORITY));
 		}
@@ -330,25 +366,61 @@ public class CommandLine {
 		
 		String extraDescription = Util.stripFirstWord(this.param);
 
-		MyDate commandStartDate = null;
-		MyDate commandEndDate = null;
-		
 		int commandPriority = OptionType.PRIORITY_UNCHANGED;
 				
-		if (options.hasOption(OptionType.START_TIME)) {
-			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.START_TIME));
-		}
 		
-		if (options.hasOption(OptionType.END_TIME)) {
-			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(options, OptionType.END_TIME));
+		// Handling date
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+
+		MyDate startDate = null;
+		MyDate endDate = null;
+
+		if (hasStart) {
+			startDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.START_TIME));
 		}
+
+		if (hasEnd) {
+			endDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.END_TIME));
+		}
+
+		if (hasOn) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (startDate != null) {
+				startDate.setDate(dd, mm, yy);
+			} else {
+				startDate = onDate;
+			}
+
+			if (endDate != null) {
+				endDate.setDate(dd, mm, yy);
+			} else {
+				endDate = onDate;
+			}
+		}
+
+		if (hasBoth || hasOn) {
+			if (startDate.compareIncludingTime(endDate) > 0) {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_INTERVAL_MSG, startDate, endDate));
+			}
+		} 
 		
 		if (options.hasOption(OptionType.PRIORITY)) {
 			commandPriority = Integer.parseInt(getFirstOptionValue(options, OptionType.PRIORITY));
 		}
 
 		return new CommandUpdate(id, extraDescription, commandPriority,
-				commandStartDate, commandEndDate);
+				startDate, endDate);
 	}
 
 	/**
