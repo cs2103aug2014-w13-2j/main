@@ -1,3 +1,4 @@
+// @author A0114573J
 package edu.dynamic.dynamiz.UI;
 
 import java.awt.*;
@@ -22,7 +23,8 @@ import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
  * Defines the UI for Dynamiz using Java Swing
- * @author A0114573J
+ * 
+ * @author XYLau
  */
 
 public class UI extends JPanel implements ActionListener {
@@ -51,7 +53,7 @@ public class UI extends JPanel implements ActionListener {
 	private SimpleAttributeSet BoldBlue;
 	private SimpleAttributeSet BoldCyan;
 	private SimpleAttributeSet BoldYellow;
-	
+
 	// Logger: Creating Logger
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
@@ -107,56 +109,17 @@ public class UI extends JPanel implements ActionListener {
 
 		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + newline,BoldWhite);
-			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,BoldWhite);
-			doc.insertString(doc.getLength(), helpprompt + newline,BoldWhite);
+			doc.insertString(0, disp.displayWelcomeMessage() + newline,
+					BoldWhite);
+			doc.insertString(doc.getLength(), disp.displayPrompt(1) + newline,
+					BoldWhite);
+			doc.insertString(doc.getLength(), helpprompt + newline, BoldWhite);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
 		// Logging: Creation
 		LoggerUI.info("UI Created");
-	}
-
-	/**
-	 * Defines the stylesheet for displaying (Hightlight & Priority)
-	 */
-	private void style() {
-		Default = new SimpleAttributeSet();
-		StyleConstants.setForeground(Default, Color.WHITE);
-
-		BoldWhite = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldWhite, Color.WHITE);
-//		StyleConstants.setBold(BoldBlack, true);
-
-		BoldGreen = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldGreen, Color.GREEN);
-//		StyleConstants.setBold(BoldGreen, true);
-
-		BoldOrange = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldOrange, Color.ORANGE);
-//		StyleConstants.setBold(BoldOrange, true);
-
-		BoldMagenta = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldMagenta, Color.MAGENTA);
-//		StyleConstants.setBold(BoldMagenta, true);
-
-		BoldRed = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldRed, Color.RED);
-//		StyleConstants.setBold(BoldRed, true);
-
-		BoldBlue = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldBlue, Color.BLUE);
-//		StyleConstants.setBold(BoldBlue, true);
-
-		BoldCyan = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldCyan, Color.CYAN);
-//		StyleConstants.setBold(BoldCyan, true);
-
-		BoldYellow = new SimpleAttributeSet();
-		StyleConstants.setForeground(BoldYellow, Color.YELLOW);
-//		StyleConstants.setBold(BoldYellow, true);
-		
 	}
 
 	/**
@@ -202,21 +165,16 @@ public class UI extends JPanel implements ActionListener {
 
 				// Feedback Display
 				doc.insertString(doc.getLength(), divider + newline, Default);
-				
+
 				/*
 				 * Display feedback
 				 * 
-				 * Displayer Color Guide 
-				 * -------------------------------- 
-				 * 1	Green (Priority:Low) 
-				 * 2 	Orange (Priority:Medium) 
-				 * 4 	Magenta(Priority:High) 
-				 * 8 	Red (Priority:Urgent)
-				 * -------------------------------- 
-				 * 10 	Blue (Status:Completed)
-				 * 11 	Cyan (Status:Pending) 
-				 * -------------------------------- 
-				 * 12	Yellow (Changes)
+				 * Displayer Color Guide -------------------------------- 1
+				 * Green (Priority:Low) 2 Orange (Priority:Medium) 4
+				 * Magenta(Priority:High) 8 Red (Priority:Urgent)
+				 * -------------------------------- 10 Blue (Status:Completed)
+				 * 11 Cyan (Status:Pending) -------------------------------- 12
+				 * Yellow (Changes)
 				 */
 				for (int i = 0; i < returnResult.size(); i++) {
 					switch (returnResult.get(i).getInt()) {
@@ -325,4 +283,35 @@ public class UI extends JPanel implements ActionListener {
 		});
 	}
 
+	/**
+	 * Defines the stylesheet for displaying (Hightlight & Priority)
+	 */
+	private void style() {
+		Default = new SimpleAttributeSet();
+		StyleConstants.setForeground(Default, Color.WHITE);
+
+		BoldWhite = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldWhite, Color.WHITE);
+
+		BoldGreen = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldGreen, Color.GREEN);
+
+		BoldOrange = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldOrange, Color.ORANGE);
+
+		BoldMagenta = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldMagenta, Color.MAGENTA);
+
+		BoldRed = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldRed, Color.RED);
+
+		BoldBlue = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldBlue, Color.BLUE);
+
+		BoldCyan = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldCyan, Color.CYAN);
+
+		BoldYellow = new SimpleAttributeSet();
+		StyleConstants.setForeground(BoldYellow, Color.YELLOW);
+	}
 }
