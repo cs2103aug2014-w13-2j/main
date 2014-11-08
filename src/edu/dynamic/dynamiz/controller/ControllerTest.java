@@ -15,8 +15,8 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test case for Controller.
- * @author A0110781N
  */
+//@author A0110781N
 public class ControllerTest {
     
     @Test
