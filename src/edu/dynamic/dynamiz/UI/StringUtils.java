@@ -7,6 +7,12 @@ package edu.dynamic.dynamiz.UI;
  */
 
 class StringUtils {
+	/**
+	 * @param string
+	 * @param string size
+	 * @return String
+	 * Format the content to the center 
+	 */
 	public static String center(String s, int size) {
 		return center(s, size, " ");
 	}
