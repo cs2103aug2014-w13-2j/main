@@ -56,7 +56,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
-
 	
 	private String displayDividingLine() {
 		String s = new String("------------------------------------------------------------------------------------------------\n");

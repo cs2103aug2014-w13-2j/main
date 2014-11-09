@@ -13,7 +13,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
  */
 public interface DisplayerFormatterInterface {
 	
-	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!\nPlease enter \"help\" for more information about the available commands!";
+	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!\nType 'help' in the space below for more information!";
 	
 	/**
 	 * Integer Tag for different Feedback type
@@ -35,10 +35,10 @@ public interface DisplayerFormatterInterface {
 	/**
 	 * String content for different prompt
 	 */
-	static final String ENTER_COMMAND_STR = "Please Enter Command.";
-	static final String ENTER_VALID_COMMAND_STR = "Please Enter Valid Command.";
-	static final String ENTER_TIME_PERIOD_STR = "Please Enter Time Period: ";
-	static final String ENTER_TASK_INDEX_STR = "Please Enter Index: ";
+	static final String ENTER_COMMAND_STR = "Please enter command in the space below:";
+	static final String ENTER_VALID_COMMAND_STR = "Please enter valid command:";
+	static final String ENTER_TIME_PERIOD_STR = "Please enter time period: ";
+	static final String ENTER_TASK_INDEX_STR = "Please enter index: ";
 	
 	/**
 	 * Integer Tag for two different types of States
