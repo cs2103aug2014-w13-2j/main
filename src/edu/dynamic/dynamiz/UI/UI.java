@@ -33,12 +33,12 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextPane displayScreen;
 
 	/** Establish relations between UI, Displayer, Controller & StyleUI */
-	public static DisplayFormatter disp = new DisplayFormatter();
-	public static Controller cont = new Controller();
+	public static DisplayFormatter displayer = new DisplayFormatter();
+	public static Controller controller = new Controller();
 	private StyleUI style = new StyleUI();
 
 	/** UI display components */
-	private StyledDocument doc;
+	private StyledDocument document;
 	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 
@@ -87,13 +87,13 @@ public class UI extends JPanel implements ActionListener {
 
 				displayCommandPrompt(input);
 
-				Feedback feedback = cont.executeCommand(input);
-				ArrayList<StrIntPair> returnResult = disp
+				Feedback feedback = controller.executeCommand(input);
+				ArrayList<StrIntPair> returnResult = displayer
 						.displayFeedback(feedback);
 				assert (returnResult != null);
 
 				/** Displays Feedback */
-				doc.insertString(doc.getLength(), DIVIDER + NEWLINE,
+				document.insertString(document.getLength(), DIVIDER + NEWLINE,
 						style.getStyleDefault());
 
 				for (int i = 0; i < returnResult.size(); i++) {
@@ -128,13 +128,13 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	private void flushUI(String input) throws BadLocationException {
 		// clear document screen
-		doc.remove(0, doc.getLength());
+		document.remove(0, document.getLength());
 		displayCommandPrompt(input);
 
 		// Feedback
-		doc.insertString(doc.getLength(), DIVIDER + NEWLINE,
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
 				style.getStyleDefault());
-		doc.insertString(doc.getLength(), "Cleared screen successfully!"
+		document.insertString(document.getLength(), "Cleared screen successfully!"
 				+ NEWLINE, style.getStyleDefault());
 	}
 
@@ -177,26 +177,29 @@ public class UI extends JPanel implements ActionListener {
 		// Define size of Command Display - Screen
 		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
 
-		// / Create Command Input
+		// Create Command Input
 		inputScreen = new JTextField();
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE);
 		inputScreen.setFont(fontInput);
 
 		// Add Command Display - Scroll and Command Input into Panel
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		add(scrollPane, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		add(inputScreen, c);
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		add(scrollPane, constraints);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		add(inputScreen, constraints);
 
 		// Styling for Command Display - Screen
-		doc = displayScreen.getStyledDocument();
+		document = displayScreen.getStyledDocument();
 	}
 
+	/**
+	 * Defines the tab size specifications for JTextPane
+	 */
 	private void setTabSettings() {
 		// Set tab size
 		TabStop[] tabs = new TabStop[4];
@@ -212,27 +215,34 @@ public class UI extends JPanel implements ActionListener {
 		displayScreen.setParagraphAttributes(aset, false);
 	}
 
-	private void printWithStyle(ArrayList<StrIntPair> returnResult, int i)
+	/**
+	 * References StyleUI to return the appropriate getStyleType based on the Priority Value (OptionType) or the Status Settings (StyleUI.STATUS_PENDING or StyleUI.STATUS_COMPLETED).
+	 * 
+	 * @param returnResult
+	 * @param styleValue
+	 * @throws BadLocationException
+	 */
+	private void printWithStyle(ArrayList<StrIntPair> returnResult, int styleValue)
 			throws BadLocationException {
-		doc.insertString(doc.getLength(), returnResult.get(i).getString(),
-				style.getStyleType(returnResult.get(i).getInt()));
+		document.insertString(document.getLength(), returnResult.get(styleValue).getString(),
+				style.getStyleType(returnResult.get(styleValue).getInt()));
 	}
 
 	// ---------------------------------------------------------------------------------
 	private void displayWelcomeMessage() throws BadLocationException {
-		doc.insertString(0, disp.displayWelcomeMessage() + NEWLINE,
+		document.insertString(0, displayer.displayWelcomeMessage() + NEWLINE,
 				style.getStyleWhite());
-		doc.insertString(doc.getLength(), disp.displayPrompt(1) + NEWLINE,
+		document.insertString(document.getLength(), displayer.displayPrompt(1) + NEWLINE,
 				style.getStyleWhite());
 	}
 
 	private void displayCommandPrompt(String input) throws BadLocationException {
 		// Command Prompt Display
-		doc.insertString(doc.getLength(), DIVIDER + NEWLINE,
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
 				style.getStyleDefault());
-		doc.insertString(doc.getLength(), disp.displayPrompt(),
+		document.insertString(document.getLength(), displayer.displayPrompt(),
 				style.getStyleYellow());
-		doc.insertString(doc.getLength(), input + NEWLINE,
+		document.insertString(document.getLength(), input + NEWLINE,
 				style.getStyleYellow());
 
 	}
