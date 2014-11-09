@@ -15,26 +15,36 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	static private final String NULL_STRING = "null object";
 	/**
-	 * @param Format Calendar object to readable string
-	 * @return
+	 * @param 
+	 * @return String
+	 * Format Calendar object to readable string
 	 */
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
 	/**
-	 * @param Format MyDate object to readable string
-	 * @return
+	 * @param 
+	 * @return 
+	 * Format MyDate object to readable string
 	 */
 	public String dateFormatter(MyDate d){
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
+	/**
+	 * @param d
+	 * @return
+	 * Format MyDate object to readable string
+	 */
 	public String timeFormatter(MyDate d){
 		String s = String.format("%tH:%tM", d);
 		return s;
 	}
-
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayWelcomeMessage()
+	 */
 	public String displayWelcomeMessage(){
 		return WELCOME_MESSAGE;
 	}
@@ -57,7 +67,9 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s;
 	}
 	
-	
+	/** 
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayStringList(ArrayList<String>)
+	 */
 	@Override
 	public String displayStringList(ArrayList<String> arr) {	
 		if(arr == null) return NULL_STRING;
@@ -70,24 +82,37 @@ public class DisplayFormatter implements DisplayerInterface {
 
 		return s.toString();	
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskItem(TaskItem)
+	 */
 	@Override
 	public String displayTaskItem(TaskItem task) {
 		assert task!=null;
 		return task.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskFile(TaskItem)
+	 */
 	@Override
 	public String displayTaskFile(TaskItem task) {
 		assert task!=null;
 		return task.toFileString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskFeedback(TaskItem)
+	 */
 	@Override
 	public String displayTaskFeedback(TaskItem task) {
 		assert task!=null;
 		return task.getFeedbackString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(ArrayList<TaskItem>)
+	 */
 	@Override
 	public String displayTaskList(ArrayList<TaskItem> taskList) {
 		assert taskList!=null;
@@ -99,6 +124,9 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(TaskItem[])
+	 */
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
 		assert taskList!=null;
@@ -109,23 +137,36 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventFeedback(EventItem)
+	 */
 	@Override
 	public String displayEventFeedback(EventItem event) {
 		assert event!=null;
 		return event.getFeedbackString();	
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventFile(EventItem)
+	 */
 	@Override
 	public String displayEventFile(EventItem event) {
 		assert event!=null;
 		return event.toFileString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventItem(EventItem)
+	 */
 	@Override
 	public String displayEventItem(EventItem event) {
 		assert event!=null;
 		return event.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(ArrayList<EventItem>)
+	 */
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
 		assert eventList!=null;
@@ -135,6 +176,10 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(EventItem[])
+	 */
 	@Override
 	public String displayEventList(EventItem[] eventList) {
 		assert eventList!=null;

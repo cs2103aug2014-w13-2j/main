@@ -9,7 +9,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 
 //@author A0119397R
 /**
- * Interface class for Dispalyer
+ * Interface class for Displayer
  */
 public interface DisplayerInterface {
 	
@@ -189,7 +189,8 @@ public interface DisplayerInterface {
 	/**
 	 * @return
 	 * No @param return "Enter command:" prompt
-	 * @param promptTag, corresbonding integer tag please refer to the final int above
+	 * @param promptTag, corresponding integer tag please refer to the integer constant above 
+	 * @see {@link #FEEDBACK_TAG}
 	 * @param specific String promptMessage 
 	 */
 	public String displayPrompt();
