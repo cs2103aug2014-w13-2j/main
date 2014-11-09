@@ -1,28 +1,28 @@
 package edu.dynamic.dynamiz.structure;
 
+// @author A0119397R
 /**
- * @author A0119397R
  * An exception class built for Dynamiz
  */
 public class DynamizException extends Exception {
 		
 		/**
 		 * Used when an operation cannot be completed.
-		 * <br>Will request the program to continue execution.
+		 * Will request the program to continue execution.
 		 */
 		public static final int LEVEL_RETRY = 0;
 		public static final String LEVEL_RETRY_MESSAGE = "Retry operaton";
 		
 		/**
 		 * Used when an initialization problem occurs.
-		 * <br>Will request the program to restart from the beginning and re-initialize.
+		 * Will request the program to restart from the beginning and re-initialize.
 		 */	
 		public static final int LEVEL_RESTART = 1;
 		public static final String LEVEL_RESTART_MESSAGE = "Restart program";
 		
 		/**
 		 * Used when a fatal problem or unknown exception occurs.
-		 * <br>Will request the system to exit with error code <code>1</code>.
+		 * Will request the system to exit with error code <code>1</code>.
 		 */		
 		public static final int LEVEL_TERMINATE = 2;
 		public static final String LEVEL_TERMINATE_MESSAGE = "Terminate program";
@@ -50,8 +50,7 @@ public class DynamizException extends Exception {
 		public String getMessage(){
 			String s = super.getMessage();
 			return s;
-		}
-		
+		}	
 		private String getLevelMessage(int level){
 			switch(level){
 			case LEVEL_RETRY:

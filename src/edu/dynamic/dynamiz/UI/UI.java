@@ -34,9 +34,10 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextPane displayScreen;
 
 	/** Establish relations between UI, Displayer, Controller & StyleUI */
-	public static DisplayFormatter displayer = new DisplayFormatter();
+	public static DisplayerFormatter displayer = new DisplayerFormatter();
 	public static Controller controller = new Controller();
 	private StyleUI style = new StyleUI();
+
 
 	/** UI display components */
 	private StyledDocument document;

@@ -6,37 +6,56 @@ import java.util.logging.*;
 
 import edu.dynamic.dynamiz.structure.*;
 
+//@author A0119397R
 /**
- * @author A0119397R
  * Acts as the information interpreter of Feedback items and formatter for UI
- * 
  * */
 
-public class DisplayFormatter implements DisplayerInterface {
-
+public class DisplayerFormatter implements DisplayerFormatterInterface {
+	
+	static private final String NULL_STRING = "null object";
+	/**
+	 * @param 
+	 * @return String
+	 * Format Calendar object to readable string
+	 */
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
+	/**
+	 * @param 
+	 * @return 
+	 * Format MyDate object to readable string
+	 */
 	public String dateFormatter(MyDate d){
-
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
+	/**
+	 * @param d
+	 * @return
+	 * Format MyDate object to readable string
+	 */
 	public String timeFormatter(MyDate d){
 		String s = String.format("%tH:%tM", d);
 		return s;
 	}
-
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayWelcomeMessage()
+	 */
 	public String displayWelcomeMessage(){
 		return WELCOME_MESSAGE;
 	}
 
+	/**
+	 * @return Title Line for task list 
+	 */
 	public String displayTitleLine() {
 		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
-
 	
 	private String displayDividingLine() {
 		String s = new String("------------------------------------------------------------------------------------------------\n");
@@ -46,13 +65,13 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String("----------------------------------------\n");
 		return s;
 	}
-	@Override
-	public String displayString(String str) {	
-		return str;
-	}
+	
+	/** 
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayStringList(ArrayList<String>)
+	 */
 	@Override
 	public String displayStringList(ArrayList<String> arr) {	
-		if(arr == null) return "null";
+		if(arr == null) return NULL_STRING;
 		StringBuilder s = new StringBuilder();
 
 		for(int i=0;i<arr.size();i++){
@@ -62,24 +81,37 @@ public class DisplayFormatter implements DisplayerInterface {
 
 		return s.toString();	
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskItem(TaskItem)
+	 */
 	@Override
 	public String displayTaskItem(TaskItem task) {
 		assert task!=null;
 		return task.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskFile(TaskItem)
+	 */
 	@Override
 	public String displayTaskFile(TaskItem task) {
 		assert task!=null;
 		return task.toFileString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskFeedback(TaskItem)
+	 */
 	@Override
 	public String displayTaskFeedback(TaskItem task) {
 		assert task!=null;
 		return task.getFeedbackString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(ArrayList<TaskItem>)
+	 */
 	@Override
 	public String displayTaskList(ArrayList<TaskItem> taskList) {
 		assert taskList!=null;
@@ -91,6 +123,9 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskList(TaskItem[])
+	 */
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
 		assert taskList!=null;
@@ -101,32 +136,49 @@ public class DisplayFormatter implements DisplayerInterface {
 		return s.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventFeedback(EventItem)
+	 */
 	@Override
 	public String displayEventFeedback(EventItem event) {
 		assert event!=null;
 		return event.getFeedbackString();	
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventFile(EventItem)
+	 */
 	@Override
 	public String displayEventFile(EventItem event) {
 		assert event!=null;
 		return event.toFileString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventItem(EventItem)
+	 */
 	@Override
 	public String displayEventItem(EventItem event) {
 		assert event!=null;
 		return event.toString();
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(ArrayList<EventItem>)
+	 */
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
 		assert eventList!=null;
-		StringBuilder s = new StringBuilder();
+		StringBuilder strB = new StringBuilder();
 		for(int i = 0; i< eventList.size(); i++){
-			s.append(eventList.get(i).toString()).append("\n");
+			strB.append(eventList.get(i).toString()).append("\n");
 		}
-		return s.toString();
+		return strB.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventList(EventItem[])
+	 */
 	@Override
 	public String displayEventList(EventItem[] eventList) {
 		assert eventList!=null;
@@ -136,21 +188,37 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoItem(ToDoItem)
+	 */
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFeedback(ToDoItem)
+	 */
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.getFeedbackString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFile(ToDoItem)
+	 */
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.toFileString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ArrayList)
+	 */
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
 		assert todoList !=null;
@@ -160,6 +228,10 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ToDoItem[])
+	 */
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
 		assert todoList !=null;		
@@ -169,10 +241,18 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt()
+	 */
 	public String displayPrompt() {
 		String s = new String ("Command: ");
 		return s;
 	}	
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt(int)
+	 */
 	public String displayPrompt(int promptTag) {
 		String tag = new String();
 		switch(promptTag){
@@ -180,7 +260,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			tag = ENTER_COMMAND_STR;
 			break;
 		case ENTER_ITEM_PROMPT:
-			tag = "Please Enter Task: ";
+			tag = ENTER_COMMAND_STR;
 			break;
 		case ENTER_TASK_INDEX_PROMPT:
 			tag = ENTER_TASK_INDEX_STR;
@@ -188,7 +268,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		case ENTER_TIME_PROMPT:
 			tag = ENTER_TIME_PERIOD_STR;
 			break;
-
 		case INVALID_COMMAND_PROMPT:
 			tag = ENTER_VALID_COMMAND_STR;
 			break;
@@ -200,12 +279,21 @@ public class DisplayFormatter implements DisplayerInterface {
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
 	}		
+	
+	/**
+	 * Receive a @param Feedback Object 
+	 * @return ArrayList<StrIntPair>
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
+	 */
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		assert commandFeedback!=null;	
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
-		switch(t){		
+		switch(t){	
+		/**
+		 * Check which subclass this Feedback Object belongs to and format accordingly
+		 */
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();
@@ -223,23 +311,25 @@ public class DisplayFormatter implements DisplayerInterface {
 			s  = sf.getCommandType()+" successfully!";
 			s = s+"\n";	
 			displayContentList.add(new StrIntPair(s));	
-			getFeedbackContent(displayContentList,sf);		
+			getSucFeedbackContent(displayContentList,sf);		
 			break;
 		default:
 			s = "Invalid Instruction\n";
 			displayContentList.add(new StrIntPair(s));
-
 		}
 		return  displayContentList;	
 	}
 
-	private void getFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
+	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
 		assert(displayContentList!=null);
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list==null){
 			displayContentList.add(new StrIntPair("The list is empty!\n"));
 			return;
 		}		
+		/**
+		 * Check which command this SuccessFeedback is, and format accordingly
+		 */
 		if(sf.getCommandType().equalsIgnoreCase(SHOW_COMMAND)||sf.getCommandType().equalsIgnoreCase(ADD_COMMAND)){
 			assert(1==list.length);
 			displayContentList.add(new StrIntPair(displayDividingLine()));
@@ -302,7 +392,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		else if (item instanceof EventItem){
 			EventItem t = (EventItem)item;
 			starT = t.getStartDateString();
-			//starT = TagFormat.format(starT, TagFormat.START_TIME);
 			endT = t.getEndDateString();	
 
 		}
@@ -311,7 +400,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
 		contentList.add(new StrIntPair(String.format(strForStat,stas),stasTag));
 		contentList.add(new StrIntPair(strForEndLine));
-
 	}
 
 	/**Format task list for chunk display
@@ -321,8 +409,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
 		assert item!=null;
 		assert contentList!=null;
-		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
-				"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s ";
+		
 		int ID = item.getId();
 		String des = item.getDescription();
 		int pri = item.getPriority();
@@ -351,14 +438,16 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	
 	private int getFeedbackTag(Feedback f){
-		String t =f.getClassName();
-		if(t.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
-		if(t.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
-		if(t.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
+		String fname =f.getClassName();
+		if(fname.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
+		if(fname.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
+		if(fname.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
 		return FEEDBACK_TAG;		
-
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayHelpPage()
+	 */
 	@Override
 	public ArrayList<StrIntPair> displayHelpPage() {
 		ArrayList<StrIntPair> printContentList = new ArrayList<StrIntPair>();
@@ -370,109 +459,3 @@ public class DisplayFormatter implements DisplayerInterface {
 	}	
 }
 
-/**
- * For V0.3 we tried to switch to using JavaFX for GUI
- * This TagFormat is reserved for adding html div tag to string content 
- * Hence facilitates GUI to display certain string according to its div class tag
- */
-class TagFormat{
-	private static boolean addHTMLTAG = false;
-	public static final String SUCCESS = "";
-	public static final String HELP = "";
-	public static final String ERORR = "";
-	public static final String PROMPT = "";
-
-	public static final String PRIORITY = "PRIORITY_HEADER";
-	public static final String TASK_ID = "";
-	public static final String TASK_DESCRIPTION = "";
-	public static final String TASK_STATUS = "";
-	public static final String START_TIME = "";
-	public static final String END_TIME = "";
-	public static final String TIME = "";
-
-	public static final String PRIORITY_URGENT_TAG= "PRIORITY_URGERNT";
-	public static final String PRIORITY_HIGH_TAG = "PRIORITY_HIGH";
-	public static final String PRIORITY_MEDIUM_TAG = "PRIORITY_MEDIUM";
-	public static final String PRIORITY_LOW_TAG = "PRIORITY_LOW";
-	public static final String PRIORITY_NONE_TAG = "PRIORITY_NONE";
-
-	public static final int PRIORITY_URGENT = 8;
-	public static final int PRIORITY_HIGH = 4;
-	public static final int PRIORITY_MEDIUM = 2;
-	public static final int PRIORITY_LOW = 1;
-	public static final int PRIORITY_NONE = 0;
-	public static final int PRIORITY_UNCHANGED = -1;
-
-
-	private static final String FORMAT_HTML_TAG = "<div class = %s >%s</div>";
-
-	public static String format(String content, String tag){		
-		if(addHTMLTAG) return String.format(FORMAT_HTML_TAG, tag, content);
-		return content;
-	}
-
-	public static String formatPri(int pri){
-		String s = new String();
-		String content = new String();
-		switch(pri){
-		case PRIORITY_NONE:
-			s = PRIORITY_NONE_TAG;
-			content = "None";
-
-			break;
-		case PRIORITY_LOW:
-			s = PRIORITY_LOW_TAG;
-			content = "Low";
-			break;
-
-		case PRIORITY_MEDIUM:
-			s = PRIORITY_MEDIUM_TAG;
-			content = "Medium";
-			break;
-		case PRIORITY_HIGH:
-			s = PRIORITY_HIGH_TAG;
-			content = "High";
-			break;
-		case PRIORITY_URGENT:
-			s = PRIORITY_URGENT_TAG;
-			content = "Urgent";
-			break;
-
-		default:
-			s = PRIORITY_NONE_TAG;
-			content = "None";
-			break;
-		}
-		s = String.format(FORMAT_HTML_TAG, s,content);
-		if(addHTMLTAG == true) return s;
-		return content;
-	}
-
-}
-
-/**
- * String Utilities for centralize string content
- */
-class StringUtils {
-	public static String center(String s, int size) {
-		return center(s, size, " ");
-	}
-	public static String center(String s, int size, String pad) {
-		if (pad == null)
-			throw new NullPointerException("pad cannot be null");
-		if (pad.length() <= 0)
-			throw new IllegalArgumentException("pad cannot be empty");
-		if (s == null || size <= s.length())
-			return s;
-
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < (size - s.length()) / 2; i++) {
-			sb.append(pad);
-		}
-		sb.append(s);
-		while (sb.length() < size) {
-			sb.append(pad);
-		}
-		return sb.toString();
-	}
-}
