@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import edu.dynamic.dynamiz.parser.OptionType;
+
 public class StyleUI {
 	// Styling Constants
 	private SimpleAttributeSet styleWhite;
@@ -16,6 +18,9 @@ public class StyleUI {
 	private SimpleAttributeSet styleBlue;
 	private SimpleAttributeSet styleCyan;
 	private SimpleAttributeSet styleYellow;
+	
+	private final int STATUS_COMPLETED = 10;
+	private final int STATUS_PENDING = 11;
 
 	/**
 	 * Defines the stylesheet for displaying (Hightlight & Priority)
@@ -120,5 +125,16 @@ public class StyleUI {
 	public void setStyleYellow(SimpleAttributeSet styleYellow) {
 		this.styleYellow = styleYellow;
 	}
-	
+
+	public SimpleAttributeSet getStyleType(int styleValue) {
+		switch (styleValue){
+		case OptionType.PRIORITY_LOW: return getStyleGreen();
+		case OptionType.PRIORITY_MEDIUM: return getStyleOrange();
+		case OptionType.PRIORITY_HIGH: return getStyleMagenta();
+		case OptionType.PRIORITY_URGENT: return getStyleRed();
+		case STATUS_COMPLETED: return getStyleBlue();
+		case STATUS_PENDING: return getStyleCyan();
+		default: return getStyleDefault();
+		}
+	}
 }
