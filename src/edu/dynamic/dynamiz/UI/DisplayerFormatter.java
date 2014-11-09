@@ -14,6 +14,9 @@ import edu.dynamic.dynamiz.structure.*;
 public class DisplayerFormatter implements DisplayerFormatterInterface {
 	private final static Logger LoggerDisplayer = Logger.getLogger(DisplayerFormatter.class.getName());
 	static private final String NULL_STRING = "null object";
+	 
+	private final int ShowComdListLength = 1;
+	private final int UpdateComdListLength = 2;
 	
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayWelcomeMessage()
@@ -44,7 +47,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
 	 */
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
-		LoggerDisplayer.info("displayFeedback called ");	
+		LoggerDisplayer.info("displayFeedback called");	
 		assert commandFeedback!=null;	
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		String s = new String(); 
@@ -82,6 +85,8 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
 		assert(displayContentList!=null);
+		LoggerDisplayer.info("getSucFeedbackContent called");
+		
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list==null){
 			displayContentList.add(new StrIntPair("The list is empty!\n"));
@@ -91,17 +96,18 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		 * Check which command this SuccessFeedback is, and format accordingly
 		 */
 		if(sf.getCommandType().equalsIgnoreCase(SHOW_COMMAND)||sf.getCommandType().equalsIgnoreCase(ADD_COMMAND)){
-			assert(1==list.length);
-			displayContentList.add(new StrIntPair(displayDividingLine()));
-			formatTaskChunk(displayContentList,list[0]);
+			assert(ShowComdListLength==list.length);
+			formatShowAddComd(displayContentList,list);
 			return;
 		}
-
+		
 		else if(sf.getCommandType().equalsIgnoreCase(UPDATE_COMMAND)){
-			assert(2 == list.length);
+			assert(UpdateComdListLength == list.length);
 			displayContentList.add(new StrIntPair(displayParaLine()));
 			displayContentList.add(new StrIntPair("Item affected:\n"));
+			
 			formatTaskChunk(displayContentList,list[0]);
+			
 			displayContentList.add(new StrIntPair(displayParaLine()));
 			displayContentList.add(new StrIntPair("Updated Item:\n"));
 			formatTaskChunk(displayContentList,list[1]);		
@@ -117,6 +123,12 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 			displayContentList.add(new StrIntPair(displayDividingLine()));
 		}
 	}
+	
+	private void formatShowAddComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list){
+		displayContentList.add(new StrIntPair(displayDividingLine()));
+		formatTaskChunk(displayContentList,list[0]);	
+	}
+	
 	/**
 	 * Format task list for list display
 	 * @param contentList
@@ -132,14 +144,14 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert contentList!=null;
 		int ID = item.getId();
 		String des = item.getDescription();
-		int pri = item.getPriority();
-		String prioS = TagFormat.formatPri(pri);
+		int priIntTag = item.getPriority();
+		String prioS = TagFormat.formatPri(priIntTag);
 		String starT = "";
 		String endT = "";
 		String stas = item.getStatus();
-		int stasTag;
-		if(stas.equalsIgnoreCase(STATU_PEND)) stasTag =STATU_PEND_TAG;
-		else stasTag = STATU_COMPLETE_TAG;
+		int stasIntTag;
+		if(stas.equalsIgnoreCase(STATU_PEND)) stasIntTag =STATU_PEND_TAG;
+		else stasIntTag = STATU_COMPLETE_TAG;
 		if(des.length()>=23){
 			des = des.substring(0, 23);
 			des = des + "...";
@@ -156,9 +168,9 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 		}
 		contentList.add(new StrIntPair(String.format(strForID, ID,des)));
-		contentList.add(new StrIntPair(String.format(strForPri, prioS),pri));
+		contentList.add(new StrIntPair(String.format(strForPri, prioS),priIntTag));
 		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
-		contentList.add(new StrIntPair(String.format(strForStat,stas),stasTag));
+		contentList.add(new StrIntPair(String.format(strForStat,stas),stasIntTag));
 		contentList.add(new StrIntPair(strForEndLine));
 	}
 
@@ -171,29 +183,34 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert contentList!=null;
 		
 		int ID = item.getId();
-		String des = item.getDescription();
 		int pri = item.getPriority();
-		String prioS = TagFormat.formatPri(pri);
+		int stasIntTag;		
+		String des = item.getDescription();
+		String priStr = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
-		int stasTag;
-		if(stas.equalsIgnoreCase(STATU_PEND)) stasTag =STATU_PEND_TAG;
-		else stasTag = STATU_COMPLETE_TAG;
+		
+		
+		if(stas.equalsIgnoreCase(STATU_PEND)) stasIntTag =STATU_PEND_TAG;
+		else stasIntTag = STATU_COMPLETE_TAG;
+		
 		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
-		contentList.add(new StrIntPair(prioS+"\n",pri));
+		contentList.add(new StrIntPair(priStr+"\n",pri));
+		
 		if(item instanceof TaskItem){
 			TaskItem t = (TaskItem)item;
 			String ddl = t.getDeadlineString();
 			contentList.add(new StrIntPair("Deadline: "+ddl+"\n"));
 		}
 		else if (item instanceof EventItem){
-			EventItem t = (EventItem)item;
-			String starT = t.getStartDateString();
-			String endT = t.getEndDateString();
+			EventItem evtItem = (EventItem)item;
+			String starT = evtItem.getStartDateString();
+			String endT = evtItem.getEndDateString();
 			contentList.add(new StrIntPair("Start Time: "+starT+"\n"));
 			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
 		}
+		
 		contentList.add(new StrIntPair("Status: "));
-		contentList.add(new StrIntPair(stas+"\n",stasTag));
+		contentList.add(new StrIntPair(stas+"\n",stasIntTag));
 	}
 
 	
@@ -216,6 +233,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
+	
 	/**
 	 * @param 
 	 * @return 
@@ -225,6 +243,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
+	
 	/**
 	 * @param d
 	 * @return
