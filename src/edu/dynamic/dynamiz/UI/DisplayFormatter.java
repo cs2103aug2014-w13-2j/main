@@ -6,20 +6,27 @@ import java.util.logging.*;
 
 import edu.dynamic.dynamiz.structure.*;
 
+//@author A0119397R
 /**
- * @author A0119397R
  * Acts as the information interpreter of Feedback items and formatter for UI
- * 
  * */
 
 public class DisplayFormatter implements DisplayerInterface {
 
+	
+	/**
+	 * @param Format Calendar object to readable string
+	 * @return
+	 */
 	public String dateFormatter(Calendar c){
 		String s = String.format("%1$tm,%1$te",c);
 		return s;	
 	}
+	/**
+	 * @param Format MyDate object to readable string
+	 * @return
+	 */
 	public String dateFormatter(MyDate d){
-
 		String s = String.format("%tm,%td,%ty", d);
 		return s;
 	}
@@ -32,6 +39,9 @@ public class DisplayFormatter implements DisplayerInterface {
 		return WELCOME_MESSAGE;
 	}
 
+	/**
+	 * @return Title Line for task list 
+	 */
 	public String displayTitleLine() {
 		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
@@ -46,10 +56,8 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String("----------------------------------------\n");
 		return s;
 	}
-	@Override
-	public String displayString(String str) {	
-		return str;
-	}
+	
+	
 	@Override
 	public String displayStringList(ArrayList<String> arr) {	
 		if(arr == null) return "null";
@@ -173,6 +181,7 @@ public class DisplayFormatter implements DisplayerInterface {
 		String s = new String ("Command: ");
 		return s;
 	}	
+	
 	public String displayPrompt(int promptTag) {
 		String tag = new String();
 		switch(promptTag){
@@ -200,12 +209,22 @@ public class DisplayFormatter implements DisplayerInterface {
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
 	}		
+	
+	/**
+	 * Receive a @param Feedback Object 
+	 * 
+	 * @return ArrayList<StrIntPair>
+	 */
+	
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		assert commandFeedback!=null;	
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
-		switch(t){		
+		switch(t){	
+		/**
+		 * Check which subclass this Feedback Object belongs to and format accordingly
+		 */
 		case HELP_FEEDBACK_TAG:
 			HelpFeedback hf = (HelpFeedback)commandFeedback; 
 			s = hf.getHelpContent();
@@ -223,23 +242,25 @@ public class DisplayFormatter implements DisplayerInterface {
 			s  = sf.getCommandType()+" successfully!";
 			s = s+"\n";	
 			displayContentList.add(new StrIntPair(s));	
-			getFeedbackContent(displayContentList,sf);		
+			getSucFeedbackContent(displayContentList,sf);		
 			break;
 		default:
 			s = "Invalid Instruction\n";
 			displayContentList.add(new StrIntPair(s));
-
 		}
 		return  displayContentList;	
 	}
 
-	private void getFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
+	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
 		assert(displayContentList!=null);
 		ToDoItem[] list = sf.getAffectedItems();
 		if(list==null){
 			displayContentList.add(new StrIntPair("The list is empty!\n"));
 			return;
 		}		
+		/**
+		 * Check which command this SuccessFeedback is, and format accordingly
+		 */
 		if(sf.getCommandType().equalsIgnoreCase(SHOW_COMMAND)||sf.getCommandType().equalsIgnoreCase(ADD_COMMAND)){
 			assert(1==list.length);
 			displayContentList.add(new StrIntPair(displayDividingLine()));
@@ -302,7 +323,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		else if (item instanceof EventItem){
 			EventItem t = (EventItem)item;
 			starT = t.getStartDateString();
-			//starT = TagFormat.format(starT, TagFormat.START_TIME);
 			endT = t.getEndDateString();	
 
 		}
@@ -370,109 +390,3 @@ public class DisplayFormatter implements DisplayerInterface {
 	}	
 }
 
-/**
- * For V0.3 we tried to switch to using JavaFX for GUI
- * This TagFormat is reserved for adding html div tag to string content 
- * Hence facilitates GUI to display certain string according to its div class tag
- */
-class TagFormat{
-	private static boolean addHTMLTAG = false;
-	public static final String SUCCESS = "";
-	public static final String HELP = "";
-	public static final String ERORR = "";
-	public static final String PROMPT = "";
-
-	public static final String PRIORITY = "PRIORITY_HEADER";
-	public static final String TASK_ID = "";
-	public static final String TASK_DESCRIPTION = "";
-	public static final String TASK_STATUS = "";
-	public static final String START_TIME = "";
-	public static final String END_TIME = "";
-	public static final String TIME = "";
-
-	public static final String PRIORITY_URGENT_TAG= "PRIORITY_URGERNT";
-	public static final String PRIORITY_HIGH_TAG = "PRIORITY_HIGH";
-	public static final String PRIORITY_MEDIUM_TAG = "PRIORITY_MEDIUM";
-	public static final String PRIORITY_LOW_TAG = "PRIORITY_LOW";
-	public static final String PRIORITY_NONE_TAG = "PRIORITY_NONE";
-
-	public static final int PRIORITY_URGENT = 8;
-	public static final int PRIORITY_HIGH = 4;
-	public static final int PRIORITY_MEDIUM = 2;
-	public static final int PRIORITY_LOW = 1;
-	public static final int PRIORITY_NONE = 0;
-	public static final int PRIORITY_UNCHANGED = -1;
-
-
-	private static final String FORMAT_HTML_TAG = "<div class = %s >%s</div>";
-
-	public static String format(String content, String tag){		
-		if(addHTMLTAG) return String.format(FORMAT_HTML_TAG, tag, content);
-		return content;
-	}
-
-	public static String formatPri(int pri){
-		String s = new String();
-		String content = new String();
-		switch(pri){
-		case PRIORITY_NONE:
-			s = PRIORITY_NONE_TAG;
-			content = "None";
-
-			break;
-		case PRIORITY_LOW:
-			s = PRIORITY_LOW_TAG;
-			content = "Low";
-			break;
-
-		case PRIORITY_MEDIUM:
-			s = PRIORITY_MEDIUM_TAG;
-			content = "Medium";
-			break;
-		case PRIORITY_HIGH:
-			s = PRIORITY_HIGH_TAG;
-			content = "High";
-			break;
-		case PRIORITY_URGENT:
-			s = PRIORITY_URGENT_TAG;
-			content = "Urgent";
-			break;
-
-		default:
-			s = PRIORITY_NONE_TAG;
-			content = "None";
-			break;
-		}
-		s = String.format(FORMAT_HTML_TAG, s,content);
-		if(addHTMLTAG == true) return s;
-		return content;
-	}
-
-}
-
-/**
- * String Utilities for centralize string content
- */
-class StringUtils {
-	public static String center(String s, int size) {
-		return center(s, size, " ");
-	}
-	public static String center(String s, int size, String pad) {
-		if (pad == null)
-			throw new NullPointerException("pad cannot be null");
-		if (pad.length() <= 0)
-			throw new IllegalArgumentException("pad cannot be empty");
-		if (s == null || size <= s.length())
-			return s;
-
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < (size - s.length()) / 2; i++) {
-			sb.append(pad);
-		}
-		sb.append(s);
-		while (sb.length() < size) {
-			sb.append(pad);
-		}
-		return sb.toString();
-	}
-}

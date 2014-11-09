@@ -9,35 +9,19 @@ import org.junit.Test;
 import edu.dynamic.dynamiz.UI.DisplayFormatter;
 import edu.dynamic.dynamiz.structure.*;
 
+// @author A0119397R
 /**
- * @author A0119397R
- *
+ * The JUnit Test for DispayerFormatter
  */
 public class TestDisplayerFormatter {
 	DisplayFormatter dp = new DisplayFormatter();
-	
-	@Test
-	public void testWelcome(){
-		assertEquals("Welcome to Dynamiz!",dp.displayWelcomeMessage());
-	}
-	
-	@Test
-	public void testDisplayString() {
-		String t1 = "test String";
-		dp.displayString(t1);
-		assertEquals(t1,dp.displayString(t1));
-	}
-	
-	
+		
 	@Test
 	public void testDisplayTask(){
 		TaskItem task1 = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
-		TaskItem task2 = new TaskItem("CS2105 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
-		TaskItem task3 = new TaskItem("CS2102 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
 		assertEquals( task1.toString(),dp.displayTaskItem(task1));
 		assertEquals( task1.getFeedbackString(),dp.displayTaskFeedback(task1));
-		assertEquals( task1.toFileString(),dp.displayTaskFile(task1));
-		
+		assertEquals( task1.toFileString(),dp.displayTaskFile(task1));		
 	}
 	
 	@Test 
@@ -59,7 +43,6 @@ public class TestDisplayerFormatter {
 		s+=task3.toString();
 		s+="\n";
 		
-		
 		assertEquals(s,dp.displayTaskList(testList));
 		
 		TaskItem[] testArray = new TaskItem[3];
@@ -67,8 +50,7 @@ public class TestDisplayerFormatter {
 		testArray[1]=task2;
 		testArray[2]=task3;
 		
-		assertEquals(s,dp.displayTaskList(testArray));
-		
+		assertEquals(s,dp.displayTaskList(testArray));		
 	}
 	
 	@Test
@@ -104,29 +86,22 @@ public class TestDisplayerFormatter {
 		s+=item2.toString();
 		s+="\n";
 		s+=item3.toString();
-		s+="\n";
-		
-		
-		assertEquals(s, dp.displayToDoList(todoList));
-		
+		s+="\n";		
+		assertEquals(s, dp.displayToDoList(todoList));		
 		ToDoItem[] testArray = new ToDoItem[3];
 		testArray[0]=item1;
 		testArray[1]=item2;
-		testArray[2]=item3;
-		
+		testArray[2]=item3;		
 		assertEquals(s, dp.displayToDoList(testArray));
 		
-	}
-	
+	}	
 	@Test
 	public void testDisplayEvent(){
-		EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));
-		
+		EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 2014));		
 		System.out.println(item.toString());
 		assertEquals(item.toString(),dp.displayEventItem(item));
 		assertEquals(item.toFileString(),dp.displayEventFile(item));
-		assertEquals(item.getFeedbackString(),dp.displayEventFeedback(item));
-			
+		assertEquals(item.getFeedbackString(),dp.displayEventFeedback(item));		
 	}
 	
 	@Test 
@@ -160,11 +135,4 @@ public class TestDisplayerFormatter {
 		
 	}
 	
-
-	
-	
- 
-	
-
-
 }

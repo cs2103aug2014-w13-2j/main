@@ -7,9 +7,9 @@ import edu.dynamic.dynamiz.structure.Feedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-
+//@author A0119397R
 /**
- * @author A0119397R
+ * Interface class for Dispalyer
  */
 public interface DisplayerInterface {
 	
@@ -40,10 +40,15 @@ public interface DisplayerInterface {
 	static final String SHOW_COMMAND = "show";
 	static final String ADD_COMMAND = "add";
 	
+	/**
+	 * Receive @param commandFeedBack 
+	 * Fetch feedback information and format it in a readable form
+	 * compact information and corresponding color tag into An ArrayList of StrIntPair
+	 * @return ArrayList<StrIntPair>
+	 */
 	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
 
 	public String displayWelcomeMessage();
-	public String displayString(String str);
 	public String displayStringList(ArrayList<String> arr);
 	
 	
