@@ -25,21 +25,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		return WELCOME_MESSAGE;
 	}
 
-	/**
-	 * @return Title Line for task list 
-	 */
-	public String displayTitleLine() {
-		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
-		return s;
-	}
-	private String displayDividingLine() {
-		String s = new String("------------------------------------------------------------------------------------------------\n");
-		return s;
-	}
-	private String displayParaLine() {
-		String s = new String("----------------------------------------\n");
-		return s;
-	}
 
 	/**
 	 * Receive a @param Feedback Object 
@@ -52,28 +37,28 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		String s = new String(); 
 		int t = getFeedbackTag(commandFeedback);
-		switch(t){	
 		/**
 		 * Check which subclass this Feedback Object belongs to and format accordingly
 		 */
-		case HELP_FEEDBACK_TAG:
-			HelpFeedback hf = (HelpFeedback)commandFeedback; 
-			getHelpFeedbackContent(displayContentList,hf);
-			break;		
-
-		case ERROR_FEEDBACK_TAG:
-			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 	
-			getErrorFeedbackContent(displayContentList,ef);
-			break;	
-			
-		case SUCCESS_FEEDBACK_TAG:
-			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
-			getSucFeedbackContent(displayContentList,sf);		
-			break;
-			
-		default:
-			s = "Invalid Instruction\n";
-			displayContentList.add(new StrIntPair(s));
+		switch(t){		
+			case HELP_FEEDBACK_TAG:
+				HelpFeedback hf = (HelpFeedback)commandFeedback; 
+				getHelpFeedbackContent(displayContentList,hf);
+				break;		
+	
+			case ERROR_FEEDBACK_TAG:
+				ErrorFeedback ef = (ErrorFeedback)commandFeedback; 	
+				getErrorFeedbackContent(displayContentList,ef);
+				break;	
+				
+			case SUCCESS_FEEDBACK_TAG:
+				SuccessFeedback sf = (SuccessFeedback) commandFeedback;
+				getSucFeedbackContent(displayContentList,sf);		
+				break;
+				
+			default:
+				s = "Invalid Instruction\n";
+				displayContentList.add(new StrIntPair(s));
 		}
 		LoggerDisplayer.info("displayFeedback return ");
 		return  displayContentList;	
@@ -92,6 +77,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		s+="\n";
 		displayContentList.add(new StrIntPair(s));
 	}
+	
 	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
 		assert(displayContentList!=null);
 		LoggerDisplayer.info("getSucFeedbackContent called");
@@ -100,8 +86,8 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		s = s+"\n";	
 
 		displayContentList.add(new StrIntPair(s));	
-
 		ToDoItem[] list = sf.getAffectedItems();
+		
 		if(list==null){
 			displayContentList.add(new StrIntPair("The list is empty!\n"));
 			return;
@@ -157,8 +143,8 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 			formatTaskLine(displayContentList,list[i]);
 		}
 		displayContentList.add(new StrIntPair(displayDividingLine()));
-
 	}
+	
 	/**
 	 * Format task list for list display
 	 * @param contentList
@@ -252,6 +238,21 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		return FEEDBACK_TAG;		
 	}
 
+	/**
+	 * @return Title Line for task list 
+	 */
+	public String displayTitleLine() {
+		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
+		return s;
+	}
+	private String displayDividingLine() {
+		String s = new String("------------------------------------------------------------------------------------------------\n");
+		return s;
+	}
+	private String displayParaLine() {
+		String s = new String("----------------------------------------\n");
+		return s;
+	}
 
 
 	/**
