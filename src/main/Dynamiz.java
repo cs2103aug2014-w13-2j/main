@@ -1,10 +1,12 @@
+//@author A0114573J
 package main;
+
 import java.util.logging.LogManager;
 
 /**
  * Main Driver Program for Dynamiz. Execute Dynmaiz from here.
- * @author A0114573J
  */
+
 import edu.dynamic.dynamiz.UI.*;
 
 public class Dynamiz {
@@ -15,4 +17,3 @@ public class Dynamiz {
 		ui.run();
 	}
 }
- 

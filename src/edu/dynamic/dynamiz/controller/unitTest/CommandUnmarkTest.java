@@ -1,9 +1,12 @@
-package edu.dynamic.dynamiz.controller;
+package edu.dynamic.dynamiz.controller.unitTest;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandUnmark;
+import edu.dynamic.dynamiz.controller.Undoable;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**

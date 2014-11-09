@@ -21,105 +21,48 @@ import edu.dynamic.dynamiz.controller.*;
 import edu.dynamic.dynamiz.structure.Feedback;
 
 /**
- * Defines the UI for Dynamiz using Java Swing
- * 
+ * This is the UI class that will display the user interface to the user. It
+ * also receives user's input command to the Controller through the UI subclass
+ * Displayer and StyleUI before outputting the feedback onto the UI for the user
+ * to see.
  */
 
 public class UI extends JPanel implements ActionListener {
-	// Screen components
+	/** UI screen components */
 	protected JTextField inputScreen;
 	protected JTextPane displayScreen;
 
-	// Establish relations between UI & Display + Controller
-	public static DisplayFormatter disp = new DisplayFormatter();
-	public static Controller cont = new Controller();
+	/** Establish relations between UI, Displayer, Controller & StyleUI */
+	public static DisplayerFormatter displayer = new DisplayerFormatter();
+	public static Controller controller = new Controller();
+	private StyleUI style = new StyleUI();
 
-	// Formatting Constants
-	private StyledDocument doc;
+
+	/** UI display components */
+	private StyledDocument document;
 	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
 	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
-	
-	
+
+	/** Constants for basic sectioning of display in the UI */
 	private String DIVIDER = "================================================================================================";
 	private final static String NEWLINE = "\n";
-//	private final static String HELP_PROMPT = "Please enter 'help' for more information about the available options";
-	
-	// Styling Constants
-	private SimpleAttributeSet setStyleWhite;
-	private SimpleAttributeSet setStyleDefault;
-	private SimpleAttributeSet setStyleGreen;
-	private SimpleAttributeSet setStyleOrange;
-	private SimpleAttributeSet setStyleMagenta;
-	private SimpleAttributeSet setStyleRed;
-	private SimpleAttributeSet setStyleBlue;
-	private SimpleAttributeSet setStyleCyan;
-	private SimpleAttributeSet setStyleYellow;
 
-	// Logger: Creating Logger
+	/** A logger instance for this class */
 	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
 
 	public UI() {
 		super(new GridBagLayout());
 
-		// Logger: Set Level (Logger alert above Info level = Severe & Warning)
 		LoggerUI.setLevel(Level.INFO);
 
-		// Create Command Display - Screen
-		displayScreen = new JTextPane();
-		displayScreen.setEditable(false);
-		displayScreen.setFont(font);
-		displayScreen.setBackground(Color.BLACK);
-		displayScreen.setForeground(Color.WHITE);
+		intialiseUIScreen();
 
-		// Set tab size
-		TabStop[] tabs = new TabStop[1];
-		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
-		TabSet tabset = new TabSet(tabs);
-
-		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
-				StyleConstants.TabSet, tabset);
-		displayScreen.setParagraphAttributes(aset, false);
-
-		// Create Command Display - Scroll
-		JScrollPane scrollPane = new JScrollPane(displayScreen);
-
-		// Define size of Command Display - Screen
-		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
-
-		// / Create Command Input
-		inputScreen = new JTextField();
-		inputScreen.addActionListener(this);
-		inputScreen.setForeground(Color.BLUE);
-		inputScreen.setFont(fontInput);
-
-		// Add Command Display - Scroll and Command Input into Panel
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		add(scrollPane, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		add(inputScreen, c);
-
-		// Styling for Command Display - Screen
-		doc = displayScreen.getStyledDocument();
-
-		style();
-
-		// Display: Welcome message
 		try {
-			doc.insertString(0, disp.displayWelcomeMessage() + NEWLINE,
-					setStyleWhite);
-			doc.insertString(doc.getLength(), disp.displayPrompt(1) + NEWLINE,
-					setStyleWhite);
-	//		doc.insertString(doc.getLength(), HELP_PROMPT + NEWLINE, setStyleWhite);
+			displayWelcomeMessage();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		// Logging: Creation
 		LoggerUI.info("UI Created");
 	}
 
@@ -129,139 +72,75 @@ public class UI extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		String input = inputScreen.getText();
-		// Logging: Command Entered
 		LoggerUI.info("Command Entered");
 
 		try {
-
-			// Command: Exit
 			if (CommandType.fromString(input) == CommandType.EXIT) {
 				LoggerUI.info("Exit Dynamiz");
 				System.exit(0);
 			}
 
-			// Command: Flush
 			if (CommandType.fromString(input) == CommandType.FLUSH) {
-
-				// clear document screen
-				doc.remove(0, doc.getLength());
-				commandPromptDisplay(input);
-
-				// Feedback
-				doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
-				doc.insertString(doc.getLength(),
-						"Cleared screen successfully!" + NEWLINE, setStyleDefault);
-
-				// Logger: Flush screen
+				flushUI(input);
 				LoggerUI.info("Flush Screen");
 			} else {
 
-				commandPromptDisplay(input);
+				displayCommandPrompt(input);
 
-				// Command Feedback
-				Feedback feedback = cont.executeCommand(input);
-				ArrayList<StrIntPair> returnResult = disp
+				Feedback feedback = controller.executeCommand(input);
+				ArrayList<StrIntPair> returnResult = displayer
 						.displayFeedback(feedback);
 				assert (returnResult != null);
 
-				// Feedback Display
-				doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
+				/** Displays Feedback */
+				document.insertString(document.getLength(), DIVIDER + NEWLINE,
+						style.getStyleDefault());
 
 				for (int i = 0; i < returnResult.size(); i++) {
 					printWithStyle(returnResult, i);
 				}
 
-				// Logging: Return Command Feedback
 				LoggerUI.info("Return Command Feedback");
 
 			}
 		} catch (Exception e) {
-			// Logging: Exception from actionPerformed
-			LoggerUI.warning("Exception @ actionPerformed()");
 			System.out.println(e);
+			LoggerUI.warning("Exception @ actionPerformed()");
 		}
 
-		// Additional Feature: Retained Last-Entered Command
+		retainLastEnteredCommand();
+	}
+
+	/**
+	 * Retains last entered command from inputScreen(JTextField). The command is
+	 * highlighted for easy editing & re-entering.
+	 */
+	private void retainLastEnteredCommand() {
 		inputScreen.selectAll();
 		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
 	}
 
-	private void printWithStyle(ArrayList<StrIntPair> returnResult, int i)
-			throws BadLocationException {
-		switch (returnResult.get(i).getInt()) {
-		case 1:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleGreen);
-			break;
-		case 2:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleOrange);
-			break;
-		case 4:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleMagenta);
-			break;
-		case 8:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleRed);
-			break;
-		// Display Color (Status)
-		// ----------------------------------------------------------
-		case 10:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleBlue);
-			break;
-		case 11:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleCyan);
-			break;
-
-		default:
-			doc.insertString(doc.getLength(), returnResult.get(i)
-					.getString(), setStyleDefault);
-			break;
-		}
-	}
-
-	private void commandPromptDisplay(String input) throws BadLocationException {
-		// Command Prompt Display
-		doc.insertString(doc.getLength(), DIVIDER + NEWLINE, setStyleDefault);
-		doc.insertString(doc.getLength(), disp.displayPrompt(), setStyleYellow);
-		doc.insertString(doc.getLength(), input + NEWLINE, setStyleYellow);
-
-	}
-
-	// -------------------------------------------------------------------------------------------------
-
 	/**
-	 * Creates the GUI and displays it
-	 */
-	public static void Screen() {
-		// Create and set up the window.
-		JFrame frame = new JFrame("Dynamiz");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// Add contents to the window.
-		frame.add(new UI());
-		displayScreen(frame);
-	}
-
-	/**
-	 * Displays the Frame
+	 * Flushes the inputScreen(JTextField) when the user input comes in any
+	 * variations of CommandType.FLUSH
 	 * 
-	 * @param frame
+	 * @param input
+	 * @throws BadLocationException
 	 */
-	private static void displayScreen(JFrame frame) {
-		frame.pack();
-		frame.setVisible(true);
-		// Logging: Frame = visible
-		LoggerUI.info("displayScreen visible");
+	private void flushUI(String input) throws BadLocationException {
+		// clear document screen
+		document.remove(0, document.getLength());
+		displayCommandPrompt(input);
 
+		// Feedback
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
+				style.getStyleDefault());
+		document.insertString(document.getLength(),
+				"Cleared screen successfully!" + NEWLINE,
+				style.getStyleDefault());
 	}
 
 	public static void main(String[] args) {
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
@@ -278,34 +157,119 @@ public class UI extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Defines the stylesheet for displaying (Hightlight & Priority)
+	 * Intialises the UI JTextPane. JTextPane creation, specification of Tab
+	 * Settings, JTextField creation, scrollPane constraints and setting up
+	 * StyledDocument to format output styles.
 	 */
-	private void style() {
-		setStyleDefault = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleDefault, Color.WHITE);
+	private void intialiseUIScreen() {
+		displayScreen = new JTextPane();
+		displayScreen.setEditable(false);
+		displayScreen.setFont(font);
+		displayScreen.setBackground(Color.BLACK);
+		displayScreen.setForeground(Color.WHITE);
 
-		setStyleWhite = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleWhite, Color.WHITE);
+		setTabSettings();
 
-		setStyleGreen = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleGreen, Color.GREEN);
+		JScrollPane scrollPane = new JScrollPane(displayScreen);
+		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
 
-		setStyleOrange = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleOrange, Color.ORANGE);
+		inputScreen = new JTextField();
+		inputScreen.addActionListener(this);
+		inputScreen.setForeground(Color.BLUE);
+		inputScreen.setFont(fontInput);
 
-		setStyleMagenta = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleMagenta, Color.MAGENTA);
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		add(scrollPane, constraints);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		add(inputScreen, constraints);
 
-		setStyleRed = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleRed, Color.RED);
-
-		setStyleBlue = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleBlue, Color.BLUE);
-
-		setStyleCyan = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleCyan, Color.CYAN);
-
-		setStyleYellow = new SimpleAttributeSet();
-		StyleConstants.setForeground(setStyleYellow, Color.YELLOW);
+		document = displayScreen.getStyledDocument();
 	}
+
+	/**
+	 * Defines the tab size specifications for JTextPane
+	 */
+	private void setTabSettings() {
+		TabStop[] tabs = new TabStop[4];
+		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
+		tabs[1] = new TabStop(100, TabStop.ALIGN_LEFT, TabStop.LEAD_NONE);
+		tabs[2] = new TabStop(200, TabStop.ALIGN_CENTER, TabStop.LEAD_NONE);
+		tabs[3] = new TabStop(300, TabStop.ALIGN_DECIMAL, TabStop.LEAD_NONE);
+		TabSet tabset = new TabSet(tabs);
+
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+				StyleConstants.TabSet, tabset);
+		displayScreen.setParagraphAttributes(aset, false);
+	}
+
+	/**
+	 * References StyleUI to return the appropriate getStyleType based on the
+	 * Priority Value (OptionType) or the Status Settings
+	 * (StyleUI.STATUS_PENDING or StyleUI.STATUS_COMPLETED).
+	 * 
+	 * @param returnResult
+	 * @param styleValue
+	 * @throws BadLocationException
+	 */
+	private void printWithStyle(ArrayList<StrIntPair> returnResult,
+			int styleValue) throws BadLocationException {
+		document.insertString(document.getLength(), returnResult
+				.get(styleValue).getString(), style.getStyleType(returnResult
+				.get(styleValue).getInt()));
+	}
+
+	/**
+	 * Displays the welcome message onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * Welcome to Dynamiz!
+	 * Type 'help' in the space below for more information!
+	 * Please enter command in the space below:
+	 * 
+	 * @throws BadLocationException
+	 */
+	private void displayWelcomeMessage() throws BadLocationException {
+		document.insertString(0, displayer.displayWelcomeMessage() + NEWLINE,
+				style.getStyleWhite());
+		document.insertString(document.getLength(), displayer.displayPrompt(1)
+				+ NEWLINE, style.getStyleWhite());
+	}
+
+	/**
+	 * Displays the command prompt onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * ================================================================================================
+	 * command: <user-entered command>
+	 * 
+	 * @param input
+	 * @throws BadLocationException
+	 */
+	private void displayCommandPrompt(String input) throws BadLocationException {
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
+				style.getStyleDefault());
+		document.insertString(document.getLength(), displayer.displayPrompt(),
+				style.getStyleYellow());
+		document.insertString(document.getLength(), input + NEWLINE,
+				style.getStyleYellow());
+
+	}
+
+	/**
+	 * Creates the Frame (JFrame) for the UI
+	 */
+	public static void Screen() {
+		JFrame frame = new JFrame("Dynamiz");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(new UI());
+
+		frame.pack();
+		frame.setVisible(true);
+		
+		LoggerUI.info("displayScreen visible");
+	}
+
 }

@@ -1,4 +1,4 @@
-package edu.dynamic.dynamiz.controller;
+package edu.dynamic.dynamiz.controller.unitTest;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,11 @@ import java.util.Stack;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandAdd;
+import edu.dynamic.dynamiz.controller.CommandRedo;
+import edu.dynamic.dynamiz.controller.CommandUndo;
+import edu.dynamic.dynamiz.controller.Undoable;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**

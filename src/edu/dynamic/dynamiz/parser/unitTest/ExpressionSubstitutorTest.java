@@ -1,10 +1,13 @@
 //@author A0113855E
-package edu.dynamic.dynamiz.parser;
+package edu.dynamic.dynamiz.parser.unitTest;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.parser.ExpressionSubstitutor;
+
+//@author A0113855E
 public class ExpressionSubstitutorTest {
 
 	@Test

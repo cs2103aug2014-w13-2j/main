@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * be used in the UI requires JDK8 while the project environment runs on JRE7.
  */
 public class GUI extends Application {
-	public static DisplayFormatter disp = new DisplayFormatter();
+	public static DisplayerFormatter disp = new DisplayerFormatter();
 
 	@Override
 	public void start(Stage primaryStage) {

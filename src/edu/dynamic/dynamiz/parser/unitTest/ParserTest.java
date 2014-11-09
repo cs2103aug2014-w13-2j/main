@@ -1,5 +1,5 @@
 //@author A0113855E
-package edu.dynamic.dynamiz.parser;
+package edu.dynamic.dynamiz.parser.unitTest;
 
 import static org.junit.Assert.*;
 
@@ -13,11 +13,16 @@ import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.parser.CommandLine;
+import edu.dynamic.dynamiz.parser.Option;
+import edu.dynamic.dynamiz.parser.OptionType;
+import edu.dynamic.dynamiz.parser.Parser;
 import edu.dynamic.dynamiz.structure.MyDate;
 
 
 /**
  * Test program to understand the output of parser.
+ * @author nhan
  */
 
 public class ParserTest {

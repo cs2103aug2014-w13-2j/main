@@ -1,9 +1,10 @@
-package edu.dynamic.dynamiz.controller;
+package edu.dynamic.dynamiz.controller.unitTest;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.controller.Controller;
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
 import edu.dynamic.dynamiz.structure.EventItem;
 import edu.dynamic.dynamiz.structure.Feedback;
