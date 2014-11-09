@@ -31,7 +31,7 @@ public class UI extends JPanel implements ActionListener {
 	protected JTextPane displayScreen;
 
 	// Establish relations between UI & Display + Controller
-	public static DisplayFormatter disp = new DisplayFormatter();
+	public static DisplayerFormatter disp = new DisplayerFormatter();
 	public static Controller cont = new Controller();
 
 	// Formatting Constants

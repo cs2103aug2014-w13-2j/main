@@ -11,7 +11,7 @@ import edu.dynamic.dynamiz.structure.*;
  * Acts as the information interpreter of Feedback items and formatter for UI
  * */
 
-public class DisplayFormatter implements DisplayerInterface {
+public class DisplayerFormatter implements DisplayerFormatterInterface {
 	
 	static private final String NULL_STRING = "null object";
 	/**
@@ -43,7 +43,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayWelcomeMessage()
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayWelcomeMessage()
 	 */
 	public String displayWelcomeMessage(){
 		return WELCOME_MESSAGE;
@@ -84,7 +84,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskItem(TaskItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskItem(TaskItem)
 	 */
 	@Override
 	public String displayTaskItem(TaskItem task) {
@@ -93,7 +93,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskFile(TaskItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskFile(TaskItem)
 	 */
 	@Override
 	public String displayTaskFile(TaskItem task) {
@@ -102,7 +102,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskFeedback(TaskItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskFeedback(TaskItem)
 	 */
 	@Override
 	public String displayTaskFeedback(TaskItem task) {
@@ -125,7 +125,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(TaskItem[])
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskList(TaskItem[])
 	 */
 	@Override
 	public String displayTaskList(TaskItem[] taskList) {
@@ -138,7 +138,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventFeedback(EventItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventFeedback(EventItem)
 	 */
 	@Override
 	public String displayEventFeedback(EventItem event) {
@@ -147,7 +147,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventFile(EventItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventFile(EventItem)
 	 */
 	@Override
 	public String displayEventFile(EventItem event) {
@@ -156,7 +156,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventItem(EventItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventItem(EventItem)
 	 */
 	@Override
 	public String displayEventItem(EventItem event) {
@@ -170,15 +170,15 @@ public class DisplayFormatter implements DisplayerInterface {
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
 		assert eventList!=null;
-		StringBuilder s = new StringBuilder();
+		StringBuilder strB = new StringBuilder();
 		for(int i = 0; i< eventList.size(); i++){
-			s.append(eventList.get(i).toString()).append("\n");
+			strB.append(eventList.get(i).toString()).append("\n");
 		}
-		return s.toString();
+		return strB.toString();
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(EventItem[])
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventList(EventItem[])
 	 */
 	@Override
 	public String displayEventList(EventItem[] eventList) {
@@ -191,7 +191,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoItem(ToDoItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoItem(ToDoItem)
 	 */
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
@@ -200,7 +200,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoFeedback(ToDoItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFeedback(ToDoItem)
 	 */
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
@@ -209,7 +209,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoFile(ToDoItem)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFile(ToDoItem)
 	 */
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
@@ -218,7 +218,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoList(ArrayList)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ArrayList)
 	 */
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
@@ -231,7 +231,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoList(ToDoItem[])
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ToDoItem[])
 	 */
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
@@ -244,7 +244,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayPrompt()
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt()
 	 */
 	public String displayPrompt() {
 		String s = new String ("Command: ");
@@ -252,7 +252,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	}	
 	
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayPrompt(int)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt(int)
 	 */
 	public String displayPrompt(int promptTag) {
 		String tag = new String();
@@ -284,7 +284,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	/**
 	 * Receive a @param Feedback Object 
 	 * @return ArrayList<StrIntPair>
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
 	 */
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
@@ -439,16 +439,15 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	
 	private int getFeedbackTag(Feedback f){
-		String t =f.getClassName();
-		if(t.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
-		if(t.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
-		if(t.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
+		String fname =f.getClassName();
+		if(fname.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
+		if(fname.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
+		if(fname.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
 		return FEEDBACK_TAG;		
-
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayHelpPage()
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayHelpPage()
 	 */
 	@Override
 	public ArrayList<StrIntPair> displayHelpPage() {

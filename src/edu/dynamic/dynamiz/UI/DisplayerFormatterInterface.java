@@ -11,7 +11,7 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 /**
  * Interface class for Displayer
  */
-public interface DisplayerInterface {
+public interface DisplayerFormatterInterface {
 	
 	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!\nPlease enter \"help\" for more information about the available commands!";
 	
@@ -183,8 +183,6 @@ public interface DisplayerInterface {
 	 * @return A formatted String of the FileString of this todoItem 
 	 */
 	public String displayToDoFile(ToDoItem todoItem);
-	
-
 	
 	/**
 	 * @return

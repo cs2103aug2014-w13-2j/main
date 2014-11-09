@@ -1,8 +1,8 @@
 package edu.dynamic.dynamiz.UI;
-
+//unused
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-public class DisplayStub extends DisplayFormatter {
+public class DisplayStub extends DisplayerFormatter {
    // @Override
     public void WelcomeMessage(){
 	System.out.println(super.displayWelcomeMessage());

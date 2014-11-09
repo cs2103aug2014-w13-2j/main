@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import edu.dynamic.dynamiz.UI.DisplayFormatter;
+import edu.dynamic.dynamiz.UI.DisplayerFormatter;
 import edu.dynamic.dynamiz.structure.*;
 
 // @author A0119397R
@@ -14,7 +14,7 @@ import edu.dynamic.dynamiz.structure.*;
  * The JUnit Test for DispayerFormatter
  */
 public class TestDisplayerFormatter {
-	DisplayFormatter dp = new DisplayFormatter();
+	DisplayerFormatter dp = new DisplayerFormatter();
 		
 	@Test
 	public void testDisplayTask(){
