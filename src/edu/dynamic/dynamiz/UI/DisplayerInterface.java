@@ -14,28 +14,48 @@ import edu.dynamic.dynamiz.structure.ToDoItem;
 public interface DisplayerInterface {
 	
 	static final String WELCOME_MESSAGE= "Welcome to Dynamiz!\nPlease enter \"help\" for more information about the available commands!";
-
+	
+	/**
+	 * Integer Tag for different Feedback type
+	 */
 	static final int FEEDBACK_TAG = 1;
 	static final int ERROR_FEEDBACK_TAG = 2;
 	static final int SUCCESS_FEEDBACK_TAG = 3;
 	static final int HELP_FEEDBACK_TAG = 4;
 	
+	/**
+	 * Integer Tag for different types of prompt
+	 */
 	static final int ENTER_COMMAND_PROMPT = 1;
 	static final int ENTER_ITEM_PROMPT = 2;
 	static final int ENTER_TASK_INDEX_PROMPT = 3;
 	static final int ENTER_TIME_PROMPT = 4;
 	static final int INVALID_COMMAND_PROMPT = 5;
 	
+	/**
+	 * String content for different prompt
+	 */
 	static final String ENTER_COMMAND_STR = "Please Enter Command.";
 	static final String ENTER_VALID_COMMAND_STR = "Please Enter Valid Command.";
 	static final String ENTER_TIME_PERIOD_STR = "Please Enter Time Period: ";
 	static final String ENTER_TASK_INDEX_STR = "Please Enter Index: ";
 	
-	static final String STATU_PEND ="pending";
-	static final String STATU_COMPLETE ="completed";
+	/**
+	 * Integer Tag for two different types of States
+	 */
 	static final int STATU_PEND_TAG = 11;
 	static final int STATU_COMPLETE_TAG = 10;
+	/**
+	 * String content for States
+	 */
+	static final String STATU_PEND ="pending";
+	static final String STATU_COMPLETE ="completed";
+	
+	
 
+	/**
+	 * String content for different command
+	 */
 	static final String UPDATE_COMMAND = "update";
 	static final String SHOW_COMMAND = "show";
 	static final String ADD_COMMAND = "add";
@@ -114,7 +134,18 @@ public interface DisplayerInterface {
 	 * @return A formatted String of the content of this event item
 	 */
 	public String displayEventItem(EventItem event);
+	
+	/**
+	 * @param event
+	 * @return A formatted String of the Feedback string of this event item
+	 */
 	public String displayEventFeedback(EventItem event);
+	
+	
+	/**
+	 * @param event
+	 * @return A formatted String of the FileString of this event item
+	 */
 	public String displayEventFile(EventItem event);
 	
 	/**
@@ -122,9 +153,28 @@ public interface DisplayerInterface {
 	 * @return String of formatted todoList
 	 */
 	public String displayToDoList(ArrayList<ToDoItem> todoList);
+	
+	/**
+	 * @param todoList
+	 * @return A formatted String of the content of this todoList
+	 */
 	public String displayToDoList(ToDoItem[] todoList);
+	
+	/**
+	 * @param todoItem
+	 * @return A formatted String of the content of this todoItem
+	 */
 	public String displayToDoItem(ToDoItem todoItem);
+	/**
+	 * @param todoItem
+	 * @return Formatted Feedback String of todoItem
+	 */
 	public String displayToDoFeedback(ToDoItem todoItem);
+	
+	/**
+	 * @param todoItem
+	 * @return A formatted String of the FileString of this todoItem 
+	 */
 	public String displayToDoFile(ToDoItem todoItem);
 	
 
