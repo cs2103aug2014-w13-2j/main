@@ -47,8 +47,19 @@ public interface DisplayerInterface {
 	 * @return ArrayList<StrIntPair>
 	 */
 	public ArrayList<StrIntPair> displayFeedback (Feedback commandFeedBack);
+	
 
+	/**
+	 * @return Welcome Message
+	 */
 	public String displayWelcomeMessage();
+	
+	
+	/**
+	 * @param ArrayList<String>
+	 * format it into a single string
+	 * @return String
+	 */
 	public String displayStringList(ArrayList<String> arr);
 	
 	
@@ -57,9 +68,33 @@ public interface DisplayerInterface {
 	 * @return String of formatted taskList
 	 */
 	public String displayTaskList(ArrayList<TaskItem> taskList);
+	
+	
+	/**
+	 * @param taskList
+	 * @return Formatted String of the content of taskList
+	 */
 	public String displayTaskList(TaskItem[] taskList);
+	
+	
+	/**
+	 * @param task
+	 * @return Formatted String of the content of task
+	 */
 	public String displayTaskItem(TaskItem task);
+	
+	
+	/**
+	 * @param task
+	 * @return Feedback String of the task
+	 */
 	public String displayTaskFeedback(TaskItem task);
+	
+	
+	/**
+	 * @param task
+	 * @return TaskFilestring of this task
+	 */
 	public String displayTaskFile(TaskItem task);
 	
 	/**
@@ -67,7 +102,17 @@ public interface DisplayerInterface {
 	 * @return String of formatted eventList
 	 */
 	public String displayEventList(ArrayList<EventItem> eventList);
+	
+	/**
+	 * @param eventList
+	 * @return A formatted string of the content of this eventList
+	 */
 	public String displayEventList(EventItem[] eventList);
+	
+	/**
+	 * @param event
+	 * @return A formatted String of the content of this event item
+	 */
 	public String displayEventItem(EventItem event);
 	public String displayEventFeedback(EventItem event);
 	public String displayEventFile(EventItem event);
