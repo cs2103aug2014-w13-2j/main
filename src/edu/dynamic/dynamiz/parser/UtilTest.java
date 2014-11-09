@@ -6,7 +6,10 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
+
+import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
  * Test program to validate Util.
@@ -16,9 +19,10 @@ public class UtilTest {
 	Util util = new Util();
 	private List<String> expectedList;
 	private List<String> testList;
+	private List<Integer> expectedIntList;
+	private List<Integer> testIntList;
 	String expectedString;
 	String testString;
-	private String[] expectedArray;
 	private String[] testArray;
 	private final int N = 10;
 
@@ -42,101 +46,160 @@ public class UtilTest {
 	@SuppressWarnings("static-access")
 	@Test
 	public final void testRemoveEmptyStringsInArray() {
-		expectedArray = new String[N];
+		expectedList = new ArrayList<String>();
 		testArray = new String[N];
 
 		testArray[0] = "test string";
-		expectedArray[0] = "test string";
+		expectedList.add("test string");
 
 		for (int i = 1; i < N; i++) {
 			testArray[i] = "";
 		}
-		assertEquals(expectedArray, util.removeEmptyStringsInArray(testArray));
-
-		// Empty String Case
-		testList.add("");
-		testList.add("");
-		assertEquals(expectedArray, util.removeEmptyStringsInArray(testArray));
+		assertEquals(expectedList, util.removeEmptyStringsInArray(testArray));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testStripFirstWordString() {
-		fail("Not yet implemented"); // TODO
+		String str = "add hello world";
+		assertEquals("hello world",util.stripFirstWord(str));
+		str = "";
+		assertEquals("",util.stripFirstWord(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testStripFirstWordStringString() {
-		fail("Not yet implemented"); // TODO
+		String str = "add hello -world";
+		String deliminator = "-";
+		assertEquals("-world",util.stripFirstWord(str, deliminator));
+		str = "";
+		assertEquals("",util.stripFirstWord(str, deliminator));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testGetFirstWordString() {
-		fail("Not yet implemented"); // TODO
+		String str = "add hello world";
+		assertEquals("add",util.getFirstWord(str));
+		str = "";
+		assertEquals("",util.getFirstWord(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testGetFirstWordStringString() {
-		fail("Not yet implemented"); // TODO
+		String str = "add hello -world";
+		String deliminator = "-";
+		assertEquals("add hello ",util.getFirstWord(str, deliminator));
+		str = "";
+		assertEquals("",util.getFirstWord(str, deliminator));
 	}
 
-	@Test
-	public final void testStripLeadingHyphens() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testStripLeadingAndTrailingQuotes() {
-		fail("Not yet implemented"); // TODO
-	}
-
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testIsNumber() {
-		fail("Not yet implemented"); // TODO
+		String str = "12312";
+		assertTrue(util.isNumber(str));
+		str = "12asds";
+		assertFalse(util.isNumber(str));
+		str = "12.2";
+		assertTrue(util.isNumber(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testIsInteger() {
-		fail("Not yet implemented"); // TODO
+		String str = "12312";
+		assertTrue(util.isInteger(str));
+		str = "12asds";
+		assertFalse(util.isInteger(str));
+		str = "12.2";
+		assertFalse(util.isInteger(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testIsValidNumberRange() {
-		fail("Not yet implemented"); // TODO
+		String range = "12-13";
+		assertTrue(util.isValidNumberRange(range));
+		range = "12-12";
+		assertTrue(util.isValidNumberRange(range));
+		range = "12313-2";
+		assertFalse(util.isValidNumberRange(range));
 	}
 
-	@Test
+	@SuppressWarnings("static-access")
+	@Test(expected = IllegalArgumentException.class)
 	public final void testGetNumberListFromRange() {
-		fail("Not yet implemented"); // TODO
+		expectedIntList = new ArrayList<Integer>();
+		String range = "12-13";
+		expectedIntList.add(12);
+		expectedIntList.add(13);
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
+		
+		range = "12-12";
+		expectedIntList.clear();
+		expectedIntList.add(12);		
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
+		
+		range = "12313-2";
+		expectedIntList.clear();
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testEscapeString() {
-		fail("Not yet implemented"); // TODO
+		String str = "hello;world";
+		assertEquals("helloworld",util.escapeString(str));
+		str = "hello world";
+		assertEquals("hello world",util.escapeString(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testAddEscapeCapacityToRegex() {
-		fail("Not yet implemented"); // TODO		
+		String str = "hello world";
+		assertEquals("(?<!;)hello world",util.addEscapeCapacityToRegex(str));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testToIntArray() {
-		fail("Not yet implemented"); // TODO
+		int[] expectedArray = {1,1,1};
+		testIntList = new ArrayList<Integer>();
+		testIntList.add(1);
+		testIntList.add(1);
+		testIntList.add(1);
+
+		int[] outputArray = util.toIntArray(testIntList);
+		for (int i=0;i<3;i++){
+			assertEquals(expectedArray[i],outputArray[i]);
+		}
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testConvertStringToMyDate() {
-		fail("Not yet implemented"); // TODO
+		String str = "11/12/2014";
+		MyDate date = util.convertStringToMyDate(str);
+		assertEquals(11,date.getDayOfMonth());
+		assertEquals(12,date.getMonth());
+		assertEquals(2014,date.getYear());
+			
 	}
 
 	@Test
 	public final void testConvertJodaToMyDate() {
-		fail("Not yet implemented"); // TODO
+		DateTime dt = new DateTime(2011,11,11,8,00);
+		assertEquals("11/11/2011", Util.convertJodaToMyDate(dt).toString());
 	}
 
 	@Test
 	public final void testConvertJodaToMyDateTime() {
-		fail("Not yet implemented"); // TODO
+		DateTime dt = new DateTime(2011,11,11,8,00);
+		assertEquals("11/11/2011 8:00", Util.convertJodaToMyDateTime(dt).toString());		
 	}
 
 }

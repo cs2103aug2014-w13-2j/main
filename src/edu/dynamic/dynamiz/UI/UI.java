@@ -264,7 +264,6 @@ public class UI extends JPanel implements ActionListener {
 	public static void Screen() {
 		JFrame frame = new JFrame("Dynamiz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		frame.add(new UI());
 
 		frame.pack();
