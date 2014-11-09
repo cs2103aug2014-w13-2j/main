@@ -189,21 +189,37 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoItem(ToDoItem)
+	 */
 	@Override
 	public String displayToDoItem(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoFeedback(ToDoItem)
+	 */
 	@Override
 	public String displayToDoFeedback(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.getFeedbackString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoFile(ToDoItem)
+	 */
 	@Override
 	public String displayToDoFile(ToDoItem todoItem) {
 		assert todoItem !=null;
 		return todoItem.toFileString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoList(ArrayList)
+	 */
 	@Override
 	public String displayToDoList(ArrayList<ToDoItem> todoList) {
 		assert todoList !=null;
@@ -213,6 +229,10 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayToDoList(ToDoItem[])
+	 */
 	@Override
 	public String displayToDoList(ToDoItem[] todoList) {
 		assert todoList !=null;		
@@ -222,11 +242,18 @@ public class DisplayFormatter implements DisplayerInterface {
 		}
 		return s.toString();
 	}
+	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayPrompt()
+	 */
 	public String displayPrompt() {
 		String s = new String ("Command: ");
 		return s;
 	}	
 	
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayPrompt(int)
+	 */
 	public String displayPrompt(int promptTag) {
 		String tag = new String();
 		switch(promptTag){
@@ -256,10 +283,9 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	/**
 	 * Receive a @param Feedback Object 
-	 * 
 	 * @return ArrayList<StrIntPair>
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
 	 */
-	
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
 		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
 		assert commandFeedback!=null;	
@@ -375,7 +401,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
 		contentList.add(new StrIntPair(String.format(strForStat,stas),stasTag));
 		contentList.add(new StrIntPair(strForEndLine));
-
 	}
 
 	/**Format task list for chunk display
@@ -422,6 +447,9 @@ public class DisplayFormatter implements DisplayerInterface {
 
 	}
 
+	/**
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayHelpPage()
+	 */
 	@Override
 	public ArrayList<StrIntPair> displayHelpPage() {
 		ArrayList<StrIntPair> printContentList = new ArrayList<StrIntPair>();
