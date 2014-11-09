@@ -1,0 +1,10 @@
+edu.dynamic.dynamiz.UI
+edu.dynamic.dynamiz.UI.unitTest
+edu.dynamic.dynamiz.controller
+edu.dynamic.dynamiz.controller.unitTest
+edu.dynamic.dynamiz.parser
+edu.dynamic.dynamiz.parser.unitTest
+edu.dynamic.dynamiz.storage
+edu.dynamic.dynamiz.structure
+edu.dynamic.dynamiz.structure.unitTest
+main
