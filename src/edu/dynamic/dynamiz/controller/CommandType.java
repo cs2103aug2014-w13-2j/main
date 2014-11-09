@@ -50,7 +50,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, LIST("l", "ls", "display", "show") {
+	}, LIST("l", "ls", "display") {
 		private final OptionType[] optionsArray = {OptionType.ORDER_BY,
 												   OptionType.START_TIME,
 												   OptionType.END_TIME,
@@ -115,7 +115,7 @@ public enum CommandType {
 		public List<OptionType> getApplicableOptions() {
 			return Arrays.asList(optionsArray);
 		}
-	}, FLUSH("f", "c", "clear", "~") {
+	}, FLUSH("f", "c", "clear") {
 		private final OptionType[] optionsArray = {};
 
 		@Override
