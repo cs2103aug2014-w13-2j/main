@@ -103,14 +103,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		
 		else if(sf.getCommandType().equalsIgnoreCase(UPDATE_COMMAND)){
 			assert(UpdateComdListLength == list.length);
-			displayContentList.add(new StrIntPair(displayParaLine()));
-			displayContentList.add(new StrIntPair("Item affected:\n"));
-			
-			formatTaskChunk(displayContentList,list[0]);
-			
-			displayContentList.add(new StrIntPair(displayParaLine()));
-			displayContentList.add(new StrIntPair("Updated Item:\n"));
-			formatTaskChunk(displayContentList,list[1]);		
+			formatUpdateComd(displayContentList,list);	
 		}
 
 		else{ 
@@ -129,6 +122,16 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		formatTaskChunk(displayContentList,list[0]);	
 	}
 	
+	private void formatUpdateComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list){
+		displayContentList.add(new StrIntPair(displayParaLine()));
+		displayContentList.add(new StrIntPair("Item affected:\n"));
+		
+		formatTaskChunk(displayContentList,list[0]);
+		
+		displayContentList.add(new StrIntPair(displayParaLine()));
+		displayContentList.add(new StrIntPair("Updated Item:\n"));
+		formatTaskChunk(displayContentList,list[1]);		
+	}
 	/**
 	 * Format task list for list display
 	 * @param contentList
