@@ -1,7 +1,9 @@
-package edu.dynamic.dynamiz.controller;
+package edu.dynamic.dynamiz.controller.unitTest;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandList;
 import edu.dynamic.dynamiz.parser.OptionType;
 import edu.dynamic.dynamiz.structure.MyDate;
 import edu.dynamic.dynamiz.structure.ToDoItem;

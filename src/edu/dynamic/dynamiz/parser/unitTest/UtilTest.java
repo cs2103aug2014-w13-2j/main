@@ -1,5 +1,5 @@
 //@author A0114573J
-package edu.dynamic.dynamiz.parser;
+package edu.dynamic.dynamiz.parser.unitTest;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.parser.Util;
 import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
