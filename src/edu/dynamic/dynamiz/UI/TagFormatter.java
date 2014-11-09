@@ -4,7 +4,7 @@ package edu.dynamic.dynamiz.UI;
 
 /**
  * For V0.3 we tried to switch to using JavaFX for GUI
- * This TagFormat is reserved for adding html div tag to string content 
+ * This TagFormat class is reserved for adding html div tag to string content 
  * Hence facilitates GUI to display certain string according to its div class tag
  */
 class TagFormat{

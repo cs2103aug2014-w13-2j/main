@@ -60,6 +60,13 @@ public interface DisplayerInterface {
 	static final String SHOW_COMMAND = "show";
 	static final String ADD_COMMAND = "add";
 	
+	
+	/**
+	 * Format for feedback item
+	 */
+	static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+			"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s ";
+	
 	/**
 	 * Receive @param commandFeedBack 
 	 * Fetch feedback information and format it in a readable form

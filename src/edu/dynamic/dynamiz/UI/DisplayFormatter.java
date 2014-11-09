@@ -12,8 +12,8 @@ import edu.dynamic.dynamiz.structure.*;
  * */
 
 public class DisplayFormatter implements DisplayerInterface {
-
 	
+	static private final String NULL_STRING = "null object";
 	/**
 	 * @param Format Calendar object to readable string
 	 * @return
@@ -60,7 +60,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	
 	@Override
 	public String displayStringList(ArrayList<String> arr) {	
-		if(arr == null) return "null";
+		if(arr == null) return NULL_STRING;
 		StringBuilder s = new StringBuilder();
 
 		for(int i=0;i<arr.size();i++){
@@ -189,7 +189,7 @@ public class DisplayFormatter implements DisplayerInterface {
 			tag = ENTER_COMMAND_STR;
 			break;
 		case ENTER_ITEM_PROMPT:
-			tag = "Please Enter Task: ";
+			tag = ENTER_COMMAND_STR;
 			break;
 		case ENTER_TASK_INDEX_PROMPT:
 			tag = ENTER_TASK_INDEX_STR;
@@ -197,7 +197,6 @@ public class DisplayFormatter implements DisplayerInterface {
 		case ENTER_TIME_PROMPT:
 			tag = ENTER_TIME_PERIOD_STR;
 			break;
-
 		case INVALID_COMMAND_PROMPT:
 			tag = ENTER_VALID_COMMAND_STR;
 			break;
@@ -341,8 +340,7 @@ public class DisplayFormatter implements DisplayerInterface {
 	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
 		assert item!=null;
 		assert contentList!=null;
-		final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
-				"Start: %4$s\n"+"End: %5$s\n"+"Status: %7$s ";
+		
 		int ID = item.getId();
 		String des = item.getDescription();
 		int pri = item.getPriority();
