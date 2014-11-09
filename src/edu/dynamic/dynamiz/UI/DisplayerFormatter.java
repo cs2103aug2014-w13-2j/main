@@ -12,41 +12,230 @@ import edu.dynamic.dynamiz.structure.*;
  * */
 
 public class DisplayerFormatter implements DisplayerFormatterInterface {
-	
+	private final static Logger LoggerDisplayer = Logger.getLogger(DisplayerFormatter.class.getName());
 	static private final String NULL_STRING = "null object";
-	/**
-	 * @param 
-	 * @return String
-	 * Format Calendar object to readable string
-	 */
-	public String dateFormatter(Calendar c){
-		String s = String.format("%1$tm,%1$te",c);
-		return s;	
-	}
-	/**
-	 * @param 
-	 * @return 
-	 * Format MyDate object to readable string
-	 */
-	public String dateFormatter(MyDate d){
-		String s = String.format("%tm,%td,%ty", d);
-		return s;
-	}
-	/**
-	 * @param d
-	 * @return
-	 * Format MyDate object to readable string
-	 */
-	public String timeFormatter(MyDate d){
-		String s = String.format("%tH:%tM", d);
-		return s;
-	}
-	
+
+	private final int ShowComdListLength = 1;
+	private final int UpdateComdListLength = 2;
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayWelcomeMessage()
 	 */
 	public String displayWelcomeMessage(){
 		return WELCOME_MESSAGE;
+	}
+
+
+	/**
+	 * Receive a @param Feedback Object 
+	 * @return ArrayList<StrIntPair>
+	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
+	 */
+	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
+		LoggerDisplayer.info("displayFeedback called");	
+		assert commandFeedback!=null;	
+		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
+		String s = new String(); 
+		int t = getFeedbackTag(commandFeedback);
+		/**
+		 * Check which subclass this Feedback Object belongs to and format accordingly
+		 */
+		switch(t){		
+			case HELP_FEEDBACK_TAG:
+				HelpFeedback hf = (HelpFeedback)commandFeedback; 
+				getHelpFeedbackContent(displayContentList,hf);
+				break;		
+	
+			case ERROR_FEEDBACK_TAG:
+				ErrorFeedback ef = (ErrorFeedback)commandFeedback; 	
+				getErrorFeedbackContent(displayContentList,ef);
+				break;	
+				
+			case SUCCESS_FEEDBACK_TAG:
+				SuccessFeedback sf = (SuccessFeedback) commandFeedback;
+				getSucFeedbackContent(displayContentList,sf);		
+				break;
+				
+			default:
+				s = "Invalid Instruction\n";
+				displayContentList.add(new StrIntPair(s));
+		}
+		LoggerDisplayer.info("displayFeedback return ");
+		return  displayContentList;	
+	}
+
+	private void getHelpFeedbackContent(ArrayList<StrIntPair> displayContentList, HelpFeedback hf){
+		String s = new String();
+		s = hf.getHelpContent();
+		s+="\n";
+		displayContentList.add(new StrIntPair(s));
+	}
+
+	public void getErrorFeedbackContent(ArrayList<StrIntPair> displayContentList, ErrorFeedback ef){
+		String s = new String();
+		s=ef.getMessage();
+		s+="\n";
+		displayContentList.add(new StrIntPair(s));
+	}
+	
+	public void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
+		assert(displayContentList!=null);
+		LoggerDisplayer.info("getSucFeedbackContent called");
+		String s = new String();
+		s  = sf.getCommandType()+" successfully!";
+		s = s+"\n";	
+
+		displayContentList.add(new StrIntPair(s));	
+		ToDoItem[] list = sf.getAffectedItems();
+		
+		if(list==null){
+			displayContentList.add(new StrIntPair("The list is empty!\n"));
+			return;
+		}		
+		/**
+		 * Check which command this SuccessFeedback is, and format accordingly
+		 */
+		switch(sf.getCommandType().toLowerCase()){
+
+			case SHOW_COMMAND:
+				assert(ShowComdListLength==list.length);
+				formatShowAddComd(displayContentList,list);
+				break;
+	
+			case ADD_COMMAND:
+				assert(ShowComdListLength==list.length);
+				formatShowAddComd(displayContentList,list);
+				break;
+	
+			case UPDATE_COMMAND:
+				assert(UpdateComdListLength == list.length);
+				formatUpdateComd(displayContentList,list);	
+				break;
+	
+			default:
+				formatListComd(displayContentList,list);
+				break;
+	
+			}
+	}
+
+	private void formatShowAddComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list){
+		displayContentList.add(new StrIntPair(displayDividingLine()));
+		formatTaskChunk(displayContentList,list[0]);	
+	}
+
+	private void formatUpdateComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list){
+		displayContentList.add(new StrIntPair(displayParaLine()));
+		displayContentList.add(new StrIntPair("Item affected:\n"));
+
+		formatTaskChunk(displayContentList,list[0]);
+
+		displayContentList.add(new StrIntPair(displayParaLine()));
+		displayContentList.add(new StrIntPair("Updated Item:\n"));
+		formatTaskChunk(displayContentList,list[1]);		
+	}
+
+	private void formatListComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list){
+		displayContentList.add(new StrIntPair(displayDividingLine()));
+		displayContentList.add(new StrIntPair(displayTitleLine()));
+		displayContentList.add(new StrIntPair(displayDividingLine()));
+		for (int i = 0;i <list.length;i++){
+			formatTaskLine(displayContentList,list[i]);
+		}
+		displayContentList.add(new StrIntPair(displayDividingLine()));
+	}
+	
+	/**
+	 * Format task list for list display
+	 * @param contentList
+	 * @param item
+	 */
+	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
+		String strForID = "| %-2s | %-26s|";
+		String strForPri = " %-9s";
+		String strForTime = "| %-17s| %-17s|";
+		String strForStat =	" %-9s  ";
+		String strForEndLine = "|\n";
+		assert item!=null;
+		assert contentList!=null;
+		int ID = item.getId();
+		String des = item.getDescription();
+		int priIntTag = item.getPriority();
+		String prioS = TagFormat.formatPri(priIntTag);
+		String starT = "";
+		String endT = "";
+		String stas = item.getStatus();
+		int stasIntTag;
+		if(stas.equalsIgnoreCase(STATU_PEND)) stasIntTag =STATU_PEND_TAG;
+		else stasIntTag = STATU_COMPLETE_TAG;
+		if(des.length()>=23){
+			des = des.substring(0, 23);
+			des = des + "...";
+		}
+		if(item instanceof TaskItem){
+			TaskItem t = (TaskItem)item;
+			starT = "";
+			endT = t.getDeadlineString();
+		}
+		else if (item instanceof EventItem){
+			EventItem t = (EventItem)item;
+			starT = t.getStartDateString();
+			endT = t.getEndDateString();	
+
+		}
+		contentList.add(new StrIntPair(String.format(strForID, ID,des)));
+		contentList.add(new StrIntPair(String.format(strForPri, prioS),priIntTag));
+		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
+		contentList.add(new StrIntPair(String.format(strForStat,stas),stasIntTag));
+		contentList.add(new StrIntPair(strForEndLine));
+	}
+
+	/**Format task list for chunk display
+	 * @param contentList
+	 * @param item
+	 */
+	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
+		assert item!=null;
+		assert contentList!=null;
+
+		int ID = item.getId();
+		int pri = item.getPriority();
+		int stasIntTag;		
+		String des = item.getDescription();
+		String priStr = TagFormat.formatPri(pri);
+		String stas = item.getStatus();
+
+
+		if(stas.equalsIgnoreCase(STATU_PEND)) stasIntTag =STATU_PEND_TAG;
+		else stasIntTag = STATU_COMPLETE_TAG;
+
+		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
+		contentList.add(new StrIntPair(priStr+"\n",pri));
+
+		if(item instanceof TaskItem){
+			TaskItem t = (TaskItem)item;
+			String ddl = t.getDeadlineString();
+			contentList.add(new StrIntPair("Deadline: "+ddl+"\n"));
+		}
+		else if (item instanceof EventItem){
+			EventItem evtItem = (EventItem)item;
+			String starT = evtItem.getStartDateString();
+			String endT = evtItem.getEndDateString();
+			contentList.add(new StrIntPair("Start Time: "+starT+"\n"));
+			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
+		}
+
+		contentList.add(new StrIntPair("Status: "));
+		contentList.add(new StrIntPair(stas+"\n",stasIntTag));
+	}
+
+
+	private int getFeedbackTag(Feedback f){
+		String fname =f.getClassName();
+		if(fname.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
+		if(fname.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
+		if(fname.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
+		return FEEDBACK_TAG;		
 	}
 
 	/**
@@ -56,7 +245,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s=String.format("| %-3s| %-26s| %-9s| %-17s| %-17s| %-9s  |\n","ID", "Description","Priority","Start Time","End Time","Status");	
 		return s;
 	}
-	
 	private String displayDividingLine() {
 		String s = new String("------------------------------------------------------------------------------------------------\n");
 		return s;
@@ -65,7 +253,38 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s = new String("----------------------------------------\n");
 		return s;
 	}
-	
+
+
+	/**
+	 * @param 
+	 * @return String
+	 * Format Calendar object to readable string
+	 */
+	public String dateFormatter(Calendar c){
+		String s = String.format("%1$tm,%1$te",c);
+		return s;	
+	}
+
+	/**
+	 * @param 
+	 * @return 
+	 * Format MyDate object to readable string
+	 */
+	public String dateFormatter(MyDate d){
+		String s = String.format("%tm,%td,%ty", d);
+		return s;
+	}
+
+	/**
+	 * @param d
+	 * @return
+	 * Format MyDate object to readable string
+	 */
+	public String timeFormatter(MyDate d){
+		String s = String.format("%tH:%tM", d);
+		return s;
+	}
+
 	/** 
 	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayStringList(ArrayList<String>)
 	 */
@@ -81,7 +300,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 		return s.toString();	
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayTaskItem(TaskItem)
 	 */
@@ -153,7 +372,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert event!=null;
 		return event.toFileString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventItem(EventItem)
 	 */
@@ -175,7 +394,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		}
 		return strB.toString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayEventList(EventItem[])
 	 */
@@ -188,7 +407,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoItem(ToDoItem)
 	 */
@@ -197,7 +416,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert todoItem !=null;
 		return todoItem.toString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFeedback(ToDoItem)
 	 */
@@ -206,7 +425,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert todoItem !=null;
 		return todoItem.getFeedbackString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoFile(ToDoItem)
 	 */
@@ -215,7 +434,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		assert todoItem !=null;
 		return todoItem.toFileString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ArrayList)
 	 */
@@ -228,7 +447,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayToDoList(ToDoItem[])
 	 */
@@ -241,7 +460,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt()
 	 */
@@ -249,7 +468,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String s = new String ("Command: ");
 		return s;
 	}	
-	
+
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayPrompt(int)
 	 */
@@ -279,171 +498,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	public String displayPrompt(String promptMessage) {
 		return promptMessage;
 	}		
-	
-	/**
-	 * Receive a @param Feedback Object 
-	 * @return ArrayList<StrIntPair>
-	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
-	 */
-	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedback) {
-		ArrayList<StrIntPair> displayContentList = new ArrayList<StrIntPair>();
-		assert commandFeedback!=null;	
-		String s = new String(); 
-		int t = getFeedbackTag(commandFeedback);
-		switch(t){	
-		/**
-		 * Check which subclass this Feedback Object belongs to and format accordingly
-		 */
-		case HELP_FEEDBACK_TAG:
-			HelpFeedback hf = (HelpFeedback)commandFeedback; 
-			s = hf.getHelpContent();
-			s+="\n";
-			displayContentList.add(new StrIntPair(s));
-			break;		
-		case ERROR_FEEDBACK_TAG:
-			ErrorFeedback ef = (ErrorFeedback)commandFeedback; 	
-			s=ef.getMessage();
-			s+="\n";
-			displayContentList.add(new StrIntPair(s));
-			break;			
-		case SUCCESS_FEEDBACK_TAG:
-			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
-			s  = sf.getCommandType()+" successfully!";
-			s = s+"\n";	
-			displayContentList.add(new StrIntPair(s));	
-			getSucFeedbackContent(displayContentList,sf);		
-			break;
-		default:
-			s = "Invalid Instruction\n";
-			displayContentList.add(new StrIntPair(s));
-		}
-		return  displayContentList;	
-	}
-
-	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList, SuccessFeedback sf){
-		assert(displayContentList!=null);
-		ToDoItem[] list = sf.getAffectedItems();
-		if(list==null){
-			displayContentList.add(new StrIntPair("The list is empty!\n"));
-			return;
-		}		
-		/**
-		 * Check which command this SuccessFeedback is, and format accordingly
-		 */
-		if(sf.getCommandType().equalsIgnoreCase(SHOW_COMMAND)||sf.getCommandType().equalsIgnoreCase(ADD_COMMAND)){
-			assert(1==list.length);
-			displayContentList.add(new StrIntPair(displayDividingLine()));
-			formatTaskChunk(displayContentList,list[0]);
-			return;
-		}
-
-		else if(sf.getCommandType().equalsIgnoreCase(UPDATE_COMMAND)){
-			assert(2 == list.length);
-			displayContentList.add(new StrIntPair(displayParaLine()));
-			displayContentList.add(new StrIntPair("Item affected:\n"));
-			formatTaskChunk(displayContentList,list[0]);
-			displayContentList.add(new StrIntPair(displayParaLine()));
-			displayContentList.add(new StrIntPair("Updated Item:\n"));
-			formatTaskChunk(displayContentList,list[1]);		
-		}
-
-		else{ 
-			displayContentList.add(new StrIntPair(displayDividingLine()));
-			displayContentList.add(new StrIntPair(displayTitleLine()));
-			displayContentList.add(new StrIntPair(displayDividingLine()));
-			for (int i = 0;i <list.length;i++){
-				formatTaskLine(displayContentList,list[i]);
-			}
-			displayContentList.add(new StrIntPair(displayDividingLine()));
-		}
-	}
-	/**
-	 * Format task list for list display
-	 * @param contentList
-	 * @param item
-	 */
-	private void formatTaskLine(ArrayList<StrIntPair> contentList,ToDoItem item){
-		String strForID = "| %-2s | %-26s|";
-		String strForPri = " %-9s";
-		String strForTime = "| %-17s| %-17s|";
-		String strForStat =	" %-9s  ";
-		String strForEndLine = "|\n";
-		assert item!=null;
-		assert contentList!=null;
-		int ID = item.getId();
-		String des = item.getDescription();
-		int pri = item.getPriority();
-		String prioS = TagFormat.formatPri(pri);
-		String starT = "";
-		String endT = "";
-		String stas = item.getStatus();
-		int stasTag;
-		if(stas.equalsIgnoreCase(STATU_PEND)) stasTag =STATU_PEND_TAG;
-		else stasTag = STATU_COMPLETE_TAG;
-		if(des.length()>=23){
-			des = des.substring(0, 23);
-			des = des + "...";
-		}
-		if(item instanceof TaskItem){
-			TaskItem t = (TaskItem)item;
-			starT = "";
-			endT = t.getDeadlineString();
-		}
-		else if (item instanceof EventItem){
-			EventItem t = (EventItem)item;
-			starT = t.getStartDateString();
-			endT = t.getEndDateString();	
-
-		}
-		contentList.add(new StrIntPair(String.format(strForID, ID,des)));
-		contentList.add(new StrIntPair(String.format(strForPri, prioS),pri));
-		contentList.add(new StrIntPair(String.format(strForTime,starT,endT)));
-		contentList.add(new StrIntPair(String.format(strForStat,stas),stasTag));
-		contentList.add(new StrIntPair(strForEndLine));
-	}
-
-	/**Format task list for chunk display
-	 * @param contentList
-	 * @param item
-	 */
-	private void formatTaskChunk(ArrayList<StrIntPair> contentList,ToDoItem item){
-		assert item!=null;
-		assert contentList!=null;
-		
-		int ID = item.getId();
-		String des = item.getDescription();
-		int pri = item.getPriority();
-		String prioS = TagFormat.formatPri(pri);
-		String stas = item.getStatus();
-		int stasTag;
-		if(stas.equalsIgnoreCase(STATU_PEND)) stasTag =STATU_PEND_TAG;
-		else stasTag = STATU_COMPLETE_TAG;
-		contentList.add(new StrIntPair("ID: "+ID+"\n"+"Des: "+des+"\n"+"Priority: "));
-		contentList.add(new StrIntPair(prioS+"\n",pri));
-		if(item instanceof TaskItem){
-			TaskItem t = (TaskItem)item;
-			String ddl = t.getDeadlineString();
-			contentList.add(new StrIntPair("Deadline: "+ddl+"\n"));
-		}
-		else if (item instanceof EventItem){
-			EventItem t = (EventItem)item;
-			String starT = t.getStartDateString();
-			String endT = t.getEndDateString();
-			contentList.add(new StrIntPair("Start Time: "+starT+"\n"));
-			contentList.add(new StrIntPair("End Time:   "+endT+"\n"));
-		}
-		contentList.add(new StrIntPair("Status: "));
-		contentList.add(new StrIntPair(stas+"\n",stasTag));
-	}
-
-	
-	private int getFeedbackTag(Feedback f){
-		String fname =f.getClassName();
-		if(fname.equalsIgnoreCase("SuccessFeedback")) return SUCCESS_FEEDBACK_TAG;
-		if(fname.equalsIgnoreCase("ErrorFeedback")) return ERROR_FEEDBACK_TAG;	
-		if(fname.equalsIgnoreCase("HelpFeedback")) return HELP_FEEDBACK_TAG;
-		return FEEDBACK_TAG;		
-	}
 
 	/**
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayHelpPage()

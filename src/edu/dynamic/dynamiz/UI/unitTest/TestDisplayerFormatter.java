@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import edu.dynamic.dynamiz.UI.DisplayerFormatter;
+import edu.dynamic.dynamiz.UI.StrIntPair;
 import edu.dynamic.dynamiz.structure.*;
 
 // @author A0119397R
@@ -123,7 +124,6 @@ public class TestDisplayerFormatter {
 		s+=e3.toString();
 		s+="\n";
 		
-		
 		assertEquals(s,dp.displayEventList(ls));
 		
 		EventItem[] testArray = new EventItem[3];
@@ -134,5 +134,38 @@ public class TestDisplayerFormatter {
 		assertEquals(s,dp.displayEventList(testArray));
 		
 	}
+	@Test
+	public void testGetSucFeedbackContent(){
+		ArrayList<StrIntPair> contentList = new ArrayList<StrIntPair>();
+		ToDoItem[] itemList = new ToDoItem[1];
+		itemList[0] = new ToDoItem("task1");
+		
+		SuccessFeedback sf = new SuccessFeedback("add","task1",itemList);
+		dp.getSucFeedbackContent(contentList,sf);
+		assertEquals("add successfully!\n",contentList.get(0).getString());
+		assertEquals(0,contentList.get(0).getInt());
+		assertEquals("------------------------------------------------------------------------------------------------\n",
+				contentList.get(1).getString());
+		assertEquals(0,contentList.get(1).getInt());
+		assertEquals("ID: 11\nDes: task1\nPriority: ",contentList.get(2).getString());
+		assertEquals(0,contentList.get(2).getInt());
+		assertEquals("None\n",contentList.get(3).getString() );
+		assertEquals(0,contentList.get(1).getInt());
+		assertEquals("Status: ",contentList.get(4).getString() );
+		assertEquals(0,contentList.get(4).getInt());
+	}
+	
+	@Test
+	public void testGetErrorContent(){
+		ArrayList<StrIntPair> contentList = new ArrayList<StrIntPair>();
+		
+		ErrorFeedback ef = new ErrorFeedback("add3","add2","invalid instruction");
+		dp.getErrorFeedbackContent(contentList,ef);
+		assertEquals("invalid instruction\n",contentList.get(0).getString());
+		assertEquals(0,contentList.get(0).getInt());
+		
+	}
+	
+	
 	
 }
