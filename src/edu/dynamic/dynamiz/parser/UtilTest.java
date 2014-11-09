@@ -3,18 +3,60 @@ package edu.dynamic.dynamiz.parser;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
+/**
+ * Test program to validate Util.
+ * 
+ */
 public class UtilTest {
+	Util util = new Util();
+	private List<String> expectedList;
+	private List<String> testList;
+	String expectedString;
+	String testString;
+	private String[] expectedArray;
+	private String[] testArray;
+	private final int N = 10;
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testRemoveEmptyStringsInList() {
-		fail("Not yet implemented"); // TODO
+
+		expectedList = new ArrayList<String>();
+		testList = new ArrayList<String>();
+		// Normal Case
+		testList.add("test string");
+		expectedList.add("test string");
+		assertEquals(expectedList, util.removeEmptyStringsInList(testList));
+
+		// Empty String Case
+		testList.add("");
+		testList.add("");
+		assertEquals(expectedList, util.removeEmptyStringsInList(testList));
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public final void testRemoveEmptyStringsInArray() {
-		fail("Not yet implemented"); // TODO
+		expectedArray = new String[N];
+		testArray = new String[N];
+
+		testArray[0] = "test string";
+		expectedArray[0] = "test string";
+
+		for (int i = 1; i < N; i++) {
+			testArray[i] = "";
+		}
+		assertEquals(expectedArray, util.removeEmptyStringsInArray(testArray));
+
+		// Empty String Case
+		testList.add("");
+		testList.add("");
+		assertEquals(expectedArray, util.removeEmptyStringsInArray(testArray));
 	}
 
 	@Test
@@ -74,7 +116,7 @@ public class UtilTest {
 
 	@Test
 	public final void testAddEscapeCapacityToRegex() {
-		fail("Not yet implemented"); // TODO
+		fail("Not yet implemented"); // TODO		
 	}
 
 	@Test
