@@ -13,7 +13,7 @@ import edu.dynamic.dynamiz.structure.*;
  * @author A0119397R
  *
  */
-public class testDisplayer {
+public class TestDisplayerFormatter {
 	DisplayFormatter dp = new DisplayFormatter();
 	
 	@Test
