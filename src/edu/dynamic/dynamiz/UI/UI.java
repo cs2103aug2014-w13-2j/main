@@ -23,7 +23,8 @@ import edu.dynamic.dynamiz.structure.Feedback;
 /**
  * This is the UI class that will display the user interface to the user. It
  * also receives user's input command to the Controller through the UI subclass
- * Displayer and StyleUI before outputting the feedback onto the UI for the user to see.
+ * Displayer and StyleUI before outputting the feedback onto the UI for the user
+ * to see.
  * 
  */
 
@@ -56,7 +57,6 @@ public class UI extends JPanel implements ActionListener {
 
 		intialiseUIScreen();
 
-		// Display: Welcome message
 		try {
 			displayWelcomeMessage();
 		} catch (Exception e) {
@@ -112,8 +112,8 @@ public class UI extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Retains last entered command from inputScreen(JTextField). 
-	 * The command is highlighted for easy editing & re-entering.
+	 * Retains last entered command from inputScreen(JTextField). The command is
+	 * highlighted for easy editing & re-entering.
 	 */
 	private void retainLastEnteredCommand() {
 		inputScreen.selectAll();
@@ -121,7 +121,8 @@ public class UI extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Flushes the inputScreen(JTextField) when the user input comes in any variations of CommandType.FLUSH
+	 * Flushes the inputScreen(JTextField) when the user input comes in any
+	 * variations of CommandType.FLUSH
 	 * 
 	 * @param input
 	 * @throws BadLocationException
@@ -134,14 +135,12 @@ public class UI extends JPanel implements ActionListener {
 		// Feedback
 		document.insertString(document.getLength(), DIVIDER + NEWLINE,
 				style.getStyleDefault());
-		document.insertString(document.getLength(), "Cleared screen successfully!"
-				+ NEWLINE, style.getStyleDefault());
+		document.insertString(document.getLength(),
+				"Cleared screen successfully!" + NEWLINE,
+				style.getStyleDefault());
 	}
 
-
 	public static void main(String[] args) {
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Screen();
@@ -157,10 +156,10 @@ public class UI extends JPanel implements ActionListener {
 		});
 	}
 
-	
 	/**
-	 * Intialises the UI JTextPane. 
-	 * JTextPane creation, specification of Tab Settings, JTextField creation, scrollPane constraints and setting up StyledDocument to format output styles.
+	 * Intialises the UI JTextPane. JTextPane creation, specification of Tab
+	 * Settings, JTextField creation, scrollPane constraints and setting up
+	 * StyledDocument to format output styles.
 	 */
 	private void intialiseUIScreen() {
 		displayScreen = new JTextPane();
@@ -171,19 +170,14 @@ public class UI extends JPanel implements ActionListener {
 
 		setTabSettings();
 
-		// Create Command Display - Scroll
 		JScrollPane scrollPane = new JScrollPane(displayScreen);
-
-		// Define size of Command Display - Screen
 		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
 
-		// Create Command Input
 		inputScreen = new JTextField();
 		inputScreen.addActionListener(this);
 		inputScreen.setForeground(Color.BLUE);
 		inputScreen.setFont(fontInput);
 
-		// Add Command Display - Scroll and Command Input into Panel
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		constraints.fill = GridBagConstraints.BOTH;
@@ -193,7 +187,6 @@ public class UI extends JPanel implements ActionListener {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		add(inputScreen, constraints);
 
-		// Styling for Command Display - Screen
 		document = displayScreen.getStyledDocument();
 	}
 
@@ -201,7 +194,6 @@ public class UI extends JPanel implements ActionListener {
 	 * Defines the tab size specifications for JTextPane
 	 */
 	private void setTabSettings() {
-		// Set tab size
 		TabStop[] tabs = new TabStop[4];
 		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
 		tabs[1] = new TabStop(100, TabStop.ALIGN_LEFT, TabStop.LEAD_NONE);
@@ -216,28 +208,47 @@ public class UI extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * References StyleUI to return the appropriate getStyleType based on the Priority Value (OptionType) or the Status Settings (StyleUI.STATUS_PENDING or StyleUI.STATUS_COMPLETED).
+	 * References StyleUI to return the appropriate getStyleType based on the
+	 * Priority Value (OptionType) or the Status Settings
+	 * (StyleUI.STATUS_PENDING or StyleUI.STATUS_COMPLETED).
 	 * 
 	 * @param returnResult
 	 * @param styleValue
 	 * @throws BadLocationException
 	 */
-	private void printWithStyle(ArrayList<StrIntPair> returnResult, int styleValue)
-			throws BadLocationException {
-		document.insertString(document.getLength(), returnResult.get(styleValue).getString(),
-				style.getStyleType(returnResult.get(styleValue).getInt()));
+	private void printWithStyle(ArrayList<StrIntPair> returnResult,
+			int styleValue) throws BadLocationException {
+		document.insertString(document.getLength(), returnResult
+				.get(styleValue).getString(), style.getStyleType(returnResult
+				.get(styleValue).getInt()));
 	}
 
-	// ---------------------------------------------------------------------------------
+	/**
+	 * Displays the welcome message onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * Welcome to Dynamiz!
+	 * Type 'help' in the space below for more information!
+	 * Please enter command in the space below:
+	 * 
+	 * @throws BadLocationException
+	 */
 	private void displayWelcomeMessage() throws BadLocationException {
 		document.insertString(0, displayer.displayWelcomeMessage() + NEWLINE,
 				style.getStyleWhite());
-		document.insertString(document.getLength(), displayer.displayPrompt(1) + NEWLINE,
-				style.getStyleWhite());
+		document.insertString(document.getLength(), displayer.displayPrompt(1)
+				+ NEWLINE, style.getStyleWhite());
 	}
 
+	/**
+	 * Displays the command prompt onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * ================================================================================================
+	 * command: <user-entered command>
+	 * 
+	 * @param input
+	 * @throws BadLocationException
+	 */
 	private void displayCommandPrompt(String input) throws BadLocationException {
-		// Command Prompt Display
 		document.insertString(document.getLength(), DIVIDER + NEWLINE,
 				style.getStyleDefault());
 		document.insertString(document.getLength(), displayer.displayPrompt(),
@@ -247,32 +258,19 @@ public class UI extends JPanel implements ActionListener {
 
 	}
 
-	// -------------------------------------------------------------------------------------------------
-
 	/**
-	 * Creates the GUI and displays it
+	 * Creates the Frame (JFrame) for the UI
 	 */
 	public static void Screen() {
-		// Create and set up the window.
 		JFrame frame = new JFrame("Dynamiz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Add contents to the window.
 		frame.add(new UI());
-		displayScreen(frame);
-	}
 
-	/**
-	 * Displays the Frame
-	 * 
-	 * @param frame
-	 */
-	private static void displayScreen(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
-		// Logging: Frame = visible
+		
 		LoggerUI.info("displayScreen visible");
-
 	}
 
 }
