@@ -1,8 +1,15 @@
-package edu.dynamic.dynamiz.structure;
+package edu.dynamic.dynamiz.structure.unitTest;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+import edu.dynamic.dynamiz.structure.StartDateComparator;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
 
 /**
  * JUnit test class to test correctness of StartDateComparator.

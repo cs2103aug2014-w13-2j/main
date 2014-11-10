@@ -1,14 +1,16 @@
-package edu.dynamic.dynamiz.structure;
+package edu.dynamic.dynamiz.structure.unitTest;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+
 //@author A0113855E
 /**
  * Test the correctness of comparing MyDate objects (including
  * MyDate and MyDateTime)
- * @author nhan
  *
  */
 public class MyDateTimeTest {
