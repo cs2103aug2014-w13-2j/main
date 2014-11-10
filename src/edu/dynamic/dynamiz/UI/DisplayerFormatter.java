@@ -11,10 +11,8 @@ import edu.dynamic.dynamiz.structure.*;
 /**
  * Acts as the information interpreter of Feedback items and formatter for UI
  * */
-
 public class DisplayerFormatter implements DisplayerFormatterInterface {
-	private final static Logger LoggerDisplayer = Logger
-			.getLogger(DisplayerFormatter.class.getName());
+	private final static Logger LoggerDisplayer = Logger.getLogger(DisplayerFormatter.class.getName());
 	static private final String NULL_STRING = "null object";
 
 	private final int ShowComdListLength = 1;
@@ -29,7 +27,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 	/**
 	 * Receive a @param Feedback Object
-	 * 
 	 * @return ArrayList<StrIntPair>
 	 * @see edu.dynamic.dynamiz.UI.DisplayerFormatterInterface#displayFeedback(edu.dynamic.dynamiz.structure.Feedback)
 	 */
@@ -67,24 +64,21 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		return displayContentList;
 	}
 
-	private void getHelpFeedbackContent(
-			ArrayList<StrIntPair> displayContentList, HelpFeedback hf) {
+	public void getHelpFeedbackContent(ArrayList<StrIntPair> displayContentList, HelpFeedback hf) {
 		String s = new String();
 		s = hf.getHelpContent();
 		s += "\n";
 		displayContentList.add(new StrIntPair(s));
 	}
 
-	public void getErrorFeedbackContent(
-			ArrayList<StrIntPair> displayContentList, ErrorFeedback ef) {
+	public void getErrorFeedbackContent(ArrayList<StrIntPair> displayContentList, ErrorFeedback ef) {
 		String s = new String();
 		s = ef.getMessage();
 		s += "\n";
 		displayContentList.add(new StrIntPair(s));
 	}
 
-	public void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList,
-			SuccessFeedback sf) {
+	public void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList,SuccessFeedback sf) {
 		assert (displayContentList != null);
 		LoggerDisplayer.info("getSucFeedbackContent called");
 		String s = new String();
@@ -125,14 +119,12 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		}
 	}
 
-	private void formatShowAddComd(ArrayList<StrIntPair> displayContentList,
-			ToDoItem[] list) {
+	private void formatShowAddComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list) {
 		displayContentList.add(new StrIntPair(displayDividingLine()));
 		formatTaskChunk(displayContentList, list[0]);
 	}
 
-	private void formatUpdateComd(ArrayList<StrIntPair> displayContentList,
-			ToDoItem[] list) {
+	private void formatUpdateComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list) {
 		displayContentList.add(new StrIntPair(displayParaLine()));
 		displayContentList.add(new StrIntPair("Item affected:\n"));
 
@@ -143,8 +135,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		formatTaskChunk(displayContentList, list[1]);
 	}
 
-	private void formatListComd(ArrayList<StrIntPair> displayContentList,
-			ToDoItem[] list) {
+	private void formatListComd(ArrayList<StrIntPair> displayContentList,ToDoItem[] list) {
 		displayContentList.add(new StrIntPair(displayDividingLine()));
 		displayContentList.add(new StrIntPair(displayTitleLine()));
 		displayContentList.add(new StrIntPair(displayDividingLine()));
@@ -155,17 +146,16 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	}
 
 	/**
-	 * Format task list for list display
-	 * 
+	 * Format task list for list display 
 	 * @param contentList
 	 * @param item
 	 */
 	private void formatTaskLine(ArrayList<StrIntPair> contentList, ToDoItem item) {
-		String strForID = "| %-2s | %-26s|";
-		String strForPri = " %-9s";
-		String strForTime = "| %-17s| %-17s|";
-		String strForStat = " %-9s  ";
-		String strForEndLine = "|\n";
+		final String strForID = "| %-2s | %-26s|";
+		final String strForPri = " %-9s";
+		final String strForTime = "| %-17s| %-17s|";
+		final String strForStat = " %-9s  ";
+		final String strForEndLine = "|\n";
 		assert item != null;
 		assert contentList != null;
 		int ID = item.getId();
@@ -178,8 +168,9 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		int stasIntTag;
 		if (stas.equalsIgnoreCase(STATU_PEND))
 			stasIntTag = STATU_PEND_TAG;
-		else
+		else{
 			stasIntTag = STATU_COMPLETE_TAG;
+		}
 		if (des.length() >= 23) {
 			des = des.substring(0, 23);
 			des = des + "...";
@@ -195,11 +186,9 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 		}
 		contentList.add(new StrIntPair(String.format(strForID, ID, des)));
-		contentList.add(new StrIntPair(String.format(strForPri, prioS),
-				priIntTag));
+		contentList.add(new StrIntPair(String.format(strForPri, prioS),priIntTag));
 		contentList.add(new StrIntPair(String.format(strForTime, starT, endT)));
-		contentList.add(new StrIntPair(String.format(strForStat, stas),
-				stasIntTag));
+		contentList.add(new StrIntPair(String.format(strForStat, stas),stasIntTag));
 		contentList.add(new StrIntPair(strForEndLine));
 	}
 
@@ -221,13 +210,14 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String priStr = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
 
-		if (stas.equalsIgnoreCase(STATU_PEND))
+		if (stas.equalsIgnoreCase(STATU_PEND)){
 			stasIntTag = STATU_PEND_TAG;
-		else
+		}
+		else{
 			stasIntTag = STATU_COMPLETE_TAG;
+		}
 
-		contentList.add(new StrIntPair("ID: " + ID + "\n" + "Des: " + des
-				+ "\n" + "Priority: "));
+		contentList.add(new StrIntPair("ID: " + ID + "\n" + "Des: " + des+ "\n" + "Priority: "));
 		contentList.add(new StrIntPair(priStr + "\n", pri));
 
 		if (item instanceof TaskItem) {
@@ -248,12 +238,15 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 	private int getFeedbackTag(Feedback f) {
 		String fname = f.getClassName();
-		if (fname.equalsIgnoreCase("SuccessFeedback"))
+		if (fname.equalsIgnoreCase("SuccessFeedback")){
 			return SUCCESS_FEEDBACK_TAG;
-		if (fname.equalsIgnoreCase("ErrorFeedback"))
+		}
+		if (fname.equalsIgnoreCase("ErrorFeedback")){
 			return ERROR_FEEDBACK_TAG;
-		if (fname.equalsIgnoreCase("HelpFeedback"))
+		}
+		if (fname.equalsIgnoreCase("HelpFeedback")){
 			return HELP_FEEDBACK_TAG;
+		}		
 		return FEEDBACK_TAG;
 	}
 
@@ -306,9 +299,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	}
 
 	/**
-	 * @see 
-	 *      edu.dynamic.dynamiz.UI.DisplayerInterface#displayStringList(ArrayList
-	 *      <String>)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayStringList(ArrayList<String>)
 	 */
 	@Override
 	public String displayStringList(ArrayList<String> arr) {
@@ -352,8 +343,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	}
 
 	/**
-	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(ArrayList<
-	 *      TaskItem>)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayTaskList(ArrayList<TaskItem>)
 	 */
 	@Override
 	public String displayTaskList(ArrayList<TaskItem> taskList) {
@@ -407,9 +397,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 	}
 
 	/**
-	 * @see 
-	 *      edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(ArrayList<
-	 *      EventItem>)
+	 * @see edu.dynamic.dynamiz.UI.DisplayerInterface#displayEventList(ArrayList<EventItem>)
 	 */
 	@Override
 	public String displayEventList(ArrayList<EventItem> eventList) {
