@@ -1,0 +1,795 @@
+//@author: a0114573j
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\UtilTest.java
+	 */
+
+package edu.dynamic.dynamiz.parser.unitTest;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+
+import edu.dynamic.dynamiz.parser.Util;
+import edu.dynamic.dynamiz.structure.MyDate;
+
+/**
+ * Test program to validate Util.
+ * 
+ */
+public class UtilTest {
+	Util util = new Util();
+	private List<String> expectedList;
+	private List<String> testList;
+	private List<Integer> expectedIntList;
+	private List<Integer> testIntList;
+	String expectedString;
+	String testString;
+	private String[] testArray;
+	private final int N = 10;
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testRemoveEmptyStringsInList() {
+
+		expectedList = new ArrayList<String>();
+		testList = new ArrayList<String>();
+		// Normal Case
+		testList.add("test string");
+		expectedList.add("test string");
+		assertEquals(expectedList, util.removeEmptyStringsInList(testList));
+
+		// Empty String Case
+		testList.add("");
+		testList.add("");
+		assertEquals(expectedList, util.removeEmptyStringsInList(testList));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testRemoveEmptyStringsInArray() {
+		expectedList = new ArrayList<String>();
+		testArray = new String[N];
+
+		testArray[0] = "test string";
+		expectedList.add("test string");
+
+		for (int i = 1; i < N; i++) {
+			testArray[i] = "";
+		}
+		assertEquals(expectedList, util.removeEmptyStringsInArray(testArray));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testStripFirstWordString() {
+		String str = "add hello world";
+		assertEquals("hello world",util.stripFirstWord(str));
+		str = "";
+		assertEquals("",util.stripFirstWord(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testStripFirstWordStringString() {
+		String str = "add hello -world";
+		String deliminator = "-";
+		assertEquals("-world",util.stripFirstWord(str, deliminator));
+		str = "";
+		assertEquals("",util.stripFirstWord(str, deliminator));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testGetFirstWordString() {
+		String str = "add hello world";
+		assertEquals("add",util.getFirstWord(str));
+		str = "";
+		assertEquals("",util.getFirstWord(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testGetFirstWordStringString() {
+		String str = "add hello -world";
+		String deliminator = "-";
+		assertEquals("add hello ",util.getFirstWord(str, deliminator));
+		str = "";
+		assertEquals("",util.getFirstWord(str, deliminator));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testIsNumber() {
+		String str = "12312";
+		assertTrue(util.isNumber(str));
+		str = "12asds";
+		assertFalse(util.isNumber(str));
+		str = "12.2";
+		assertTrue(util.isNumber(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testIsInteger() {
+		String str = "12312";
+		assertTrue(util.isInteger(str));
+		str = "12asds";
+		assertFalse(util.isInteger(str));
+		str = "12.2";
+		assertFalse(util.isInteger(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testIsValidNumberRange() {
+		String range = "12-13";
+		assertTrue(util.isValidNumberRange(range));
+		range = "12-12";
+		assertTrue(util.isValidNumberRange(range));
+		range = "12313-2";
+		assertFalse(util.isValidNumberRange(range));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test(expected = IllegalArgumentException.class)
+	public final void testGetNumberListFromRange() {
+		expectedIntList = new ArrayList<Integer>();
+		String range = "12-13";
+		expectedIntList.add(12);
+		expectedIntList.add(13);
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
+		
+		range = "12-12";
+		expectedIntList.clear();
+		expectedIntList.add(12);		
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
+		
+		range = "12313-2";
+		expectedIntList.clear();
+		assertEquals(expectedIntList,util.getNumberListFromRange(range));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testEscapeString() {
+		String str = "hello;world";
+		assertEquals("helloworld",util.escapeString(str));
+		str = "hello world";
+		assertEquals("hello world",util.escapeString(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testAddEscapeCapacityToRegex() {
+		String str = "hello world";
+		assertEquals("(?<!;)hello world",util.addEscapeCapacityToRegex(str));
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testToIntArray() {
+		int[] expectedArray = {1,1,1};
+		testIntList = new ArrayList<Integer>();
+		testIntList.add(1);
+		testIntList.add(1);
+		testIntList.add(1);
+
+		int[] outputArray = util.toIntArray(testIntList);
+		for (int i=0;i<3;i++){
+			assertEquals(expectedArray[i],outputArray[i]);
+		}
+	}
+
+	@SuppressWarnings("static-access")
+	@Test
+	public final void testConvertStringToMyDate() {
+		String str = "11/12/2014";
+		MyDate date = util.convertStringToMyDate(str);
+		assertEquals(11,date.getDayOfMonth());
+		assertEquals(12,date.getMonth());
+		assertEquals(2014,date.getYear());
+			
+	}
+
+	@Test
+	public final void testConvertJodaToMyDate() {
+		DateTime dt = new DateTime(2011,11,11,8,00);
+		assertEquals("11/11/2011", Util.convertJodaToMyDate(dt).toString());
+	}
+
+	@Test
+	public final void testConvertJodaToMyDateTime() {
+		DateTime dt = new DateTime(2011,11,11,8,00);
+		assertEquals("11/11/2011 8:00", Util.convertJodaToMyDateTime(dt).toString());		
+	}
+
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\UtilTest.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\UI\StyleUI.java
+	 */
+
+package edu.dynamic.dynamiz.UI;
+
+import java.awt.Color;
+
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+
+import edu.dynamic.dynamiz.parser.OptionType;
+
+/**
+ * This is the StyleUI class that will set the styling of the Styled Document.
+ * It recevies the styling settings from Displayer to UI to StyleUI before
+ * returning the style settings to UI
+ */
+
+public class StyleUI {
+	// Styling Constants
+	private SimpleAttributeSet styleWhite;
+	private SimpleAttributeSet styleDefault;
+	private SimpleAttributeSet styleGreen;
+	private SimpleAttributeSet styleOrange;
+	private SimpleAttributeSet styleMagenta;
+	private SimpleAttributeSet styleRed;
+	private SimpleAttributeSet styleBlue;
+	private SimpleAttributeSet styleCyan;
+	private SimpleAttributeSet styleYellow;
+
+	private final int STATUS_COMPLETED = 10;
+	private final int STATUS_PENDING = 11;
+
+	/**
+	 * Defines the stylesheet for displaying (Hightlight & Priority)
+	 */
+	public StyleUI() {
+		styleDefault = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleDefault, Color.WHITE);
+
+		styleWhite = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleWhite, Color.WHITE);
+
+		styleGreen = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleGreen, Color.GREEN);
+
+		styleOrange = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleOrange, Color.ORANGE);
+
+		styleMagenta = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleMagenta, Color.MAGENTA);
+
+		styleRed = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleRed, Color.RED);
+
+		styleBlue = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleBlue, Color.BLUE);
+
+		styleCyan = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleCyan, Color.CYAN);
+
+		styleYellow = new SimpleAttributeSet();
+		StyleConstants.setForeground(styleYellow, Color.YELLOW);
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleWhite
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleWhite() {
+		return styleWhite;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleWhite
+	 * 
+	 * @return
+	 */
+	public void setStyleWhite(SimpleAttributeSet styleWhite) {
+		this.styleWhite = styleWhite;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleDefault
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleDefault() {
+		return styleDefault;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleDefault
+	 * 
+	 * @return
+	 */
+	public void setStyleDefault(SimpleAttributeSet styleDefault) {
+		this.styleDefault = styleDefault;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleGreen
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleGreen() {
+		return styleGreen;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleGreen
+	 * 
+	 * @return
+	 */
+	public void setStyleGreen(SimpleAttributeSet styleGreen) {
+		this.styleGreen = styleGreen;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleOrange
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleOrange() {
+		return styleOrange;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleOrange
+	 * 
+	 * @return
+	 */
+	public void setStyleOrange(SimpleAttributeSet styleOrange) {
+		this.styleOrange = styleOrange;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleMagenta
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleMagenta() {
+		return styleMagenta;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleMagenta
+	 * 
+	 * @return
+	 */
+	public void setStyleMagenta(SimpleAttributeSet styleMagenta) {
+		this.styleMagenta = styleMagenta;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleRed
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleRed() {
+		return styleRed;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleRed
+	 * 
+	 * @return
+	 */
+	public void setStyleRed(SimpleAttributeSet styleRed) {
+		this.styleRed = styleRed;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleBlue
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleBlue() {
+		return styleBlue;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleBlue
+	 * 
+	 * @return
+	 */
+	public void setStyleBlue(SimpleAttributeSet styleBlue) {
+		this.styleBlue = styleBlue;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleCyan
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleCyan() {
+		return styleCyan;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleCyan
+	 * 
+	 * @return
+	 */
+	public void setStyleCyan(SimpleAttributeSet styleCyan) {
+		this.styleCyan = styleCyan;
+	}
+
+	/**
+	 * Returns SimpleAttributeSet styleYellow
+	 * 
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleYellow() {
+		return styleYellow;
+	}
+
+	/**
+	 * Sets SimpleAttributeSet styleYellow
+	 * 
+	 * @return
+	 */
+	public void setStyleYellow(SimpleAttributeSet styleYellow) {
+		this.styleYellow = styleYellow;
+	}
+
+	/**
+	 * Returns the SimpleAttributeSet for the corresponding styleValue (Priority
+	 * Value or Status Value - 10 for completed, 11 for pending)
+	 * 
+	 * @param styleValue
+	 * @return
+	 */
+	public SimpleAttributeSet getStyleType(int styleValue) {
+		switch (styleValue) {
+		case OptionType.PRIORITY_LOW:
+			return getStyleGreen();
+		case OptionType.PRIORITY_MEDIUM:
+			return getStyleOrange();
+		case OptionType.PRIORITY_HIGH:
+			return getStyleMagenta();
+		case OptionType.PRIORITY_URGENT:
+			return getStyleRed();
+		case STATUS_COMPLETED:
+			return getStyleBlue();
+		case STATUS_PENDING:
+			return getStyleCyan();
+		default:
+			return getStyleDefault();
+		}
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\UI\StyleUI.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\UI\UI.java
+	 */
+
+package edu.dynamic.dynamiz.UI;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
+
+import edu.dynamic.dynamiz.controller.*;
+import edu.dynamic.dynamiz.structure.Feedback;
+
+/**
+ * This is the UI class that will display the user interface to the user. It
+ * also receives user's input command to the Controller through the UI subclass
+ * Displayer and StyleUI before outputting the feedback onto the UI for the user
+ * to see.
+ */
+
+public class UI extends JPanel implements ActionListener {
+	/** UI screen components */
+	protected JTextField inputScreen;
+	protected JTextPane displayScreen;
+
+	/** Establish relations between UI, Displayer, Controller & StyleUI */
+	public static DisplayerFormatter displayer = new DisplayerFormatter();
+	public static Controller controller = new Controller();
+	private StyleUI style = new StyleUI();
+
+
+	/** UI display components */
+	private StyledDocument document;
+	private static Font font = new Font(Font.MONOSPACED, Font.PLAIN, 18);
+	private static Font fontInput = new Font(Font.MONOSPACED, Font.PLAIN, 18);
+
+	/** Constants for basic sectioning of display in the UI */
+	private String DIVIDER = "================================================================================================";
+	private final static String NEWLINE = "\n";
+
+	/** A logger instance for this class */
+	private final static Logger LoggerUI = Logger.getLogger(UI.class.getName());
+
+	public UI() {
+		super(new GridBagLayout());
+
+		LoggerUI.setLevel(Level.INFO);
+
+		intialiseUIScreen();
+
+		try {
+			displayWelcomeMessage();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		LoggerUI.info("UI Created");
+	}
+
+	/**
+	 * Event Handler for each event, where event refers to the entry of a single
+	 * command into the Screen interface
+	 */
+	public void actionPerformed(ActionEvent evt) {
+		String input = inputScreen.getText();
+		LoggerUI.info("Command Entered");
+
+		try {
+			if (CommandType.fromString(input) == CommandType.EXIT) {
+				LoggerUI.info("Exit Dynamiz");
+				System.exit(0);
+			}
+
+			if (CommandType.fromString(input) == CommandType.FLUSH) {
+				flushUI(input);
+				LoggerUI.info("Flush Screen");
+			} else {
+
+				displayCommandPrompt(input);
+
+				Feedback feedback = controller.executeCommand(input);
+				ArrayList<StrIntPair> returnResult = displayer
+						.displayFeedback(feedback);
+				assert (returnResult != null);
+
+				/** Displays Feedback */
+				document.insertString(document.getLength(), DIVIDER + NEWLINE,
+						style.getStyleDefault());
+
+				for (int i = 0; i < returnResult.size(); i++) {
+					printWithStyle(returnResult, i);
+				}
+
+				LoggerUI.info("Return Command Feedback");
+
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			LoggerUI.warning("Exception @ actionPerformed()");
+		}
+
+		retainLastEnteredCommand();
+	}
+
+	/**
+	 * Retains last entered command from inputScreen(JTextField). The command is
+	 * highlighted for easy editing & re-entering.
+	 */
+	private void retainLastEnteredCommand() {
+		inputScreen.selectAll();
+		displayScreen.setCaretPosition(displayScreen.getDocument().getLength());
+	}
+
+	/**
+	 * Flushes the inputScreen(JTextField) when the user input comes in any
+	 * variations of CommandType.FLUSH
+	 * 
+	 * @param input
+	 * @throws BadLocationException
+	 */
+	private void flushUI(String input) throws BadLocationException {
+		// clear document screen
+		document.remove(0, document.getLength());
+		displayCommandPrompt(input);
+
+		// Feedback
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
+				style.getStyleDefault());
+		document.insertString(document.getLength(),
+				"Cleared screen successfully!" + NEWLINE,
+				style.getStyleDefault());
+	}
+
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Screen();
+			}
+		});
+	}
+
+	public void run() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Screen();
+			}
+		});
+	}
+
+	/**
+	 * Intialises the UI JTextPane. JTextPane creation, specification of Tab
+	 * Settings, JTextField creation, scrollPane constraints and setting up
+	 * StyledDocument to format output styles.
+	 */
+	private void intialiseUIScreen() {
+		displayScreen = new JTextPane();
+		displayScreen.setEditable(false);
+		displayScreen.setFont(font);
+		displayScreen.setBackground(Color.BLACK);
+		displayScreen.setForeground(Color.WHITE);
+
+		setTabSettings();
+
+		JScrollPane scrollPane = new JScrollPane(displayScreen);
+		scrollPane.getViewport().setPreferredSize(new Dimension(1080, 600));
+
+		inputScreen = new JTextField();
+		inputScreen.addActionListener(this);
+		inputScreen.setForeground(Color.BLUE);
+		inputScreen.setFont(fontInput);
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		add(scrollPane, constraints);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		add(inputScreen, constraints);
+
+		document = displayScreen.getStyledDocument();
+	}
+
+	/**
+	 * Defines the tab size specifications for JTextPane
+	 */
+	private void setTabSettings() {
+		TabStop[] tabs = new TabStop[4];
+		tabs[0] = new TabStop(60, TabStop.ALIGN_RIGHT, TabStop.LEAD_NONE);
+		tabs[1] = new TabStop(100, TabStop.ALIGN_LEFT, TabStop.LEAD_NONE);
+		tabs[2] = new TabStop(200, TabStop.ALIGN_CENTER, TabStop.LEAD_NONE);
+		tabs[3] = new TabStop(300, TabStop.ALIGN_DECIMAL, TabStop.LEAD_NONE);
+		TabSet tabset = new TabSet(tabs);
+
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+				StyleConstants.TabSet, tabset);
+		displayScreen.setParagraphAttributes(aset, false);
+	}
+
+	/**
+	 * References StyleUI to return the appropriate getStyleType based on the
+	 * Priority Value (OptionType) or the Status Settings
+	 * (StyleUI.STATUS_PENDING or StyleUI.STATUS_COMPLETED).
+	 * 
+	 * @param returnResult
+	 * @param styleValue
+	 * @throws BadLocationException
+	 */
+	private void printWithStyle(ArrayList<StrIntPair> returnResult,
+			int styleValue) throws BadLocationException {
+		document.insertString(document.getLength(), returnResult
+				.get(styleValue).getString(), style.getStyleType(returnResult
+				.get(styleValue).getInt()));
+	}
+
+	/**
+	 * Displays the welcome message onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * Welcome to Dynamiz!
+	 * Type 'help' in the space below for more information!
+	 * Please enter command in the space below:
+	 * 
+	 * @throws BadLocationException
+	 */
+	private void displayWelcomeMessage() throws BadLocationException {
+		document.insertString(0, displayer.displayWelcomeMessage() + NEWLINE,
+				style.getStyleWhite());
+		document.insertString(document.getLength(), displayer.displayPrompt(1)
+				+ NEWLINE, style.getStyleWhite());
+	}
+
+	/**
+	 * Displays the command prompt onto displayScreen (JTextPane) in the following manner:
+	 * 
+	 * ================================================================================================
+	 * command: <user-entered command>
+	 * 
+	 * @param input
+	 * @throws BadLocationException
+	 */
+	private void displayCommandPrompt(String input) throws BadLocationException {
+		document.insertString(document.getLength(), DIVIDER + NEWLINE,
+				style.getStyleDefault());
+		document.insertString(document.getLength(), displayer.displayPrompt(),
+				style.getStyleYellow());
+		document.insertString(document.getLength(), input + NEWLINE,
+				style.getStyleYellow());
+
+	}
+
+	/**
+	 * Creates the Frame (JFrame) for the UI
+	 */
+	public static void Screen() {
+		JFrame frame = new JFrame("Dynamiz");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(new UI());
+
+		frame.pack();
+		frame.setVisible(true);
+		
+		LoggerUI.info("displayScreen visible");
+	}
+
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\UI\UI.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\main\Dynamiz.java
+	 */
+
+package main;
+
+import java.util.logging.LogManager;
+
+/**
+ * Main Driver Program for Dynamiz. Execute Dynmaiz from here.
+ */
+
+import edu.dynamic.dynamiz.UI.*;
+
+public class Dynamiz {
+	public static void main(String[] args) {
+		// Turn of Logger
+		LogManager.getLogManager().reset();
+		UI ui = new UI();
+		ui.run();
+	}
+}
+
+	// End of segment: Dynamiz\src\main\Dynamiz.java
+
+
+
+
+

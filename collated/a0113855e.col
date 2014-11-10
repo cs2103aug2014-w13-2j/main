@@ -1,0 +1,2906 @@
+//@author: a0113855e
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\controller\CommandType.java
+	 */
+
+package edu.dynamic.dynamiz.controller;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.dynamic.dynamiz.parser.OptionType;
+/**
+ * CommandType is the enumeration class of all the different types of commands.
+ * 
+ * This allows aliases of the same command type to be understood and returned as a particular
+ * command type.
+ * 
+ * Also, this allows each command type to declare its applicable options.
+ * 
+ * For example, applicable options for ADD type of command is OptionType.START_TIME, OptionType.END_TIME,
+ * and OptionType.PRIORITY.
+ *
+ */
+public enum CommandType {
+	ADD("a", "put") { 
+		private final OptionType[] optionsArray = {OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			// TODO Auto-generated method stub
+			return Arrays.asList(optionsArray);
+		}
+		
+	}, DELETE("d", "del", "remove", "rm") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, UPDATE("u", "upd", "modify", "mod", "edit", "change") {
+		private final OptionType[] optionsArray = {OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, LIST("l", "ls", "display") {
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY,
+												   OptionType.START_TIME,
+												   OptionType.END_TIME,
+												   OptionType.PRIORITY,
+												   OptionType.ON_TIME};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, SEARCH("s", "find") {
+		private final OptionType[] optionsArray = {OptionType.ORDER_BY, 
+												   OptionType.START_TIME, 
+												   OptionType.END_TIME, 
+												   OptionType.PRIORITY,
+												   OptionType.STATUS,
+												   OptionType.ON_TIME};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, UNDO("un", "ud") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, REDO("re", "rd") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, HELP("h", "man") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, MARK("m", "done", "do", "tick") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, UNMARK("um", "undone", "untick") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	},  SHOW("sh") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, FLUSH("f", "c", "clear") {
+		private final OptionType[] optionsArray = {};
+
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	}, EXIT("e", "quit", "bye", "!", "close") {
+		private final OptionType[] optionsArray = {};
+		
+		@Override
+		public List<OptionType> getApplicableOptions() {
+			return Arrays.asList(optionsArray);
+		}
+	};
+	
+	static private final Map<String, CommandType> ALIAS_TABLE = new HashMap<String, CommandType>();
+	static {
+		for (CommandType cmd: CommandType.values()) {
+			// Normalising by lowercase all
+			for (String alias: cmd.aliases) {
+				ALIAS_TABLE.put(alias.toLowerCase(), cmd);
+			}
+		}
+	}
+	
+	static public CommandType fromString(String value) {
+		if (value == null) {
+			throw new NullPointerException("Null alias");
+		}
+
+		// Normalising input
+		CommandType opt = ALIAS_TABLE.get(value.toLowerCase().trim());
+		
+		return opt;
+	}
+	
+	static public List<String> getAliases(CommandType cmd) {
+		return cmd.aliases;
+	}
+	
+	private List<String> aliases;
+	private CommandType(String... aliases) {
+		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
+		this.aliases.add(this.toString());
+	}
+	
+	/**
+	 * Retrieve a list of applicable OptionType for the corresponding command type.
+	 * 
+	 * @return a List<OptionType> that contains the applicable OptionType. null if there is none.
+	 */
+	public abstract List<OptionType> getApplicableOptions();
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\controller\CommandType.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\CommandLine.java
+	 */
+
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandAdd;
+import edu.dynamic.dynamiz.controller.CommandDelete;
+import edu.dynamic.dynamiz.controller.CommandMark;
+import edu.dynamic.dynamiz.controller.CommandHelp;
+import edu.dynamic.dynamiz.controller.CommandList;
+import edu.dynamic.dynamiz.controller.CommandRedo;
+import edu.dynamic.dynamiz.controller.CommandSearch;
+import edu.dynamic.dynamiz.controller.CommandShow;
+import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.controller.CommandUndo;
+import edu.dynamic.dynamiz.controller.CommandUnmark;
+import edu.dynamic.dynamiz.controller.CommandUpdate;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
+/**
+ * This is a class which stores the information of the parsed command line given
+ * by the user.
+ * 
+ * Represents a list of arguments parsed against an option argument.
+ * 
+ * Also represents a list of commands parsed (?! if it is necessary)
+ * 
+ * This allows querying of a boolean hasOption(String opt), and retrieving value
+ * of the option getOptionValue(String opt)
+ *
+ */
+
+public class CommandLine {
+	private CommandType commandType;
+	private Options options;
+	private String param;
+	private Command command;
+
+	private final int INVALID_ID = -1;
+
+	/** A logger instance for this class */
+	private final static Logger LoggerCommandLine = Logger
+			.getLogger(CommandLine.class.getName());
+
+	private final static String INVALID_ID_MSG = "Not a valid id given: %1$s";
+	private final static String INVALID_COMMANDTYPE_MSG = "Not a valid alias to known CommandType: %1$s";
+	private final static String INVALID_OPTIONTYPE_MSG = "Not a valid alias of known OptionType: %1$s";
+	private final static String INVALID_DATE_INTERVAL_MSG = "Not a valid interval of date: from %1$s to %2$s";
+
+	public CommandLine() {
+		this.commandType = null;
+		this.options = null;
+		this.param = null;
+	}
+
+	public CommandLine(CommandType cmdType, Options options, String param) {
+		this.commandType = cmdType;
+		this.options = options;
+		this.param = param;
+
+		if (!initialiseCommand()) {
+			LoggerCommandLine.severe("Command is not initialised!");
+		}
+	}
+
+	private boolean initialiseCommand() {
+		switch (this.commandType) {
+		case ADD :
+			this.command = parseAdd();
+			break;
+		case DELETE :
+			this.command = parseDelete();
+			break;
+		case UPDATE :
+			this.command = parseUpdate();
+			break;
+		case LIST :
+			this.command = parseList();
+			break;
+		case SEARCH :
+			this.command = parseSearch();
+			break;
+		case UNDO :
+			this.command = parseUndo();
+			break;
+		case REDO :
+			this.command = parseRedo();
+			break;
+		case HELP :
+			this.command = parseHelp();
+			break;
+		case MARK :
+			this.command = parseMark();
+			break;
+		case UNMARK :
+			this.command = parseUnmark();
+			break;
+		case SHOW :
+			this.command = parseShow();
+			break;
+		case EXIT :
+			this.command = parseExit();
+			break;
+		default :
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandAdd} object
+	 * 
+	 * @return a parsed {@link CommandAdd} object
+	 */
+	private Command parseAdd() {
+		ToDoItem commandItem = null;
+
+		// Handling date
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+
+		MyDate startDate = null;
+		MyDate endDate = null;
+
+		if (hasStart) {
+			startDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.START_TIME));
+		}
+
+		if (hasEnd) {
+			endDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.END_TIME));
+		}
+
+		if (hasOn) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (startDate != null) {
+				startDate.setDate(dd, mm, yy);
+			} else {
+				startDate = onDate;
+			}
+
+			if (endDate != null) {
+				endDate.setDate(dd, mm, yy);
+			} else {
+				endDate = onDate;
+			}
+		}
+
+		if (hasBoth || hasOn) {
+			if (startDate.compareIncludingTime(endDate) <= 0) {
+				commandItem = new EventItem(this.param, startDate, endDate);
+			} else {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_INTERVAL_MSG, startDate, endDate));
+			}
+		} else if (hasEnd) {
+			commandItem = new TaskItem(this.param, endDate);
+		} else {
+			commandItem = new ToDoItem(this.param);
+		}
+
+		// Handling Priority (if applicable)
+		if (options.hasOption(OptionType.PRIORITY)) {
+			int priority = Integer.parseInt(getFirstOptionValue(options,
+					OptionType.PRIORITY));
+			commandItem.setPriority(priority);
+		}
+
+		return new CommandAdd(commandItem);
+
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandDelete} object
+	 * 
+	 * @return a parsed {@link CommandDelete} object
+	 */
+	private Command parseDelete() {
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandDelete(ids);
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandList} object
+	 * 
+	 * @return a parsed {@link CommandList} object
+	 */
+	private Command parseList() {
+		// Parse Start and End Date
+		List<MyDate> commandStartDateList = new ArrayList<MyDate>();
+		List<MyDate> commandEndDateList = new ArrayList<MyDate>();
+		List<MyDate> commandOnDateList = new ArrayList<MyDate>();
+
+		List<Integer> commandPriorityList = new ArrayList<Integer>();
+		List<OptionType> commandOrderList = new ArrayList<OptionType>();
+
+		if (options.hasOption(OptionType.START_TIME)) {
+			commandStartDateList = extractDateList(options,
+					OptionType.START_TIME);
+		}
+
+		if (options.hasOption(OptionType.END_TIME)) {
+			commandEndDateList = extractDateList(options, OptionType.END_TIME);
+		}
+
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriorityList = extractPriorityList(options);
+		}
+
+		if (options.hasOption(OptionType.ORDER_BY)) {
+			commandOrderList = extractOptionTypeList(options);
+		}
+
+		if (options.hasOption(OptionType.ON_TIME)) {
+			commandOnDateList = extractDateList(options, OptionType.ON_TIME);
+			if (!commandOnDateList.isEmpty()) {
+				for (MyDate date : commandOnDateList) {
+					commandStartDateList.add(date);
+					commandEndDateList.add(date);
+				}
+			}
+		}
+
+		int[] priorities = null;
+		MyDate[] startDates = null;
+		MyDate[] endDates = null;
+		OptionType[] orderings = null;
+
+		if (!commandStartDateList.isEmpty()) {
+			startDates = commandStartDateList
+					.toArray(new MyDate[commandStartDateList.size()]);
+		}
+
+		if (!commandEndDateList.isEmpty()) {
+			endDates = commandEndDateList.toArray(new MyDate[commandEndDateList
+					.size()]);
+		}
+
+		if (!commandPriorityList.isEmpty()) {
+			priorities = new int[commandPriorityList.size()];
+			for (int i = 0; i < commandPriorityList.size(); i++) {
+				priorities[i] = commandPriorityList.get(i);
+			}
+		}
+
+		if (!commandOrderList.isEmpty()) {
+			orderings = commandOrderList
+					.toArray(new OptionType[commandOrderList.size()]);
+		}
+
+		return new CommandList(priorities, startDates, endDates, orderings);
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandSearch} object
+	 * 
+	 * @return a parsed {@link CommandSearch} object
+	 */
+	private Command parseSearch() {
+		// Parse Start and End Date
+		int commandPriority = OptionType.PRIORITY_UNCHANGED;
+		String commandStatus = null;
+
+		List<OptionType> commandOrderList = new ArrayList<OptionType>();
+
+		// Handling date
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+
+		MyDate commandStartDate = null;
+		MyDate commandEndDate = null;
+
+		if (hasStart) {
+			commandStartDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.START_TIME));
+		}
+
+		if (hasEnd) {
+			commandEndDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.END_TIME));
+		}
+
+		if (hasOn) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (commandStartDate != null) {
+				commandStartDate.setDate(dd, mm, yy);
+			} else {
+				commandStartDate = onDate;
+			}
+
+			if (commandEndDate != null) {
+				commandEndDate.setDate(dd, mm, yy);
+			} else {
+				commandEndDate = onDate;
+			}
+		}
+
+		if (hasBoth || hasOn) {
+			if (commandStartDate.compareIncludingTime(commandEndDate) > 0) {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_INTERVAL_MSG, commandStartDate,
+						commandEndDate));
+			}
+		}
+
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriority = Integer.parseInt(getFirstOptionValue(options,
+					OptionType.PRIORITY));
+		}
+
+		if (options.hasOption(OptionType.ORDER_BY)) {
+			commandOrderList = extractOptionTypeList(options);
+		}
+
+		if (options.hasOption(OptionType.STATUS)) {
+			commandStatus = getFirstOptionValue(options, OptionType.STATUS);
+		}
+
+		return new CommandSearch(
+				param,
+				commandPriority,
+				commandStartDate,
+				commandEndDate,
+				commandStatus,
+				commandOrderList.toArray(new OptionType[commandOrderList.size()]));
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUndo} object
+	 * 
+	 * @return a parsed {@link CommandUndo} object
+	 */
+	private Command parseUndo() {
+		return new CommandUndo();
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandRedo} object
+	 * 
+	 * @return a parsed {@link CommandRedo} object
+	 */
+	private Command parseRedo() {
+		return new CommandRedo();
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUpdate} object
+	 * 
+	 * @return a parsed {@link CommandUpdate} object
+	 */
+	private Command parseUpdate() {
+		// check param. If have more than just item ID, update the description
+		String itemID = Util.getFirstWord(this.param);
+		int id;
+		try {
+			id = Integer.parseInt(itemID);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, itemID));
+			throw new IllegalArgumentException(String.format(INVALID_ID_MSG,
+					itemID));
+		}
+
+		String extraDescription = Util.stripFirstWord(this.param);
+
+		int commandPriority = OptionType.PRIORITY_UNCHANGED;
+
+		// Handling date
+		boolean hasStart = options.hasOption(OptionType.START_TIME);
+		boolean hasEnd = options.hasOption(OptionType.END_TIME);
+		boolean hasBoth = hasStart && hasEnd;
+		boolean hasOn = options.hasOption(OptionType.ON_TIME);
+
+		MyDate startDate = null;
+		MyDate endDate = null;
+
+		if (hasStart) {
+			startDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.START_TIME));
+		}
+
+		if (hasEnd) {
+			endDate = Util.convertStringToMyDate(getFirstOptionValue(options,
+					OptionType.END_TIME));
+		}
+
+		if (hasOn) {
+			MyDate onDate = Util.convertStringToMyDate(getFirstOptionValue(
+					options, OptionType.ON_TIME));
+			int dd = onDate.getDayOfMonth();
+			int mm = onDate.getMonth();
+			int yy = onDate.getYear();
+
+			if (startDate != null) {
+				startDate.setDate(dd, mm, yy);
+			} else {
+				startDate = onDate;
+			}
+
+			if (endDate != null) {
+				endDate.setDate(dd, mm, yy);
+			} else {
+				endDate = onDate;
+			}
+		}
+
+		if (hasBoth || hasOn) {
+			if (startDate.compareIncludingTime(endDate) > 0) {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_INTERVAL_MSG, startDate, endDate));
+			}
+		}
+
+		if (options.hasOption(OptionType.PRIORITY)) {
+			commandPriority = Integer.parseInt(getFirstOptionValue(options,
+					OptionType.PRIORITY));
+		}
+
+		return new CommandUpdate(id, extraDescription, commandPriority,
+				startDate, endDate);
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandHelp} object
+	 * 
+	 * @return a parsed {@link CommandHelp} object
+	 */
+	private Command parseHelp() {
+		try {
+			if (!param.isEmpty()) {
+				CommandType type = CommandType.fromString(param);
+				return new CommandHelp(type);
+			} else {
+				return new CommandHelp(null);
+			}
+		} catch (IllegalArgumentException e) {
+			LoggerCommandLine.warning(String.format(INVALID_COMMANDTYPE_MSG,
+					param));
+			return new CommandHelp(null);
+		}
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandMark} object
+	 * 
+	 * @return a parsed {@link CommandMark} object
+	 */
+	private Command parseMark() {
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandMark(ids);
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandUnmark} object
+	 * 
+	 * @return a parsed {@link CommandUnmark} object
+	 */
+	private Command parseUnmark() {
+		int[] ids = Util.toIntArray(extractIdList(param));
+		return new CommandUnmark(ids);
+	}
+
+	/**
+	 * Parsing CommandLine object into respective {@link CommandShow} object
+	 * 
+	 * @return a parsed {@link CommandShow} object
+	 */
+	private Command parseShow() {
+		try {
+			int id = Integer.parseInt(param);
+			return new CommandShow(id);
+		} catch (NumberFormatException e) {
+			LoggerCommandLine.warning(String.format(INVALID_ID_MSG, param));
+			return new CommandShow(INVALID_ID);
+		}
+	}
+
+	/**
+	 * It is redundant to try and parse Exit command into an object
+	 */
+	private Command parseExit() {
+		return null;
+	}
+
+	/**
+	 * Retrieve the first valid value of the last {@link Option} present in the
+	 * collection of the given {@link Options}
+	 * 
+	 * @param commandOptions
+	 *            The collection of {@link Option}
+	 * @param optionType
+	 *            The {@link OptionType} of the {@link Option} that is being
+	 *            retrieved
+	 * @return the first valid value of the matching {@link Option}
+	 */
+	private String getFirstOptionValue(Options commandOptions,
+			OptionType optionType) {
+		List<Option> optionList = commandOptions.getOptionList(optionType);
+		Option option = optionList.get(optionList.size() - 1);
+		String optionStr = option.getValues().get(0);
+
+		return optionStr;
+	}
+
+	/**
+	 * Retrieve a list of {@link MyDate} object from the given list of value
+	 * 
+	 * @param options
+	 *            The collection of {@link Option} to extract from
+	 * @param dateType
+	 *            The {@link OptionType} of the {@link Option} that is being
+	 *            retrieved
+	 * @return a list of {@link MyDate} and/or {@link MyDateTime} objects
+	 *         extracted from the given collection.
+	 */
+	public List<MyDate> extractDateList(Options options, OptionType dateType) {
+		List<String> values = options.getOptionList(dateType).get(0)
+				.getValues();
+		List<MyDate> dateList = new ArrayList<MyDate>();
+
+		for (String value : values) {
+			MyDate date = Util.convertStringToMyDate(value);
+			if (date != null) {
+				dateList.add(date);
+			}
+		}
+
+		return dateList;
+	}
+
+	/**
+	 * Retrieve a list of {@link OptionType.PRIORITY} integer values from the
+	 * collection
+	 * 
+	 * @param options
+	 *            The collection of {@link Option} to extract from
+	 * @return a list of {@link OptionType.PRIORITY} integer values extracted
+	 *         from the given collection.
+	 */
+	public List<Integer> extractPriorityList(Options options) {
+		List<String> values = options.getOptionList(OptionType.PRIORITY).get(0)
+				.getValues();
+		List<Integer> priorityList = new ArrayList<Integer>();
+
+		for (String value : values) {
+			Integer priority = Integer.parseInt(value);
+			priorityList.add(priority);
+		}
+
+		return priorityList;
+	}
+
+	/**
+	 * Retrieve a list of {@link OptionType} values from the collection
+	 * 
+	 * @param options
+	 *            The collection of {@link Option} to extract from
+	 * @return a list of matching {@link OptionType} values extracted from the
+	 *         given collection.
+	 */
+	public List<OptionType> extractOptionTypeList(Options options) {
+		List<String> values = options.getOptionList(OptionType.ORDER_BY).get(0)
+				.getValues();
+		List<OptionType> typeList = new ArrayList<OptionType>();
+
+		for (String value : values) {
+			try {
+				OptionType type = OptionType.fromString(value);
+				typeList.add(type);
+			} catch (IllegalArgumentException e) {
+				LoggerCommandLine.warning(String.format(INVALID_OPTIONTYPE_MSG,
+						value));
+				throw new IllegalArgumentException(String.format(
+						INVALID_OPTIONTYPE_MSG, value));
+			}
+		}
+
+		return typeList;
+	}
+
+	/**
+	 * Retrieve a List<Integer> from the given string
+	 * 
+	 * @param idStr
+	 *            The string in which the number list is extracted from
+	 * @return a List<Integer> containing the values in the given string
+	 */
+	public List<Integer> extractIdList(String idStr) {
+		String[] idArray = idStr.split(Option.DEFAULT_DELIMITER);
+		List<String> idStrList = Util.removeEmptyStringsInArray(idArray);
+
+		Set<Integer> idSet = new HashSet<Integer>();
+
+		for (String id : idStrList) {
+			if (Util.isInteger(id)) {
+				idSet.add(Integer.parseInt(id));
+			} else {
+				List<Integer> idList = Util.getNumberListFromRange(id);
+				if (idList != null && !idList.isEmpty()) {
+					idSet.addAll(idList);
+				} else {
+					LoggerCommandLine
+							.warning(String.format(INVALID_ID_MSG, id));
+					throw new IllegalArgumentException(String.format(
+							INVALID_ID_MSG, id));
+				}
+			}
+		}
+
+		return new ArrayList<Integer>(idSet);
+	}
+
+	/**
+	 * Retrieve an Integer[] array from the given string
+	 * 
+	 * @param idStr
+	 *            The string in which the number array is extracted from
+	 * @return an Integer[] containing the values in the given string.
+	 */
+	public Integer[] extractIdArray(String idStr) {
+		List<Integer> idList = extractIdList(idStr);
+		return idList.toArray(new Integer[idList.size()]);
+	}
+
+	/*
+	 * ========================================================================
+	 * Getters & Setters
+	 * ========================================================================
+	 */
+	public CommandType getCommandType() {
+		return commandType;
+	}
+
+	public void setCommandType(CommandType command) {
+		this.commandType = command;
+	}
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public void setOptions(Options options) {
+		this.options = options;
+	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
+	}
+
+	public Command getCommand() {
+		return command;
+	}
+
+	public void setCommand(Command command) {
+		this.command = command;
+	}
+
+	/*
+	 * ========================================================================
+	 * End of Getters & Setters
+	 * ========================================================================
+	 */
+
+	public int getNumberOfOptions() {
+		return options.getNumOfOptions();
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Command Type: " + commandType.toString() + "\n");
+		sb.append("Value: " + param + "\n");
+		sb.append("Options: \n" + options.toString());
+
+		return sb.toString();
+	}
+
+	/**
+	 * This function will call the corresponding Command its execute. For
+	 * example, if the parsed CommandLine has the CommandType of Add. It will
+	 * call CommandAdd's execute.
+	 */
+	public void execute() {
+		if (command != null) {
+			command.execute();
+		} else {
+			throw new IllegalArgumentException("Null command");
+		}
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\CommandLine.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\ExpressionSubstitutor.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * This is a singleton class to substitute abbreviations of commonly used expressions
+ * to full length expressions. The reasons to implement this in a separate class 
+ * instead of merging with Util are:
+ * 	- This serves a different purpose than the general purpose Util class
+ *  - This is open for extension in which the user is able to define their own abbreviation
+ *  - Organising purposes.
+ *  
+ */
+
+public class ExpressionSubstitutor {
+	private static ExpressionSubstitutor substitutor;
+	private HashMap<String, String> dictionary;
+
+	/**
+	 * Singleton construction.
+	 * For the current implementation, the expressions are hard-coded.
+	 * User-defined abbr will be retrieved from files.
+	 * These are considered as default values.
+	 */
+	private ExpressionSubstitutor() {
+		dictionary = new HashMap<String, String>();
+		
+		dictionary.put("tmr", "tomorrow");
+		dictionary.put("2mr", "tomorrow");
+		dictionary.put("tmw", "tomorrow");
+		
+		dictionary.put("ytd", "yesterday");
+		dictionary.put("yst", "yesterday");
+		
+		dictionary.put("td", "today");
+		dictionary.put("t", "today");
+		
+		dictionary.put("nxt", "next");
+		dictionary.put("nt", "next");
+
+		dictionary.put("lt", "last");
+		dictionary.put("lst", "last");
+	}
+	
+	/**
+	 * Retrieve an instance of ExpressionSubstitutor to utilise its functionality
+	 * @return
+	 */
+	public static ExpressionSubstitutor getInstance() {
+		if (substitutor == null) {
+			substitutor = new ExpressionSubstitutor();
+		}
+		
+		return substitutor;
+	}
+	
+	/**
+	 * Retrieve a new String after substituted with the values existing in the 
+	 * look-up table
+	 * 
+	 * @param input The string in which abbrs are to be found and substituted (if any)
+	 * @return a new string whereby abbrs are substituted.
+	 */
+	public String subCommonDateAbbreviation(String input) {
+		assert input != null;
+		
+		Pattern pat = null;
+		Matcher mat = null;
+		for (String abbr: dictionary.keySet()) {
+			pat = Pattern.compile(makeWordRegEx(abbr), Pattern.CASE_INSENSITIVE);
+			mat = pat.matcher(input);
+			input = mat.replaceAll(dictionary.get(abbr));
+		}
+		
+		return input;
+	}
+	
+	/**
+	 * Retrieve a List<String> after substituted with the values existing in the
+	 * look-up table
+	 * 
+	 * @param inputList the List<String> input in which abbrs are to be found and
+	 * substituted (if any)
+	 * @return a new List<String> whereby arrbs are substituted.
+	 */
+	public List<String> subCommonDateAbbrList(List<String> inputList) {
+		assert inputList != null;
+		List<String> outputList = new ArrayList<String>();
+		
+		for (String s: inputList) {
+			outputList.add(subCommonDateAbbreviation(s));
+		}
+		
+		return outputList;
+	}
+	
+	/**
+	 * Retrieve a RegEx expression of a plain input.
+	 * 
+	 * @param input the word to be transformed into RegEx to be used by this class
+	 * @return a new RegEx that allows the ability to ignore escaped words.
+	 */
+	private String makeWordRegEx(String input) {
+		return Util.addEscapeCapacityToRegex(String.format("\\b(%1$s)\\b", input));
+	}
+	
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\ExpressionSubstitutor.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\Option.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A single command-line option. It keeps information of an option
+ * such as 
+ * 	- short name
+ *  - long name (if any)
+ *  - number of arguments required (0: none, 1: one, -1: none or many, -2: at least 1)
+ *  - self documenting description string
+ *  
+ * An Option requires at least a short name or a long name.
+ * 
+ * Modelled after CLI library
+ */
+
+public class Option{
+	/*=========================================================================
+	 * Constants
+	 * ========================================================================
+	 */
+	
+	/** constant that specifies the default character for delimiter of argument values */
+	public static final String DEFAULT_DELIMITER = ",";
+	
+	/*=========================================================================
+	 * Class attributes
+	 * ========================================================================
+	 */
+	/** option short name */
+	private OptionType optionType;
+
+	/** list of argument values */
+	private List<String> values = new ArrayList<String>();
+	
+	/** delimiter character for multiple argument values */
+	private char delimiter = ',';
+	
+	/*=========================================================================
+	 * Constructors
+	 * ======================================================================== 
+	 */
+
+	/**
+	 * Construct an Option object that hold the OptionType and a list of argument value strings
+	 * @param optionType Type of this Option object
+	 * @param values List of value strings
+	 */
+	public Option(OptionType optionType, List<String> values) {
+		this.optionType = optionType;
+		this.values = values;
+	}
+	
+	/**
+	 * Construct an Option object with a given OptionType as String and a list of argument values.
+	 * @param typeString OptionType in String
+	 * @param values List of values
+	 */
+	public Option(String typeString, List<String> values) {
+		this.optionType = OptionType.fromString(typeString);
+		this.values = values;
+	}
+	
+	/*=========================================================================
+	 * Getter & Setter Methods
+	 * ========================================================================
+	 */
+
+	/**
+	 * Retrieve the OptionType of this Option object
+	 * @return return an OptionType instance that this Option belongs to
+	 */
+	public OptionType getOptionType() {
+		return optionType;
+	}
+
+	/**
+	 * Set the OptionType of this Option object
+	 * @param optionType the OptionType instance to set
+	 */
+	public void setOptionType(OptionType optionType) {
+		this.optionType = optionType;
+	}
+	
+	/**
+	 * Retrieve an array list of argument values
+	 * 
+	 * @return an array list of argument values. Null if there is none
+	 */
+	public List<String> getValues() {
+		return values;
+	}
+	
+	/**
+	 * Set the array of list of argument values 
+	 * Should use with caution
+	 * 
+	 * @param values the array list of argument values
+	 */
+	public void setValues(List<String> values) {
+		this.values = values;
+	}
+
+	/**
+	 * Retrieve the delimiter character
+	 * 
+	 * @return delimiter character. Null if there is none
+	 */
+	public char getDelimiter() {
+		return delimiter;
+	}
+
+	/**
+	 * Set the delimiter character for multiple argument values
+	 * 
+	 * @param delimiter the delimiter character
+	 */
+	public void setDelimiter(char delimiter) {
+		this.delimiter = delimiter;
+	}
+
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<" + this.optionType.name() + ", " + this.values + ">");
+		
+		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		
+		if (!(other instanceof Option)) {
+			return false;
+		}
+		
+		Option o = (Option) other;
+		if (this.getOptionType().equals(o.getOptionType())) {
+			for (String s: this.getValues()) {
+				if (!o.getValues().contains(s)) {
+					return false;
+				}
+			}		
+			return true;
+		}
+		
+		return false;		
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\Option.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\Options.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+/**
+ * List of Options
+ * This is a container of {@link Option}. Multiple {@link Option} of the same {@link OptionType} will be 
+ * grouped together.
+ * <p>
+ * Provide utility methods to check for ambiguity if one {@link OptionType} has more than one occurrence.
+ * 
+ *
+ */
+public class Options {
+
+	private Map<OptionType, List<Option>> optionTable;
+
+	public Options() {
+		optionTable = new HashMap<OptionType, List<Option>>();
+	}
+	
+	/**
+	 * Add an option to the Options collection.
+	 * 
+	 * @param opt {@link Option} to add to Options
+	 * @return true of the Option input is successfully added. False otherwise.
+	 */
+	public boolean add(Option opt) {
+		OptionType optType = OptionType.fromOption(opt);
+		
+		List<Option> optionList = null;
+		
+		if (optionTable.containsKey(optType)) {
+			optionList = optionTable.get(optType);
+		} else {
+			optionList = new ArrayList<Option>();
+		}
+		optionList.add(opt);
+		optionTable.put(optType, optionList);
+		
+		return true;
+	}
+	
+	/**
+	 * Add a list of {@link Option}. The {@link OptionType} of the list will have to be the same for all 
+	 * the elements. Otherwise, the operation will return false and nothing will be added to Options collection.
+	 * 
+	 * @param optList the list of {@link Option} to be added
+	 * @return true if the list of {@link Option} is of the same {@link OptionType} and successfully added to the
+	 * collection. False otherwise. 
+	 */
+	public boolean add(List<Option> optList) {
+		assert(optList != null);
+		
+		if (optList.size() <= 0) {
+			throw new IllegalArgumentException("Empty list");
+		}
+		
+		OptionType optType = OptionType.fromOption(optList.get(0));
+		for (Option op: optList) {
+			if (OptionType.fromOption(op) != optType) {
+				return false;
+			}
+		}
+		
+		optionTable.put(optType, optList);
+		return true;
+	}
+	
+
+
+	/**
+	 * Query if this List contains a particular option
+	 * 
+	 * @param opt the Option to query
+	 * @return boolean flag if the matching option exists in the List
+	 */
+	public boolean hasOption(Option opt) {
+		OptionType optType = OptionType.fromOption(opt);
+		
+		if (optionTable.containsKey(optType)) {
+			List<Option> options = optionTable.get(optType);
+			return options.contains(opt);
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Query if this List contains an option name
+	 * 
+	 * @param optName String name for the option
+	 * @return boolean flag if a certain option type exists.
+	 */
+	public boolean hasOption(String optName) {
+		return optionTable.containsKey(OptionType.fromString(optName));
+	}
+	
+	/**
+	 * Query if this List contains an option name
+	 * 
+	 * @param optName String name for the option
+	 * @return boolean flag if a certain option type exists.
+	 */
+	public boolean hasOption(OptionType optType) {
+		return optionTable.containsKey(optType);
+	}
+	
+	/**
+	 * Retrieve a passed Option if it exists in this List
+	 * 
+	 * @param opt an Option to search for in the List
+	 * @return an Option object that exists in the List
+	 */
+	public Option getOption(Option opt) {
+		OptionType optType = OptionType.fromOption(opt);
+		
+		for (Option o: optionTable.get(optType)) {
+			if (opt.equals(o)) {
+				return o;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieve the List of Option that has the same type
+	 * 
+	 * @param optName an alias of the option to specify OptionType
+	 * @return a List of all the options of that OptionType
+	 */
+	public List<Option> getOptionList(String optName) {
+		OptionType optType = OptionType.fromString(optName);
+		
+		return getOptionList(optType);
+	}
+	
+	/**
+	 * Retrieve the List of Option that is of the given type
+	 * 
+	 * @param optType OptionType to retrieve
+	 * @return a List of all the options of that OptionType
+	 */
+	public List<Option> getOptionList(OptionType optType) {
+		return optionTable.get(optType);
+	}
+
+	/**
+	 * Retrieve the number of different {@link OptionType} of {@link Option} present in the collection
+	 * @return the number of different {@link OptionType}
+	 */
+	public int getNumOfOptions() {
+		return optionTable.size();
+	}
+	
+	/**
+	 * Check if the collection contains cases of ambiguity. This is done by checking that for at least one
+	 * {@link OptionType} of {@link Option}, there is more more than one {@link Option} present in the collection
+	 *
+	 * @return true if there is a case of ambiguity described above. False otherwise.
+	 */
+	public List<OptionType> getAmbiguousOptionTypes() {
+		List<OptionType> list = new ArrayList<OptionType>();
+		for (Entry<OptionType, List<Option>> e: optionTable.entrySet()) {
+			if (e.getValue().size() > 1) { // if there are 2 more options for 1 type
+				list.add(e.getKey());
+			}
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * Check if the Options contains no Option. 
+	 * @return True if the Options is empty, i.e. containing no Option
+	 */
+	public boolean isEmpty() {
+		return optionTable.isEmpty();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (Entry<OptionType, List<Option>> e: optionTable.entrySet()) {
+			OptionType type = e.getKey();
+			List<Option> opts = e.getValue();
+			sb.append(type + ": ");
+			
+			for (Option opt: opts) {
+				sb.append(opt.toString() + " ");
+			}
+			
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\Options.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\OptionType.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * OptionType enum class is a class to hold the various options applicable to many commands.
+ * Using OptionType allows the users to specify the PRIORITY, START_TIME, END_TIME, or
+ * ORDER_BY options for each items.
+ * 
+ * This enum class mainly facilitates the functionalities of Command classes as well as help in
+ * Parsing of the command.
+ *
+ */
+public enum OptionType {
+	PRIORITY("-p") {
+		@Override
+		public String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
+	}, START_TIME("-s", "starttime", "from", "startdate") {
+		@Override
+		public String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
+	}, END_TIME("-d", "-e", "deadline", "endtime", "enddate", "to", "by", "due") {
+		@Override
+		String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
+	}, ON_TIME("on") {
+		@Override
+		String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
+	}, ORDER_BY("-o", "orderby", "sortby") {
+		@Override
+		String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(RIGHT_END_FORMAT);
+			return String.format(format, getAliasesRegex());
+		}
+	}, STATUS("stat", "st") {
+		@Override
+		String getParsingRegex() {
+			String format = Util.addEscapeCapacityToRegex(SANDWICH_FORMAT);
+			return String.format(format, getAliasesRegex(), allAliasesRegex);
+		}
+	};
+	
+	
+	private static final String SANDWICH_FORMAT = "(%1$s)" + // Lookahead for targeted option keyword.
+			  									  "(.*?)" +       // Arguments sandwiched between 2 keywords or 1 keywords and end of line
+			  									  "(?=%2$s|$)"; // Another keyword or end of line to mark the end
+	private static final String RIGHT_END_FORMAT = "(%1$s)(.*)$";
+	
+	private static final Map<String, OptionType> ALIAS_TABLE = new HashMap<String, OptionType>();
+	private static final Map<String, Integer> PRIORITY_TABLE = new HashMap<String, Integer>();
+	private static final Map<String, String> STATUS_TABLE = new HashMap<String, String>();
+	
+	private static String allAliasesRegex = "";
+	
+	public static final int PRIORITY_URGENT = 8;
+	public static final int PRIORITY_HIGH = 4;
+	public static final int PRIORITY_MEDIUM = 2;
+	public static final int PRIORITY_LOW = 1;
+	public static final int PRIORITY_NONE = 0;
+	public static final int PRIORITY_UNCHANGED = -1;	
+	public static final int PRIORITY_INVALID = -2;
+	
+	public static final String STATUS_PENDING = "pending";
+	public static final String STATUS_COMPLETED = "completed";
+	public static final String STATUS_INVALID = "invalid";
+	
+	public static final String OPTION_SIGNAL_CHARACTER = "-";
+	
+	/** This character is added to escape an OptionType keyword from being parsed*/
+	public static final String OPTION_ESCAPE_CHARACTER = ";";
+	
+	static {
+		StringBuffer allAliases = new StringBuffer();
+		
+		for (OptionType opt: OptionType.values()) {
+			// Normalising by lowercase all
+			for (String alias: opt.aliases) {
+				ALIAS_TABLE.put(alias.toLowerCase(), opt);
+			}
+			allAliases.append(opt.aliasesRegex);
+			allAliases.append("|");
+		}
+		
+		// Remove the last | character
+		allAliasesRegex = allAliases.substring(0, allAliases.length() - 1);
+		
+		// Initialise priority table
+		PRIORITY_TABLE.put("u", PRIORITY_URGENT);
+		PRIORITY_TABLE.put("urg", PRIORITY_URGENT);
+		PRIORITY_TABLE.put("urgent", PRIORITY_URGENT);
+		
+		PRIORITY_TABLE.put("h", PRIORITY_HIGH);
+		PRIORITY_TABLE.put("hig", PRIORITY_HIGH);
+		PRIORITY_TABLE.put("high", PRIORITY_HIGH);
+		
+		PRIORITY_TABLE.put("m", PRIORITY_MEDIUM);
+		PRIORITY_TABLE.put("med", PRIORITY_MEDIUM);
+		PRIORITY_TABLE.put("medium", PRIORITY_MEDIUM);
+		
+		PRIORITY_TABLE.put("l", PRIORITY_LOW);
+		PRIORITY_TABLE.put("low", PRIORITY_LOW);
+		
+		PRIORITY_TABLE.put("n", PRIORITY_NONE);
+		PRIORITY_TABLE.put("non", PRIORITY_NONE);
+		PRIORITY_TABLE.put("none", PRIORITY_NONE);
+		
+		PRIORITY_TABLE.put("unchanged", PRIORITY_UNCHANGED);
+		
+		// Initialise status table
+		STATUS_TABLE.put("pending", STATUS_PENDING);
+		STATUS_TABLE.put("pend", STATUS_PENDING);
+		STATUS_TABLE.put("p", STATUS_PENDING);
+		
+		STATUS_TABLE.put("completed", STATUS_COMPLETED);
+		STATUS_TABLE.put("complete", STATUS_COMPLETED);
+		STATUS_TABLE.put("comp", STATUS_COMPLETED);
+		STATUS_TABLE.put("c", STATUS_COMPLETED);
+		
+		
+	}
+	
+	/**
+	 * Retrieve the OptionType instance given the string of one of the option
+	 * alias
+	 * 
+	 * @param value the String identification of the option
+	 * @return OptionType instance corresponding to the string value
+	 */
+	public static OptionType fromString(String value) {
+		if (value == null) {
+			throw new NullPointerException("Null alias");
+		}
+
+		// Normalising input
+		OptionType opt = ALIAS_TABLE.get(value.toLowerCase().trim());
+
+		if (opt == null) {
+			throw new IllegalArgumentException("Not an alias: " + value);
+		}
+		
+		return opt;
+	}
+	
+	/**
+	 * Retrieve the OptionType instance given a parsed Option.
+	 * 
+	 * @param opt the Option to get the OptionType from
+	 * @return the OptionType instance indicating the Option given
+	 */
+	public static OptionType fromOption(Option opt) {
+		if (opt == null) {
+			throw new NullPointerException("Null option");
+		}
+		
+		return opt.getOptionType();
+	}
+	
+	/**
+	 * To check if the String priority given is an alias of any of the
+	 * existing PRIORITY levels
+	 * 
+	 * @param priority the string containing the priority level
+	 * @return true if it is a valid alias. False otherwise
+	 */
+	public static boolean isValidPriority(String priority) {
+		return PRIORITY_TABLE.containsKey(priority.toLowerCase());
+	}
+	
+	/**
+	 * Retrieve the numerical value of the Priority from the given string
+	 * 
+	 * @param priority the string containing the priority level
+	 * @return the integer value of the priority given in the string.
+	 */
+	public static int getPriority(String priority) {
+		priority = priority.toLowerCase();
+		if (isValidPriority(priority)) {
+			return PRIORITY_TABLE.get(priority); 
+		}
+		
+		return PRIORITY_INVALID;
+	}
+	
+	/**
+	 * To check if the String status given is an alias of any of the
+	 * existing Status states
+	 * 
+	 * @param status the string containing the status state
+	 * @return true if it is a valid alias. False otherwise
+	 */
+	public static boolean isValidStatus(String status) {
+		return STATUS_TABLE.containsKey(status.toLowerCase());
+	}
+	
+	/**
+	 * Retrieve the String value of the Status from the given string
+	 * 
+	 * @param status the string containing the status state
+	 * @return the string value of the status given in the string.
+	 */
+	public static String getStatus(String status) {
+		status = status.toLowerCase();
+		if (isValidStatus(status)) {
+			return STATUS_TABLE.get(status);
+		}
+		
+		return STATUS_INVALID;
+	}
+	
+	/**
+	 * Retrieve a List<String> of all the aliases of all the OptionType
+	 * 
+	 * @return a List of String of all the string representation of  the OptionType
+	 */
+	public static List<String> getAllAliases() {
+		List<String> allAliases = new ArrayList<String>();
+		for (OptionType opts: OptionType.values()) {
+			allAliases.addAll(opts.aliases);
+		}
+		
+		return allAliases;
+	}
+	
+	public static String getAllAliasesRegex() {
+		return allAliasesRegex;
+	}
+	
+	private List<String> aliases;
+	private String aliasesRegex;
+	private OptionType(String... aliases) {
+		this.aliases = new ArrayList<String>(Arrays.asList(aliases));
+		this.aliases.add(this.toString().toLowerCase());
+		
+		StringBuffer regEx = new StringBuffer();
+		for (String alias: this.aliases) {
+			if (alias.charAt(0) == OPTION_SIGNAL_CHARACTER.charAt(0)) {
+				String wordRegex = "[\\w" + OPTION_SIGNAL_CHARACTER + "]";
+				regEx.append(String.format("(?<!%1$s)%2$s\\b|", wordRegex, alias));
+			} else {
+				regEx.append(String.format("\\b%1$s\\b|", alias));
+			}
+		}
+		aliasesRegex = regEx.substring(0, regEx.length() - 1);
+	}
+	
+	public String getAliasesRegex() {
+		return aliasesRegex;
+	}
+	
+	abstract String getParsingRegex();
+
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\OptionType.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\Parser.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
+import com.joestelmach.natty.DateGroup;
+
+import edu.dynamic.dynamiz.controller.Command;
+import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+
+/**
+ * This is a Parser class that will parse the given input from the user into
+ * CommandLine object which in turn into Command object of suitable type. It
+ * also provides the parsing of Date in explicit form e.g. 13/12/2014 or
+ * implicit form, e.g. next Thurs.
+ * <p>
+ * The Parser will divide an input mainly into three groups: 1> Command keyword
+ * 2> Parameter 3> Options
+ * <p>
+ * Firstly, the Parser will assume that the first word is always a Command
+ * keyword (group 1) and remove it from the input string and check it against
+ * the known Command keyword. Then, the Parser will base on the parsed Command
+ * keyword to continue parsing the correct structure corresponding to the
+ * {@link CommandType}.
+ * <p>
+ * Then, the Parser will attempt to parse the {@link OptionType} ORDER_BY and
+ * then extract if it is applicable to the parsed {@link CommandType}
+ * <p>
+ * Next, the Parser will attempt to parse Option token by recognising a pair of
+ * [OptionType value]. The parser will attempt to parse the value if it is
+ * suitable with the OptionType. If both match, then it is considered as a valid
+ * token and hence get extracted from the input string.
+ * <p>
+ * The remaining will be assumed to be the parameter (group 2).
+ * <p>
+ * The Parser class follows the Singleton pattern.
+ * 
+ *
+ */
+public class Parser {
+	/** A regular expression matching explicit date format */
+	private static final String EXPLICIT_DATE_REGEX = "\\b(\\d{1,2})[/-](\\d{1,2})[/-](\\d{2}|\\d{4})\\b";
+
+	private static final String DATE_RANGE_INDICATOR = ">";
+	private static final String DATE_RANGE_REGEX = String.format(
+			"(.*)%1$s(.*)", DATE_RANGE_INDICATOR);
+
+	private static final String INVALID_DATE_RANGE_MSG = "Invalid date range: %1$s";
+
+	/** An attribute for Singleton pattern */
+	private static Parser parser = null;
+
+	/** A logger instance for this class */
+	private final static Logger LoggerParser = Logger.getLogger(Parser.class
+			.getName());
+
+	/**
+	 * Explicitly declare Constructor to be private to override the default
+	 * Constructor
+	 */
+	private Parser() {
+	}
+
+	/**
+	 * Retrieve the Singleton instance of Parser class
+	 * 
+	 * @return
+	 */
+	public static Parser getInstance() {
+		if (parser == null) {
+			parser = new Parser();
+		}
+
+		return parser;
+	}
+
+	/**
+	 * Retrieve a MyDate object parsed from a string. Using natty library as the
+	 * main parsing mechanism
+	 * 
+	 * @param dateStr
+	 *            the string that may contain a date information
+	 * @return a parsed MyDate object if applicable, otherwise null
+	 */
+	public MyDate parseMyDate(String dateStr) {
+		assert dateStr != null;
+
+		String dateStrUS = changeDateFormatUKToUS(dateStr);
+
+		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = nattyParser.parse(dateStrUS);
+		if (!groups.isEmpty()) {
+			DateGroup group = groups.get(0);
+			Date date = group.getDates().get(0);
+
+			if (group.isTimeInferred()) {
+				return new MyDate(date);
+			} else {
+				return new MyDateTime(date);
+			}
+		} else {
+			LoggerParser.warning("Unrecognised date string: " + dateStr);
+			return null;
+		}
+	}
+
+/**
+	 * Retrieve a {@link org.joda.time.DateTime object parsed from a string. 
+	 * Using natty library as the main parsing mechanism
+	 * 
+	 * @param dateStr the string that may contain a date information
+	 * @return a parsed {@link org.joda.time.DateTime object if applicable, otherwise null
+	 */
+	public DateTime parseJodaDate(String dateStr) {
+		assert dateStr != null;
+
+		String dateStrUS = changeDateFormatUKToUS(dateStr);
+
+		com.joestelmach.natty.Parser nattyParser = new com.joestelmach.natty.Parser();
+		List<DateGroup> groups = nattyParser.parse(dateStrUS);
+		if (!groups.isEmpty()) {
+			DateGroup group = groups.get(0);
+			Date date = group.getDates().get(0);
+
+			return new DateTime(date);
+		} else {
+			LoggerParser.warning("Unrecognised date string: " + dateStr);
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieve from a list of string a list of parsed dates wherever applicable
+	 * 
+	 * @param unparsedList
+	 *            the unparsed list of string
+	 * @return a Date parsed list of string containing the date
+	 */
+	public List<String> parseDateList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+
+		for (String dateStr : unparsedList) {
+			List<String> datesRange = parseDateListFromRange(dateStr);
+			if (datesRange == null) {
+				MyDate date = parseMyDate(dateStr);
+				if (date != null) {
+					parsedList.add(date.toString());
+				}
+			} else {
+				parsedList = datesRange;
+			}
+		}
+
+		return parsedList;
+	}
+
+	/**
+	 * Retrieve a List<String> of MyDate representation from a list of valid
+	 * string date range
+	 * 
+	 * @param dateRange
+	 *            the string date range given
+	 * @return The List<String> of MyDate representation generated from the
+	 *         valid date range. Null otherwise
+	 */
+	public List<String> parseDateListFromRange(String dateRange) {
+		Pattern rangePat = Pattern.compile(DATE_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(dateRange.trim());
+
+		List<String> dates = new ArrayList<String>();
+
+		if (rangeMat.matches()) {
+			DateTime startDate = parseJodaDate(rangeMat.group(1));
+			DateTime endDate = parseJodaDate(rangeMat.group(2));
+
+			int days = Days.daysBetween(startDate, endDate).getDays();
+
+			if (days < 0) {
+				throw new IllegalArgumentException(String.format(
+						INVALID_DATE_RANGE_MSG, dateRange));
+			}
+
+			for (int i = 0; i <= days; i++) {
+				DateTime date = startDate.plusDays(i);
+				dates.add(Util.convertJodaToMyDate(date).toString());
+			}
+
+			return dates;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieve from a list of string a list of parsed Priority wherever
+	 * applicable
+	 * 
+	 * @param unparsedList
+	 *            the unparsed list of string
+	 * @return a Priority-parsed list of string containing the priorities
+	 */
+	public List<String> parsePriorityList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String priority : unparsedList) {
+			if (OptionType.isValidPriority(priority)) {
+				parsedList.add("" + OptionType.getPriority(priority));
+			}
+		}
+
+		return parsedList;
+	}
+
+	/**
+	 * Retrieve from a list of string a list of parsed Status wherever
+	 * applicable
+	 * 
+	 * @param unparsedList
+	 *            the unparsed list of string
+	 * @return a Status-parsed list of string containing the statuses
+	 */
+	public List<String> parseStatusList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String status : unparsedList) {
+			if (OptionType.isValidStatus(status)) {
+				parsedList.add(OptionType.getStatus(status));
+			}
+		}
+
+		return parsedList;
+	}
+
+	/**
+	 * Retrieve from a list of string a list of parsed OptionType wherever
+	 * applicable
+	 * 
+	 * @param unparsedList
+	 *            the unparsed list of string
+	 * @return an OptionType-parsed list of string containing the OptionType for
+	 *         ordering
+	 */
+	public List<String> parseOrderingList(List<String> unparsedList) {
+		List<String> parsedList = new ArrayList<String>();
+		for (String ordering : unparsedList) {
+			OptionType type = OptionType.fromString(ordering);
+			if (type != null) {
+				parsedList.add(type.name());
+			}
+		}
+
+		return parsedList;
+	}
+
+	/**
+	 * Parse the input with the given regular expression based on the OptionType
+	 * given. The general format of the Pattern is as followed: - Group 0: part
+	 * to remove if there is a matching - Group 1: matching keyword of
+	 * OptionType - Group 2: argument associating matching option type
+	 * 
+	 * Only the last matching token will be extracted.
+	 * 
+	 * @param input
+	 *            The unparsed input
+	 * @param type
+	 *            OptionType to match the Option in return
+	 * @return an Option that is correctly parse or a null if there is no
+	 *         matching.
+	 */
+	public Option parseOptionAndExtract(StringBuffer input, OptionType type) {
+		Option option = null;
+		String regEx = type.getParsingRegex();
+
+		Pattern pattern = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(input.toString());
+
+		int lastMatchStart = 0;
+		int lastMatchEnd = 0;
+		String argument = "";
+
+		while (matcher.find()) {
+			// Loop until the last match
+			argument = matcher.group(2);
+			lastMatchStart = matcher.start();
+			lastMatchEnd = matcher.end();
+		}
+
+		String[] values = argument.split("" + Option.DEFAULT_DELIMITER);
+
+		// Sanitise values
+		List<String> valueList = Util.removeEmptyStringsInArray(values);
+
+		// Substitute abbr expression
+		ExpressionSubstitutor substitutor = ExpressionSubstitutor.getInstance();
+		valueList = substitutor.subCommonDateAbbrList(valueList);
+
+		switch (type) {
+		case START_TIME : // Fall through
+		case END_TIME : // Fall through
+		case ON_TIME :
+			List<String> dateList = parseDateList(valueList);
+			if (!dateList.isEmpty()) {
+				option = new Option(type, dateList);
+				input.replace(lastMatchStart, lastMatchEnd, "");
+			}
+			break;
+		case PRIORITY :
+			List<String> priorityList = parsePriorityList(valueList);
+			if (!priorityList.isEmpty()) {
+				option = new Option(type, priorityList);
+				input.replace(lastMatchStart, lastMatchEnd, "");
+			}
+			break;
+		case STATUS :
+			List<String> statusList = parseStatusList(valueList);
+			if (!statusList.isEmpty()) {
+				option = new Option(type, statusList);
+				input.replace(lastMatchStart, lastMatchEnd, "");
+			}
+			break;
+		case ORDER_BY :
+			List<String> orderingList = parseOrderingList(valueList);
+			if (!orderingList.isEmpty()) {
+				option = new Option(type, orderingList);
+				input.replace(lastMatchStart, lastMatchEnd, "");
+			}
+			break;
+		default :
+			throw new IllegalArgumentException("Invalid OptionType is given");
+		}
+		return option;
+	}
+
+	/**
+	 * Change date format from dd/mm/yy(yy) to mm/dd/yy(yy) format for natty
+	 * parsing
+	 * 
+	 * @param dateStr
+	 *            date string in format dd/mm/yy(yy)
+	 * @return date string in format mm/dd/yy(yy)
+	 */
+	public String changeDateFormatUKToUS(String dateStr) {
+		assert (dateStr != null);
+
+		return dateStr.replaceAll(EXPLICIT_DATE_REGEX, "$2/$1/$3");
+	}
+
+	/**
+	 * Retrieve a Command object after parsing against the given input
+	 * 
+	 * @param inputCmd
+	 *            the unparsed string input given
+	 * @return a parsed Command with appropriate fields
+	 */
+	public Command parse(String inputCmd) {
+		CommandLine cmdLine = parseCommandLine(inputCmd);
+		return cmdLine.getCommand();
+	}
+
+	/**
+	 * Retrieve a CommandLine object after parsing against the given input
+	 *
+	 * The different between a CommandLine object and Command object is that the
+	 * CommandLine object will simply contain the information regardless of the
+	 * applicability of that information to the command. Whereas, the Command
+	 * object will check for the applicability
+	 * 
+	 * @param inputCmd
+	 *            the unparsed string input given
+	 * @return a parsed CommandLine with information (token) parsed
+	 */
+	public CommandLine parseCommandLine(String inputCmd) {
+		assert (inputCmd != null);
+
+		String commandWord = Util.getFirstWord(inputCmd);
+		CommandType cmdType = CommandType.fromString(commandWord);
+
+		inputCmd = Util.stripFirstWord(inputCmd);
+		Options options = new Options();
+
+		StringBuffer inputCmdBuffer = new StringBuffer(inputCmd);
+
+		// Parsing only applicable options
+		for (OptionType optType : cmdType.getApplicableOptions()) {
+			Option option = parseOptionAndExtract(inputCmdBuffer, optType);
+			if (option != null) {
+				options.add(option);
+			}
+		}
+
+		String param = Util.escapeString(inputCmdBuffer.toString().trim());
+		CommandLine cmdLine = new CommandLine(cmdType, options, param);
+		return cmdLine;
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\Parser.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ExpressionSubstitutorTest.java
+	 */
+
+package edu.dynamic.dynamiz.parser.unitTest;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import edu.dynamic.dynamiz.parser.ExpressionSubstitutor;
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ExpressionSubstitutorTest.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ExpressionSubstitutorTest.java
+	 */
+
+public class ExpressionSubstitutorTest {
+
+	@Test
+	public void testSubCommonDateAbbreviation() {
+		ExpressionSubstitutor substitutor = ExpressionSubstitutor.getInstance();
+		
+		// Test on common case
+		String input = "td is a good day. tmr will be better. But yst was the best";
+		assertEquals("today is a good day. tomorrow will be better. But yesterday was the best", 
+						substitutor.subCommonDateAbbreviation(input));
+		
+		// Test on corner case where abbr is embedded
+		input = "thistmr should not be subtdstuted.";
+		assertEquals(input, substitutor.subCommonDateAbbreviation(input));
+		
+		// Test when the abbr is in uppercase
+		input = "TD should be td. TmR should be tmr. yTd should be ytd";
+		assertEquals("today should be today. tomorrow should be tomorrow. yesterday should be yesterday",
+				substitutor.subCommonDateAbbreviation(input));
+		
+		// Test if the abbr is escaped
+		input = ";tmr should still be ;tmr.";
+		assertEquals(input, substitutor.subCommonDateAbbreviation(input));
+		
+		// Test other abbr.
+		input = "nxt Friday";
+		assertEquals("next Friday", substitutor.subCommonDateAbbreviation(input));
+		
+		input = "LST friday";
+		assertEquals("last friday", substitutor.subCommonDateAbbreviation(input));
+		
+	}
+
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ExpressionSubstitutorTest.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ParserTest.java
+	 */
+
+package edu.dynamic.dynamiz.parser.unitTest;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.junit.Test;
+
+import edu.dynamic.dynamiz.controller.CommandType;
+import edu.dynamic.dynamiz.parser.CommandLine;
+import edu.dynamic.dynamiz.parser.Option;
+import edu.dynamic.dynamiz.parser.OptionType;
+import edu.dynamic.dynamiz.parser.Parser;
+import edu.dynamic.dynamiz.structure.MyDate;
+
+
+/**
+ * Test program to understand the output of parser.
+ */
+
+public class ParserTest {
+	private static Parser parser = Parser.getInstance();
+	
+    @Test
+    public void test() {
+		CommandLine cmdLine = parser.parseCommandLine("add task");
+		assertEquals("task", cmdLine.getParam());
+
+		cmdLine = parser.parseCommandLine("delete 1");
+		assertEquals("1", cmdLine.getParam());
+
+		cmdLine = parser.parseCommandLine("add 2 on 27/9/2014 from yesterday 18:00 to 23:00");
+		assertEquals("2", cmdLine.getParam());
+		
+		List<String> values = new ArrayList<String>();
+		values.add(parser.parseMyDate("27/9/2014").toString());
+		Option opt = new Option(OptionType.ON_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("yesterday 18:00").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("23:00").toString());
+		opt = new Option(OptionType.END_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+
+		cmdLine = parser.parseCommandLine("list -s tomorrow,today,yesterday orderby -s,to,priority");
+		assertEquals("", cmdLine.getParam());
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("tomorrow").toString());
+		values.add(parser.parseMyDate("today").toString());
+		values.add(parser.parseMyDate("yesterday").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.fromString("-s").toString());
+		values.add(OptionType.fromString("to").toString());
+		values.add(OptionType.fromString("priority").toString());			
+		opt = new Option(OptionType.ORDER_BY, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		cmdLine = parser.parseCommandLine("update 3 priority h on tomorrow from 18:00 to 23:00");
+		assertEquals("3", cmdLine.getParam());
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.getPriority("h") + "");
+		opt = new Option(OptionType.PRIORITY, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("tomorrow").toString());
+		opt = new Option(OptionType.ON_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("18:00").toString());
+		opt = new Option(OptionType.START_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		values = new ArrayList<String>();
+		values.add(parser.parseMyDate("23:00").toString());
+		opt = new Option(OptionType.END_TIME, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+		
+		cmdLine = parser.parseCommandLine("search status p");
+		assertEquals("", cmdLine.getParam());
+		
+		values = new ArrayList<String>();
+		values.add(OptionType.getStatus("p").toString());
+		opt = new Option(OptionType.STATUS, values);
+		assertTrue(cmdLine.getOptions().hasOption(opt));
+    }
+    
+    @Test
+    public void testMultipleOption() {
+    	CommandLine cmdLine;
+    	Option opt = null;
+    	List<String> values = new ArrayList<String>();
+    	
+    	cmdLine = parser.parseCommandLine("add a task from today from yesterday from tomorrow");
+    	MyDate date = parser.parseMyDate("tomorrow");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.START_TIME, values);
+    	
+    	assertEquals("a task from today from yesterday", cmdLine.getParam());
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
+    	
+    	cmdLine = parser.parseCommandLine("add a task from today from yesterday to tomorrow");
+    	values = new ArrayList<String>();
+    	date = parser.parseMyDate("yesterday");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.START_TIME, values);
+    	
+    	assertEquals("a task from today", cmdLine.getParam());
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
+    	
+    	values = new ArrayList<String>();
+    	date = parser.parseMyDate("tomorrow");
+    	values.add(date.toString());
+    	opt = new Option(OptionType.END_TIME, values);
+    	
+    	assertTrue(cmdLine.getOptions().hasOption(opt));
+    }
+    
+    @Test
+    public void testEscapingInputNormal() {
+    	CommandLine cmdLine;
+    	
+    	// With normal OptionType
+    	cmdLine = parser.parseCommandLine("add ;from Fri ;to Sat ;on 12 Dec from yesterday to today");
+    	assertEquals("from Fri to Sat on 12 Dec", cmdLine.getParam());
+    	
+    	// With ORDER_BY OptionType
+    	cmdLine = parser.parseCommandLine("search ;orderby -s from yesterday orderby -s");
+    	assertEquals("orderby -s", cmdLine.getParam());
+    	
+    	// With both normal OptionType and ORDER_BY
+    	cmdLine = parser.parseCommandLine("s ;orderby -s ;from today 2am ;priority high from tomorrow -p u orderby -s");
+    	assertEquals("orderby -s from today 2am priority high", cmdLine.getParam());
+    	
+    	// Escape aliases with preceding '-' character
+    	cmdLine = parser.parseCommandLine("s ;-s tomorrow -s today");
+    	assertEquals("-s tomorrow", cmdLine.getParam());
+    }
+    
+    @Test
+    public void testAliasesNormal() {
+    	CommandLine cmdLine = null;
+    	String[] addCommands = {"add sth", "AdD sth", "PUT sth", "put sth", "pUt sth"};
+    	
+    	for (String c: addCommands) {
+    		cmdLine = parser.parseCommandLine(c);
+    		assertEquals(CommandType.ADD, cmdLine.getCommandType());
+    	}
+    	
+    	String[] delCommands = {"delete 1", "DEL 1", "reMoVe 1"};
+
+    	for (String c: delCommands) {
+    		cmdLine = parser.parseCommandLine(c);
+    		assertEquals(CommandType.DELETE, cmdLine.getCommandType());
+    	}
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testAliasesErroneous() {
+    	CommandLine cmdLine = parser.parseCommandLine("sadfasdf");
+    	
+    	fail("It should throw an Exception");
+    }
+    
+    /**
+     * Test on natty parsing capacity
+     */
+    @Test
+    public void testParsingDate() {
+    	
+    	// Explicit date expressions
+    	MyDate date = parser.parseMyDate("17/10/2014");
+    	assertEquals("17/10/2014", date.toString());
+    	
+    	date = parser.parseMyDate("end of October 4pm");
+    	assertEquals("31/10/2014 16:00", date.toString());
+    	
+    	// Relative date expressions
+    	MutableDateTime today = new MutableDateTime();
+    	today.setDayOfMonth(today.getDayOfMonth()-1);
+    	today.setHourOfDay(18);
+    	today.setMinuteOfHour(0);
+    	
+    	DateTimeFormatter formatter = DateTimeFormat.forPattern("d/MM/yyyy HH:mm");
+    	String expected = formatter.print(today);
+    	date = parser.parseMyDate("yesterday 18:00");
+    	assertEquals(expected, date.toString());
+    }
+
+    @Test
+    public void testParseDateListFromRangeNormal() {
+    	DateTime today = new DateTime();
+    	int yy = today.getYear();
+    	
+    	// Common case
+    	String dateRange = "12 Nov > 15 Nov";
+    	
+    	List<String> expected = new ArrayList<String>();
+    	expected.add(new MyDate(12,11,yy).toString());
+    	expected.add(new MyDate(13,11,yy).toString());
+    	expected.add(new MyDate(14,11,yy).toString());
+    	expected.add(new MyDate(15,11,yy).toString());
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Month crossing
+    	dateRange = "29 Nov> 3 Dec";
+    	
+    	expected.clear();
+    	expected.add(new MyDate(29, 11, yy).toString());
+    	expected.add(new MyDate(30, 11, yy).toString());
+    	expected.add(new MyDate(1,12,yy).toString());
+    	expected.add(new MyDate(2,12,yy).toString());
+    	expected.add(new MyDate(3,12,yy).toString());
+    	
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));
+    	
+    	// Corner case: Year crossing
+    	dateRange = "30 Dec 2014 >2 January 2015";
+    	
+    	expected.clear();
+    	
+    	yy = 2014;
+    	expected.add(new MyDate(30, 12, yy).toString());
+    	expected.add(new MyDate(31, 12, yy).toString());
+    	expected.add(new MyDate(1, 1, yy + 1).toString());
+    	expected.add(new MyDate(2, 1, yy + 1).toString());
+   
+    	assertEquals(expected, parser.parseDateListFromRange(dateRange));	
+    }
+   
+    /*======================================================================
+     * Parse Exception throwing
+     * =====================================================================
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeValidExpressionButInvalidRange() {
+    	String dateRange = "30 Dec > 3 Jan";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidExpression() {
+    	String dateRange = ">30 Dec";
+    	parser.parseDateListFromRange(dateRange);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testParsingDateRangeInvalidSyntax() {
+    	String dateRange = "tomorrow > today > yesterday";
+    	parser.parseDateListFromRange(dateRange);
+    }
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\unitTest\ParserTest.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\parser\Util.java
+	 */
+
+package edu.dynamic.dynamiz.parser;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+/**
+ * Util class to store some utilities function in String, Date and Number 
+ * manipulation
+ * 
+ *	Modelled after org.apache.commons.cli
+ */
+public final class Util {
+	/** This is the default delimiter to split the string, i.e. Whitespace*/
+	private static final String DEFAULT_DELIMITER = "\\s+";
+	private static final String ESCAPE_CHARACTER = ";";
+	
+	private static final String NUMBER_RANGE_REGEX = "(\\d+)\\s*(-)\\s*(\\d+)";
+	
+	private static final String INVALID_NUMBER_RANGE_MSG = "Not a valid number range: %1$s";
+	private static final int START_NUMBER_GROUP = 1;
+	private static final int END_NUMBER_GROUP = 3;
+	
+	public static List<String> removeEmptyStringsInList(List<String> list) {
+		List<String> newList = new ArrayList<String>();
+		for (String s: list) {
+			if (!s.isEmpty()) {
+				newList.add(s.trim());
+			}
+		}
+		
+		return newList;
+	}
+	
+	public static List<String> removeEmptyStringsInArray(String[] array) {
+		List<String> list = Arrays.asList(array);
+		return removeEmptyStringsInList(list);
+	}
+	/**
+	 * Retrieve the string with its first word stripped off. 
+	 * Default delimiter is applied here.
+	 * 
+	 * @param str the string to strip the first word off
+	 * @return the stripped string
+	 */
+	public static String stripFirstWord(String str) {
+		return stripFirstWord(str, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Retrieve the string with its first word stripped off.
+	 * regEx specifies the delimiter for the string
+	 * 
+	 * @param str the string to strip the first word off
+	 * @param regEx the regular expression string to split the string
+	 * @return the stripped string
+	 */
+	public static String stripFirstWord(String str, String regEx) {
+		if (str == null) {
+			return null;
+		}
+		
+		String firstWord = getFirstWord(str, regEx);
+		
+		return str.replaceFirst(firstWord, "").trim();
+	}
+	
+	/**
+	 * Retrieve the first word of the string. 
+	 * Default delimiter is applied when splitting the string
+	 * 
+	 * @param str the string to get the first word from
+	 * @return the first word of the string
+	 */
+	public static String getFirstWord(String str) {
+		return getFirstWord(str, DEFAULT_DELIMITER);
+	}
+	
+	/**
+	 * Retrieve the first word of the string
+	 * regEx specifies the delimiter for the string
+	 * 
+	 * @param str the string to get the first word from
+	 * @param regEx the regular expression string to split the string
+	 * @return the first word of the string
+	 */
+	public static String getFirstWord(String str, String regEx) {
+		if (str == null) {
+			return null;
+		}
+		
+		String[] words = str.trim().split(regEx);
+		return words[0];
+	}
+	
+	
+	/**
+	 * Remove the hyphens (single or double) from the given string and
+	 * return a new String
+	 * 
+	 * @param str The string from which the hyphens should be removed.
+	 * 
+	 * @return the new stripped String.
+	 */
+	public static String stripLeadingHyphens(String str) {
+		if (str == null) {
+			return null;
+		}
+		
+		if (str.startsWith("--")) {
+			return str.substring(2, str.length()); 
+		} else if (str.startsWith("-")) {
+			return str.substring(1, str.length());
+		} else {
+			// Do nothing here
+		}
+		
+		return str;
+	}
+	
+	/**
+	 * Remove the leading and ending quotes from the string and 
+	 * return a new String
+	 * 
+	 * For example, '"Hello World"' should returns 'Hello World'
+	 * 
+	 * @param str The string from which the quotes should be removed.
+	 * 
+	 * @return the string without leading and trailing quotes.
+	 */
+	public static String stripLeadingAndTrailingQuotes(String str) {
+		int length = str.length();
+		
+		boolean hasSufficientLength = str.length() > 1;
+		boolean hasLeadingAndTrailingQuotes = str.startsWith("\"") && 
+											  str.endsWith("\"");
+		// Index -1 means not found.
+		boolean hasNoMiddleQuotes = str.substring(1, length - 1).indexOf("\"") == -1;
+		
+		if (hasSufficientLength && hasLeadingAndTrailingQuotes && hasNoMiddleQuotes) {
+			str = str.substring(1, length - 1);
+		}
+		
+		return str;
+	}
+	
+	/**
+	 * Check if a given string has a number format
+	 * @param str the string to check for format
+ 	 * @return true if the string has a number format and false otherwise
+	 */
+	public static boolean isNumber(String str) {
+		return str.trim().matches("-?\\d+(\\.\\d+)?");
+	}
+	
+	/**
+	 * Check if a given string has an integer format
+	 * @param str the string to check for format 
+	 * @return true if the string has an integer format and false otherwise
+	 */
+	public static boolean isInteger(String str) {
+		return str.trim().matches("-?\\d+");
+	}
+	
+	/**
+	 * Check if a given string contains a valid positive integer number range
+	 * A valid positive integer number range consists of NUMBER_FROM - NUMBER_TO
+	 * where NUMBER_FROM <= NUMBER_TO
+	 * 
+	 * @param range the string to check the number range format from
+	 * @return true if the given string satisfies the number range format. False otherwise.
+	 */
+	public static boolean isValidNumberRange(String range) {
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(range.trim());
+		if (rangeMat.matches()) {
+			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
+			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
+			
+			return (startNum <= endNum);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Retrieve a List<Integer> of a given string containing a valid positive integer number
+	 * range
+	 * 
+	 * @param range the string to get the number list from
+	 * @return a List<Integer> of the number from the range inclusively. Empty if the 
+	 * string matches format but not valid. Null otherwise.
+	 */
+	public static List<Integer> getNumberListFromRange(String range) {
+		Pattern rangePat = Pattern.compile(NUMBER_RANGE_REGEX);
+		Matcher rangeMat = rangePat.matcher(range.trim());
+		if (rangeMat.matches()) {
+			int startNum = Integer.parseInt(rangeMat.group(START_NUMBER_GROUP));
+			int endNum = Integer.parseInt(rangeMat.group(END_NUMBER_GROUP));
+			
+			if (startNum > endNum) {
+				throw new IllegalArgumentException(String.format(INVALID_NUMBER_RANGE_MSG, range));
+			}
+			
+			List<Integer> numList = new ArrayList<Integer>();
+			for (int i = startNum; i <= endNum; i++) {
+				numList.add(i);
+			}
+			
+			return numList;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * This will remove the escape character from the given input string
+	 * Helping in parsing of ambiguous cases
+	 * 
+	 * @param input the given input to escape from
+	 * @return the escaped string.
+	 */
+	public static String escapeString(String input) {
+		return input.replaceAll(ESCAPE_CHARACTER, "");
+	}
+	
+	/**
+	 * This will encode the given Regex string the capacity to ignore the 
+	 * escaped word, i.e. word preceded by the {@link ESCAPE_CHARACTER}.
+	 * 
+	 * @param inputRegex the Regex string to be added the capacity
+	 * @return the new Regex that include the capacity to ignore the escaped word.
+	 */
+	public static String addEscapeCapacityToRegex(String inputRegex) {
+		return String.format("(?<!%1$s)%2$s", ESCAPE_CHARACTER, inputRegex);
+	}
+	
+	/**
+	 * Convert a List<Integer> into the primitive type array
+	 * 
+	 * @param intList the List<Integer> to convert to
+	 * @return a converted array of int primitive type
+	 */
+	public static int[] toIntArray(List<Integer> intList) {
+		assert intList != null;
+		if (intList == null) {
+			return null;
+		}
+		
+		int[] ints = new int[intList.size()];
+		for (int i = 0; i < intList.size(); i++) {
+			ints[i] = intList.get(i);
+		}
+		
+		return ints;
+	}
+	
+	/**
+	 * A simple dispatcher to convert a date string representation into respective {@link MyDate} object
+	 * If the string matches {@link MyDateTime.REGEX_DATETIME} then a MyDateTime object will be returned.
+	 * If the string matches {@link MyDate.REGEX_DATE} then a MyDate object will be returned.
+	 * A null object will be returned of neither of the above matches.
+	 * 
+	 * @param dateStr a string representation of the date
+	 * @return corresponding MyDate object if applicable. Otherwise return null
+	 */
+	public static MyDate convertStringToMyDate(String dateStr) {
+		if (dateStr.matches(MyDateTime.REGEX_DATETIME)) {
+			return MyDateTime.makeDateTime(dateStr);
+		} else if (dateStr.matches(MyDateTime.REGEX_DATE)) {
+			return MyDate.makeDate(dateStr);
+		} else {
+			assert false;
+			return null;
+		}
+	}
+	
+	/**
+	 * A caster to cast from {@link org.joda.time.DateTime} object to {@link MyDate} 
+	 * object. {@link MyDate} will only contain the Date information without
+	 * the timing.
+	 * 
+	 * @param dt the {@link org.joda.time.DateTime} object to be casted
+	 * @return the casted {@link MyDate} object
+	 */
+	public static MyDate convertJodaToMyDate(DateTime dt) {
+		assert dt != null;
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+		String MyDateStr = formatter.print(dt);
+		
+		return MyDate.makeDate(MyDateStr);
+	}
+	
+	/**
+	 * A caster to cast from {@link org.joda.time.DateTime} object to {@link MyDateTime} 
+	 * object. {@link MyDateTime} will contain the Date and Time information
+	 * 
+	 * @param dt the {@link org.joda.time.DateTime} object to be casted
+	 * @return the casted {@link MyDateTime} object
+	 */
+	public static MyDateTime convertJodaToMyDateTime(DateTime dt) {
+		assert dt != null;
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm");
+		String MyDateTimeStr = formatter.print(dt);
+		
+		return MyDateTime.makeDateTime(MyDateTimeStr);
+	}
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\parser\Util.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\structure\MyDate.java
+	 */
+
+    /**
+     * Comparing the date. If the dates differ at the date level then return
+     * the result. Otherwise, compare the time level.
+     * 
+     * @param other The date to be compared with. It can be MyDate or MyDateTime instance
+     * @return same result as compareTo() will
+     */
+    public int compareIncludingTime(MyDate other) {
+    	assert other != null;
+    	
+    	int comp1 = this.compareTo(other);
+    	if (comp1 != 0) {
+    		return comp1;
+    	}
+    	
+    	if (other instanceof MyDateTime) {
+    		return -1;
+    	} else {
+    		return 0;
+    	}
+    }
+    
+    
+    @Override
+    /**
+     * Checks if the 2 dates represent the same date on the calendar.
+     * @param obj The MyDate object to check for equality.
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\structure\MyDate.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\structure\MyDateTime.java
+	 */
+
+    /**
+     * Comparing the date. If the dates differ at the date level then return
+     * the result. Otherwise, compare the time level.
+     * 
+     * @param other The date to be compared with. It can be MyDate or MyDateTime instance
+     * @return same result as compareTo() will
+     */
+    public int compareIncludingTime(MyDate other) {
+    	assert (other != null);
+    	
+    	int comp1 = super.compareTo(other);
+    	if (comp1 != 0) {
+    		return comp1;
+    	}
+    	
+    	if (this.getClass() == other.getClass()) {
+	    	MyDateTime o = (MyDateTime) other;
+	    	int comp2 = this.getHour() - o.getHour();
+	    	if (comp2 != 0) {
+	    		return comp2;
+	    	}
+	    	
+	    	return this.getMinute() - o.getMinute();
+    	} else {
+    		return 1;
+    	}
+    	
+    }
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\structure\MyDateTime.java
+
+
+
+
+
+	/**
+	 * origin: Dynamiz\src\edu\dynamic\dynamiz\structure\unitTest\MyDateTimeTest.java
+	 */
+
+/**
+ * Test the correctness of comparing MyDate objects (including
+ * MyDate and MyDateTime)
+ *
+ */
+public class MyDateTimeTest {
+
+	@Test
+	public void test() {
+		MyDate d1 = new MyDate(1,1,2000);
+		MyDate d2 = new MyDate(2,1,2000);
+		MyDate dt1 = new MyDateTime(1,1,2000,12,00);
+		MyDate dt2 = new MyDateTime(2,1,2000,12,00);
+		MyDate dt3 = new MyDateTime(1,1,2000,11,00);
+		
+		
+		assertTrue(dt1.compareIncludingTime(d1) > 0);
+		assertTrue(dt1.compareIncludingTime(d2) < 0);
+		assertTrue(dt1.compareIncludingTime(dt2) < 0);
+		
+		assertTrue(d1.compareIncludingTime(d2) < 0);
+		assertTrue(d1.compareIncludingTime(dt1) < 0);
+		assertTrue(d1.compareIncludingTime(dt2) < 0);
+		
+		assertTrue(d2.compareIncludingTime(d1) > 0);
+		assertTrue(d2.compareIncludingTime(dt1) > 0);
+		assertTrue(d2.compareIncludingTime(dt2) < 0);
+		
+		assertTrue(dt2.compareIncludingTime(d1) > 0);
+		assertTrue(dt2.compareIncludingTime(d2) > 0);
+		assertTrue(dt2.compareIncludingTime(dt1) > 0);
+		
+		assertTrue(dt1.compareIncludingTime(dt1) == 0);
+		assertTrue(d1.compareIncludingTime(d1) == 0);
+		
+		assertTrue(dt1.compareIncludingTime(dt3) > 0);
+	}
+
+}
+
+	// End of segment: Dynamiz\src\edu\dynamic\dynamiz\structure\unitTest\MyDateTimeTest.java
+
+
+
+
+

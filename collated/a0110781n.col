@@ -1,0 +1,5084 @@
+//@author: a0110781n
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Command.java
+	 */
+
+/**
+ * Defines the Command superclass.
+ */
+public abstract class Command {
+    //Data members
+    protected Storage storage = Storage.getInstance();	//The storage object to operate on.
+    
+    //Method signatures
+    public abstract void execute();
+    public abstract String getCommandName();
+    public abstract ToDoItem[] getAffectedItems();
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Command.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandAdd.java
+	 */
+
+/**
+ * Defines the Command object that adds a new ToDoItem object with the given information into
+ * the given storage object.
+ * Currently, the execute() method's implementation is incomplete, so this class is only able to 
+ * add ToDoItem with only description and default priority level.
+ * 
+ * Constructor
+ * CommandAdd(String description, Options options)	//Creates a CommandAdd instance
+ * 							//with the given description, the Options list
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem instances added by this command.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ * Options extractOptions(Options options)	//Gets the Options list that is applicable to this command
+ * 						//from the given Options list.
+ * 
+ * Private Methods
+ * Date makeDate(String dateString)	//Creates a Date instance from the given date string. 
+ * */
+public class CommandAdd extends Command implements Undoable {
+	//The string representation of this command's type.
+	private static final String COMMAND_TYPE = "add";
+
+	//Affected list-related constants.
+	private static final int LISTSIZE = 1;
+	private static final int ITEMINDEX = 0;
+
+	//Main data members
+	private ToDoItem addedItem;	//The item being added by this command.
+
+	/**
+	 * Creates a new Command object that adds a new entry into the given storage.
+	 * @param description The description of the entry to be added.
+	 * @param options The list of options specifying extra information associated with the entry to be added.
+	 * @param storage The storage object to add the new entry into.
+	 * @throws IllegalArgumentException if description is an empty string.
+	 * */
+	public CommandAdd(ToDoItem item) {
+		assert item!=null;
+		this.addedItem = item;
+	}
+
+	@Override
+	/**
+	 * Executes this command. Also used for redo operation.
+	 */
+	public void execute() {
+		storage.addItem(addedItem);
+	}
+
+	@Override
+	/**
+	 * Undoes this command's execute method.
+	 * Can only be called after calling this command's execute() method.
+	 */
+	public void undo() {
+		storage.removeItem(addedItem.getId());
+	}
+
+	@Override
+	/**
+	 * Re-execute this command.
+	 * Must only be called after calling this command's undo() method.
+	 */
+	public void redo(){
+		execute();
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	/**
+	 * Gets the list of items affected by the execution of this command.
+	 * Can only be called after calling this command's execute method.
+	 * @return A list of ToDoItem added by this command.
+	 */
+	public ToDoItem[] getAffectedItems(){
+		assert addedItem!=null;
+
+		ToDoItem[] list = new ToDoItem[LISTSIZE];
+		list[ITEMINDEX] = addedItem;
+		return list;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandAdd.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandDelete.java
+	 */
+
+/**
+ * Defines the Command object that deletes a ToDoItem from Storage object.
+ * 
+ * Constructor
+ * CommandDelete(int[] id)	//Creates a CommandDelete object that will delete the ToDoItem
+ * 						//with the given list of id from the storage.
+ * 
+ * Methods(public)
+ * void execute()	//Executes this command.
+ * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects removed from storage by
+ * 					//this command's execute method.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ */
+public class CommandDelete extends Command implements Undoable {
+	//The string representation of this command's type.
+	private static final String COMMAND_TYPE = "delete";
+
+	//Error message.
+	private static final String MSG_NOMATCHINGID = "No matching ID found.";
+
+	//Main data members
+	private int[] id;	//The id of the ToDoItem to remove.
+	private ToDoItem[] deletedItems;	//The ToDoItem that is deleted by this command.
+
+	/**
+	 * Creates a new Command object to remove the object with the given id from the storage.
+	 * @param id The list of ID of the ToDoItem objects to remove.
+	 * @param storage The storage object from which the ToDoItem is to be removed.
+	 */
+	public CommandDelete(int[] id){
+		assert id!=null;
+		this.id = id;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 * @throws IllegalArgumentException if none of the ID in the given array exists in the storage.
+	 */
+	public void execute() throws IllegalArgumentException {
+		int size = id.length;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>(size);
+		for(int i=0; i<size; i++){
+			try{
+				temp.add(storage.removeItem(id[i]));
+			} catch(IllegalArgumentException e){
+
+			}
+		}
+		if(temp.isEmpty()){
+			throw new IllegalArgumentException(MSG_NOMATCHINGID);
+		}
+		deletedItems = temp.toArray(new ToDoItem[temp.size()]);
+	}
+
+	@Override
+	/**
+	 * Undoes this command's execute method.
+	 * Can only be called after calling this command's execute() method.
+	 */
+	public void undo() {
+		assert deletedItems!=null;
+		for(ToDoItem i: deletedItems){
+			storage.addItem(i);
+		}
+	}
+
+	@Override
+	/**
+	 * Re-executes this command.
+	 * Must only be called after calling this command's undo() method.
+	 */
+	public void redo() throws IllegalArgumentException {
+		execute();
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItems affected by this command's execution.
+	 * Can only be called after calling this command's execute method.
+	 * Note that not all specified items are in the list as some of them may be non-existent.
+	 * @return A list of ToDoItems removed by this command.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert deletedItems!=null;
+		return deletedItems;
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandDelete.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandHelp.java
+	 */
+
+/**
+ * Defines command to display help contents from help files.
+ * 
+ * Constructor
+ * CommandHelp()	//Creates a command to get the main help page.
+ * CommandHelp(CommandType command)	//Creates a command to get the specified command's help page.
+ * 
+ * Public Methods
+ * String getCommandName()	//Gets the String representation of this command's type.
+ * String getContent()	//Gets the contents of the help page.
+ * void execute()	//Executes this command. 
+ */
+public class CommandHelp extends Command {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "help";
+
+	//Error messages
+	private static final String MSG_FILENOTFOUND = "Requested help file missing.";
+	private static final String MSG_IOEXCEPTION = "An IO Exception occurred.";
+
+	//Defines help content line delimiter
+	private static final char LINE_TERMINATOR = '\n';
+
+	//Defines the help page files
+	private static final String HELPFILE_MAIN = "help.txt";
+	private static final String HELPFILE_ADD = "help_add.txt";
+	private static final String HELPFILE_DELETE = "help_delete.txt";
+	private static final String HELPFILE_DO = "help_mark.txt";
+	private static final String HELPFILE_LIST = "help_list.txt";
+	private static final String HELPFILE_REDO = "help_redo.txt";
+	private static final String HELPFILE_SEARCH = "help_search.txt";
+	private static final String HELPFILE_UNDO = "help_undo.txt";
+	private static final String HELPFILE_UNMARK = "help_unmark.txt";
+	private static final String HELPFILE_UPDATE = "help_update.txt";
+
+	//Logger to log errors
+	private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller");
+
+	//Main data members
+	private CommandType command = null;
+	private String helpContent = MSG_FILENOTFOUND;
+
+	/**
+	 * Creates a new instance of this command.
+	 */
+	public CommandHelp(){
+
+	}
+
+	/**
+	 * Creates a new instance of this command.
+	 * @param command The command type to get help page on. Cannot be null.
+	 */
+	public CommandHelp(CommandType command){
+		assert command!=null;
+		this.command = command;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 */
+	public void execute() {
+		String helpFile;
+		if(command==null){
+			helpFile = HELPFILE_MAIN;
+		} else{
+			switch(command){
+			case ADD: 
+				helpFile = HELPFILE_ADD;
+				break;
+			case DELETE: 
+				helpFile = HELPFILE_DELETE;
+				break;
+			case MARK: 
+				helpFile = HELPFILE_DO;
+				break;
+			case LIST: 
+				helpFile = HELPFILE_LIST;
+				break;
+			case REDO: 
+				helpFile = HELPFILE_REDO;
+				break;
+			case SEARCH: 
+				helpFile = HELPFILE_SEARCH;
+				break;
+			case UNDO: 
+				helpFile = HELPFILE_UNDO;
+				break;
+			case UPDATE: 
+				helpFile = HELPFILE_UPDATE;
+				break;
+			case UNMARK: 
+				helpFile = HELPFILE_UNMARK;
+				break;
+			default: 
+				helpFile = HELPFILE_MAIN;
+			}
+		}
+
+		try{
+			InputStream in = this.getClass().getResourceAsStream("/" + helpFile);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			StringBuilder str = new StringBuilder();
+			String input;
+			while((input = reader.readLine())!=null){
+				str = str.append(input).append(LINE_TERMINATOR);
+			}
+			helpContent = str.toString();
+			reader.close();
+		} catch(FileNotFoundException e){
+			logger.warning(MSG_FILENOTFOUND);
+		} catch(IOException e){
+			logger.warning(MSG_IOEXCEPTION);
+		}
+
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Does nothing as it does not deal with Storage.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		return null;
+	}
+
+	/**
+	 * Gets the contents of the help page being read from.
+	 * Must only be called after the execute() method.
+	 * @return The help content string.
+	 */
+	public String getContent(){
+		return helpContent;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandHelp.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandList.java
+	 */
+
+/**
+ * Defines the command that lists all the items in the storage.
+ * 
+ * Constructor
+ * CommandList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options)
+ * 								//Creates a new instance of this list command.
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ * ToDoItem[] getAffectedItems()	//Gets the list retrieved by execute() method. 
+ */
+public class CommandList extends Command {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "list";
+
+	//Main data members
+	private ToDoItem[] itemList = null;
+	private int[] priority;
+	private MyDate[] start, end;
+	private OptionType[] optionsList = null; 
+
+	/**
+	 * Creates a new instance of this command with the list of field values to use
+	 * for filtering and the list of options to use for sorting the filtered list.
+	 * @param keywords The list of keywords used to filter items or null if unused.
+	 * @param priorities The priority levels used to filter items or null if unused.
+	 * @param start The list of start date values used to filter the items or null if unused.
+	 * @param end The list of end date values used to filter the items or null if unused.
+	 * @param options The list of options(in decreasing precedence) used to sort the filtered list
+	 * 		or null if unused.
+	 */
+	public CommandList(int[] priorities, MyDate[] start, MyDate[] end, OptionType[] options){
+		this.priority = priorities;
+		this.start = start;
+		this.end = end;
+		this.optionsList = options;
+	}
+
+
+	@Override
+	/**
+	 * Executes this command.
+	 */
+	public void execute() {
+		itemList = storage.getList(priority, start, end, optionsList);
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The string representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItem to be displayed.
+	 * Must be called after execute() method.
+	 * @return An array of ToDoItem or null if the list is empty.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		return itemList;
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandList.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandMark.java
+	 */
+
+/**
+ * Defines the command to mark an event/task as completed.
+ * 
+ * Constructor
+ * CommandDo(int[] id)		//Creates a new instance of this command
+ * 
+ * Public Methods
+ * ToDoItem[] getAffectedItems()	//Gets a list of item that is marked as completed
+ * String getCommandName()	//Gets the string representation of this command's type
+ * void execute()	//Executes this command
+ * void redo()		//Redo this command
+ * void undo()		//Undo this command
+ */
+public class CommandMark extends Command implements Undoable{
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "do";
+
+	//Error message.
+	private static final String MSG_NOMATCHINGID = "No matching ID.";
+	private static final String MSG_NOVALIDITEMS = "No valid items to be marked as completed.";
+
+	//Main data members
+	private int[] id;
+	private ToDoItem[] feedbackItems;
+
+	/**
+	 * Creates a new instance of this command.
+	 * @param id The list of ID of the items to mark as completed.
+	 */
+	public CommandMark(int[] id){
+		this.id = id;
+	}
+
+	@Override
+	/**
+	 * Executes this command. The list will not contain items of invalid ID nor items that are marked
+	 * as completed prior to this command's execution.
+	 * @throws IllegalArgumentException if none of the specified items can be marked as completed,
+	 * 		either due to invalid ID or the item has been previously marked as completed.
+	 */
+	public void execute() throws IllegalArgumentException {
+		int size = id.length, errors = 0;
+		ToDoItem item;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>(size);
+		for(int i=0; i<size; i++){
+			try{
+				item = storage.markItem(id[i]);
+				if(item!=null){
+					temp.add(item);
+				}
+			} catch(IllegalArgumentException e){
+				errors++;
+			}
+		}
+		if(temp.isEmpty()){
+			if(errors==size){
+				throw new IllegalArgumentException(MSG_NOMATCHINGID);
+			}
+			throw new IllegalArgumentException(MSG_NOVALIDITEMS);
+		}
+		feedbackItems = temp.toArray(new ToDoItem[temp.size()]);
+	}
+
+	@Override
+	/**
+	 * Redo this command.
+	 * Should only be used after the undo() method.
+	 */
+	public void redo(){
+		assert feedbackItems!=null;
+		for(ToDoItem i: feedbackItems){
+			storage.markItem(i);
+		}
+	}
+
+	@Override
+	/**
+	 * Undo this command.
+	 * Should only be used after the execute() method.
+	 */
+	public void undo(){
+		assert feedbackItems!=null;
+		for(ToDoItem i: feedbackItems){
+			storage.unmarkItem(i);
+		}
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the ToDoItem object(s) that is/are marked as completed.
+	 * Must only be called after calling this command's execute() method.
+	 * @return An array of ToDoItem object(s) that is/are marked as completed.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert feedbackItems!=null;
+		return feedbackItems;
+	} 
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandMark.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandRedo.java
+	 */
+
+/**
+ * Defines the redo command.
+ * 
+ * Constructor
+ * CommandRedo()	//Creates a new instance of this command.
+ * 
+ * Public Methods
+ * void execute()	//Executes this command
+ * ToDoItem[] getAffectedItems()	//Gets a list of ToDoItem objects affected by the redone command
+ * String getCommandName()	//Gets the string representation of this command's type
+ * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Passes the undo and redo stacks for this command's execution
+ */
+public class CommandRedo extends Command {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "redo";
+
+	//Main data members
+	private Stack<Undoable> undoStack, redoStack;
+	private Undoable command;	//The command to be redone
+
+	/**
+	 * Creates a new instance of this command.
+	 */
+	public CommandRedo(){
+
+	}
+
+	/**
+	 * Passes in the command history stack and the stack of undone commands to this
+	 * command for execution.
+	 * @param undoStack The command history stack.
+	 * @param redoStack The stack of undone commands.
+	 */
+	public void setStacks(Stack<Undoable> undoStack, Stack<Undoable> redoStack){
+		assert undoStack!=null && redoStack!=null;
+		this.undoStack = undoStack;
+		this.redoStack = redoStack;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 * @throws EmptyStackException if the redo stack is empty.
+	 */
+	public void execute() throws EmptyStackException {
+		assert undoStack!=null && redoStack!=null;
+		command = redoStack.pop();
+		command.redo();
+		undoStack.push(command);
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItem objects affected by the redone command.
+	 * @return An array of ToDoItem objects affected by the redone command.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert command!=null;
+		return ((Command)command).getAffectedItems();
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandRedo.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandSearch.java
+	 */
+
+/**
+ * Defines the command to search for item with the given keyword in their description, 
+ * filtered by the specified options, in the given storage.
+ * 
+ * Constructor
+ * CommandSearch(String keyword, int priority, Date start, Date end)	//Creates an instance of this command object.
+ * 
+ * Public Methods
+ * Options extractOptions(Options options)	//Extracts the options in this list that are applicable to this command.
+ * void execute()	//Executes this command.
+ * ToDoItem[] getAffectItems()	//Gets the list of items with the keyword in their description.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ */
+public class CommandSearch extends Command {
+	//The string representation of this command's type.
+	private static final String COMMAND_TYPE = "search";
+
+	//Main data members
+	private String searchKey;
+	private int priority;
+	private MyDate start, end;
+	private String status;
+	private ToDoItem[] searchList = null;
+	private OptionType[] optList;
+
+	/**
+	 * Creates an instance of this search command.
+	 * @param keyword The keyword to search by, or null if search by keyword is not required.
+	 * @param priority The priority level of the item(s) to search, or -1 if not required.
+	 * @param start The start date of the item(s) to search, or null if not required.
+	 * @param end The end date of the item(s)to search, or null if not required.
+	 * @param status The status of the item to search for or null if not required.
+	 * @param optList The list of options in descending order of precedence, to sort the result by, or null if not required.
+	 */
+	public CommandSearch(String searchKey, int priority, MyDate start, MyDate end, String status, OptionType[] optList){
+		this.searchKey = searchKey;
+		this.priority = priority;
+		this.start = start;
+		this.end = end;
+		this.status = status;
+		this.optList = optList;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 */
+	public void execute() {
+		searchList = storage.searchItems(searchKey, priority, start, end, status, optList);
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The string representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of items obtained by this command.
+	 * Must be called only after calling the execute() method.
+	 * @return An array of ToDoItem objects resulting from this command's execution or
+	 * 		null if the list is empty.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		return searchList;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandSearch.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandShow.java
+	 */
+
+/**
+ * Defines the command that retrieves an item by ID for full display.
+ * 
+ * Constructor
+ * CommandShow(int id)	//Creates a new instance of this command.
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * ToDoItem[] getAffectedItems()	//Gets the list of the ToDoItem with the ID specified in the constructor.
+ * String getCommandName()	//Gets the String representation of this command's type.
+ */
+public class CommandShow extends Command {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "show";
+
+	//Main data members
+	private int id;
+	private ToDoItem[] itemList;
+
+	/**
+	 * Creates a new instance of this command.
+	 * @param id The ID of the ToDoItem to search.
+	 */
+	public CommandShow(int id){
+		this.id = id;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 */
+	public void execute() throws IllegalArgumentException {
+		itemList = storage.searchItems(id);
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItem with the ID specified in the constructor.
+	 * Should only be called after execute() method.
+	 * @return An array of the ToDoItem with the given ID.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert itemList!=null;
+		return itemList;
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandShow.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUndo.java
+	 */
+
+/**
+ * Defines the command class that undoes the previously executed command.
+ * 
+ * Constructor
+ * CommandUndo()	//Creates a new instance of this command.
+ * 
+ * Public Methods
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItems affected by this command.
+ * String getCommandName()		//Gets the string representation of this command's type
+ * void execute()	//Executes this command
+ * void setStacks(Stack<Command> undoStack, Stack<Command> redoStack)	//Assigns the appropriate stacks to this command for execution
+ */
+public class CommandUndo extends Command {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "undo";
+
+	//Main data members
+	private Stack<Undoable> undoStack, redoStack;
+	private Undoable command;	//The command to be undone
+
+	/**
+	 * Creates a new instance of this undo command
+	 */
+	public CommandUndo(){
+
+	}
+
+	/**
+	 * Passes the past and undone command history to this command.
+	 * @param undoStack The stack of commands to retrieve the command from.
+	 * @param redoStack The stack of commands to place the undone command into.
+	 */
+	public void setStacks(Stack<Undoable> undoStack, Stack<Undoable> redoStack){
+		assert undoStack!=null && redoStack!=null;
+		this.undoStack = undoStack;
+		this.redoStack = redoStack;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 * @throws EmptyStackException if the undo stack is empty.
+	 */
+	public void execute() throws EmptyStackException {
+		assert undoStack!=null && redoStack!=null;
+		command = undoStack.pop();
+		redoStack.push(command);
+		command.undo();
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItem objects that are affected by this command.
+	 * Must be called after this command's execute() method.
+	 * @return An array of ToDoItem objects that are affected by this command.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert command!=null;
+		return ((Command)command).getAffectedItems();
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUndo.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUnmark.java
+	 */
+
+/**
+ * Defines the command that unmarks an item that was marked as completed in previous program executions
+ * from completion.
+ * 
+ * Constructor
+ * CommandUnmark(int[] id)	//Creates a new instance of this command.
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * ToDoItem[] getAffectedItem()	//Gets the ToDoItem that is unmarked by this command's execution.
+ * String getCommandName()	//Gets the String representation of this command's type.
+ * void redo()		//Re-executes this command.
+ * void undo()		//Undo this command.
+ */
+public class CommandUnmark extends Command implements Undoable {
+	//String representation of this command's type
+	private static final String COMMAND_TYPE = "unmark";
+
+	//Error message.
+	private static final String MSG_NOMATCHINGID = "No matching ID.";
+	private static final String MSG_NOVALIDITEMS = "No valid items to be unmarked from completion.";
+
+	//Main data members
+	private int[] id;
+	private ToDoItem[] affectedItems;
+
+	/**
+	 * Creates a new instance of this command.
+	 * @param id The list of ID of the ToDoItem objects to unmark from completion.
+	 */
+	public CommandUnmark(int[] id){
+		this.id = id;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 * @throws IllegalArgumentException if there is no item to be unmarked, either due to
+	 * 		invalid ID or the item was marked as incomplete prior to this command's execution.
+	 */
+	public void execute() throws IllegalArgumentException {
+		int size = id.length, errors = 0;
+		ToDoItem item;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>(size);
+		for(int i=0; i<size; i++){
+			try{
+				item = storage.unmarkItem(id[i]);
+				if(item!=null){
+					temp.add(item);
+				}
+			} catch(IllegalArgumentException e){
+				errors++;
+			}
+		}
+		if(temp.isEmpty()){
+			if(errors==size){
+				throw new IllegalArgumentException(MSG_NOMATCHINGID);
+			}
+			throw new IllegalArgumentException(MSG_NOVALIDITEMS);
+		}
+		affectedItems = temp.toArray(new ToDoItem[temp.size()]);
+	}
+
+	@Override
+	/**
+	 * Undo this command.
+	 * Should only be executed after execute() method.
+	 */
+	public void undo(){
+		assert affectedItems!=null;
+		for(ToDoItem i: affectedItems){
+			storage.markItem(i);
+		}
+	}
+
+	@Override
+	/**
+	 * Re-executes this command.
+	 * Should only be executed after undo() method.
+	 */
+	public void redo(){
+		assert affectedItems!=null;
+		for(ToDoItem i: affectedItems){
+			storage.unmarkItem(i);
+		}
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the ToDoItem that is affected by this command's execution.
+	 * Should only be used after the execute() method.
+	 * @return An array of the ToDoItem affected by this command's execution.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert affectedItems!=null;
+		return affectedItems;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUnmark.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUpdate.java
+	 */
+
+/**
+ * Defines the Command object that updates a ToDoItem with the given id using the information
+ * specified in the Options.
+ * Currently, execute() method's implementation is incomplete, so this class actually does not mutate the
+ * target object.
+ * 
+ * Constructor
+ * CommandUpdate(String param, Options options)	//Creates a new instance of this Command
+ * 
+ * Public Methods
+ * void execute()	//Executes this command.
+ * void undo()		//Undoes this command's execute method.
+ * void redo()		//Redo this command.
+ * String getCommandName()	//Gets the string representation of this command's type.
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects that are affected by this command.
+ * Options extractOptions(Options options)	//Gets the list of options that are applicable to this command.
+ */
+public class CommandUpdate extends Command implements Undoable {
+	//The string representation of this command's type.
+	private static final String COMMAND_TYPE = "update";
+
+	//UpdatedItem indices
+	private static final int UPDATEDINDEX_OLD = 0;
+	private static final int UPDATEDINDEX_NEW = 1;
+
+	//Main data members
+	private String description = null;
+	private ToDoItem[] updatedItem;
+	private int id;
+
+	private int priority = OptionType.PRIORITY_NONE;
+
+	private MyDate startDate;
+	private MyDate endDate;
+
+	/**
+	 * Creates a new instance of this Command object that updates the ToDoItem object with the given id
+	 * with the given information.
+	 * @param id The id (and new description) of the ToDoItem object to update.
+	 * @param description The new description for the item, or null if it is not to be changed.
+	 * @param priority The new priority of the item, or -1 if it is not to be changed.
+	 * @param start The new start date of this item, or null if it is not to be changed.
+	 * @param end The new end date of this item, or null if it is not to be changed.
+	 */
+	public CommandUpdate(int id, String newDescription, int newPriority, MyDate newStartDate, MyDate newEndDate) {
+		this.id = id;
+		this.description = newDescription;
+		this.priority = newPriority;
+		this.startDate = newStartDate;
+		this.endDate = newEndDate;
+	}
+
+	@Override
+	/**
+	 * Executes this command.
+	 * @throws IllegalArgumentException if start and/or end represent invalid dates.
+	 */
+	public void execute() throws IllegalArgumentException {
+		updatedItem = storage.updateItem(id, description, priority, startDate, endDate);
+	}
+
+	@Override
+	/**
+	 * Undoes this command's execute method.
+	 * Can only be called after calling this command's execute method.
+	 */
+	public void undo() {
+		assert updatedItem!=null;
+
+		storage.removeItem(updatedItem[UPDATEDINDEX_NEW].getId());
+		storage.addItem(updatedItem[UPDATEDINDEX_OLD]);
+		ToDoItem[] temp = new ToDoItem[2];
+		temp[UPDATEDINDEX_OLD] = updatedItem[UPDATEDINDEX_NEW];
+		temp[UPDATEDINDEX_NEW] = updatedItem[UPDATEDINDEX_OLD];
+		updatedItem = temp;
+	}
+
+	@Override
+	/**
+	 * Re-executes this command.
+	 * Must only be called after calling this command's undo() method.
+	 */
+	public void redo() throws IllegalArgumentException {
+		storage.removeItem(updatedItem[UPDATEDINDEX_OLD].getId());
+		storage.addItem(updatedItem[UPDATEDINDEX_NEW]);
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this command's type.
+	 * @return The String representation of this command's type.
+	 */
+	public String getCommandName() {
+		return COMMAND_TYPE;
+	}
+
+	@Override
+	/**
+	 * Gets the list of ToDoItem objects that are updated by this command.
+	 * Can only be called after calling this command's execute method.
+	 * @return A list of ToDoItem object that is updated by this command.
+	 * 		The element at index 0 is the state of the target object before the update.
+	 * 		The element at index 1 is the state of the target object after the update.
+	 */
+	public ToDoItem[] getAffectedItems() {
+		assert updatedItem!=null;
+		return updatedItem;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\CommandUpdate.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Controller.java
+	 */
+
+/**
+ * Defines the component in Dynamiz that coordinates the front-end user interface and the back end operations.
+ * Currently, list and search operations are not supported as the parser has yet to implement parsing for
+ * these 2 command types.
+ * 
+ * Constructor
+ * Controller()	//Creates a new instance of this Controller.
+ * 
+ * Public Methods
+ * Feedback executeCommand(String input)	//Executes the command represented by the input string.
+ */
+public class Controller {
+	//Defines the name of the log file
+	private static final String LOGFILENAME = "dynamiz/log.txt";
+
+	//Defines command type of unsupported commands for use in Feedback constructor
+	private static final String COMMAND_UNKNOWN = "unknown command";
+
+	//Defines the messages used for feedback.
+	private static final String MSG_INVALIDCOMMAND = "Invalid command";
+	private static final String MSG_EMPTYSTACK = "No command to %1$s";
+
+	//Main data members
+	private Parser parser;	//The Parser object to parse input commands
+	private Stack<Undoable> undoStack, redoStack;	//Tracks commands being executed/undone
+	private Stack<String> cmdHistory, undoneCommands;	//Tracks command strings being executed/undone
+	private Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller");	//For logging purpose
+
+	/**
+	 * Creates a new Controller object for the program.
+	 */
+	public Controller(){
+		parser = Parser.getInstance();
+		undoStack = new Stack<Undoable>();	//Keeps track of past commands
+		redoStack = new Stack<Undoable>();	//Keeps track of undone commands.
+		//Clears when executing new commands while this stack is not empty.
+		cmdHistory = new Stack<String>();	//Keeps track of past command strings
+		undoneCommands = new Stack<String>();	//Keeps track of undone command strings. Same mechanism as redoStack.
+		Storage.getInstance();
+		logger.setLevel(Level.INFO);
+		try{
+			logger.addHandler(new FileHandler(LOGFILENAME, true));
+		} catch(IOException e){
+			logger.severe("Unable to open file for logging.");
+		}
+	}
+
+	/**
+	 * Executes the given input command.
+	 * @param input The user's input command string.
+	 * @return A Feedback object describing the success or failure of executing the input command.
+	 */
+	public Feedback executeCommand(String input){
+		logger.info("Executing \""+input+"\"");
+
+		Command command = null;
+
+		try{
+			command = parser.parse(input);	//this method throws IllegalArgumentException
+			if(command instanceof CommandUndo){
+				((CommandUndo)command).setStacks(undoStack, redoStack);
+			} else if(command instanceof CommandRedo){
+				((CommandRedo)command).setStacks(undoStack, redoStack);
+			}
+
+			command.execute();	//If exceptions occur during execution, the command object does not go into undo stack
+			if(command instanceof Undoable){
+				undoStack.push((Undoable) command);
+				cmdHistory.push(input);
+				redoStack.clear();
+				undoneCommands.clear();
+			} else if(command instanceof CommandUndo){
+				undoneCommands.push(cmdHistory.pop());
+			} else if(command instanceof CommandRedo){
+				cmdHistory.push(undoneCommands.pop());
+			}
+			if(command instanceof CommandHelp){
+				return new HelpFeedback(command.getCommandName(), input, ((CommandHelp)command).getContent());
+			}
+			return new SuccessFeedback(command.getCommandName(), input, command.getAffectedItems());
+		} catch(EmptyStackException e){	//Only thrown by attempts to undo/redo
+			return new ErrorFeedback(command.getCommandName(), input, String.format(MSG_EMPTYSTACK, command.getCommandName()));
+		} catch(IllegalArgumentException e){	//Thrown by parser and storage operations
+			if(command==null){
+				return new ErrorFeedback(COMMAND_UNKNOWN, input, e.getMessage());
+			}
+			return new ErrorFeedback(command.getCommandName(), input, e.getMessage());
+		} catch(Exception e){
+			return new ErrorFeedback(COMMAND_UNKNOWN, input, MSG_INVALIDCOMMAND);
+		}
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Controller.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\DataFileReadWrite.java
+	 */
+
+/**
+ * FileHandler is a class that reads/writes task list to/from the
+ * specified file or "todo.txt".
+ * This class is meant to be used in the same way as Java Math class: no object instance is required.
+ * 
+ * Public Methods:
+ * static ArrayList<ToDoItem> getListFromFile(String filename)	Gets a list of ToDoItem from the specified filename
+ * static void writeListToFile(String[] list, String filename)	//Writes the given list of strings to file.
+ * 
+ * Private Methods:
+ * static EventItem makeEventItem(String data)	Creates an EventItem from the data read from file.
+ * static TaskItem makeTaskItem(String data)	Creates a TaskItem from the data read from file.
+ * static ToDoItem makeToDoItem(String data)	Creates a ToDoItem form the data read from file.
+ */
+public class DataFileReadWrite {
+	/*
+	 * Defines regular expression format for each TaskItem object
+	 * represented on each line.
+	 */
+	private static final String FORMAT_DATE = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4} " +
+	"(([0-9]{1,2}:[0-9]{2})||(--:--))";
+	private static final String FORMAT_EVENTITEM = ".+; [0-9]+; .+; "+FORMAT_DATE+"; "+FORMAT_DATE;
+	private static final String FORMAT_TASKITEM = ".+; [0-9]+; .+; --/--/---- --:--; "+FORMAT_DATE;
+	private static final String FORMAT_TODOITEM = ".+; [0-9]+; .+; --/--/---- --:--; --/--/---- --:--";
+
+	//File names for todo list and completed.list
+	private static final String FILENAME_COMPLETED = "completed.txt";
+	private static final String FILE_DIR = "dynamiz";
+
+	//Delimiters for data processing purposes.
+	private static final String DATETIME_DELIM = " ";
+	private static final String FILESTRING_DELIM = "; ";
+
+	//Indices of various parameters in the params
+	private static final int INDEX_DESCRIPTION = 0;
+	private static final int INDEX_PRIORITY = 1;
+	private static final int INDEX_STATUS = 2;
+	private static final int INDEX_STARTDATE = 3;
+	private static final int INDEX_ENDDATE = 4;
+	private static final int INDEX_DEADLINE = 4;
+
+	//Index of date when splitting DateTime string.
+	private static final int DATEINDEX = 0;
+
+	//Number of days to keep completed items in todo.txt before archiving to completed.txt
+	private static final int PERSISTENT_DURATION = 5;
+
+	//Object for reading from file.
+	private static BufferedReader reader;
+
+	//Object for writing to file.
+	private static PrintWriter writer;
+
+	//The logger to log any errors.
+	private static Logger logger = Logger.getLogger("edu.dynamic.dynamiz.controller.DataFileReadWrite");
+
+	/**
+	 * Reads the task list from the from the specified filename.
+	 * Stops reading on encountering IOException. May return incomplete list in such case.
+	 * If the ToDoItem is marked as completed and its end date is older than the threshold date,
+	 * it will be written to completed.txt and not included in the list for managing.
+	 * @param filename Name of file to read list from.
+	 * @return An ArrayList of ToDoItem objects.
+	 */
+	public static ArrayList<ToDoItem> getListFromFile(String filename){
+		File file, completedFile, dir;
+		ArrayList<ToDoItem> tempList = new ArrayList<ToDoItem>();
+		DateTime currentTime = new DateTime();
+		DateTime threshold = currentTime.minusDays(PERSISTENT_DURATION);
+		MyDate thresholdDate = new MyDate(threshold.getDayOfMonth(), threshold.getMonthOfYear(), threshold.getYear());
+
+		try{
+			String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+			File directory = new File(path).getParentFile();
+			dir = new File(directory, FILE_DIR);
+			if(!dir.exists() || !dir.isDirectory()){
+				dir.mkdirs();
+			}
+			file = new File(dir, filename);
+			completedFile = new File(dir, FILENAME_COMPLETED);
+			if(!file.exists() || !file.isFile()){
+				logger.log(Level.INFO, "{0} does not exist, creating file...", filename);
+				file.createNewFile();
+			}
+			if(!completedFile.exists() || !completedFile.isFile()){
+				logger.log(Level.INFO, "{0} does not exist, creating file...", FILENAME_COMPLETED);
+			}
+
+			//Opens todo.txt for reading and completed.txt for writing.
+			reader = new BufferedReader(new FileReader(file));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(completedFile, true)));
+
+			//Process input
+			String lineInput;
+			TaskItem task;
+			EventItem event;
+			while((lineInput = reader.readLine())!=null){
+				if(lineInput.matches(FORMAT_TASKITEM)){
+					task = makeTaskItem(lineInput);
+					if(task.getStatus().equals(ToDoItem.STATUS_COMPLETED) && task.getDeadline().compareTo(thresholdDate)<0){
+						writer.println(lineInput);
+					} else{
+						tempList.add(task);
+					}
+				} else if(lineInput.matches(FORMAT_EVENTITEM)){
+					event = makeEventItem(lineInput);
+					if(event.getStatus().equals(ToDoItem.STATUS_COMPLETED) && event.getEndDate().compareTo(thresholdDate)<0){
+						writer.println(lineInput);
+					} else{
+						tempList.add(event);
+					}
+				} else if(lineInput.matches(FORMAT_TODOITEM)){
+					tempList.add(makeToDoItem(lineInput));
+				} else{
+					throw new IOException();
+				}    
+			}
+			reader.close();
+			writer.close();
+			Thread writeToFileThread = new WriteToFileThread(tempList.toArray(new ToDoItem[tempList.size()]), filename);
+			writeToFileThread.start();
+		} catch(IOException e){
+			logger.log(Level.SEVERE, "IO Exception.");
+		}
+		return tempList;
+	}
+
+	/**
+	 * Writes the given list of string to the given file, with each element in the list
+	 * written on a separate line.
+	 * @param list The list to be written to the file.
+	 * @param filename The name of the file to write to.
+	 */
+	public static synchronized void writeListToFile(String[] list, String filename){
+		String path = DataFileReadWrite.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File directory = new File(path).getParentFile();
+		File dir = new File(directory, FILE_DIR);    	
+		File outFile;
+		try{
+			if(!dir.exists() || !dir.isDirectory()){
+				dir.mkdirs();
+			}
+			outFile = new File(dir, filename);
+			if(!outFile.exists() || !outFile.isFile()){
+				outFile.createNewFile();
+			}
+			Thread currentThread = Thread.currentThread();
+			writer = new PrintWriter(outFile);
+			for(String str: list){
+				writer.println(str);
+				if(currentThread.isInterrupted()){
+					break;
+				}
+			}
+			writer.close();
+		} catch(IOException e){
+			logger.log(Level.SEVERE, "IO Exception.");
+		}
+	}
+
+	/**
+	 * Creates an EventItem from the given data string.
+	 * data must be such that data.matches(FORMAT_EVENTITEM) returns true.
+	 * @param data The String representation of the EventItem object used to write to files.
+	 * @return An EventItem object such that its toFileString() method returns the same string as data.
+	 */
+	private static EventItem makeEventItem(String data){
+		EventItem event;
+		String[] params = data.split(FILESTRING_DELIM);
+		String description = params[INDEX_DESCRIPTION];
+		int priority = Integer.parseInt(params[INDEX_PRIORITY]);
+		String status = params[INDEX_STATUS];
+
+		MyDate startDate, endDate;
+		if(params[INDEX_STARTDATE].matches(MyDateTime.REGEX_DATETIME)){
+			startDate = MyDateTime.makeDateTime(params[INDEX_STARTDATE]);
+		} else{
+			startDate = MyDate.makeDate(params[INDEX_STARTDATE].split(DATETIME_DELIM)[DATEINDEX]);
+		}
+
+		if(params[INDEX_ENDDATE].matches(MyDateTime.REGEX_DATETIME)){
+			endDate = MyDateTime.makeDateTime(params[INDEX_ENDDATE]);
+		} else{
+			endDate = MyDate.makeDate(params[INDEX_ENDDATE].split(DATETIME_DELIM)[DATEINDEX]);
+		}
+
+		event = new EventItem(description, priority, startDate, endDate);
+		event.setStatus(status);
+		return event;
+	}
+
+	/**
+	 * Creates a ToDoItem from the given data string.
+	 * data must be such that data.matches(FORMAT_TODOITEM) returns true.
+	 * @param data The String representation of the ToDoItem object used to write to files.
+	 * @return A ToDoItem object such that its toFileString() method returns the same string as data.
+	 */
+	private static ToDoItem makeToDoItem(String data){
+		ToDoItem item;
+		String[] params = data.split(FILESTRING_DELIM);
+		String description = params[INDEX_DESCRIPTION];
+		int priority = Integer.parseInt(params[INDEX_PRIORITY]);
+		String status = params[INDEX_STATUS];
+		item = new ToDoItem(description, priority);
+		item.setStatus(status);
+		return item;
+	}
+
+	/**
+	 * Creates a TaskItem from the given data string.
+	 * data must be such that data.matches(FORMAT_TASKITEM) returns true.
+	 * @param data The String representation of the TaskItem object used to write to files.
+	 * @return A TaskItem object such that its toFileString() method returns the same string as data.
+	 */
+	private static TaskItem makeTaskItem(String data){
+		TaskItem task;
+		String[] params = data.split(FILESTRING_DELIM);
+		String description = params[0];
+		int priority = Integer.parseInt(params[INDEX_PRIORITY]);
+		String status = params[INDEX_STATUS];
+
+		MyDate deadline;
+		if(params[INDEX_DEADLINE].matches(MyDateTime.REGEX_DATETIME)){
+			deadline = MyDateTime.makeDateTime(params[INDEX_DEADLINE]);
+		} else{
+			deadline = MyDate.makeDate(params[INDEX_DEADLINE].split(DATETIME_DELIM)[DATEINDEX]);
+		}
+
+		task = new TaskItem(description, priority, deadline);
+		task.setStatus(status);
+		return task;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\DataFileReadWrite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Undoable.java
+	 */
+
+public interface Undoable {
+    void undo();
+    void redo();
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\Undoable.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandAddTest.java
+	 */
+
+ */
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandAddTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandAddTest.java
+	 */
+
+public class CommandAddTest {
+
+	@Test
+	public void test() {
+		Storage.getInstance();
+		Command cmd = new CommandAdd(new ToDoItem("Learn C++"));
+		cmd.execute();
+		assertEquals(1, cmd.getAffectedItems().length);
+		assertEquals("Learn C++", cmd.getAffectedItems()[0].getDescription());
+		((Undoable)cmd).undo();	//To clean up the todo.txt
+
+		cmd = new CommandAdd(new EventItem("Learn C++", new MyDateTime(31, 10, 2014, 12, 0), new MyDateTime(11, 11, 2014, 12, 0)));
+		cmd.execute();
+		assertEquals(new MyDateTime(31, 10, 2014, 12, 0), ((EventItem)cmd.getAffectedItems()[0]).getStartDate());
+		assertEquals(new MyDateTime(11, 11, 2014, 12, 0), ((EventItem)cmd.getAffectedItems()[0]).getEndDate());
+		((Undoable)cmd).undo();	//To clean up todo.txt
+
+		cmd = new CommandAdd(new TaskItem("PS7R", new MyDate(13, 11, 2014)));
+		cmd.execute();
+		assertEquals(new MyDate(13, 11, 2014), ((TaskItem)cmd.getAffectedItems()[0]).getDeadline());
+		((Undoable)cmd).undo();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandAddTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandDeleteTest.java
+	 */
+
+public class CommandDeleteTest {
+
+	@Test
+	//Tests normal case
+	public void test() {
+		int[] arr = new int[3];
+		arr[0] = 2;
+		arr[1] = 4;
+		arr[2] = 5;
+		Command cmd = new CommandDelete(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertEquals(4, cmd.getAffectedItems()[1].getId());
+		assertEquals(5, cmd.getAffectedItems()[2].getId());
+		((Undoable)cmd).undo();
+		cmd = new CommandShow(2);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		cmd = new CommandShow(4);
+		cmd.execute();
+		assertEquals(4, cmd.getAffectedItems()[0].getId());
+		cmd = new CommandShow(5);
+		cmd.execute();
+		assertEquals(5, cmd.getAffectedItems()[0].getId());
+	}
+
+	@Test
+	//Tests the case where some of the ID is/are invalid or non-existent.
+	public void testSomeInvalid(){
+		int[] arr = new int[3];
+		arr[0] = 2;
+		arr[1] = 20;
+		arr[2] = 5;
+		Command cmd = new CommandDelete(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems().length);
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertEquals(5, cmd.getAffectedItems()[1].getId());
+		((Undoable)cmd).undo();
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	//Tests the case when all ID are invalid/non-existent.
+	public void testAllInvalid(){
+		int[] arr = new int[3];
+		arr[0] = -1;
+		arr[1] = 20;
+		arr[2] = 35;
+		Command cmd = new CommandDelete(arr);
+		cmd.execute();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandDeleteTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandListTest.java
+	 */
+
+public class CommandListTest {
+
+	@Test
+	public void testList(){
+		OptionType[] optList = new OptionType[2];
+		optList[0] = OptionType.PRIORITY;
+		optList[1] = OptionType.START_TIME;
+		Command cmd = new CommandList(null, null, null, optList);	//Sort by priority, then by start time.
+		cmd.execute();
+		ToDoItem[] list = cmd.getAffectedItems();
+		for(ToDoItem i: list)
+			System.out.println(i);
+		System.out.println();
+
+		optList = new OptionType[1];
+		optList[0] = OptionType.END_TIME;
+		cmd = new CommandList(null, null, null, optList);	//Sort in ascending order of end time.
+		cmd.execute();
+		list = cmd.getAffectedItems();
+		for(ToDoItem i: list)
+			System.out.println(i);
+		System.out.println();
+	}
+
+	@Test
+	public void testFilter(){
+		int[] pri = new int[2];
+		pri[0] = 2;
+		pri[1] = 4;
+		MyDate[] end = new MyDate[2];
+		end[0] = new MyDate(29, 10, 2014);
+		end[1] = new MyDate(1, 11, 2014);
+		Command cmd = new CommandList(pri, null, end, null);	//filter by priority and end date.
+		cmd.execute();
+		ToDoItem[] list = cmd.getAffectedItems();
+		for(ToDoItem i: list)
+			System.out.println(i);
+		System.out.println();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandListTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandMarkTest.java
+	 */
+
+public class CommandMarkTest {
+
+	@Test
+	//Tests normal case where all ID are valid.
+	//Change the ID based on the contents of dynamiz/todo.txt.
+	//Items represented by the ID must be "Pending" as this test case is for all valid ID.
+	public void test() {
+		int[] arr = new int[2];
+		arr[0] = 2;
+		arr[1] = 3;
+		CommandMark cmd = new CommandMark(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, cmd.getAffectedItems()[0].getStatus());
+		assertEquals(3, cmd.getAffectedItems()[1].getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, cmd.getAffectedItems()[1].getStatus());
+
+		cmd.undo();
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
+	}
+
+	@Test
+	//Tests cases where some ID are invalid.
+	//For the ID, make sure that 2 of them can be marked as completed.
+	//Else the test file will screw up, causing subsequent runs to fail.
+	public void testSomeInvalidAndCompleted(){
+		int[] arr = new int[3];
+		arr[0] = -2;
+		arr[1] = 4;
+		arr[2] = 6;
+		Command cmd = new CommandMark(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems().length);
+		((Undoable)cmd).undo();
+
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	//Tests case when no item is marked as completed.
+	public void testIllegalOperations(){
+		//Invalid ID
+		int[] arr = new int[2];
+		arr[0] = -1;
+		arr[1] = 25;
+		Command cmd = new CommandMark(arr);
+		cmd.execute();
+
+		//Both items are already completed.
+		arr[0] = 1;
+		arr[1] = 3;
+		cmd = new CommandMark(arr);
+		cmd.execute();
+
+		//Mixture of both cases.
+		arr[1] = 25;
+		cmd = new CommandMark(arr);
+		cmd.execute();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandMarkTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandRedoTest.java
+	 */
+
+public class CommandRedoTest {
+
+	@Test
+	public void test() {
+		Command cmd = new CommandAdd(new ToDoItem("Learn C++"));
+		Stack<Undoable> undoStack = new Stack<Undoable>();
+		Stack<Undoable> redoStack = new Stack<Undoable>();
+		cmd.execute();
+		((Undoable)cmd).undo();
+		redoStack.push((Undoable)cmd);
+		cmd = new CommandRedo();
+		((CommandRedo)cmd).setStacks(undoStack, redoStack);
+		cmd.execute();
+		assertEquals("Learn C++", cmd.getAffectedItems()[0].getDescription());
+		cmd = new CommandUndo();
+		((CommandUndo)cmd).setStacks(undoStack, redoStack);	//To maintain integrity of dynamiz/todo.txt
+		cmd.execute();
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandRedoTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandSearchTest.java
+	 */
+
+public class CommandSearchTest {
+
+	@Test
+	public void test() {
+		Command cmd = new CommandSearch("CS", -1, null, null, ToDoItem.STATUS_PENDING, null);
+		cmd.execute();
+		ToDoItem[] list = cmd.getAffectedItems();
+		assertTrue(list!=null);
+		for(ToDoItem i: list){
+			assertEquals(ToDoItem.STATUS_PENDING, i.getStatus());
+		}
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandSearchTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandShowTest.java
+	 */
+
+public class CommandShowTest {
+
+	@Test
+	public void test() {
+		Command cmd = new CommandShow(1);
+		cmd.execute();
+		ToDoItem[] list = cmd.getAffectedItems();
+		assertEquals(1, list.length);
+		assertEquals(1, list[0].getId());
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandShowTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUndoTest.java
+	 */
+
+public class CommandUndoTest {
+
+	@Test
+	public void test() {
+		//For mark command, use an ID that can be successfully marked as "Completed" in dynamiz/todo.txt,
+		//or the test case will not work.
+		int[] arr = new int[1];
+		arr[0] = 2;
+		Command cmd = new CommandMark(arr);
+		cmd.execute();
+		Stack<Undoable> undoStack = new Stack<Undoable>();
+		Stack<Undoable> redoStack = new Stack<Undoable>();
+		undoStack.push((Undoable)cmd);
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+		CommandUndo undo = new CommandUndo();
+		undo.setStacks(undoStack, redoStack);
+		undo.execute();
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_PENDING));
+
+		cmd = new CommandUpdate(2, null, 2, null, null);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems()[0].getId());
+		assertEquals(2, cmd.getAffectedItems()[1].getPriority());
+		undoStack.push((Undoable)cmd);
+		undo.execute();
+		assertEquals(4, cmd.getAffectedItems()[1].getPriority());
+
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUndoTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUnmarkTest.java
+	 */
+
+public class CommandUnmarkTest {
+	@Test
+	public void test() {
+		//Tests normal use case.
+		int[] arr = new int[3];
+		arr[0] = 7;	//All 3 ID must have status "Completed" in dynamiz/todo.txt for this test case to work.
+		arr[1] = 8;
+		arr[2] = 9;
+		Command cmd = new CommandUnmark(arr);
+		cmd.execute();
+		assertEquals(3, cmd.getAffectedItems().length);
+		assertEquals(7, cmd.getAffectedItems()[0].getId());
+		assertEquals(8, cmd.getAffectedItems()[1].getId());
+		assertEquals(9, cmd.getAffectedItems()[2].getId());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[2].getStatus());
+		((Undoable)cmd).undo();
+		assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+		assertTrue(cmd.getAffectedItems()[1].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+		assertTrue(cmd.getAffectedItems()[2].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+
+		//Test case where some of the items are already not marked as completed.
+		arr[1] = 2;	//This ID must have status "Pending".
+		cmd = new CommandUnmark(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems().length);
+		assertEquals(7, cmd.getAffectedItems()[0].getId());
+		assertEquals(9, cmd.getAffectedItems()[1].getId());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
+		((Undoable)cmd).undo();
+		assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+		assertTrue(cmd.getAffectedItems()[1].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+
+		//Test case where some of the ID are invalid.
+		arr[1] = -1;	//Must be an invalid ID.
+		cmd = new CommandUnmark(arr);
+		cmd.execute();
+		assertEquals(2, cmd.getAffectedItems().length);
+		assertEquals(7, cmd.getAffectedItems()[0].getId());
+		assertEquals(9, cmd.getAffectedItems()[1].getId());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[0].getStatus());
+		assertEquals(ToDoItem.STATUS_PENDING, cmd.getAffectedItems()[1].getStatus());
+		((Undoable)cmd).undo();
+		assertTrue(cmd.getAffectedItems()[0].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+		assertTrue(cmd.getAffectedItems()[1].getStatus().equals(ToDoItem.STATUS_COMPLETED));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testInvalidCases(){
+		//Test case where all are invlaid ID.
+		int[] arr = new int[3];
+		arr[0] = -1;
+		arr[1] = 20;
+		arr[2] = 100;
+		Command cmd = new CommandUnmark(arr);
+		cmd.execute();
+
+		//Test case where all items are already marked as not 'completed'.
+		arr[0] = 2;
+		arr[1] = 6;
+		arr[2] = 8;
+		cmd = new CommandUnmark(arr);
+		cmd.execute();
+
+		//Test case where all ID are either of the 1st error type or the 2nd error type.
+		arr[1] = -1;
+		cmd = new CommandUnmark(arr);
+		cmd.execute();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUnmarkTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUpdateTest.java
+	 */
+
+public class CommandUpdateTest {
+
+	@Test
+	public void test() {
+		//Make a backup copy of dynamiz/todo.txt elsewhere as re-initialization of file
+		//is needed to maintain integrity of file.
+		Command cmd = new CommandUpdate(3, "Midterm for CS2105", -1, new MyDateTime(4, 10, 2014, 16, 0), new MyDateTime(4, 10, 2014, 17, 0));
+		cmd.execute();
+
+		ToDoItem[] list = cmd.getAffectedItems();
+		assertEquals(2, list.length);
+		assertEquals(3, cmd.getAffectedItems()[1].getId());
+		assertEquals("Midterm for CS2105", cmd.getAffectedItems()[1].getDescription());
+		assertEquals(cmd.getAffectedItems()[0].getPriority(), cmd.getAffectedItems()[1].getPriority());
+		assertEquals(new MyDateTime(4, 10, 2014, 16, 0), ((EventItem)cmd.getAffectedItems()[1]).getStartDate());
+		assertEquals(new MyDateTime(4, 10, 2014, 17, 0), ((EventItem)cmd.getAffectedItems()[1]).getEndDate());
+		((Undoable)cmd).undo();	//To maintain integrity of dynamiz/todo.txt
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalDateUpdate(){
+		//Any ID will do.
+		Command cmd = new CommandUpdate(1, null, -1, new MyDate(10, 11, 2014), new MyDate(9, 11, 2014));
+		cmd.execute();
+		cmd = new CommandUpdate(8, null, -1, null, new MyDate(9, 9, 2014));
+		cmd.execute();
+
+		//Use and ID of an EventItem
+		cmd = new CommandUpdate(8, null, -1, new MyDate(31, 12, 2014), null);
+		cmd.execute();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\CommandUpdateTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\ControllerTest.java
+	 */
+
+public class ControllerTest {
+	//Make a backup copy of todo.txt to put into dynamiz folder before running this unit test.
+
+	@Test
+	public void testAdd() throws Exception{
+		Feedback feedback;
+		Controller controller = new Controller();
+
+		//Adds a ToDoItem
+		feedback = controller.executeCommand("add Buy newspaper");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("add", feedback.getCommandType());
+		assertEquals("add Buy newspaper", feedback.getOriginalCommand());
+		assertEquals("Buy newspaper", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
+		controller.executeCommand("undo");
+
+		//Adds an event
+		feedback = controller.executeCommand("add Meeting priority medium from 7/10/2014 to 8/10/2014");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("add", feedback.getCommandType());
+		assertEquals("add Meeting priority medium from 7/10/2014 to 8/10/2014", feedback.getOriginalCommand());
+		assertEquals("Meeting", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
+		assertEquals(new MyDate(7, 10, 2014), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getStartDate());
+		assertEquals(new MyDate(8, 10, 2014), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getEndDate());
+		assertEquals(ToDoItem.PRIORITY_NORMAL, ((SuccessFeedback)feedback).getAffectedItems()[0].getPriority());
+		controller.executeCommand("undo");
+
+		//Adds another event, more on testing that the time element is added
+		feedback = controller.executeCommand("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 2pm");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("add", feedback.getCommandType());
+		assertEquals("add CS2103T Tutorial from 8/10/2014 13:00 to 8/10/2014 2pm", feedback.getOriginalCommand());
+		assertEquals("CS2103T Tutorial", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
+		assertEquals(new MyDateTime(8, 10, 2014, 13, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getStartDate());
+		assertEquals(new MyDateTime(8, 10, 2014, 14, 0), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getEndDate());
+		controller.executeCommand("undo");
+
+		//Adds a deadline task, tests more for the deadline.
+		feedback = controller.executeCommand("add D by 25 October 2014");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("add", feedback.getCommandType());
+		assertEquals("add D by 25 October 2014", feedback.getOriginalCommand());
+		assertEquals("D", ((SuccessFeedback)feedback).getAffectedItems()[0].getDescription());
+		assertEquals(new MyDate(25, 10, 2014), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[0]).getDeadline());
+		controller.executeCommand("undo");
+	}
+
+	@Test
+	public void testDelete(){
+		//Deletes an item
+		Controller controller = new Controller();
+		Feedback feedback = controller.executeCommand("delete 2");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("delete", feedback.getCommandType());
+		assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+		controller.executeCommand("undo");
+
+		//Deletes multiple items by ID range
+		feedback = controller.executeCommand("delete 2-4");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("delete", feedback.getCommandType());
+		assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+		assertEquals(3, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+		assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[2].getId());
+		controller.executeCommand("undo");
+
+		//Deletes multiple items by ID
+		feedback = controller.executeCommand("delete 2, 5");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+		assertEquals(5, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+		controller.executeCommand("undo");
+
+		//Case where some ID are invalid/non-existent
+		feedback = controller.executeCommand("delete -1, 4");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals(1, ((SuccessFeedback)feedback).getAffectedItems().length);
+		assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+		controller.executeCommand("undo");
+
+		//Case when all ID are invalid.
+		feedback = controller.executeCommand("delete -1, 100");
+		assertTrue(feedback instanceof ErrorFeedback);
+	}
+
+	@Test
+	public void testUpdate(){
+		Controller controller = new Controller();
+		//Changes both start and end dates
+		Feedback feedback = controller.executeCommand("update 1 on 27/9/2014 17:30");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("update", feedback.getCommandType());
+		assertEquals(1, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+		assertEquals(new MyDateTime(27, 9, 2014, 17, 30), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getStartDate());
+		assertEquals(new MyDateTime(27, 9, 2014, 17, 30), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+		controller.executeCommand("undo");
+
+		//Changes only end date
+		feedback = controller.executeCommand("update 1 to 1 january 2015");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals("update", feedback.getCommandType());
+		if(((SuccessFeedback)feedback).getAffectedItems()[1] instanceof EventItem){
+			assertEquals(new MyDate(1, 1, 2015), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+		} else{
+			assertEquals(new MyDate(1, 1, 2015), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getDeadline());
+		}
+		controller.executeCommand("undo");
+
+		//Multiple fields update
+		feedback = controller.executeCommand("update 4 Go shopping by 6/10/2014");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals(4, ((SuccessFeedback)feedback).getAffectedItems()[1].getId());
+		assertEquals("Go shopping", ((SuccessFeedback)feedback).getAffectedItems()[1].getDescription());
+		if(((SuccessFeedback)feedback).getAffectedItems()[1] instanceof EventItem){
+			assertEquals(new MyDate(6, 10, 2014), ((EventItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getEndDate());
+		} else{
+			assertEquals(new MyDate(6, 10, 2014), ((TaskItem)((SuccessFeedback)feedback).getAffectedItems()[1]).getDeadline());
+		}
+		controller.executeCommand("undo");
+	}
+
+	@Test
+	public void testSearch(){
+		Controller controller = new Controller();
+		//Search by keyword
+		Feedback feedback = controller.executeCommand("search cs210");
+		assertTrue(feedback instanceof SuccessFeedback);
+		ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
+		for(ToDoItem item: list){
+			assertTrue(item.getDescription().toLowerCase().contains("cs210"));
+		}
+
+		//Search by multiple values
+		feedback = controller.executeCommand("search cs priority high orderby starttime");
+		assertTrue(feedback instanceof SuccessFeedback);
+		list = ((SuccessFeedback)feedback).getAffectedItems();
+		for(ToDoItem i: list){
+			assertTrue(i.getDescription().toLowerCase().contains("cs"));
+			assertEquals(ToDoItem.PRIORITY_HIGH, i.getPriority());
+		}
+	}
+
+	@Test
+	public void testDo(){
+		Controller controller = new Controller();
+		//Marks 1 item as completed.
+		//Choose ID of an item whose status is not "Completed"
+		Feedback feedback = controller.executeCommand("do 2");
+		assertTrue(feedback instanceof SuccessFeedback);
+		assertEquals(2, ((SuccessFeedback)feedback).getAffectedItems()[0].getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, ((SuccessFeedback)feedback).getAffectedItems()[0].getStatus());
+		controller.executeCommand("undo");
+
+		//Marks multiple items by ID.
+		//Choose IDs of items that are not yet marked as "completed".
+		feedback = controller.executeCommand("mark 2, 3");
+		assertTrue(feedback instanceof SuccessFeedback);
+		ToDoItem[] list = ((SuccessFeedback)feedback).getAffectedItems();
+		assertEquals(2, list.length);
+		assertEquals(2, list[0].getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, list[0].getStatus());
+		assertEquals(3, list[1].getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, list[1].getStatus());
+		controller.executeCommand("undo");
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\unitTest\ControllerTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\WriteToFileThread.java
+	 */
+
+/**
+ * Defines each thread that writes the given list to the specified file.
+ * 
+ * Constructor
+ * WriteToFileThread(String[] list, String filename)	//Creates a new instance of this thread.
+ * WriteToFileThread(ToDoItem[] list, String filename)	//Creates a new thread that writes the given ToDoItem list to file.
+ * 
+ * Public Methods
+ * void run()	//Executes this thread.
+ */
+public class WriteToFileThread extends Thread {
+	//Tracks the threads that were previously executed and to be terminated by the incoming thread.
+	private static LinkedList<WriteToFileThread> runningThreads = new LinkedList<WriteToFileThread>();
+
+	//Main data members
+	private String[] list;	//The list of items to write to file
+	private String filename;	//The name of the file to write to
+
+	/**
+	 * Creates a new thread to write the given list to file.
+	 * This constructor implicitly implies that the given list is a list of ToDoItem objects that are
+	 * marked as completed.
+	 * @param list The list to be written to file.
+	 * @param filename The name of the file to write to.
+	 */
+	public WriteToFileThread(String[] list, String filename){
+		assert list!=null && filename!=null && !filename.isEmpty();
+		this.list = list;
+		this.filename = filename;
+	}
+
+	/**
+	 * Creates a new thread that writes the file string representation of the items in the given list
+	 * to the specified file.
+	 * @param list The list of ToDoItem objects to be written to file.
+	 * @param filename The name of the file to write to.
+	 */
+	public WriteToFileThread(ToDoItem[] list, String filename){
+		assert list!=null && filename!=null && !filename.isEmpty();
+		this.list = new String[list.length];
+		int size = 0;
+		for(ToDoItem i: list){
+			this.list[size++] = i.toFileString();
+		}
+		this.filename = filename;
+	}
+
+	@Override
+	/**
+	 * Executes this thread.
+	 */
+	public void run(){
+		try{
+			stopRunningThreads();
+			DataFileReadWrite.writeListToFile(list, filename);
+		} catch(InterruptedException e){
+			Thread.currentThread().interrupt();
+			return;
+		}	
+	}
+
+	//Stops all running threads in the given thread list and adds this thread to the given list.
+	private void stopRunningThreads() throws InterruptedException {
+		synchronized(list){
+			WriteToFileThread thread;
+			Iterator<WriteToFileThread> itr = runningThreads.iterator();
+			while(itr.hasNext()){
+				thread = itr.next();
+				if(!thread.isAlive()){
+					runningThreads.remove(thread);
+				} else{
+					thread.interrupt();
+					thread.join();
+				}
+			}
+		}
+		runningThreads.add(this);
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\controller\WriteToFileThread.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\storage\Storage.java
+	 */
+
+/**
+ * Defines the storage class holding the list of tasks and events.
+ * 
+ * Public Methods(currently that can be used)
+ * static Storage getInstance()	//gets the Storage instance
+ * ToDoItem addItem(ToDoItem item)	//Adds the given item to the list.
+ * ToDoItem[] getList(OptionType[] options)	//Gets the full list of items.
+ * ToDoItem[] getList(String[] keywords, int[] priority, MyDate[] start, MyDate end, OptionsType[] optionsList)
+ * 						//Gets the filtered list of items.
+ * ToDoItem removeItem(String id)	//Removes the item with the specified id from this storage.
+ * ToDoItem[] searchItems(int id)	//Gets the ToDoItem with the given ID.
+ * ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, OptionType[] optList)	//Gets a list of items with the given parameter values.
+ * ToDoItem[] updateItem(String id, String description, int priority, Date start, Date end)	//Updates the ToDoItem with the given id with the specified details. 
+ * ToDoItem markItem(int id)	//Marks the ToDoItem with the given id as completed
+ * ToDoItem unmarkItem(int id)	//Marks the ToDoItem with the given id as not completed.
+ * void markItem(ToDoItem item)	//Marks the given ToDoItem as completed.
+ * void unmarkItem(ToDoItem item)	//Marks the given ToDoItem as not completed.
+ */
+public class Storage {
+	private static final String TODOLIST_FILENAME = "todo.txt";
+	private static final String OUTPUT_FILENAME = TODOLIST_FILENAME;
+
+	//Error messages
+	private static final String MSG_ITEMNOTFOUND = "Item not found.";
+	private static final String MSG_INVALIDDATES = "Illogical start and end date relation.";
+
+	//Main data members
+	private ArrayList<ToDoItem> mainList;	//The main list
+	private ArrayList<ToDoItem> toDoItemList;	//Holds items without any dates
+	private ArrayList<EventItem> eventList;	//Holds events
+	private ArrayList<TaskItem> taskList;	//Holds deadline tasks
+	private TreeMap<Integer, ToDoItem> searchTree;	//Maps each item to its ID for faster search by ID
+	private static Storage storage;	//Holds the only instance of the Storage object
+
+	/**
+	 * Creates a new instance of Storage.
+	 */
+	private Storage(){
+		mainList = DataFileReadWrite.getListFromFile(TODOLIST_FILENAME);
+		searchTree = new TreeMap<Integer, ToDoItem>();
+		toDoItemList = new ArrayList<ToDoItem>();
+		eventList = new ArrayList<EventItem>();
+		taskList = new ArrayList<TaskItem>();
+
+		//Adds each item in mainList to ID search tree
+		for(ToDoItem temp: mainList){
+			searchTree.put(temp.getId(), temp);
+			if(temp instanceof TaskItem){
+				taskList.add((TaskItem)temp);
+			} else if(temp instanceof EventItem){
+				eventList.add((EventItem)temp);
+			} else{
+				toDoItemList.add(temp);
+			}
+		}
+	}
+
+	/**
+	 * Gets the Storage instance.
+	 * @return The only Storage instance of this class.
+	 */
+	public static Storage getInstance(){
+		if(storage==null)
+			storage = new Storage();
+		return storage;
+	}
+
+	/**
+	 * Adds the given item to the list. For use by CommandDelete's undo method.
+	 * @param item The ToDoItem to be added to the list.
+	 * @return The TodoItem that is added to the list.
+	 */
+	public ToDoItem addItem(ToDoItem item){
+		//item must not be null.
+		assert item!=null;
+
+		mainList.add(item);
+		searchTree.put(item.getId(), item);
+		if(item instanceof TaskItem){
+			taskList.add((TaskItem)item);
+		} else if(item instanceof EventItem){
+			eventList.add((EventItem)item);
+		} else{
+			toDoItemList.add(item);
+		}
+		Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+		writeToFile.run();
+		return item;	
+	}
+
+	/**
+	 * Updates the item with the given id with the specified changes.
+	 * @param id The id of the item to update.
+	 * @param description The new description of the target object.
+	 * @param priority The new priority for the item to be updated, use a negative number to indicate
+	 * 			no change to priority.
+	 * @param start The new start date for the item, or null if start date is not to be changed.
+	 * @param end The new end date for the item, or null if end date is not to be changed.
+	 * @return The updated ToDoItem.
+	 * @throws IllegalArgumentException if there is no such item with the given id.
+	 */
+	public ToDoItem[] updateItem(int id, String description, int priority, MyDate start, MyDate end) throws IllegalArgumentException{
+		ToDoItem[] list = new ToDoItem[2];
+		ToDoItem target = searchTree.get(id);
+
+		if(target==null){
+			throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+		}
+
+		//Makes a copy of the current version of the object
+		list[0] = makeCopy(target);
+
+		if(description!=null && !description.isEmpty()){
+			target.setDescription(description);
+		}
+
+		if(ToDoItem.isValidPriority(priority)){
+			target.setPriority(priority);
+		}
+
+		//Checks for illogical date and time range.
+		if(start!=null && end!=null){
+			if(start.compareIncludingTime(end)>0){
+				throw new IllegalArgumentException(MSG_INVALIDDATES);
+			} else{
+				target = new EventItem(target, start, end);
+				removeItem(target.getId());
+				addItem(target);
+			}
+		} else if(start!=null && !(target instanceof EventItem)){
+			if(target instanceof TaskItem){
+				if(((TaskItem)target).getDeadline().compareIncludingTime(start)<0){
+					throw new IllegalArgumentException(MSG_INVALIDDATES);
+				}
+				target = new EventItem((TaskItem)target, start);
+			} else{
+				target = new EventItem(target, start);
+			}
+			removeItem(target.getId());
+			addItem(target);
+		} else if(start!=null){
+			if(((EventItem)target).getEndDate().compareIncludingTime(start)<0){
+				throw new IllegalArgumentException(MSG_INVALIDDATES);
+			}
+			((EventItem)target).setStartDate(start);
+		} else if(end!=null){
+			if(target instanceof EventItem){
+				if(((EventItem)target).getStartDate().compareIncludingTime(end)>0){
+					throw new IllegalArgumentException(MSG_INVALIDDATES);
+				}
+				((EventItem)target).setEndDate(end);
+			} else if(target instanceof TaskItem){
+				((TaskItem)target).setDeadline(end);
+			} else{
+				target = new TaskItem(target, end);
+				removeItem(target.getId());
+				addItem(target);
+			}
+		}
+
+		list[1] = target;
+
+		Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+		writeToFile.run();
+		return list;	
+	}
+
+	/**
+	 * Gets the ToDoItem with the given ID, or null if no such ToDoItem exists.
+	 * @param id The ID of the ToDoItem to search.
+	 * @return A 1-element array of the ToDoItem with the given ID, or null, if no such ToDoItem exists.
+	 */
+	public ToDoItem[] searchItems(int id) throws IllegalArgumentException {
+		ToDoItem temp = searchTree.get(id);
+		if(temp==null){
+			throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+		}
+		ToDoItem[] arr = new ToDoItem[1];
+		arr[0] = temp;
+		return arr;
+	}
+
+	/**
+	 * Gets a list of ToDoItem objects whose description contains this keyword.
+	 * @param keyword The keyword to search in the objects or null if no search by keyword is needed.
+	 * @param priority The priority level to the item(s) to search or -1 if not needed.
+	 * @param start the start date of the item(s) to search or null if search by start date is not needed.
+	 * @param end The end date of the item(s) to search or null if search by end date is not needed.
+	 * @param status the status of the item(s)to search or null if search by status is not needed.
+	 * @param optList The list of options(in descending precedence) to sort search results by.
+	 * @return An array of ToDoItem objects containing all of the given values or null
+	 * 		if the list is empty.
+	 */
+	public ToDoItem[] searchItems(String keyword, int priority, MyDate start, MyDate end, String status, OptionType[] optList){
+		ArrayList<ToDoItem> temp = mainList;;
+		if(keyword!=null && !keyword.isEmpty()){
+			temp = searchByKeyword(temp, keyword);
+		}
+		if(priority!=-1){
+			temp = searchByPriority(temp, priority);
+		}
+		if(start!=null){
+			temp = searchByStartDate(temp, start);
+		}
+		if(end!=null){
+			temp = searchByEndDate(temp, end);
+		}
+		if(status!=null && !status.isEmpty()){
+			temp = searchByStatus(temp, status);
+		}
+		if(temp.isEmpty()){
+			return null;
+		}
+		if(optList!=null){
+			int size = optList.length;
+			while(size-->0){
+				sortListByOption(temp, optList[size]);
+			}
+		}
+		return temp.toArray(new ToDoItem[temp.size()]);
+	}
+
+	/**
+	 * Gets a list of items with the keyword in their description from the given list.
+	 * @param list The list to perform search on.
+	 * @return An ArrayList of ToDoItem objects whose description contain the keyword.
+	 */
+	private ArrayList<ToDoItem> searchByKeyword(ArrayList<ToDoItem> list, String keyword){
+		assert list!=null && keyword!=null && !keyword.isEmpty();
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+		for(ToDoItem i: list){
+			if(i.getDescription().toLowerCase().contains(keyword.toLowerCase())){
+				temp.add(i);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Gets a list of items with the given priority from the given list.
+	 * @param list The list to perform search on.
+	 * @param priority The priority value used to filter the items.
+	 * @return An Arraylist of ToDoItem objects with the given priority level.
+	 */
+	private ArrayList<ToDoItem> searchByPriority(ArrayList<ToDoItem> list, int priority){
+		assert list!=null && priority>=0;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+		for(ToDoItem i: list){
+			if(i.getPriority()==priority){
+				temp.add(i);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Gets a list of items with the given start date drom the given list.
+	 * @param list The list to perform search on.
+	 * @param start The start date value to search.
+	 * @return An ArrayList of ToDoItem objects with the given start date.
+	 */
+	private ArrayList<ToDoItem> searchByStartDate(ArrayList<ToDoItem> list, MyDate start){
+		assert start!=null && list!=null;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+		for(ToDoItem i: list){
+			if((i instanceof EventItem) && ((EventItem)i).getStartDate().equals(start)){
+				temp.add(i);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Gets a list of items with the given end date/deadline.
+	 * @param list The list to perform search on.
+	 * @param end The end date/deadline value to search.
+	 */
+	private ArrayList<ToDoItem> searchByEndDate(ArrayList<ToDoItem> list, MyDate end){
+		assert list!=null && end!=null;
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+		for(ToDoItem i: list){
+			if(((i instanceof EventItem) && ((EventItem)i).getEndDate().equals(end)) ||
+					((i instanceof TaskItem) && ((TaskItem)i).getDeadline().equals(end))){
+				temp.add(i);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Gets a list of ToDoItem with the given status.
+	 * @param list The list to perform search on.
+	 * @param status The status to search for.
+	 * @return An ArrayList of ToDoItem from the given list with the given status.
+	 */
+	private ArrayList<ToDoItem> searchByStatus(ArrayList<ToDoItem> list, String status){
+		assert list!=null && status!=null && !status.isEmpty();
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();
+		for(ToDoItem i: list){
+			if(i.getStatus().equalsIgnoreCase(status)){
+				temp.add(i);
+			}
+		}
+		return temp;
+	}
+
+	/**
+	 * Gets the list of tasks and events in an array sorted according to optionsList.
+	 * @param options The list of data fields to sort the list by in descending order of precedence
+	 * 		or null if no other sorting criteria is required.
+	 * 		Eg. {a, b} means most importantly, sort by a. For all items with same value of a, sort by b.
+	 * @return An array of ToDoItem objects sorted according to sorting criteria or null
+	 * 		if the storage has no item.
+	 */
+	private ToDoItem[] getList(OptionType[] options){
+		if(mainList.isEmpty()){
+			return null;
+		}
+		Collections.sort(mainList);
+		if(options!=null){
+			int size = options.length;
+			while(size-->0){
+				sortListByOption(mainList, options[size]);
+			}
+		}
+		return mainList.toArray(new ToDoItem[mainList.size()]);
+	}
+
+	/**
+	 * Gets the list of items filtered using the given field values, sorted using the given options list
+	 * in descending order of precedence. If no filtering values are used at all, the full list of items
+	 * will be returned instead.
+	 * @param priority The list of priority values used for filtering or null if not used.
+	 * @param start The list of start dates used for filtering or null if not used.
+	 * @param end The list of end dates used for filtering or null if not used.
+	 * @param options The list of field types in descending order of precedence used to sort the list.
+	 * @return A filtered array of ToDoItem sorted using options.
+	 */
+	public ToDoItem[] getList(int[] priority, MyDate[] start, MyDate[] end, OptionType[] options){
+		if(priority==null && start==null && end==null){
+			return getList(options);
+		}
+		ArrayList<ToDoItem> temp = new ArrayList<ToDoItem>();	//To hold the resulting list
+
+		//Use BST for log(N) search time.
+		TreeSet<Integer> priorityList = new TreeSet<Integer>();
+		TreeSet<MyDate> startList = new TreeSet<MyDate>();
+		TreeSet<MyDate> endList = new TreeSet<MyDate>();
+
+		//Fills the hash tables with distinct values(if applicable).
+		if(priority!=null){
+			for(int i: priority){
+				if(!priorityList.contains(i)){
+					priorityList.add(i);
+				}
+			}
+		}
+
+		if(start!=null){
+			for(MyDate i: start){
+				if(!startList.contains(i)){
+					startList.add(i);
+				}
+			}
+		}
+
+		if(end!=null){
+			for(MyDate i: end){
+				if(!endList.contains(i)){
+					endList.add(i);
+				}
+			}
+		}
+
+		//Performs big union(OR) filtering by values.
+		Iterator<ToDoItem> itr = mainList.iterator();
+		ToDoItem item;
+		while(itr.hasNext()){
+			item = itr.next();
+			if(priorityList.contains(item.getPriority())){
+				temp.add(item);
+				continue;
+			}
+			if((item instanceof EventItem)){
+				if((startList.contains(((EventItem)item).getStartDate())) ||
+						endList.contains(((EventItem)item).getEndDate())){
+					temp.add(item);
+					continue;
+				}
+			} else if((item instanceof TaskItem) && endList.contains(((TaskItem)item).getDeadline())){
+				temp.add(item);
+				continue;
+			}
+		}
+
+		//Sorts the filtered list.
+		Collections.sort(temp);
+		if(options!=null){
+			int size = options.length;
+			while(size-->0){
+				sortListByOption(temp, options[size]);
+			}
+		}
+
+		//Returns the filtered list as an array.
+		if(temp.isEmpty()){
+			return null;
+		}
+		return temp.toArray(new ToDoItem[temp.size()]);
+	}
+
+	/**
+	 * Sorts the given list by the given option type.
+	 * @param list The list to sort.
+	 * @optType The option to sort the list by.
+	 */
+	private void sortListByOption(ArrayList<ToDoItem> list, OptionType optType){
+		switch(optType){
+		case PRIORITY: Collections.sort(list, Collections.reverseOrder(new PriorityComparator()));
+		break;
+		case START_TIME: Collections.sort(list, new StartDateComparator());
+		break;
+		case END_TIME: Collections.sort(list, new EndDateComparator());
+		break;
+		default: break;
+		}
+	}
+
+	/**
+	 * Returns a list of events sorted in lexicographical order of their ID.
+	 * @return An array of EventItem objects sorted in lexicographical order of their ID
+	 * 		or null if the list is empty.
+	 */
+	public EventItem[] getEvents(){
+		if(eventList.isEmpty()){
+			return null;
+		}
+		return eventList.toArray(new EventItem[eventList.size()]);
+	}
+
+	/**
+	 * Returns a list of deadline tasks in lexicographical order or their ID.
+	 * @return An array of TaskItem objects sorted in lexicographical order of their ID
+	 * 		or null if the list is empty.
+	 */
+	public TaskItem[] getTasks(){
+		if(taskList.isEmpty()){
+			return null;
+		}
+		return taskList.toArray(new TaskItem[taskList.size()]);
+	}
+
+	/**
+	 * Gets the list of events sorted in ascending order of start date.
+	 * @return An array of EventItem sorted in ascending order by start date
+	 * 		or null if the list is empty.
+	 * Implementation is currently only a stub, to be properly implemented when use case requirements
+	 * are confirmed.
+	 */
+	public EventItem[] getEventsSortedByStartDate(){
+		if(eventList.isEmpty()){
+			return null;
+		}
+		Collections.sort(eventList, new StartDateComparator());
+		return eventList.toArray(new EventItem[eventList.size()]);
+	}
+
+	/**
+	 * Gets the list of events sorted in ascending order of end date.
+	 * @return An array of EventItem sorted in ascending order by start date
+	 * 		or null if the list is empty.
+	 * Implementation is currently only a stub, to be properly implemented when use case requirements
+	 * are confirmed.
+	 */
+	public EventItem[] getEventsSortedByEndDate(){
+		if(eventList.isEmpty()){
+			return null;
+		}
+		Collections.sort(eventList, new EndDateComparator());
+		return eventList.toArray(new EventItem[eventList.size()]);
+	}
+
+	/**
+	 * Gets the list of deadline tasks sorted in ascending order of their deadlines.
+	 * @return An array of TaskItem objects sorted in ascending order of their deadlines.
+	 */
+	public TaskItem[] getTasksSortedByDeadline(){
+		if(taskList.isEmpty()){
+			return null;
+		}
+		Collections.sort(taskList, new EndDateComparator());
+		return taskList.toArray(new TaskItem[taskList.size()]);
+	}
+
+	/**
+	 * Removes the ToDoItem with the given ID from the list.
+	 * For use by CommandAdd's undo method and CommandDelete's execute method.
+	 * @param id The id of the ToDoItem object to remove from the list.
+	 * @return The ToDoItem object that was removed from the list by this operation.
+	 * @throws IllegalArgumentException if no item with the given ID is found.
+	 */
+	public ToDoItem removeItem(int id) throws IllegalArgumentException {	
+		ToDoItem temp = searchTree.remove(id);
+		if(temp==null){
+			throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+		}
+		mainList.remove(temp);
+		if(temp instanceof TaskItem){
+			taskList.remove((TaskItem)temp);
+		} else if(temp instanceof EventItem){
+			eventList.remove((EventItem)temp);
+		} else{
+			toDoItemList.remove(temp);
+		}
+		Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+		writeToFile.run();
+		return temp;
+	}
+
+	/**
+	 * Marks the item with the given ID as completed.
+	 * @param id The id of the item to mark as completed.
+	 * @return The ToDoItem that is marked as completed or null if the item has already been marked as completed.
+	 * @throws IllegalArgumentException if there is no item with the given ID.
+	 */
+	public ToDoItem markItem(int id)throws IllegalArgumentException {
+		ToDoItem item = searchTree.get(id);
+		if(item==null){
+			throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+		}
+		if(item.getStatus().equals(ToDoItem.STATUS_COMPLETED)){
+			return null;
+		}
+		markItem(item);
+		return item;
+	}
+
+	/**
+	 * Marks the given ToDoItem as completed.
+	 * @param item The ToDoItem to marks as completed.
+	 */
+	public void markItem(ToDoItem item){
+		assert item!=null;
+		item.setStatus(ToDoItem.STATUS_COMPLETED);
+		Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+		writeToFile.run();
+	}
+
+	/**
+	 * Unmark the most recent item that is marked completed.
+	 * @param id The ID of the ToDoItem to unmark.
+	 * @return The ToDoItem object that is unmarked from completed list or null if this item's status is
+	 * 		already not 'completed'.
+	 * @throws IllegalArgumentException if no item with the given ID exists.
+	 */
+	public ToDoItem unmarkItem(int id) throws IllegalArgumentException {
+		ToDoItem temp = searchTree.get(id);
+		if(temp==null){
+			throw new IllegalArgumentException(MSG_ITEMNOTFOUND);
+		}
+		if(temp.getStatus().equals(ToDoItem.STATUS_PENDING)){
+			return null;
+		}
+		unmarkItem(temp);
+		return temp;
+	}
+
+	/**
+	 * Unmark the most recent item that is marked completed.
+	 * @param item The ToDoItem to unmark.
+	 */
+	public void unmarkItem(ToDoItem item){
+		assert item!=null;
+		item.setStatus(ToDoItem.STATUS_PENDING);
+		Thread writeToFile = new WriteToFileThread(mainList.toArray(new ToDoItem[mainList.size()]), OUTPUT_FILENAME);
+		writeToFile.run();
+	}
+
+	//Creates a duplicate copy of the given item.
+	private ToDoItem makeCopy(ToDoItem item){
+		assert item!=null;
+		if(item instanceof EventItem){
+			return new EventItem((EventItem)item);
+		} else if(item instanceof TaskItem){
+			return new TaskItem((TaskItem)item);
+		} else{
+			return new ToDoItem(item);
+		}
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\storage\Storage.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\storage\StorageTest.java
+	 */
+
+public class StorageTest {
+
+	@Test
+	public void test() {
+		//Tests create, update and delete.
+		Storage storage = Storage.getInstance();
+
+		//Simulate add command
+		ToDoItem temp = new TaskItem("CS2105 Programming Assignment 2", 3, new MyDate(13, 10, 2014));
+		storage.addItem(temp);	
+		assertTrue(storage.searchItems(temp.getId())!=null);
+		//storage.removeItem(temp.getId());
+
+		//Simulates update command
+		int id = temp.getId();
+		ToDoItem[] list = storage.updateItem(id, null, 4, null, new MyDate(14, 10, 2014));	
+		assertEquals(id, list[1].getId());
+		assertEquals(4, list[1].getPriority());
+		assertEquals(new MyDate(14, 10, 2014), ((TaskItem)list[1]).getDeadline());
+		assertEquals(list[0].getId(), list[1].getId());
+		storage.removeItem(id);
+		storage.addItem(list[0]);
+		assertEquals(list[0], storage.searchItems(id)[0]);
+		storage.removeItem(id);
+	}
+
+	@Test
+	//Tests marking and unmarking of items
+	public void testCompleteItem(){
+		Storage storage = Storage.getInstance();
+		ToDoItem item = storage.markItem(2);
+		assertEquals(2, item.getId());
+		assertEquals(ToDoItem.STATUS_COMPLETED, item.getStatus());
+		item = storage.unmarkItem(2);
+		assertEquals(2, item.getId());
+		assertEquals(ToDoItem.STATUS_PENDING, item.getStatus());
+	}
+
+	@Test
+	//Tests search by ID.
+	public void testSearch(){
+		Storage storage = Storage.getInstance();
+		ToDoItem[] item = storage.searchItems(5);
+		assertEquals(5, item[0].getId());
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\storage\StorageTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EndDateComparator.java
+	 */
+
+/**
+ * Defines the comparator object to compare ToDoItem objects by their end dates.
+ * 
+ * Constructor
+ * EndDateComparator()	//Creates a new instance of this comparator.
+ * 
+ * Public Methods
+ * int compare(ToDoItem item1, ToDoItem item2)	//Compares item 1 and item2
+ */
+public class EndDateComparator implements Comparator<ToDoItem>{
+
+	/**
+	 * Creates a new instance of this comparator.
+	 */
+	public EndDateComparator(){
+
+	}
+
+	@Override
+	/**
+	 * Compares 2 ToDoItem objects by their end dates.
+	 * @param item1 The 1st of the 2 items to compare.
+	 * @param item2 The 2nd of the 2 items to compare.
+	 * @return A positive number if item1 has "larger" end date than item2, 0 if both items
+	 * 		have the same end date, and negative number if item1 has "smaller"
+	 * 		end date than item2.
+	 * 		Comparison is such that ToDoItem is always larger than its subclasses, and TaskItem's
+	 * 		end date is its deadline.
+	 */
+	public int compare(ToDoItem item1, ToDoItem item2){
+		assert item1!=null && item2!=null;
+		boolean isEvent1 = item1 instanceof EventItem;
+		boolean isTask1 = item1 instanceof TaskItem;
+		boolean isEvent2 = item2 instanceof EventItem;
+		boolean isTask2 = item2 instanceof TaskItem;
+		if(!(isEvent1 || isTask1) && (isEvent2 || isTask2)){
+			return 1;
+		}
+		if((isEvent1 || isTask1) && !(isEvent2 || isTask2)){
+			return -1;
+		}
+		if(!(isEvent1 || isTask1) && !(isEvent2 || isTask2)){
+			return 0;
+		}
+		if(isEvent1){
+			if(isEvent2){
+				return ((EventItem)item1).getEndDate().compareTo(((EventItem)item2).getEndDate());
+			} else{
+				return ((EventItem)item1).getEndDate().compareTo(((TaskItem)item2).getDeadline());
+			}
+		} else if(isEvent2){
+			return ((TaskItem)item1).getDeadline().compareTo(((EventItem)item2).getEndDate());
+		} else{
+			return ((TaskItem)item1).getDeadline().compareTo(((TaskItem)item2).getDeadline());
+		}
+	}
+
+	@Override
+	/**
+	 * Checks if the given object is the same reference as this.
+	 */
+	public boolean equals(Object obj){
+		return this==obj;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EndDateComparator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EndDateComparatorTest.java
+	 */
+
+public class EndDateComparatorTest {
+
+	@Test
+	public void test() {
+		EndDateComparator comp = new EndDateComparator();
+		ToDoItem todo = new ToDoItem("A");
+		EventItem event = new EventItem("A", new MyDateTime(31, 12, 2014, 17, 17));
+		EventItem event2 = new EventItem("B", new MyDate(25, 12, 2014));
+		TaskItem task = new TaskItem("A", new MyDate(1, 1, 2015));
+		TaskItem task2 = new TaskItem("B", new MyDateTime(14, 1, 2015, 19, 25));
+		assertTrue(comp.compare(event, todo)<0);
+		assertTrue(comp.compare(todo, event)>0);
+		assertTrue(comp.compare(task, todo)<0);
+		assertTrue(comp.compare(todo, task)>0);
+		assertTrue(comp.compare(todo, todo)==0);
+		assertTrue(comp.compare(event2, task2)<0);
+		assertTrue(comp.compare(event, task)<0);
+		assertTrue(comp.compare(event, event2)>0);
+		assertTrue(comp.compare(task, task2)<0);
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EndDateComparatorTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\ErrorFeedback.java
+	 */
+
+/**
+ * Defines the feedback class that is used when errors occurred during execution.
+ * 
+ * Constructor
+ * ErrorFeedback(String commandType, String command, String message)	//Creates a new instance of this feedback.
+ * 
+ * Public Methods
+ * String getMessage()	//Gets the error message of this feedback.
+ * String getClassName()	//Gets the String representation of this feedback's class. 
+ */
+public class ErrorFeedback extends Feedback {
+	//The String representation of this feedback's class.
+	public static final String CLASSNAME = "ErrorFeedback";
+
+	//Main data member
+	private String message;
+
+	/**
+	 * Creates a new instance of this feedback.
+	 * @param commandType The type of command that caused an error.
+	 * @param command The input command string that caused the error.
+	 * @param message The error message to be shown to user.
+	 */
+	public ErrorFeedback(String commandType, String command, String message){
+		super(commandType, command);
+		setMessage(message);
+	}
+
+	/**
+	 * Gets the error message associated with the operation this feedback is for.
+	 * @return The error message String.
+	 */
+	public String getMessage(){
+		return message;
+	}
+
+	//Sets the error message
+	private void setMessage(String message){
+		this.message = message;
+	}
+
+	@Override
+	/**
+	 * gets the String representation of this feedback's class.
+	 * @return The String representation of this feedback's class.
+	 */
+	public String getClassName(){
+		return CLASSNAME;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\ErrorFeedback.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EventItem.java
+	 */
+
+/**
+ * Defines each event in the To-Do list.
+ * Each event is defined as having start and/or end date(s).
+ * 
+ * Constructors
+ * EventItem(String description, MyDate eventDate)	//start and end dates are the same with no specified time.
+ * EventItem(String description, MyDate start, MyDate end)	//start and end dates can be different with no specified time.
+ * EventItem(String description, int priority, MyDate date)
+ * EventItem(String description, int priority, MyDate start, MyDate end)	//The full form of constructor
+ * EventItem(EventItem event)	//Creates a new copy of the given event.
+ * EventItem(ToDoItem item, MyDate start, MyDate end)	//Converts ToDoItem to EventItem
+ * EventItem(TaskItem task, MyDate start)	//Converts TaskItem into EventItem
+ * 
+ * Public Methods
+ * MyDate getEndDate()	//Gets the end date for this event.
+ * String getEndDateString()	//Gets the string representation of this event's end date.
+ * MyDate getStartDate()	//gets the start date for this event.
+ * String getStartDateString()	//Gets the string representation of this event's start date.
+ * void setEndDate(MyDate end)	//Sets the end date for this event.
+ * void setStartDate(MyDate start)	//Sets the start date for this event.
+ */
+public class EventItem extends ToDoItem {
+	//The String formatting used in this class.
+	private static final String FORMAT_EMPTYTIME = " --:--";
+	private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+														"Start: %4$s\n"+"End: %5$s\n"+"Status: %6$s";
+	private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; %4$s; %5$s";
+	private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s %5$s %6$s";
+
+
+	//Main data members
+	private MyDate startDate, endDate;
+
+	/**
+	 * Creates a new instance of this event.
+	 * @param description The event's description.
+	 * @param date The event's start and end date.
+	 */
+	public EventItem(String description, MyDate date){
+		this(description, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
+	}
+
+	/**
+	 * Creates a new instance of this event.
+	 * @param description The event's description.
+	 * @param priority The event's priority level.
+	 * @param date The event's start and end date.
+	 */
+	public EventItem(String description, int priority, MyDate date){
+		this(description, priority, date, (date instanceof MyDateTime)? new MyDateTime(date): new MyDate(date));
+	}
+
+	/**
+	 * Creates a new instance of this event.
+	 * @param description The event's description.
+	 * @param startDate The event's start date.
+	 * @param end The event's end date.
+	 */
+	public EventItem(String description, MyDate startDate, MyDate endDate){
+		super(description);
+		setStartDate(startDate);
+		setEndDate(endDate);
+	}
+
+	/**
+	 * Creates a new instance of this event.
+	 * @param description The event's description.
+	 * @param priority The event's priority.
+	 * @param startDate The event's start date.
+	 * @param endDate The event's end date.
+	 */
+	public EventItem(String description, int priority, MyDate startDate, MyDate endDate){
+		super(description, priority);
+		setStartDate(startDate);
+		setEndDate(endDate);
+	}
+
+	/**
+	 * Creates a copy of the given event. The resulting instance, e, is such that
+	 * e!=event and e.equals(event) returns true.
+	 * @param event The EventItem to be copied.
+	 */
+	public EventItem(EventItem event){
+		super(event);
+		if(event.getStartDate() instanceof MyDateTime){
+			setStartDate(new MyDateTime(event.getStartDate()));
+		} else{
+			setStartDate(new MyDate(event.getStartDate()));
+		}
+		if(event.getEndDate() instanceof MyDateTime){
+			setEndDate(new MyDateTime(event.getEndDate()));
+		} else{
+			setEndDate(new MyDate(event.getEndDate()));
+		}
+	}
+
+	/**
+	 * Creates a new instance of the given item as an event, while retaining all its existing values.
+	 * @param start The start date of this event.
+	 * @return An instance of EventItem that is downcasted from the given ToDoItem.
+	 */
+	public EventItem(ToDoItem item, MyDate start){
+		this(item, start, (start instanceof MyDateTime)? new MyDateTime(start): new MyDate(start));
+	}
+
+	/**
+	 * Creates a new instance of the given item as an event, while retaining all its existing values.
+	 * @param item The ToDoItem object to downcast.
+	 * @param start The start date of this event.
+	 * @param end The end date of this event.
+	 * @return An instance of EventItem that is downcasted from the given ToDoItem.
+	 */
+	public EventItem(ToDoItem item, MyDate start, MyDate end){
+		super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
+		setStartDate(start);
+		setEndDate(end);
+	}
+
+	/**
+	 * Creates a new EventItem instance from the given TaskItem.
+	 * This is not typecasting but is a copy conversion.
+	 * @param task The TaskItem object to be converted.
+	 * @start The start date of the new event.
+	 */
+	public EventItem(TaskItem task, MyDate start){
+		this(task, start, task.getDeadline());
+	}
+
+	/**
+	 * Returns the string representation of the given Date object formatted
+	 * for EventItem.
+	 * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
+	 * Null time is --:--
+	 */
+	private String getDateString(MyDate date){
+		assert date!=null;
+		if(date instanceof MyDateTime){
+			return date.toString();
+		} else{
+			return date.toString()+FORMAT_EMPTYTIME;
+		}
+	}
+
+	/**
+	 * Returns the start date of this event.
+	 * @return A Date object of the start date or null if the start date is not set.
+	 */
+	public MyDate getStartDate(){
+		return startDate;
+	}
+
+	/**
+	 * Returns the string representation of the start date and/or time in this class.
+	 * @return A String representation of the start date and/or time used in this class.
+	 */
+	public String getStartDateString(){
+		return getDateString(startDate);
+	}
+
+	/**
+	 * Returns the end date of this event.
+	 * @return A Date object of the end date or null if the end date is not set.
+	 */
+	public MyDate getEndDate(){
+		return endDate;
+	}
+
+	/**
+	 * Returns the string representation of the end date and/or time in this class.
+	 * @return A String representation of the end date and/or time used in this class.
+	 */
+	public String getEndDateString(){
+		return getDateString(endDate);
+	}
+
+	/**
+	 * Sets the start date for this event.
+	 * @param startDate The new start date for this event.
+	 */
+	public void setStartDate(MyDate startDate){
+		assert startDate!=null;
+		this.startDate = startDate;
+	}
+
+	/**
+	 * Sets the end date for this event.
+	 * @param endDate The new end date for this event.
+	 */
+	public void setEndDate(MyDate endDate){
+		assert endDate!=null;
+		this.endDate = endDate;
+	}
+
+	@Override
+	/**
+	 * Gets a String representation of this event.
+	 * @return The String representation of this event.
+	 */
+	public String toString(){
+		return String.format(FORMAT_PRINTSTRING, id, description, priority, status,
+				getDateString(startDate), getDateString(endDate));
+	}
+
+	@Override
+	/**
+	 * Gets a String representation of this event for feedback use.
+	 * @return The String representation of this event formatted for feedback purpose.
+	 */
+	public String getFeedbackString(){
+		return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, getDateString(startDate),
+				getDateString(endDate), status);
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this event used for file I/O purpose.
+	 * @return The String representation of this event formatted for file I/O.
+	 */
+	public String toFileString(){
+		return String.format(FORMAT_FILESTRING, description, priority, status,
+				getDateString(startDate), getDateString(endDate));
+	}
+
+	@Override
+	/**
+	 * Compares this item with the given item.
+	 * @param item The ToDoItem to compare with.
+	 * @return Negative number if this item has 'pending' status while item has 'completed' status,
+	 * 		item is neither TaskItem nor EventItem or this has earlier deadline, this item has higher priority,
+	 * 		, this item has smaller ID number in decreasing order of precedence, 0 if both items have same 
+	 * 		field values, and positive number otherwise.*/
+	public int compareTo(ToDoItem item){
+		assert item!=null;
+		int result;
+		if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
+			return -1;
+		} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
+			return 1;
+		} else if(item instanceof TaskItem){
+			if((result = startDate.compareTo(((TaskItem)item).getDeadline()))!=0){
+				return result;
+			}
+		} else if(item instanceof EventItem){
+			if((result = startDate.compareTo(((EventItem)item).getStartDate()))!=0){
+				return result;
+			} else if((result = endDate.compareTo(((EventItem)item).getEndDate()))!=0){
+				return result;
+			}
+		} else{
+			return -1;
+		}
+		if(priority!=item.getPriority()){
+			return item.getPriority()-priority;
+		}
+		return id-item.getId();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\EventItem.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\Feedback.java
+	 */
+
+/**
+ * Defines the feedback object returned after each operation.
+ * 
+ * Constructor
+ * Feedback(String commandType, String command)	//Creates a new instance of this feedback.
+ * 
+ * Public Methods
+ * String getCommandType()	//Gets the command type of the command that this feedback is used for.
+ * String getOriginalComamnd()	//Gets the input command that this feedback is used for.
+ * String getClassName()	//gets the String representation of this feedback's class.
+ */
+public abstract class Feedback {
+	//The String representation of this feedback's class.
+	public static final String CLASSNAME = "Feedback"; 
+
+	//Main data members
+	private String commandType, originalCommand;
+
+	/**
+	 * Creates a new instance of this feedback.
+	 * @param commandType The type of command this feedback is used for.
+	 * @param command the input command that this feedback is used for.
+	 */
+	public Feedback(String commandType, String command){
+		this.commandType = commandType;
+		this.originalCommand = command;
+	}
+
+	/**
+	 * Gets the command type of the command this feedback is for.
+	 * @return The command type String.
+	 */
+	public String getCommandType(){
+		return commandType;
+	}
+
+	/**
+	 * Gets the original command that this feedback is for.
+	 * @return The original command String.
+	 */
+	public String getOriginalCommand(){
+		return originalCommand;
+	}
+
+	/**
+	 * Returns the name of this object's class.
+	 * @return The String representation of this feedback's class.
+	 */
+	public String getClassName(){
+		return CLASSNAME;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\Feedback.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\HelpFeedback.java
+	 */
+
+/**
+ * Defines the feedback type for help command.
+ * 
+ * Constructor
+ * HelpFeedback(String commandType, String command, String content)	//Creates a new instance of this feedback.
+ * 
+ * Public Methods
+ * String getHelpContent()	//Gets the help page content.
+ * String getClassName()	//Gets the String representation of this feedback's class.
+ */
+public class HelpFeedback extends Feedback {
+	public static final String CLASSNAME = "HelpFeedback";
+
+	//Main data member
+	private String helpContents;
+
+	/**
+	 * Creates a new instance of this feedback.
+	 * @param commandType the type of command this feedback is used for.
+	 * @param command The input command this feedback is used for.
+	 * @param content The help page content to be displayed.
+	 */
+	public HelpFeedback(String commandType, String command, String content){
+		super(commandType, command);
+		setContent(content);
+	}
+
+	/**
+	 * Gets the content of the requested help page.
+	 * @return The content String of the requested help page.
+	 */
+	public String getHelpContent(){
+		return helpContents;
+	}
+
+	//Sets the help page content
+	private void setContent(String content){
+		this.helpContents = content;
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this feedback's class.
+	 * @return The String representation of this feedback's class.
+	 */
+	public String getClassName(){
+		return CLASSNAME;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\HelpFeedback.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDate.java
+	 */
+
+/**
+ * Defines the date in the format DD/MM/YYYY.
+ * 
+ * Constructor
+ * MyDate()	//Creates a new instance of this date.
+ * MyDate(MyDate date)	//the copy constructor of this class.
+ * MyDate(int date, int month, int year)	//Creates a new instance of this date.
+ * MyDate(Date date)	//Creates a new MyDate instance from the given Date object.
+ * 
+ * Public Methods
+ * int compareTo(MyDate date)	//Compares this date with the given date.
+ * boolean equals(Object obj)	//Checks if this date and the given date represent the same date on the calendar.
+ * int getDayOfMonth()	//Gets the day of the month.
+ * int getMonth()	//Gets the month of the year.
+ * int getYear()	//Gets the year.
+ * static boolean isValidDate(int date, int month, int year)	//Checks if the given date value is valid on the calendar.
+ * static MyDate makeDate(String dateString)	//Creates a MyDate instance from the given date string.
+ * void setDate(int date, int month, int year)	//Sets the date values.
+ * protected void setDayOfMonth(int date)	//Sets the day of the month.
+ * protected void setMonth(int month)	//Sets the month of the year.
+ * protected void setYear(int year)	//Sets the year
+ * String toString()	//Gets the String representation of this date. 
+ */
+public class MyDate implements Comparable<MyDate>{
+	//Default date values.
+	protected static final int DEFAULT_DAY = 1;
+	protected static final int DEFAULT_MONTH = 1;
+	protected static final int DEFAULT_YEAR = 1970;
+
+	//String format for set date
+	protected static final String FORMAT_DATE = "%1$d/%2$d/%3$d";
+	public static final String REGEX_DATE = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}";
+
+	//Error message
+	private static final String MSG_INVALIDDATE = "Invalid date.";
+
+	//The main data members of this class.
+	private int year, month, date;
+
+	/**
+	 * Creates and initialises this Date object to 1 January 1970.
+	 */
+	public MyDate(){
+		this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
+	}
+
+	/**
+	 * The copy constructor for this class.
+	 * @param date The MyDate object to be copied.
+	 */
+	public MyDate(MyDate date){
+		this(date.getDayOfMonth(), date.getMonth(), date.getYear());
+	}
+
+	/**
+	 * Creates a Date object with the specified date, month and year.
+	 * @param date The day of the month.
+	 * @param month The month of the year.
+	 * @param year The year.
+	 * @throws IllegalArgumentException if any of the values cause the date to be incorrect
+	 * 		on the actual calendar.
+	 */
+	public MyDate(int date, int month, int year) throws IllegalArgumentException{
+		setDate(date, month, year);
+	}
+
+	/**
+	 * Creates a new date representation from the given java.util.Date object.
+	 * @param date The date to create an instance from.
+	 */
+	public MyDate(Date date) {
+		assert date != null;
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+
+		int dd = calendar.get(Calendar.DAY_OF_MONTH);
+		int mm = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH starts from 0
+		int yyyy = calendar.get(Calendar.YEAR);
+
+		setDate(dd, mm, yyyy);
+	}
+
+	/**
+	 * Creates a new Date instance from the given date string.
+	 * @param dateString The string representation of the date to create.
+	 * @return The Date instance who's toString() method equals dateString.
+	 */
+	public static MyDate makeDate(String dateString){
+		assert dateString.matches(REGEX_DATE);
+
+		String[] temp = dateString.split("/");
+		int day = Integer.parseInt(temp[0]);
+		int month = Integer.parseInt(temp[1]);
+		int year = Integer.parseInt(temp[2]);
+		return new MyDate(day, month, year);
+	}
+
+	/**
+	 * Gets the day of the month of this date object.
+	 * @returns The day in the month of this Date object.
+	 */
+	public int getDayOfMonth(){
+		return date;
+	}
+
+	/**
+	 * Gets the month of this date object.
+	 * @return The month of this Date object.
+	 */
+	public int getMonth(){
+		return month;
+	}
+
+	/**
+	 * Gets the year of this date object.
+	 * @return The year of this Date object.
+	 */
+	public int getYear(){
+		return year;
+	}
+
+	/**
+	 * Checks if the given date is valid.
+	 * @param date The day of the month.
+	 * @param month The month of the year.
+	 * @param year The year.
+	 * @return True if the date is valid in the calendar and false otherwise.
+	 */
+	public static boolean isValidDate(int date, int month, int year){
+		boolean isValidYear = year>=0;
+		boolean isValidMonth = (month>0 && month<13);
+		boolean isValidDate = date>0;
+		if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12){
+			isValidDate&=(date<32);
+		} else if(month==4 || month==6 || month==9 || month==11){
+			isValidDate&=(date<31);
+		} else if(month==2){
+			boolean isLeapYear = (year%400==0 || (year%4==0 && year%100!=0));
+			if(isLeapYear){
+				isValidDate&=(date<30);
+			} else{
+				isValidDate&=(date<29);
+			}
+		} else{
+			isValidDate = false;
+		}
+		return isValidYear && isValidMonth && isValidDate;
+	}
+
+	/**
+	 * Returns the String representation of this Date object for printing purpose.
+	 * Format is: DD/MM/YYYY.
+	 * @return String representation of this Date object.
+	 */
+	public String toString(){
+		String output = String.format(FORMAT_DATE, getDayOfMonth(), getMonth(), getYear());
+		return output;
+	}
+
+	/**
+	 * Sets this to the given date without a specified time.
+	 * @throws IllegalArgumentException if any of the parameters cause the new date value to be incorrect
+	 * 		in the actual calendar.
+	 */
+	public void setDate(int date, int month, int year) throws IllegalArgumentException {
+		if(!isValidDate(date, month, year)){
+			throw new IllegalArgumentException(MSG_INVALIDDATE);   
+		}
+		setDayOfMonth(date);
+		setMonth(month);
+		setYear(year);
+	}
+
+	/**
+	 * Sets the day of the month.
+	 * @param date The day of the month.
+	 */
+	protected void setDayOfMonth(int date) {
+		this.date = date;
+	}
+
+	/**
+	 * Sets the month of the year.
+	 * @param month the month of the year.
+	 */
+	protected void setMonth(int month){
+		this.month = month;
+	}
+
+	/**
+	 * Sets the year.
+	 * @param year The year.
+	 */
+	protected void setYear(int year){
+		this.year = year;
+	}
+
+	@Override
+	/**
+	 * Compares which of the 2 Date objects comes later. If date2 is a subclass of Date,
+	 * date2's compareTo method will be used instead but the outcome is not reversed.
+	 * @param date2 The MyDate object to compare with.
+	 * @return 0 if the 2 dates have same date, positive
+	 * 		integer if this come later than date2, negative integer
+	 * 		if this comes earlier than date2.
+	 */
+	public int compareTo(MyDate date2){
+		if(year!=date2.getYear()){
+			return year-date2.getYear();
+		} else if(month!=date2.getMonth()){
+			return month-date2.getMonth();
+		} else{
+			return date-date2.getDayOfMonth();
+		}
+	}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDate.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDate.java
+	 */
+
+	 */
+	public boolean equals(Object obj){
+		assert obj!=null;
+		if(obj instanceof MyDate){
+			MyDate temp = (MyDate)obj;
+			return (date==temp.getDayOfMonth()) && (month==temp.getMonth()) && (year==temp.getYear());
+		}
+		return false;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDate.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDateTime.java
+	 */
+
+/**
+ * Defines an object containing both date and time. Time is defined using 24-hour clock.
+ * 
+ * Constructor
+ * MyDateTime()	//Creates a new instance of MyDateTime using the default date and time values.
+ * MyDateTime(int date, int month, int year)	//Creates a new date instance.
+ * MyDateTime(int date, int month, int year, int hour, int minute)	//Creates a new date and time instance.
+ * MyDateTime(MyDate date)	//Downcasting constructor for MyDate objects.
+ * MyDateTime(Date date)	//Creates a MyDateTime instance from the given Date object for storage purpose.
+ * 
+ * Public Methods
+ * int getHour()	//Gets the hour field of this date time object.
+ * int getMinute()	//Gets the minute field of this date time object.
+ * static boolean isValidTime(int hour, int minute)	//Checks if the given time is valid.
+ * static MyDateTime makeDateTime(String dateString)	//Creates a new MydateTime object from the given date and time string.
+ * void setDateTime(int date, int month, int year, int hour, int minute)	//Sets the new value of date and time.
+ * void setTime(int hour, int minute)	//Sets the time of this date time object.
+ * String toString()	//Gets the String rerpesentation of this date time object.
+ */
+public class MyDateTime extends MyDate {
+	//The default time values
+	private static final int DEFAULT_HOUR = 0;
+	private static final int DEFAULT_MINUTE = 0;
+
+	//The string format for time.
+	private static final String FORMAT_TIME = "%1$d:%2$02d";
+	public static final String REGEX_DATETIME = "[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4} [0-9]{1,2}:[0-9]{1,2}";
+
+	//Error message
+	private static final String MSG_INVALIDDATETIME = "Invalid date/time.";
+	private static final String MSG_INVALIDTIME = "Invalid time.";
+
+	//The main additional data members
+	private int hour, minute;
+
+	/**
+	 * Creates a new DateTime object with the default date and time.
+	 */
+	public MyDateTime(){
+		this(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR, DEFAULT_HOUR, DEFAULT_MINUTE);
+	}
+
+	/**
+	 * Downcast constructor for Date object and copy constructor for DateTime object.
+	 * @param date The MyDate object to be downcasted.
+	 */
+	public MyDateTime(MyDate date){
+		this(date.getDayOfMonth(), date.getMonth(), date.getYear());
+		if(date instanceof MyDateTime){
+			MyDateTime temp = (MyDateTime)date;
+			setTime(temp.getHour(), temp.getMinute());
+		}
+	}
+
+	/**
+	 * Creates a new DateTime object with the specified date, using the default time.
+	 * @param date The day of the month.
+	 * @param The month of the year.
+	 * @param year The year.
+	 * @throws IllegalArgumentException if the given date is invalid on the calendar.
+	 */
+	public MyDateTime(int date, int month, int year) throws IllegalArgumentException{
+		this(date, month, year, DEFAULT_HOUR, DEFAULT_MINUTE);
+	}
+
+	/**
+	 * Creates a new DateTime object with the specified date and time details.
+	 * @param date The day of the month.
+	 * @param month The month of the year.
+	 * @param year The year.
+	 * @param hour The hour of the day in 24-hour clock.
+	 * @param minute The minute.
+	 * @throws IllegalArgumentException if the date and time is invalid on the calendar of 24-hour clock.
+	 */
+	public MyDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
+		setDateTime(date, month, year, hour, minute);
+	}
+
+	/**
+	 * Creates a new DateTime object with the given java.util.Date
+	 * @param date the given Date to be converted into MyDateTime
+	 */
+	public MyDateTime(Date date) {
+		assert date != null;
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+
+		int dd = calendar.get(Calendar.DAY_OF_MONTH);
+		int mm = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH starts from 0
+		int yyyy = calendar.get(Calendar.YEAR);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int min = calendar.get(Calendar.MINUTE);
+
+		setDateTime(dd, mm, yyyy, hour, min);
+	}
+
+	/**
+	 * Creates a DateTime instance from the given date string.
+	 * @param dateString The string representation of the DateTiem object to make.
+	 * @return A DateTime instance such that calling toString().equals(dateString) returns true.
+	 * @throws IllegalArgumentException if either the date and/or the time is invalid.
+	 */
+	public static MyDateTime makeDateTime(String dateString){
+		assert dateString.matches(REGEX_DATETIME);
+
+		String[] dateAndTime = dateString.split(" ");
+		String[] dateArray = dateAndTime[0].split("/");
+		String[] timeArray = dateAndTime[1].split(":");
+		int day = Integer.parseInt(dateArray[0]);
+		int month = Integer.parseInt(dateArray[1]);
+		int year = Integer.parseInt(dateArray[2]);
+		int hour = Integer.parseInt(timeArray[0]);
+		int minute = Integer.parseInt(timeArray[1]);
+		return new MyDateTime(day, month, year, hour, minute);
+	}
+
+	/**
+	 * Gets the hour of this datetime object in 24-hour clock.
+	 * @return The hour of this DateTime object.
+	 */
+	public int getHour(){
+		return hour;
+	}
+
+	/**
+	 * Gets the minute of this datetime object.
+	 * @return The minute of this DateTime object.
+	 */
+	public int getMinute(){
+		return minute;
+	}
+
+	/**
+	 * Checks if the given time is valid.
+	 * @param hour The hour of the day.
+	 * @param minute The minute.
+	 * @return True if the given time is in the range [00:00, 23:59] and false otherwise.
+	 */
+	public static boolean isValidTime(int hour, int minute){
+		boolean isValidHour = (hour>=0 && hour<24);
+		boolean isValidMinute = (minute>=0 && minute<60);
+		return isValidHour && isValidMinute;
+	}
+
+	/**
+	 * Sets this to the given date and time.
+	 * @param date The day of the month.
+	 * @param month The month of the year.
+	 * @param the year.
+	 * @param hour The hour of the day in 24-hour clock.
+	 * @param minute The minute.
+	 * @throws IllegalArgumentException if the date and time is invalid on the calendar and/or 24-hour clock.
+	 */
+	public void setDateTime(int date, int month, int year, int hour, int minute) throws IllegalArgumentException{
+		if(!isValidDate(date, month, year) || !isValidTime(hour, minute)){
+			throw new IllegalArgumentException(MSG_INVALIDDATETIME);
+		}
+		setDate(date, month, year);
+		setTime(hour, minute);
+	}
+
+	private void setHour(int hour){
+		this.hour = hour;
+	}
+
+	private void setMinute(int minute){
+		this.minute = minute;
+	}
+
+	/**
+	 * Sets the time of this DateTime object.
+	 * @param hour The hour of the day in 24-hour clock.
+	 * @param minute The minute of the hour.
+	 * @throws IllegalArgumentException if the parameters result in an invalid time.
+	 */
+	public void setTime(int hour, int minute) throws IllegalArgumentException{
+		if(!isValidTime(hour, minute)){
+			throw new IllegalArgumentException(MSG_INVALIDTIME);
+		}
+		setHour(hour);
+		setMinute(minute);
+	}
+
+	@Override
+	/**
+	 * Returns the string representation of this DateTime object in the format DD/MM/YYYY HH:MM.
+	 * @return The String representation of this DateTime object.
+	 */
+	public String toString(){
+		StringBuilder output = new StringBuilder(super.toString());
+		output.append(' ');
+		output.append(String.format(FORMAT_TIME, hour, minute));
+		return output.toString();
+	}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\MyDateTime.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\PriorityComparator.java
+	 */
+
+/**
+ * Defines the comparator object that compares 2 ToDoItem objects by their priority level.
+ * 
+ * Constructor
+ * PriorityComparator()	//Creates a new instance of this comparator.
+ * 
+ * Public Methods
+ * int compare(ToDoItem item1, ToDoItem item2)	//Compares the 2 items
+ */
+public class PriorityComparator implements Comparator<ToDoItem> {
+
+	/**
+	 * Creates a new instance of this comparator.
+	 */
+	public PriorityComparator(){
+
+	}
+
+	@Override
+	/**
+	 * Compares 2 ToDoItem objects by their priority level.
+	 * @param item1 The 1st of the 2 tiems to be compared.
+	 * @param item2 The 2nd of the 2 items to be compared.
+	 * @return item1.getPriority()-item2.getPriority()
+	 */
+	public int compare(ToDoItem item1, ToDoItem item2){
+		assert item1!=null && item2!=null;
+		return item1.getPriority()-item2.getPriority();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\PriorityComparator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\StartDateComparator.java
+	 */
+
+/**
+ * Defines the comparator object to order ToDoItem by start date.
+ * 
+ * Constructor
+ * StartDateComparator()	//Creates a new instance of this comparator.
+ * 
+ * Public Methods
+ * int compare(ToDoItem item1, ToDoItem item2)	//Compares which item has later start date.
+ */
+public class StartDateComparator implements Comparator<ToDoItem> {
+
+	/**
+	 * Creates a new instance of this Comparator.
+	 */
+	public StartDateComparator(){
+
+	}
+
+	@Override
+	/**
+	 * Compares 2 ToDoItem objects by their start dates.
+	 * @param item1 The 1st of the 2 items to be compared.
+	 * @param item2 The 2nd of the 2 items to be compared.
+	 * @return A positive number if item1 has "larger" starting date than item2,
+	 * 		0 if both items have the "same" starting dates, and negative number if
+	 * 		item1 has "smaller" starting date than item2.
+	 * 		Comparison is such that ToDoItem is "larger" than any of its subclass and the "starting date"
+	 * 		of TaskItem object is its deadline.
+	 */
+	public int compare(ToDoItem item1, ToDoItem item2){
+		assert item1!=null && item2!=null;
+		boolean isEvent1 = item1 instanceof EventItem;
+		boolean isTask1 = item1 instanceof TaskItem;
+		boolean isEvent2 = item2 instanceof EventItem;
+		boolean isTask2 = item2 instanceof TaskItem;
+		if(!(isEvent1 || isTask1) && (isEvent2 || isTask2)){
+			return 1;
+		}
+		if((isEvent1 || isTask1) && !(isEvent2 || isTask2)){
+			return -1;
+		}
+		if(!(isEvent1 || isTask1) && !(isEvent2 || isTask2)){
+			return 0;
+		}
+		if(isEvent1){
+			if(isEvent2){
+				return ((EventItem)item1).getStartDate().compareTo(((EventItem)item2).getStartDate());
+			} else{
+				return ((EventItem)item1).getStartDate().compareTo(((TaskItem)item2).getDeadline());
+			}
+		} else if(isEvent2){
+			return ((TaskItem)item1).getDeadline().compareTo(((EventItem)item2).getStartDate());
+		} else{
+			return ((TaskItem)item1).getDeadline().compareTo(((TaskItem)item2).getDeadline());
+		}
+	}
+
+	@Override
+	/**
+	 * Checks whether the given object is the same reference as this object.
+	 */
+	public boolean equals(Object obj){
+		return this==obj;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\StartDateComparator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\StartDateComparatorTest.java
+	 */
+
+public class StartDateComparatorTest {
+
+	@Test
+	public void test() {
+		StartDateComparator comp = new StartDateComparator();
+		ToDoItem todo = new ToDoItem("A");
+		EventItem event = new EventItem("A", new MyDateTime(31, 12, 2014, 17, 17));
+		EventItem event2 = new EventItem("B", new MyDate(25, 12, 2014));
+		TaskItem task = new TaskItem("A", new MyDate(1, 1, 2015));
+		TaskItem task2 = new TaskItem("B", new MyDateTime(14, 1, 2015, 19, 25));
+		assertTrue(comp.compare(event, todo)<0);
+		assertTrue(comp.compare(todo, event)>0);
+		assertTrue(comp.compare(task, todo)<0);
+		assertTrue(comp.compare(todo, task)>0);
+		assertTrue(comp.compare(todo, todo)==0);
+		assertTrue(comp.compare(event2, task2)<0);
+		assertTrue(comp.compare(event, task)<0);
+		assertTrue(comp.compare(event, event2)>0);
+		assertTrue(comp.compare(task, task2)<0);
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\StartDateComparatorTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\SuccessFeedback.java
+	 */
+
+/**
+ * Defines the feedback object type for successful operations, excluding the help page command.
+ * 
+ * Constructor
+ * SuccessFeedback(String commandType, String command, ToDoItem[] list)	//Creates a new instance of this feedback.
+ * 
+ * Public Methods
+ * ToDoItem[] getAffectedItems()	//Gets the list of ToDoItem objects affected by the command this feedback is used for.
+ * String getClassName()	//Gets the String representation of this feedback's class.
+ */
+public class SuccessFeedback extends Feedback {
+	public static final String CLASSNAME = "SuccessFeedback";
+
+	//Main data members
+	private ToDoItem[] list;
+
+	/**
+	 * Creates a new instance of this feedback.
+	 * @param commandType The command type this feedback is used for.
+	 * @param command The input command this feedback is used for.
+	 * @param list The list of ToDoItem objects affected by the command.
+	 */
+	public SuccessFeedback(String commandType, String command, ToDoItem[] list){
+		super(commandType, command);
+		this.list = list;
+	}
+
+	/**
+	 * Gets the list of ToDoItem objects affected by the operation
+	 * specified by the original command.
+	 * @return An array of ToDoItem objects or null if the list is empty.
+	 */
+	public ToDoItem[] getAffectedItems(){
+		return list;
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this feedback's class.
+	 * @return the String representation of this feedback's class.
+	 */
+	public String getClassName(){
+		return CLASSNAME;
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\SuccessFeedback.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\TaskItem.java
+	 */
+
+/**
+ * Defines a task.
+ * A task is an item in the To-Do List with specified deadline.
+ * 
+ * Constructor
+ * TaskItem(String description, MyDate deadline) //Creates a new instance of this task.
+ * TaskItem(String description, int priority, MyDate deadline)	//Creates a new instance of this task.
+ * TaskItem(TaskItem task)	//Creates a new copy of the given TaskItem.
+ * TaskItem(ToDoItem item, MyDate deadline)	//Converts the given ToDoItem into a TaskItem.
+ * 	  
+ * Public Methods
+ * int compareTo(ToDoItem item)	//Compares this task with the given ToDoItem.
+ * MyDate getDeadline()	//Gets the deadline for this task.
+ * String getDeadlineString()	//Gets the String representation of this task's deadline.
+ * String getFeedbackString()	//Gets the String representation of this task used in feedback.
+ * void setDeadline(MyDate deadline)	//Sets the deadline for this task.
+ * String toFileString()	//Gets the String representation of this task used in file I/O.
+ * String toString()	//Gets the String representation of this task. 
+ */
+public class TaskItem extends ToDoItem {
+	//String formatting used in this class
+	private static final String FORMAT_EMPTYTIME = " --:--";
+	private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+														"Deadline: %4$s\n"+"Status: %5$s";
+	private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; %4$s";
+	private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- %5$s";
+
+	//Main data member
+	private MyDate deadline;
+
+	/* Constructor */
+	/**
+	 * Creates a new task with the specified deadline, using default priority level.
+	 * @param description This task's description.
+	 * @param deadline This task's deadline.
+	 */
+	public TaskItem(String description, MyDate deadline){
+		super(description);
+		setDeadline(deadline);
+	}
+
+	/**
+	 * Creates a new task with the given priority and deadline.
+	 * @param description This task's description.
+	 * @param priority This task's priority.
+	 * @param deadline This task's deadline.
+	 */
+	public TaskItem(String description, int priority, MyDate deadline){
+		super(description, priority);
+		setDeadline(deadline);
+	}
+
+	/**
+	 * The copy constructor for TaskItem class.
+	 * @param task The TaskItem to make a copy instance of.
+	 */
+	public TaskItem(TaskItem task){
+		super(task);
+		if(task.getDeadline() instanceof MyDateTime){
+			setDeadline(new MyDateTime(task.getDeadline()));
+		} else{
+			setDeadline(new MyDate(task.getDeadline()));
+		}
+	}
+
+	/**
+	 * Converts the given item into a TaskItem.
+	 * @param item The item to convert into a TaskItem.
+	 * @param deadline The deadline for this task.
+	 * @return An independent, downcasted copy of the original item.
+	 */
+	public TaskItem(ToDoItem item, MyDate deadline){
+		super(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
+		assert deadline!=null;
+		setDeadline(deadline);
+	}
+
+	/**
+	 * Returns the string representation of the given Date object formatted
+	 * for EventItem.
+	 * Format is DD/MM/YYYY HH:MM as defined in DateTime class.
+	 * Null time is --:--
+	 * @param date The MyDate item to format into String.
+	 */
+	private String getDateString(MyDate date){
+		assert date!=null;
+		if(date instanceof MyDateTime){
+			return date.toString();
+		} else{
+			return date.toString()+FORMAT_EMPTYTIME;
+		}
+	}
+
+	/**
+	 * Gets the deadline for this task.
+	 * @return A Date reference to the deadline for this task.
+	 */
+	public MyDate getDeadline(){
+		return deadline;
+	}
+
+	/**
+	 * Returns the string representation of this task's deadline.
+	 * @return A String representation of the deadline in this class.
+	 */
+	public String getDeadlineString(){
+		return getDateString(deadline);
+	}
+
+	/**
+	 * Sets the deadline date and/or time for this task.
+	 * Does nothing if specified deadline is null.
+	 * Equivalent to setDeadlineDate() if deadline is not a DateTime object.
+	 * @param deadline the new deadline of this task.
+	 */
+	public void setDeadline(MyDate deadline){
+		assert deadline!=null;
+		this.deadline = deadline;
+	}
+
+	/**
+	 * Sets the deadline date for this task.
+	 * Does nothing if specified deadline is null.
+	 * @param deadline The date of this task's new deadline.
+	 */
+	public void setDeadlineDate(MyDate deadline){
+		assert deadline!=null;
+		this.deadline.setDate(deadline.getDayOfMonth(), deadline.getMonth(), deadline.getYear());
+	}
+
+	/**
+	 * Sets the deadline time.
+	 * Does nothing if the specified time is invalid on the 24-hour clock.
+	 * @param hour The hour parameter of the new deadline time.
+	 * @param minute The minute parameter of the new deadline time.
+	 */
+	public void setDeadlineTime(int hour, int minute){
+		if(MyDateTime.isValidTime(hour, minute)){
+			if(!(this.deadline instanceof MyDateTime)){
+				this.deadline = new MyDateTime(this.deadline);
+			}
+			((MyDateTime)deadline).setTime(hour, minute);
+		}
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this item.
+	 * @return The String representation of this item.
+	 */
+	public String toString(){
+		return String.format(FORMAT_PRINTSTRING, id, description, priority, status, getDateString(deadline));
+	}
+
+	@Override
+	/**
+	 * Gets the feedback String representation of this item.
+	 * @return The feedback String representation of this item.
+	 */
+	public String getFeedbackString(){
+		return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, getDateString(deadline), status);
+	}
+
+	@Override
+	/**
+	 * Gets the String representation of this item to be used in file I/O.
+	 * @return The file String representaiton of this item.
+	 */
+	public String toFileString(){
+		return String.format(FORMAT_FILESTRING, description, priority, status, getDateString(deadline));
+	}
+
+	@Override
+	/**
+	 * Compares this item with the given ToDoItem.
+	 * @param item The ToDoItem to compare with.
+	 * @return Negative number if this item has 'pending' status while item has 'completed' status,
+	 * 		item is neither TaskItem nor EventItem or this has earlier deadline, this item has higher priority,
+	 * 		, this item has smaller ID number in decreasing order of precedence, 0 if both items have same 
+	 * 		field values, and positive number otherwise.
+	 */
+	public int compareTo(ToDoItem item){
+		assert item!=null;
+		int result;
+		if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
+			return -1;
+		} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
+			return 1;
+		} else if(item instanceof TaskItem){
+			if((result = deadline.compareTo(((TaskItem)item).getDeadline()))!=0){
+				return result;
+			}
+		} else if(item instanceof EventItem){
+			if((result = deadline.compareTo(((EventItem)item).getStartDate()))!=0){
+				return result;
+			}
+		} else{
+			return -1;
+		}
+		if(priority!=item.getPriority()){
+			return item.getPriority()-priority;
+		}
+		return id-item.getId();
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\TaskItem.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\ToDoItem.java
+	 */
+
+/**
+ * Defines each item in the To-Do list in general.
+ * Natural ordering for each ToDoItem is done using lexicographical ordering of its id.
+ * 
+ * Constructors
+ * ToDoItem(String description)	//Creates a new instance of this item.
+ * ToDoItem(String description, int priority)	//Creates a new instance of this item with the given priority level
+ * protected ToDoItem(String description, int priority, String status)
+ * ToDoItem(ToDoItem item)	//Creates a new copy of the given item
+ * 
+ * Public Methods
+ * int compareTo(ToDoItem item)	//Compares this with the given item.
+ * boolean equals(Object obj)	//Checks if this equals to the given object.
+ * String getDescription()	//Gets the description of this item.
+ * String getFeedbackString()	//Gets the feedback string format of this item.
+ * int getId()	//Gets the ID of this item.
+ * int getPriority()	//Gets the priority level of this item.
+ * String getStatus()	//Gets the status of this item.
+ * void setDescription(String description)	//Changes the description of this item.
+ * void setPriority(int priority)	//Changes the priority of this item.
+ * void setStatus(String status)	//Changes the status of this item.
+ * String toFileString()	//Gets string representation of this item used in files.
+ * String toString()	//Gets the string representation of this item.
+ */
+public class ToDoItem implements Comparable<ToDoItem>{
+
+	//ToDoItem defaults
+	private static final int DEFAULT_PRIORITY = 0;
+	protected static final String DEFAULT_STATUS = "Pending";
+
+	//Allowed status values
+	public static final String STATUS_PENDING = DEFAULT_STATUS;
+	public static final String STATUS_COMPLETED = "Completed";
+
+	//Allowed priority levels
+	public static final int PRIORITY_URGENT = 8;
+	public static final int PRIORITY_HIGH = 4;
+	public static final int PRIORITY_NORMAL = 2;
+	public static final int PRIORITY_LOW = 1;
+	public static final int PRIORITY_NONE = 0;
+
+	//Print formats
+	private static final String FORMAT_FEEDBACKSTRING = "ID: %1$s\n"+"Desc: %2$s\n"+"Priority: %3$d\n"+
+	"Status: %4$s";
+	private static final String FORMAT_FILESTRING = "%1$s; %2$d; %3$s; --/--/---- --:--; --/--/---- --:--";
+	private static final String FORMAT_PRINTSTRING = "%1$s %2$s %3$d %4$s --/--/---- --:-- --/--/---- --:--";
+
+	//ID is of the form idLetter followed by idNUm.
+	//Highest idNum possible is 99, after which idLetter will advance to the next alphabet.
+	private static int curId = 1;
+
+	//Main data members
+	protected String description, status;
+	protected int priority, id;
+
+	//Constructors
+	/**
+	 * Creates a new instance of this item.
+	 * @param description The description of this item.
+	 */
+	public ToDoItem(String description){
+		this(getNextId(), description, DEFAULT_PRIORITY, DEFAULT_STATUS);
+	}
+
+	/**
+	 * Creates a new instance of this item with the given priority level.
+	 * @param description The description of this object.
+	 * @param priority The specified priority level of this item.
+	 */
+	public ToDoItem(String description, int priority){
+		this(getNextId(), description, priority, DEFAULT_STATUS);
+	}
+
+	//The main constructor responsible for creating the item.
+	protected ToDoItem(int id, String description, int priority, String status){
+		setId(id);
+		setDescription(description);
+		setPriority(priority);
+		setStatus(status);
+	}
+
+	//Copy constructor
+	/**
+	 * Creates a new instance of the given item with the same data member values as the provided item.
+	 * @param item The item to copy.
+	 */
+	public ToDoItem(ToDoItem item){
+		this(item.getId(), item.getDescription(), item.getPriority(), item.getStatus());
+	}
+
+	@Override
+	/**
+	 * Compares this item with the given item by its natural ordering.
+	 * @param The ToDoItem to compare with.
+	 * @return Positive number if this.id is lexicographically greater than item.id,
+	 * 		0 if this.id.equals(item.id) is true, and negative number if this.id is lexicographically
+	 * 		smaller than item.id.
+	 */
+	public int compareTo(ToDoItem item){
+		assert item!=null;
+		if(status.equals(STATUS_PENDING) && item.getStatus().equals(STATUS_COMPLETED)){
+			return -1;
+		} else if(status.equals(STATUS_COMPLETED) && item.getStatus().equals(STATUS_PENDING)){
+			return 1;
+		} else if(!item.getClass().getName().equals(this.getClass().getName())){
+			return 1;
+		} else if(priority!=item.getPriority()){
+			return item.getPriority()-priority;
+		}
+		return id-item.getId();
+	}
+
+	@Override
+	/**
+	 * Checks if this equals the given object.
+	 * @param obj The object to compare with.
+	 * @return A boolean value given by (obj instanceof ToDoItem)? this.id.equals(((ToDoItem)obj).id): false;
+	 */
+	public boolean equals(Object obj){
+		assert obj!=null;
+		if(obj instanceof ToDoItem){
+			ToDoItem temp = (ToDoItem)obj;
+			return id==temp.getId();
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the priority level is valid.
+	 * @param priority The priority level to check.
+	 * @return A boolean value such that (priority>=0)? true: false
+	 */
+	public static boolean isValidPriority(int priority){
+		return priority>0;
+	}
+
+	/**
+	 * Gets the description of this item.
+	 * @return The description string of this item.
+	 */
+	public String getDescription(){
+		return description;
+	}
+
+	/**
+	 * Gets the ID of this item.
+	 * @return The ID string of this object.
+	 */
+	public int getId(){
+		return id;
+	}
+
+	//Gets the next id to assign to a new ToDoItem.
+	private static int getNextId(){
+		return curId++;
+	}
+
+	/**
+	 * Gets the priority of this item.
+	 * @return The priority level of this item.
+	 */
+	public int getPriority(){
+		return priority;
+	}
+
+	/**
+	 * Gets the status of this item.
+	 * @return The status string of this item.
+	 */
+	public String getStatus(){
+		return status;
+	}
+
+	/**
+	 * Changes this item's description.
+	 * @param description The new description.
+	 */
+	public void setDescription(String description){
+		assert description!=null && !description.isEmpty();
+		this.description = description;
+	}
+
+	//Changes the ID of this item.
+	private void setId(int id){
+		this.id = id;
+	}
+
+	/**
+	 * Changes the priority level of this item.
+	 * @param priority The new priority level of this item.
+	 * @throws IllegalArgumentException if ToDoItem.isValidPriority(priority) returns false.
+	 */
+	public void setPriority(int priority) throws IllegalArgumentException{
+		if(priority<DEFAULT_PRIORITY){
+			throw new IllegalArgumentException();
+		}
+		this.priority = priority;
+	}
+
+	/**
+	 * Changes the status of this item.
+	 * @param status The new status of this item. Acceptable values are defined as static constants in this class.
+	 * @throws IllegalArgumentException if the given status is not in the list of acceptable values.
+	 */
+	public void setStatus(String status) throws IllegalArgumentException{
+		assert status!=null && !status.isEmpty();
+		if(!status.equals(DEFAULT_STATUS) && !status.equals(STATUS_COMPLETED)){
+			throw new IllegalArgumentException("Invalid status.");
+		}
+		this.status = status;
+	}
+
+	/**
+	 * Gets the feedback string format of this item.
+	 * @return The feedback string representation of this item.
+	 */
+	public String getFeedbackString(){
+		return String.format(FORMAT_FEEDBACKSTRING, id, description, priority, status);
+	}
+
+	/**
+	 * Returns a string representation of this item to be displayed for feedback and confirmation.
+	 * @return A formatted String representing this item.
+	 */
+	public String toFileString(){
+		return String.format(FORMAT_FILESTRING, description, priority, status);
+	}
+
+	@Override
+	/**
+	 * Gets the string representation of this item.
+	 * @return The String represetnation of this item.
+	 */
+	public String toString(){
+		return String.format(FORMAT_PRINTSTRING, id, description, priority, status);
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\ToDoItem.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\DateTest.java
+	 */
+
+public class DateTest {
+
+	@Test
+	public void testDate() {
+		MyDate date = new MyDate();
+		assertEquals("Equals default date", "1/1/1970", date.toString());
+	}
+
+	@Test
+	//Tests the copy constructor
+	public void testCopy(){
+		MyDate date1 = new MyDate();
+		MyDate date2 = new MyDate(date1);
+		assertFalse("the 2 dates are different objects", date1==date2);
+		assertTrue(date1.equals(date2));
+	}
+
+	@Test
+	public void testDateIntIntInt() {
+		MyDate date = new MyDate(2, 3, 1992);
+		assertEquals("Day is 2", 2, date.getDayOfMonth());
+		assertEquals("Month is 3", 3, date.getMonth());
+		assertEquals("Year is 1992", 1992, date.getYear());
+	}
+
+	@Test
+	public void testDateIntIntIntIntInt() {
+		MyDate date = new MyDate(2, 3, 1992);
+		assertEquals("Day is 2", 2, date.getDayOfMonth());
+		assertEquals("Month is 3", 3, date.getMonth());
+		assertEquals("Year is 1992", 1992, date.getYear());
+	}
+
+	@Test
+	public void testToString() {
+		MyDate date = new MyDate();
+		assertEquals("Default date", "1/1/1970", date.toString());
+		date = new MyDate(2, 3, 1992);
+		assertEquals("Date is 2nd March 1992", "2/3/1992", date.toString());
+	}
+
+	@Test
+	public void testSetDateIntIntInt() {
+		MyDate date = new MyDate();
+		date.setDate(27, 9, 2014);
+		assertEquals("Day of month is 27", 27, date.getDayOfMonth());
+		assertEquals("Month is 9", 9, date.getMonth());
+		assertEquals("Year is 2014", 2014, date.getYear());
+		assertEquals("27/9/2014", date.toString());
+	}
+
+	@Test
+	public void testCompareTo() {
+		MyDate date1 = new MyDate(2, 3, 1992);
+		MyDate date2 = new MyDate(9, 8, 1965);
+		assertTrue("date2<date1", date2.compareTo(date1)<0);
+		assertTrue("date1>date2", date1.compareTo(date2)>0);
+		date2.setDate(2, 3, 1992);
+		assertTrue("date1==date2", date1.compareTo(date2)==0);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalDate(){
+		new MyDate(-1, -1, -1);
+		new MyDate(2, 13, 1992);
+		new MyDate(3, 0, 1);
+		new MyDate(3, 1, 2014);
+		new MyDate(30, 2, 1995);
+		new MyDate(29, 2, 2013);
+		new MyDate(32, 12, 1996);
+		new MyDate(29, 2, 2100);
+	}
+
+	@Test
+	public void testIsValidDate(){
+		//Boundary value for partition of valid input
+		assertTrue("29/2/2012 is valid date", MyDate.isValidDate(29, 2, 2012));
+		assertTrue("31/10/2014 is valid date", MyDate.isValidDate(31, 10, 2014));
+		assertTrue("2/3/1992 is valid date", MyDate.isValidDate(2, 3, 1992));
+
+		//Value in partition of invalid input
+		assertFalse("0/0/0 is invalid date", MyDate.isValidDate(0, 0, 0));
+		assertFalse("32/2/-1 is invalid date", MyDate.isValidDate(32, 2, -1));
+		assertFalse("29/2/2100 is invalid date", MyDate.isValidDate(29, 2, 2100));
+	}
+
+	@Test
+	public void testCopyConstructor(){
+		MyDate date = new MyDate(2, 3, 1992);
+		MyDate date2 = new MyDate(date);
+		assertFalse(date==date2);
+		assertEquals(date, date2);
+		date2.setDate(1, 5, 2004);
+		assertFalse(date.equals(date2));
+	}
+
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\DateTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\DateTimeTest.java
+	 */
+
+public class DateTimeTest {
+
+	@Test
+	public void testDateTime() {
+		//Boundary value using leap year of partition of valid date.
+		MyDateTime dt = new MyDateTime(29, 2, 2012);
+		assertEquals("Day of month is 29", 29, dt.getDayOfMonth());
+		assertEquals("Month is 2", 2, dt.getMonth());
+		assertEquals("Year is 2012", 2012, dt.getYear());
+		dt = new MyDateTime(29, 2, 2012, 12, 0);
+		MyDate dt2 = new MyDate(29, 2, 2012);
+		assertTrue(dt.equals(dt2));
+		assertTrue(dt2.equals(dt));
+	}
+
+	@Test
+	//Tests the copy constructor.
+	public void testCopy(){
+		MyDateTime dt1 = new MyDateTime();
+		MyDateTime dt2 = new MyDateTime(dt1);
+		assertFalse("the 2 objects are not the same", dt1==dt2);
+		assertTrue("the 2 objects represent the same date and time", dt1.equals(dt2));
+	}
+
+	@Test
+	public void testDateTimeIntIntIntIntInt() {
+		try{
+			//boundary time value
+			MyDateTime dt = new MyDateTime(2, 3, 1992, 0, 0);
+			assertEquals("Hour is 0", 0, dt.getHour());
+			assertEquals("Minute is 0", 0, dt.getMinute());
+			dt.setTime(9, 30);
+			assertEquals("Hour is 9", 9, dt.getHour());
+			assertEquals("Minute is 30", 30, dt.getMinute());
+		} catch(IllegalArgumentException e){
+			System.out.println("Error");
+		}
+	}
+
+	@Test
+	public void testToString(){
+		MyDateTime dt = new MyDateTime();
+		assertEquals("1/1/1970 0:00", dt.toString());
+		dt = new MyDateTime(2, 3, 1992, 13, 10);
+		assertEquals("2/3/1992 13:10", dt.toString());
+	}
+
+	@Test
+	//Tests the isValidTime method.
+	public void testIsValidTime(){
+		assertTrue("00:00 is valid time", MyDateTime.isValidTime(0, 0));
+		assertFalse("-1:20 is invalid time", MyDateTime.isValidTime(-1, 20));
+		assertFalse("20: 60 is invalid time", MyDateTime.isValidTime(20, 60));
+		assertFalse("24:-3 is invalid time", MyDateTime.isValidTime(24, -3));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testIllegalDateTime(){
+		//Tests invalid date/time values partition
+		MyDateTime dt = new MyDateTime(-1, -1, -1, -1, -1);
+		dt = new MyDateTime(1, 1, 1970, 12, 70);
+		dt.setDateTime(30, 2, 2014, 13, 45);
+		dt.setTime(24, 0);
+	}
+
+	@Test
+	public void testCompareTo(){
+		//Tests comparison. Note that default comparison does not compare time.
+		MyDate date = new MyDate();
+		MyDate dt1 = new MyDateTime();
+		//boundary time value
+		MyDateTime dt2 = new MyDateTime(5, 5, 1995, 23, 59);
+		assertTrue("date==dt1", date.compareTo(dt1)==0);
+		assertTrue("dt1<dt2", dt1.compareTo(dt2)<0);
+		assertTrue("dt2>dt1", dt2.compareTo(dt1)>0);
+		dt1.setDate(5, 5, 1995);
+		assertTrue("dt1==dt2", dt1.compareTo(dt2)==0);
+		assertTrue("date<dt1", date.compareTo(dt1)<0);
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\DateTimeTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\EventItemTest.java
+	 */
+
+public class EventItemTest {
+
+	@Test
+	public void test() {
+		EventItem item = new EventItem("Nana's concert", 8, new MyDate(27, 9, 2014));
+		assertEquals("Nana's concert", item.getDescription());
+		assertEquals(8, item.getPriority());
+		assertEquals(ToDoItem.STATUS_PENDING, item.getStatus());
+		assertEquals(new MyDate(27, 9, 2014), ((EventItem)item).getStartDate());
+		assertEquals(new MyDate(27, 9, 2014), ((EventItem)item).getEndDate());
+
+		item = new EventItem("CS2105 midterms", new MyDateTime(4, 10, 2014, 17, 0), new MyDateTime(4, 10, 2014, 18, 0));
+		assertEquals("CS2105 midterms", item.getDescription());
+		assertEquals(ToDoItem.PRIORITY_NONE, item.getPriority());
+		assertEquals(new MyDateTime(4, 10, 2014, 17, 0), ((EventItem)item).getStartDate());
+		assertEquals(new MyDateTime(4, 10, 2014, 18, 0), ((EventItem)item).getEndDate());
+	}
+
+	@Test
+	public void testToFileString(){
+		EventItem item = new EventItem("Nana's concert", 5, new MyDateTime(27, 9, 2014, 17, 30), new MyDate(27, 9, 2014));
+		assertEquals("Nana's concert; 5; Pending; 27/9/2014 17:30; 27/9/2014 --:--", item.toFileString());
+	}
+
+	@Test
+	public void testSetDate(){
+		EventItem item = new EventItem("CS2010R lesson", new MyDateTime(23, 9, 2014, 18, 30));
+		assertEquals(new MyDateTime(23, 9, 2014, 18, 30), item.getStartDate());
+		assertEquals(new MyDateTime(23, 9, 2014, 18, 30), item.getEndDate());
+
+		item.setStartDate(new MyDate(24, 9, 2014));
+		assertEquals(new MyDate(24, 9, 2014), item.getStartDate());
+	}
+
+	@Test
+	//Tests the copy constructor
+	public void testCopyConstructor(){
+		EventItem event =  new EventItem("Birthday", new MyDate(31, 10, 2014));
+		EventItem event2 = new EventItem(event);
+		assertFalse(event==event2);
+		assertTrue(event.equals(event2));
+		event2.setEndDate(new MyDate(1, 11, 2014));
+		assertFalse(event.getEndDate().equals(event2.getEndDate()));
+		assertEquals(event.getId(), event2.getId());
+		event2.setStatus(ToDoItem.STATUS_COMPLETED);
+		assertFalse(event.getStatus().equals(event2.getStatus()));
+	}
+
+	@Test
+	//Tests conversion from TaskItem to EventItem
+	public void testConvertFromTaskItem(){
+		TaskItem task = new TaskItem("A", new MyDate(31, 12, 2014));
+		EventItem event = new EventItem(task, new MyDate(30, 12, 2014));
+		assertEquals(new MyDate(30, 12, 2014), event.getStartDate());
+		assertEquals(new MyDate(31, 12, 2014), event.getEndDate());
+	}
+
+	@Test
+	//Tests comparison.
+	//Natural ordering is defined by increasing order of status('pending'<'completed'),
+	//start date(equivalent to TaskItem's deadline), end date, -priority.
+	public void testCompareTo(){
+		ToDoItem event1 = new EventItem("A", 4, new MyDate(4, 11, 2014), new MyDate(5, 11, 2014));
+		ToDoItem event2 = new EventItem("B", 4, new MyDate(5, 11, 2014), new MyDate(5, 11, 2014));
+		assertEquals(-1, event1.compareTo(event2));
+		event2 = new ToDoItem("B", 4);
+		assertEquals(-1, event1.compareTo(event2));
+		event2 = new TaskItem("B", 8, new MyDate(4, 11, 2014));
+		assertTrue(event1.compareTo(event2)>0);
+		event2 = new EventItem("B", 4, new MyDate(4, 11, 2014), new MyDate(6, 11, 2014));
+		assertTrue(event1.compareTo(event2)<0);
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\EventItemTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\TaskItemTest.java
+	 */
+
+public class TaskItemTest {
+
+	@Test
+	public void testToFileString() {
+		TaskItem task = new TaskItem("Return book", new MyDate(1, 10, 2014));
+		assertEquals("Return book; 0; Pending; --/--/---- --:--; 1/10/2014 --:--", task.toFileString());
+
+		task.setDeadlineTime(10, 40);
+		assertEquals("Return book; 0; Pending; --/--/---- --:--; 1/10/2014 10:40", task.toFileString());
+	}
+
+	@Test
+	public void test() {
+		TaskItem task = new TaskItem("CS2106 homework", 4, new MyDateTime(26, 9, 2014, 23, 59));
+		assertEquals("CS2106 homework", task.getDescription());
+		assertEquals(ToDoItem.PRIORITY_HIGH, task.getPriority());
+		assertEquals(new MyDateTime(26, 9, 2014, 23, 59), task.getDeadline());
+	}
+
+	@Test
+	public void testSetDeadline() {
+		TaskItem task = new TaskItem("CS2106 homework", new MyDate(24, 9, 2014));
+		assertEquals("24/9/2014", task.getDeadline().toString());
+
+		task.setDeadline(new MyDateTime(26, 9, 2014, 23, 59));
+		assertEquals("26/9/2014 23:59", task.getDeadline().toString());
+	}
+
+	@Test
+	public void testSetDeadlineDate() {
+		TaskItem task = new TaskItem("CS2106 homework", new MyDate(27, 9, 2014));
+		assertEquals(new MyDate(27, 9, 2014), task.getDeadline());
+
+		task.setDeadlineDate(new MyDate(26, 9, 2014));
+		assertEquals(new MyDate(26, 9, 2014), task.getDeadline());
+	}
+
+	@Test
+	public void testSetDeadlineTime() {
+		TaskItem task = new TaskItem("CS2106 homework", new MyDate(26, 9, 2014));
+		assertTrue("deadline is Date type", !(task.getDeadline() instanceof MyDateTime));
+
+		//This is supposed to end up with nothing done due to invalid value.
+		task.setDeadlineTime(22, 60);
+		assertTrue("deadline is Date type", !(task.getDeadline() instanceof MyDateTime));
+
+		task.setDeadlineTime(23, 59);
+		assertTrue("deadline is DateTime type", task.getDeadline() instanceof MyDateTime);
+		assertEquals(new MyDateTime(26, 9, 2014, 23, 59), task.getDeadline());
+	}
+
+	@Test
+	public void testSetStatus(){
+		TaskItem task = new TaskItem("CS2106 homework", new MyDate(26, 9, 2014));
+		assertEquals("initial status is 'pending'", TaskItem.STATUS_PENDING, task.getStatus());
+
+		task.setStatus(TaskItem.STATUS_COMPLETED);
+		assertEquals("new status is 'completed'", TaskItem.STATUS_COMPLETED, task.getStatus());
+	}
+
+	@Test
+	//Tests the copy constructor
+	public void testCopyConstructor(){
+		TaskItem task = new TaskItem("Homework", 2, new MyDate(13, 10, 2014));
+		TaskItem task2 = new TaskItem(task);
+		assertFalse(task==task2);
+		assertEquals(task.getId(), task2.getId());
+		assertEquals(task, task2);
+		task2.setPriority(5);
+		assertFalse(task.getPriority()==task2.getPriority());
+	}
+
+	@Test
+	//Tests comparison.
+	//Natural ordering is in ascending order of status('pending'<'completed'), deadline, -priority.
+	public void testCompareTo(){
+		ToDoItem task1 = new TaskItem("A", 4, new MyDate(5, 11, 2014));
+		ToDoItem task2 = new ToDoItem("B", 4);
+		assertEquals(-1, task1.compareTo(task2));
+		task2 = new TaskItem("B", 4, new MyDate(4, 11, 2014));
+		assertEquals(1, task1.compareTo(task2));
+		assertEquals(-1, task2.compareTo(task1));
+		task2 = new EventItem("B", 4, new MyDate(4, 11, 2014), new MyDate(6, 11, 2014));
+		assertEquals(1, task1.compareTo(task2));
+		task2 = new EventItem("B", 2, new MyDate(5, 11, 2014), new MyDate(6, 11, 2014));
+		assertTrue(task1.compareTo(task2)<0);
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\TaskItemTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\ToDoItemTest.java
+	 */
+
+public class ToDoItemTest {
+
+	@Test
+	public void testToDoItem() {
+		ToDoItem item = new ToDoItem("Do CS2103T");
+		assertEquals("Do CS2103T", item.getDescription());
+		assertEquals(1, item.getId());
+		item = new ToDoItem("New task");
+		assertEquals(2, item.getId());
+		assertEquals("Pending", item.getStatus());
+		assertEquals("Priority is 0", 0, item.getPriority());
+		System.out.println(item.getFeedbackString());
+
+		//Tests copy constructor
+		ToDoItem item2 = new ToDoItem(item);
+		assertFalse(item==item2);
+		assertTrue(item.equals(item2));
+		item2.setDescription("Do nothing");
+		assertFalse(item.getDescription().equals(item2.getDescription()));
+		assertEquals(item.getId(), item2.getId());
+	}
+
+	@Test
+	public void testToFileString(){
+		ToDoItem item = new ToDoItem("Do CS2103T", 2);
+		assertEquals("Do CS2103T; 2; Pending; --/--/---- --:--; --/--/---- --:--", item.toFileString());
+	}
+
+	@Test
+	//Tests comparison.
+	public void testCompareTo(){
+		ToDoItem item1 = new ToDoItem("A", 4);
+		ToDoItem item2 = new ToDoItem("B", 4);
+		item1.setStatus(ToDoItem.STATUS_COMPLETED);
+		assertEquals(1, item1.compareTo(item2));
+		item2 = new EventItem("B", 3, new MyDate(1, 11, 2014), new MyDateTime(2, 1, 2014, 15, 0));
+		assertEquals(1, item1.compareTo(item2));
+		item2 = new TaskItem("B", 3, new MyDateTime(3, 11, 2014));
+		assertEquals(1, item1.compareTo(item2));
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\edu\dynamic\dynamiz\structure\unitTest\ToDoItemTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\a0110781\Desktop\main-master\src\main\TestProgram.java
+	 */
+
+/**
+ * Test program to test the program as if it were real use without GUI.
+ * Avoids the problem of random execution sequencing of the various methods in the JUnit test case.
+ * However, ControllerTest JUnit test should still be used for automated testing for boundary test cases.
+ * UI is not well-developed in this dummy program as it is mainly to test underlying functionalities.
+ */
+public class TestProgram {
+	public static void main(String[] args){
+		String input;
+		Controller controller = new Controller();
+		Feedback feedback;
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			while(!(input = reader.readLine()).equals("exit")){
+				feedback = controller.executeCommand(input);
+				if(feedback instanceof SuccessFeedback){
+					SuccessFeedback sFeedback = (SuccessFeedback)feedback;
+					if(sFeedback.getCommandType().equals("list") || sFeedback.getCommandType().equals("search")){
+						ToDoItem[] list = sFeedback.getAffectedItems();
+						if (list != null) {
+							for(ToDoItem i: list){
+								System.out.println(i);
+							}
+						} else {
+							System.out.println("-- No items --");
+						}
+						System.out.println(); 
+					} else {
+						System.out.println("Successfully executed \""+input+"\".");
+					}
+				} else if(feedback instanceof HelpFeedback){
+					System.out.println(((HelpFeedback)feedback).getHelpContent());
+				} else{
+					System.out.println(((ErrorFeedback)feedback).getMessage());
+				}
+			}
+			reader.close();
+		} catch(IOException e){
+
+		}
+	}
+}
+
+	// End of segment: C:\Users\a0110781\Desktop\main-master\src\main\TestProgram.java
+
+
+
+
+
