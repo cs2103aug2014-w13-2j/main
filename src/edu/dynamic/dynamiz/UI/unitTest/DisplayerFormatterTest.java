@@ -1,10 +1,8 @@
 // @author A0119397R
 package edu.dynamic.dynamiz.UI.unitTest;
 
-//import static org.junit.Assert.*;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import edu.dynamic.dynamiz.UI.DisplayerFormatter;
 import edu.dynamic.dynamiz.UI.StrIntPair;
@@ -17,7 +15,6 @@ import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
 import java.util.ArrayList;
-//import edu.dynamic.dynamiz.structure.*;
 
 /**
  * The JUnit Test for DispayerFormatter
