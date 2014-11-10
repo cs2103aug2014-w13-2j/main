@@ -174,7 +174,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String endT = "";
 		String stas = item.getStatus();
 		int stasIntTag;
-		if (stas.equalsIgnoreCase(STATU_PEND))
+		if (stas.equalsIgnoreCase(STATU_PEND_STR))
 			stasIntTag = STATU_PEND_TAG;
 		else{
 			stasIntTag = STATU_COMPLETE_TAG;
@@ -218,7 +218,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		String priStr = TagFormat.formatPri(pri);
 		String stas = item.getStatus();
 
-		if (stas.equalsIgnoreCase(STATU_PEND)){
+		if (stas.equalsIgnoreCase(STATU_PEND_STR)){
 			stasIntTag = STATU_PEND_TAG;
 		}
 		else{
@@ -299,7 +299,7 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 	/**
 	 * @param d
-	 * @return Format MyDate object to readable string
+	 * @return String Format MyDate object to readable string
 	 */
 	public String timeFormatter(MyDate d) {
 		String s = String.format("%tH:%tM", d);
