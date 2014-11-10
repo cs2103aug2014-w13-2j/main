@@ -85,9 +85,17 @@ package edu.dynamic.dynamiz.UI;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
-import edu.dynamic.dynamiz.structure.*;
+import edu.dynamic.dynamiz.structure.ErrorFeedback;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.Feedback;
+import edu.dynamic.dynamiz.structure.HelpFeedback;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.SuccessFeedback;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
 
 /**
  * Acts as the information interpreter of Feedback items and formatter for UI
@@ -275,7 +283,6 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 
 	/**
 	 * Format task list for chunk display
-	 * 
 	 * @param contentList
 	 * @param item
 	 */
@@ -769,8 +776,7 @@ public interface DisplayerFormatterInterface {
 	public String displayEventFile(EventItem event);
 
 	/**
-	 * @param ArrayList
-	 *            <ToDoItem> or ToDoItem[]
+	 * @param ArrayList<ToDoItem> or ToDoItem[]
 	 * @return String of formatted todoList
 	 */
 	public String displayToDoList(ArrayList<ToDoItem> todoList);
@@ -802,11 +808,9 @@ public interface DisplayerFormatterInterface {
 	/**
 	 * @return No @param return "Enter command:" prompt
 	 * @param promptTag
-	 *            , corresponding integer tag please refer to the integer
-	 *            constant above
+	 * corresponding integer tag please refer to the integer constant above
 	 * @see {@link #FEEDBACK_TAG}
-	 * @param specific
-	 *            String promptMessage
+	 * @param String promptMessage
 	 */
 	public String displayPrompt();
 
@@ -923,15 +927,20 @@ public class StrIntPair {
 
 package edu.dynamic.dynamiz.UI.unitTest;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import edu.dynamic.dynamiz.UI.DisplayerFormatter;
 import edu.dynamic.dynamiz.UI.StrIntPair;
-import edu.dynamic.dynamiz.structure.*;
+
+import edu.dynamic.dynamiz.structure.ErrorFeedback;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+import edu.dynamic.dynamiz.structure.SuccessFeedback;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
+import java.util.ArrayList;
 
 /**
  * The JUnit Test for DispayerFormatter
