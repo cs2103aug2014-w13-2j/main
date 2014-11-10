@@ -1,15 +1,23 @@
 // @author A0119397R
 package edu.dynamic.dynamiz.UI.unitTest;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
+//import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import edu.dynamic.dynamiz.UI.DisplayerFormatter;
 import edu.dynamic.dynamiz.UI.StrIntPair;
-import edu.dynamic.dynamiz.structure.*;
+import edu.dynamic.dynamiz.structure.ErrorFeedback;
+import edu.dynamic.dynamiz.structure.EventItem;
+import edu.dynamic.dynamiz.structure.MyDate;
+import edu.dynamic.dynamiz.structure.MyDateTime;
+import edu.dynamic.dynamiz.structure.SuccessFeedback;
+import edu.dynamic.dynamiz.structure.TaskItem;
+import edu.dynamic.dynamiz.structure.ToDoItem;
+
+import java.util.ArrayList;
+//import edu.dynamic.dynamiz.structure.*;
 
 /**
  * The JUnit Test for DispayerFormatter
