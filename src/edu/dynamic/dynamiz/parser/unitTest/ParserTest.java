@@ -22,7 +22,6 @@ import edu.dynamic.dynamiz.structure.MyDate;
 
 /**
  * Test program to understand the output of parser.
- * @author nhan
  */
 
 public class ParserTest {
