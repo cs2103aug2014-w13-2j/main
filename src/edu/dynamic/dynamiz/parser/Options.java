@@ -14,7 +14,6 @@ import java.util.Map.Entry;
  * <p>
  * Provide utility methods to check for ambiguity if one {@link OptionType} has more than one occurrence.
  * 
- * @author nhan
  *
  */
 public class Options {
