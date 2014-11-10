@@ -737,7 +737,7 @@ public interface DisplayerFormatterInterface {
 
 	/**
 	 * @param ArrayList
-	 *            <EventItem> or EventItem[]
+	 *            <EventItem> 
 	 * @return String of formatted eventList
 	 */
 	public String displayEventList(ArrayList<EventItem> eventList);
@@ -797,16 +797,23 @@ public interface DisplayerFormatterInterface {
 	public String displayToDoFile(ToDoItem todoItem);
 
 	/**
-	 * @return No @param return "Enter command:" prompt
-	 * @param promptTag
-	 * corresponding integer tag please refer to the integer constant above
-	 * @see {@link #FEEDBACK_TAG}
+	 * @return  "Enter command:" 
 	 * @param String promptMessage
 	 */
 	public String displayPrompt();
-
+	
+	/**
+	 * 
+	 * @param promptTag@return  "Enter command:" 
+	 * @return  "Enter command:" 
+	 * @see {@link #FEEDBACK_TAG} for corresponding integer tag
+	 */
 	public String displayPrompt(int promptTag);
-
+	
+	/**
+	 * @param  promptMessage
+	 * @return specified prompt message
+	 */
 	public String displayPrompt(String promptMessage);
 
 	/**
@@ -833,7 +840,7 @@ public interface DisplayerFormatterInterface {
 class StringUtils {
 	/**
 	 * @param string
-	 * @param string size
+	 * @param int size
 	 * @return String
 	 * Format the content to the center 
 	 */
