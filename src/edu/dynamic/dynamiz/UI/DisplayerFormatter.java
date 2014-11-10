@@ -4,8 +4,6 @@ package edu.dynamic.dynamiz.UI;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-//import java.util.logging.*;
-
 import java.util.logging.Logger;
 
 import edu.dynamic.dynamiz.structure.ErrorFeedback;
@@ -17,7 +15,6 @@ import edu.dynamic.dynamiz.structure.SuccessFeedback;
 import edu.dynamic.dynamiz.structure.TaskItem;
 import edu.dynamic.dynamiz.structure.ToDoItem;
 
-//import edu.dynamic.dynamiz.structure.*;
 
 /**
  * Acts as the information interpreter of Feedback items and formatter for UI

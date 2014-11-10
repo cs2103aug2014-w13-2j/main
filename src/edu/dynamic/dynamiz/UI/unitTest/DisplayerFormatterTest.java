@@ -4,6 +4,7 @@ package edu.dynamic.dynamiz.UI.unitTest;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
 import edu.dynamic.dynamiz.UI.DisplayerFormatter;
 import edu.dynamic.dynamiz.UI.StrIntPair;
 import edu.dynamic.dynamiz.structure.ErrorFeedback;

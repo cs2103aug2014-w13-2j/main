@@ -1,6 +1,6 @@
 package edu.dynamic.dynamiz.UI;
 
-//A0119397R -unused
+//A0119397R
 
 /**
  * For V0.3 we tried to switch to using JavaFX for GUI
@@ -50,8 +50,8 @@ class TagFormat{
 		case PRIORITY_NONE:
 			s = PRIORITY_NONE_TAG;
 			content = "None";
-
 			break;
+			
 		case PRIORITY_LOW:
 			s = PRIORITY_LOW_TAG;
 			content = "Low";

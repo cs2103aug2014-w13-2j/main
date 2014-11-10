@@ -48,8 +48,8 @@ public interface DisplayerFormatterInterface {
 	/**
 	 * String content for States
 	 */
-	static final String STATU_PEND = "pending";
-	static final String STATU_COMPLETE = "completed";
+	static final String STATU_PEND_STR = "pending";
+	static final String STATU_COMPLETE_STR = "completed";
 
 	/**
 	 * String content for different command
@@ -66,23 +66,23 @@ public interface DisplayerFormatterInterface {
 			+ "Status: %7$s ";
 
 	/**
-	 * Receive @param commandFeedBack Fetch feedback information and format it
-	 * in a readable form compact information and corresponding color tag into
-	 * An ArrayList of StrIntPair
-	 * 
-	 * @return ArrayList<StrIntPair>
+	 * Fetch feedback information and format it
+	 * into a readable form compact information and corresponding color tag into An ArrayList of StrIntPair
+	 * @param commandFeedBack 
+	 * @return ArrayList<StrIntPair> compact information and corresponding color tag
 	 */
 	public ArrayList<StrIntPair> displayFeedback(Feedback commandFeedBack);
 
 	/**
-	 * @return Welcome Message
+	 * @return String of Welcome Message
 	 */
 	public String displayWelcomeMessage();
 
 	/**
+	 * format received string Arraylist into a single string
 	 * @param ArrayList
-	 *            <String> format it into a single string
-	 * @return String
+	 *            <String> 
+	 * @return Formatted String
 	 */
 	public String displayStringList(ArrayList<String> arr);
 
@@ -119,14 +119,14 @@ public interface DisplayerFormatterInterface {
 
 	/**
 	 * @param ArrayList
-	 *            <EventItem> or EventItem[]
+	 *            <EventItem> 
 	 * @return String of formatted eventList
 	 */
 	public String displayEventList(ArrayList<EventItem> eventList);
 
 	/**
 	 * @param eventList
-	 * @return A formatted string of the content of this eventList
+	 * @return  A formatted string of the content of this eventList
 	 */
 	public String displayEventList(EventItem[] eventList);
 
@@ -175,27 +175,30 @@ public interface DisplayerFormatterInterface {
 
 	/**
 	 * @param todoItem
-	 * @return A formatted String of the FileString of this todoItem
+	 * @return  A formatted String of the FileString of this todoItem
 	 */
 	public String displayToDoFile(ToDoItem todoItem);
 
+	
 	/**
-	 * @return No @param return "Enter command:" prompt
-	 * @param promptTag
-	 *            , corresponding integer tag please refer to the integer
-	 *            constant above
-	 * @see {@link #FEEDBACK_TAG}
-	 * @param specific
-	 *            String promptMessage
+	 * @return default prompt message
 	 */
 	public String displayPrompt();
 
+	/**
+	 * @param promptTag
+	 * @return  prompt message corresponding to given tag
+	 */
 	public String displayPrompt(int promptTag);
 
+	/**
+	 * @param promptMessage specified prompt message
+	 * @return specified prompt message
+	 */
 	public String displayPrompt(String promptMessage);
 
 	/**
-	 * @return Help page in a formatted String
+	 * @return ArrayList<StrIntPair> Help page in a formatted String
 	 */
 	public ArrayList<StrIntPair> displayHelpPage();
 
