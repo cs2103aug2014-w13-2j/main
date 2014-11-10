@@ -31,10 +31,9 @@ public class DynamizException extends Exception {
 		 */		
 		public static final int LEVEL_TERMINATE = 2;
 		public static final String LEVEL_TERMINATE_MESSAGE = "Terminate program";
-		
+	
 		public static final String LEVEL_UNKNOWN_MESSAGE = "Unknown level provided";
-		
-		
+			
 		public final int level;
 		
 		/**
@@ -134,17 +133,14 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 			HelpFeedback hf = (HelpFeedback) commandFeedback;
 			getHelpFeedbackContent(displayContentList, hf);
 			break;
-
 		case ERROR_FEEDBACK_TAG:
 			ErrorFeedback ef = (ErrorFeedback) commandFeedback;
 			getErrorFeedbackContent(displayContentList, ef);
 			break;
-
 		case SUCCESS_FEEDBACK_TAG:
 			SuccessFeedback sf = (SuccessFeedback) commandFeedback;
 			getSucFeedbackContent(displayContentList, sf);
 			break;
-
 		default:
 			s = "Invalid Instruction\n";
 			displayContentList.add(new StrIntPair(s));
@@ -185,26 +181,21 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		 * Check which command this SuccessFeedback is, and format accordingly
 		 */
 		switch (sf.getCommandType().toLowerCase()) {
-
 		case SHOW_COMMAND:
 			assert (ShowComdListLength == list.length);
 			formatShowAddComd(displayContentList, list);
 			break;
-
 		case ADD_COMMAND:
 			assert (ShowComdListLength == list.length);
 			formatShowAddComd(displayContentList, list);
 			break;
-
 		case UPDATE_COMMAND:
 			assert (UpdateComdListLength == list.length);
 			formatUpdateComd(displayContentList, list);
 			break;
-
 		default:
 			formatListComd(displayContentList, list);
 			break;
-
 		}
 	}
 
@@ -694,7 +685,7 @@ public interface DisplayerFormatterInterface {
 
 	/**
 	 * Receive @param commandFeedBack Fetch feedback information and format it
-	 * in a readable form compact information and corresponding color tag into
+	 * in a readable form compact information and corresponding colour tag into
 	 * An ArrayList of StrIntPair
 	 * 
 	 * @return ArrayList<StrIntPair>
@@ -1034,7 +1025,7 @@ public class DisplayerFormatterTest {
 
 	@Test
 	public void testDisplayEvent() {
-		EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9,
+		EventItem item = new EventItem("Nana's concert", 5, new MyDate(27, 9, 
 				2014));
 		System.out.println(item.toString());
 		assertEquals(item.toString(), dp.displayEventItem(item));
