@@ -64,21 +64,21 @@ public class DisplayerFormatter implements DisplayerFormatterInterface {
 		return displayContentList;
 	}
 
-	private void getHelpFeedbackContent(ArrayList<StrIntPair> displayContentList, HelpFeedback hf) {
+	public void getHelpFeedbackContent(ArrayList<StrIntPair> displayContentList, HelpFeedback hf) {
 		String s = new String();
 		s = hf.getHelpContent();
 		s += "\n";
 		displayContentList.add(new StrIntPair(s));
 	}
 
-	private void getErrorFeedbackContent(ArrayList<StrIntPair> displayContentList, ErrorFeedback ef) {
+	public void getErrorFeedbackContent(ArrayList<StrIntPair> displayContentList, ErrorFeedback ef) {
 		String s = new String();
 		s = ef.getMessage();
 		s += "\n";
 		displayContentList.add(new StrIntPair(s));
 	}
 
-	private void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList,SuccessFeedback sf) {
+	public void getSucFeedbackContent(ArrayList<StrIntPair> displayContentList,SuccessFeedback sf) {
 		assert (displayContentList != null);
 		LoggerDisplayer.info("getSucFeedbackContent called");
 		String s = new String();
