@@ -25,7 +25,6 @@ import edu.dynamic.dynamiz.structure.Feedback;
  * also receives user's input command to the Controller through the UI subclass
  * Displayer and StyleUI before outputting the feedback onto the UI for the user
  * to see.
- * 
  */
 
 public class UI extends JPanel implements ActionListener {
@@ -265,7 +264,6 @@ public class UI extends JPanel implements ActionListener {
 	public static void Screen() {
 		JFrame frame = new JFrame("Dynamiz");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		frame.add(new UI());
 
 		frame.pack();

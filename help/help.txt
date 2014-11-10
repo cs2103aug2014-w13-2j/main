@@ -30,13 +30,15 @@ COMMAND INPUT STRUCTURE
 	DELETE		  | d | del | remove | rm		: Delete an item from Dynamiz.
 	UPDATE		  | u | upd | modify
 				  | mod | edit | change			: Update an item in Dynamiz.
-	LIST		  | l | ls | display | show		: Listing items from Dynamiz.
+	LIST		  | l | ls | display 			: Listing items from Dynamiz.
+	SEARCH		  | s | find					: Search items from Dynamiz.
 	UNDO		  | un | ud						: Undo the previous command.
 	REDO		  | re | rd						: Redo the previous command.
 	HELP		  | h | man						: Open Help doc for Dynamiz.
 	MARK		  | m | done | do | tick		: Mark an item as completed.
 	UNMARK		  | um | undone | untick		: Unmark completed item.
 	SHOW		  | sh | view					: Inspect an item in details.
+	FLUSH		  | f | c | clear				: Flush the screen.
 	EXIT		  | e | quit | bye | ! | close	: Exit the programme.
 	
 		[parameter]:

@@ -8,3 +8,7 @@ log.txt
 log.txt.*
 completed*.txt
 check_changes.sh
+
+*.html
+
+*.html

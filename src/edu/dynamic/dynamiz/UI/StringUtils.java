@@ -5,7 +5,6 @@ package edu.dynamic.dynamiz.UI;
 /**
  * String Utilities for centralize string content
  */
-
 class StringUtils {
 	/**
 	 * @param string
